@@ -1,0 +1,45 @@
+/* Copyright 2016, Nudge, All rights reserved. */
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: url('chrome-extension://__MSG_@@extension_id__/OpenSans-Regular.ttf') format('ttf');
+}
+
+body {
+	font-family: 'Open Sans', Arial, sans-serif;
+}
+
+.label {
+	font-size: 100%;
+	font-weight: 500;
+	background-color: #61a7ff;
+}
+
+#saved_div {
+	display: inline-block;
+	opacity: 0;
+}
+
+#saved_text {
+	color: #61a7ff;
+}
+
+.btn-group {
+	vertical-align: -12px;
+}
+
+#p_text {
+	font-size: 18px;
+	line-height: 34px;
+	margin-top: 20px;
+}
+
+p {
+	margin-top: 20px;
+}
+
+#options {
+	line-height: 32px;
+}

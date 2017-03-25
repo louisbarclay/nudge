@@ -1,0 +1,78 @@
+{
+  "manifest_version": 2,
+  "name": "Nudge",
+  "commands": {
+    "tester": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Z",
+        "mac": "Command+Shift+Z"
+      },
+      "description": "tester"
+    }
+  },
+  "permissions": [
+    "idle",
+    "activeTab",
+    "tabs",
+    "webNavigation",
+    "<all_urls>",
+    "webRequest",
+    "webRequestBlocking",
+    "history",
+    "notifications",
+    "http://*/*",
+    "https://*/*",
+    "storage",
+    "clipboardRead",
+    "clipboardWrite"
+  ],
+  "description": "Helps you use addictive sites less.",
+  "icons": {
+    "128": "128.png",
+    "16": "16.png",
+    "48": "48.png"
+  },
+  "browser_action": {
+    "default_popup": "options.html"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": false,
+    "open_in_tab": true
+  },
+  "options_page": "options.html",
+  "web_accessible_resources": [
+    "blank.gif",
+    "128.png",
+    "16alpha.png",
+    "close.png",
+    "closehover.png",
+    "visit.png",
+    "scroll.png",
+    "time.png",
+    "compulsive.png",
+    "cogsmall.png",
+    "cogsmallhover.png",
+    "coglarge.png",
+    "coglargehover.png",
+    "1nothing.png",
+    "5nothings.png",
+    "whatisanothing.html",
+    "opensans.woff2"
+  ],
+  "version": "1.0.5",
+  "background": {
+    "scripts": ["lib/jquery/jquery-3.1.0.min.js", "background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["lib/jquery/jquery-3.1.0.min.js", "images.js", "player.js"],
+      "css": ["nudge.css"],
+      "exclude_globs": [
+        "*business.facebook.com*"
+      ],
+      "run_at": "document_start"
+    }
+  ]
+}

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Copyright 2016, Nudge, All rights reserved. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nudge Options</title>
+    <link rel="stylesheet" href="lib/bootstrap-3/bootstrap.min.css">
+    <link rel="stylesheet" href="custom.css" />
+    <link rel="stylesheet" href="bootstrap-tagsinput.css" />
+    <script src="lib/jquery/jquery-3.1.0.min.js"></script>
+    <script src="lib/angular/angular.js" ></script>
+    <script src="lib/ng-tags-input.min.js"></script>
+    <script src="lib/bootstrap-3/bootstrap.min.js"></script>
+    <script src="lib/tagsinput/bootstrap-tagsinput.js"></script>
+    <script src="lib/tagsinput/bootstrap-tagsinput-angular.min.js"></script>
+    <script src="lib/typeahead/typeahead.bundle.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="col-lg-10">
+        <h1 id="header">Nudge Options <div id="saved_div"><small id="saved_text">Saved!</small></div></h1>
+        <p>
+        <h3>Sites</h3>        
+        </p>
+        <p>
+        Nudge me on these sites:
+        </p>
+        <div class="input-group-lg" id="inputdiv">
+            <input data-role="tagsinput" type="text" id="input" class="form-control"/>
+        </div>        
+        <small><i>Add more sites in format 'addictivesite.com'.</i></small>
+        <p>
+        <div id="options">
+        <h3>Scrolls</h3>
+        Nudge me every time I scroll 
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span id="scroll_s_button"></span> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" id="scroll_s_list">
+            </ul>
+        </div>
+         down a site, and give me bigger nudges 
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span id="scroll_b_button"></span> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" id="scroll_b_list">
+            </ul>
+        </div>
+        .
+        </p>
+        <p>
+        <h3>Visits</h3>
+        Nudge me every  
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span id="visit_s_button"></span> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" id="visit_s_list">
+                <li><a href="#">15 visits</a>
+                </li>
+                <li><a href="#">20 visits</a>
+                </li>
+                <li><a href="#">25 visits</a>
+                </li>
+            </ul>
+        </div>
+         to a site, and give me bigger nudges 
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span id="visit_b_button"></span> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" id="visit_b_list">
+                <li><a href="#">45 visits</a>
+                </li>
+                <li><a href="#">60 visits</a>
+                </li>
+                <li><a href="#">75 visits</a>
+                </li>
+            </ul>
+        </div>
+        .       
+        </p>
+        <p>
+        <h3>Time</h3>
+        Nudge me every  
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span id="time_s_button"></span> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" id="time_s_list">
+                <li><a href="#">15 minutes</a>
+                </li>
+                <li><a href="#">20 minutes</a>
+                </li>
+                <li><a href="#">25 minutes</a>
+                </li>
+            </ul>
+        </div>
+         on a site, and give me bigger nudges 
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span id="time_b_button"></span> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" id="time_b_list">
+                <li><a href="#">45 minutes</a>
+                </li>
+                <li><a href="#">60 minutes</a>
+                </li>
+                <li><a href="#">75 minutes</a>
+                </li>
+            </ul>
+        </div>
+        .       
+        </p>
+        <p>
+        <h3>Reopens</h3>
+        Nudge me every time I quit a site completely and reopen it less than
+        <div class="btn-group dropup">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span id="compulsive_button"></span> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" id="compulsive_list">
+                <li><a href="#">four minutes</a>
+                </li>
+                <li><a href="#">three minutes</a>
+                </li>
+                <li><a href="#">two minutes</a>
+                </li>
+                <li><a href="#">a minute</a>
+                </li>                
+            </ul>
+        </div>
+        later.       
+        </p>
+        <p>
+        <h3>Limits</h3>
+        Maximum of one nudge of every type every  
+        <div class="btn-group dropup">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span id="maxnudge_button"></span> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" id="maxnudge_list">
+                <li><a href="#">two minutes</a>
+                </li>
+                <li><a href="#">five minutes</a>
+                </li>
+                <li><a href="#">ten minutes</a>
+                </li>
+                <li><a href="#">hour</a>
+                </li>                
+            </ul>
+        </div>
+        .       
+        </p>
+        </div>
+        </div>
+    </div>
+    <script src="options.js"></script>    
+</body>
+</html>
