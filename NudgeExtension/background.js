@@ -556,13 +556,13 @@ chrome.tabs.onActivated.addListener(function(activatedTab) {
 // Update URL in tabIdStorage
 // URL constantiser
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-		// New record in tabIdStorage
+		// New record in tabIdStorage		
 		tabIdStorage[tabId] = {
 			url: tab.url,
 			nudge: false
 		};
 		var domain = inDomainsSetting(tab.url);
-		if (tab.status === "active") {
+		if (tab.active === true) { //updated 25 march 2017 by ExtFo
 			timelineAdder(domain, true);
 		}
 		// For constantising titles
@@ -629,7 +629,7 @@ function messageSender(object) {
 		chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 				// Send message to the tab here
 				chrome.tabs.sendMessage(tabs[0].id, {type: "ready_check"}, function(response) {
-						if (response.type) {
+						if (response && response.type) { //updated 25 march 2017 by ExtFo
 							// object.favicon = tabs[0].favIconUrl;
 							chrome.tabs.sendMessage(tabs[0].id, object, function(response) {
 									// console.log("sentobject", object);
@@ -654,8 +654,18 @@ function messageSender(object) {
 							);
 						} else {
 							var tabRecord = tabIdStorage[tabs[0].id];
-							tabRecord.nudge = object;
-							console.log(tabIdStorage[tabs[0].id]);
+							//updated 25 march 2017 by ExtFo
+							if (tabRecord) {
+								tabRecord.nudge = object;
+								console.log(tabIdStorage[tabs[0].id]);
+								if (object.send_fails < sendFailLimit) {
+									object.send_fails++;
+									messageSender(object);
+								} else {
+									object.status = "failed";
+									nudgeLogger(object);
+								}
+							}
 							// delay to the next second, provided that in the next second,
 							// you're still on the same tab. if not, just cancel it?
 							// so...... load the tab ID with the nudge to come (the whole object!)

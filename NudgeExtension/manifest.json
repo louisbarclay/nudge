@@ -58,9 +58,19 @@
     "1nothing.png",
     "5nothings.png",
     "whatisanothing.html",
-    "opensans.woff2"
+    "opensans.woff2",
+    "retina-images/close@2x.png",
+    "retina-images/closehover@2x.png",
+    "retina-images/coglarge@2x.png",
+    "retina-images/coglargehover@2x.png",
+    "retina-images/cogsmall@2x.png",
+    "retina-images/cogsmallhover@2x.png",
+    "retina-images/compulsive@2x.png",
+    "retina-images/scroll@2x.png",
+    "retina-images/time@2x.png",
+    "retina-images/visit@2x.png"
   ],
-  "version": "1.0.5",
+  "version": "1.0.6",
   "background": {
     "scripts": ["lib/jquery/jquery-3.1.0.min.js", "background.js"]
   },

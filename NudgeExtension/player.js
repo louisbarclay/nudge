@@ -153,6 +153,7 @@ function listener() {
 				sendResponse({"time_executed": timeNow(), "status": "url_mismatch"});
 			}
 			sendResponse({"time_executed": timeNow(), "status": "succeeded"});
+			return; //updated 25 march 2017 by ExtFo
 		}
 	);
 	// AM READY FOR STUFF!!!!!!!!!!!!!!!!!!!! TODO: send message from here
@@ -178,6 +179,9 @@ console.log(faviconUrl);
 function messageCompiler(request) {
 	// Define helper variables
 	// TODO: logic for if no favicon
+	if (request.type == 'favicon') { //updated 25 march 2017 by ExtFo
+		return;
+	}
 	box_m = '<div id="m_message1_box">';
 	box_d = '<div id="d_message_box">';
 	ord_amount = ordinal(request.amount);
@@ -528,11 +532,18 @@ function bgPicker(type) {
 }
 
 // Background image variables
-var bgImageVisit = "url(" + chrome.extension.getURL("visit.png") + ") center center no-repeat";
-var bgImageTime = "url(" + chrome.extension.getURL("time.png") + ") center center no-repeat";
-var bgImageScroll = "url(" + chrome.extension.getURL("scroll.png") + ") center center no-repeat";
-var bgImageCompulsive = "url(" + chrome.extension.getURL("compulsive.png") + ") center center no-repeat";
-
+//updated 25 march 2017 by ExtFo
+if (window.devicePixelRatio > 1) {
+	var bgImageVisit = "url(" + chrome.extension.getURL("retina-images/visit@2x.png") + ") center center no-repeat";
+	var bgImageTime = "url(" + chrome.extension.getURL("retina-images/time@2x.png") + ") center center no-repeat";
+	var bgImageScroll = "url(" + chrome.extension.getURL("retina-images/scroll@2x.png") + ") center center no-repeat";
+	var bgImageCompulsive = "url(" + chrome.extension.getURL("retina-images/compulsive@2x.png") + ") center center no-repeat";
+} else {
+	var bgImageVisit = "url(" + chrome.extension.getURL("visit.png") + ") center center no-repeat";
+	var bgImageTime = "url(" + chrome.extension.getURL("time.png") + ") center center no-repeat";
+	var bgImageScroll = "url(" + chrome.extension.getURL("scroll.png") + ") center center no-repeat";
+	var bgImageCompulsive = "url(" + chrome.extension.getURL("compulsive.png") + ") center center no-repeat";
+}
 // Helper function ordinal number parser
 function ordinal(i) {
 		var j = i % 10,

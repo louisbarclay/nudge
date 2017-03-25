@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Tests of functions. Nudge ext.</title>
+
+  <link rel="shortcut icon" type="image/png" href="lib/jasmine-2.0.3/jasmine_favicon.png">
+  <link rel="stylesheet" type="text/css" href="lib/jasmine-2.0.3/jasmine.css">
+
+  <script type="text/javascript" src="lib/jasmine-2.0.3/jasmine.js"></script>
+  <script type="text/javascript" src="lib/jasmine-2.0.3/jasmine-html.js"></script>
+  <script type="text/javascript" src="lib/jasmine-2.0.3/boot.js"></script>
+
+  <!-- include source files here... -->
+  <script type="text/javascript">  
+  function checkDate() {
+    var todayStr = new Date().toLocaleDateString();
+    var saved_day = localStorage["date"];
+    if (saved_day !== todayStr) {
+      // Reset today's data
+      //for (var i = 0; i < curr.domains_setting.length; i++) { // Would be better to filter in localStorage by object as that type
+      //  var domain = curr.domains_setting[i];
+      //  var domainData = JSON.parse(localStorage[domain]);
+      //  domainData.totalTimeToday = 0;
+      //  domainData.totalVisitsToday = 0;
+      //  localStorage[domain] = JSON.stringify(domainData);
+      //}
+      return "reset";
+      // Update date
+      localStorage["date"] = todayStr;
+    }
+    return "old date";
+  }
+  </script>
+
+  <script type="text/javascript">
+  describe("testing checkDate function", function () {
+    var date = new Date();
+
+    it('now and now - do nothing', function () {
+      var now = new Date();
+      jasmine.clock().mockDate(now);
+
+      localStorage['date'] = date.toLocaleDateString();
+      expect("old date").toEqual(checkDate());
+    });
+
+    it('0pm and now - reset', function () {
+      var now = new Date();
+      now.setHours(24,0,0,0);
+      jasmine.clock().mockDate(now);
+
+      localStorage['date'] = date.toLocaleDateString();
+      expect("reset").toEqual(checkDate());
+    });
+
+    it('0pm of next day and now - reset', function () {
+      var now = new Date();
+      now.setHours(48,0,0,0);
+      jasmine.clock().mockDate(now);
+
+      localStorage['date'] = date.toLocaleDateString();
+      expect("reset").toEqual(checkDate());
+    });
+
+    it('11:59:59pm and now - do nothing', function () {
+      var now = new Date();
+      now.setHours(23,59,59,999);
+      jasmine.clock().mockDate(now);
+
+      localStorage['date'] = date.toLocaleDateString();
+      expect("reset").toEqual(checkDate());
+    });
+  });
+  </script>
+
+</head>
+
+<body>
+</body>
+</html>
