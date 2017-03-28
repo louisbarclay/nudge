@@ -189,8 +189,8 @@ function messageCompiler(request) {
 	amount = request.amount;
 	end_div = '</div>';
 	if (faviconUrl === "") {
-		favicon_m = 'this site';
-		favicon_d = 'this site';
+		favicon_m = '<div id="m_message1_favicon">this site</div>';
+		favicon_d = '<div id="d_message_favicon">this site</div>';
 	} else {
 		bg = 'background: url(' + faviconUrl + ') 32px/32px';
 		favicon_m = '<div id="m_message1_favicon" style="' + bg + '"></div>';

@@ -70,7 +70,7 @@
     "retina-images/time@2x.png",
     "retina-images/visit@2x.png"
   ],
-  "version": "1.0.6",
+  "version": "1.0.7",
   "background": {
     "scripts": ["lib/jquery/jquery-3.1.0.min.js", "background.js"]
   },

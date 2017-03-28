@@ -464,10 +464,11 @@ function domainVisitUpdater(domain, time, onUpdated) {
 	var visits = (domainData.totalVisitsToday % curr.visit_s_setting === 0);
 	// Set the visits status
 	var visitsStatus = "pending";
-	if (compulsive && onUpdated) {
+	if (compulsive/* && onUpdated*/) {
 		domainData.last_compulsive = time;
 		console.log(domainData.last_compulsive);
 		visitsStatus = "prefailed";
+		console.log("COMPULSE");
 		messageSender(nudgeObject(domain, (Math.round((timeNow() - domainData.last_shutdown) / 1000)), "compulsive"));
 	}
 	if (visits) {
@@ -492,7 +493,9 @@ function domainTimeNudger() {
 
 function windowChecker() {
 	// Make sure 'today' is up-to-date
-	checkDate(); // FIXME: has to be a better way to do this
+	if (curr.domains_setting) {
+		checkDate(); // FIXME: has to be a better way to do this
+	}
 	// Run the counter on the current site
 	domainTimeNudger();
 	// Check - is TabId of a background extension thing? TODO: THIS to get rid of annoying error
@@ -562,7 +565,8 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 			nudge: false
 		};
 		var domain = inDomainsSetting(tab.url);
-		if (tab.active === true) { //updated 25 march 2017 by ExtFo
+		console.log(tab);
+		if (tab.active === true) { //updated 25 march 2017 by ExtFo			
 			timelineAdder(domain, true);
 		}
 		// For constantising titles
@@ -626,6 +630,7 @@ function messageSender(object) {
 		object.status = "too_soon";
 		nudgeLogger(object);
 	} else {
+		console.log(object.type);
 		chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 				// Send message to the tab here
 				chrome.tabs.sendMessage(tabs[0].id, {type: "ready_check"}, function(response) {

@@ -45,5 +45,3 @@ n_scroll.src = chrome.extension.getURL("scroll.png");
 
 var n_compulsive = new Image();
 n_compulsive.src = chrome.extension.getURL("compulsive.png");
-
-console.log(coglarge);

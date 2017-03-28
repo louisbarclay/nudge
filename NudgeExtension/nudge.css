@@ -35,9 +35,11 @@
     font-size: 100%;
     font: inherit;
     vertical-align: baseline;
-    box-sizing: initial
+    box-sizing: initial;
 }
-
+#nudge_m div, div#nudge_d, #nudge_d div {
+  display: block;
+}
 #nudge_m #m_background {
   position: fixed;
   bottom: 0;
@@ -105,14 +107,14 @@
 
 #nudge_m #m_message1 {
   background-color: #ffffff;
-    border-color: #000000;
+  border-color: #000000;
   border-radius: 35px;
   border-width: 1px;
-    text-align: center;
-    height: 50px;
-    width: 100%;
-    margin: -6px;
-    padding: 6px;
+  text-align: center;
+  height: 50px;
+  width: 100%;
+  margin: -6px;
+  padding: 6px;
 }
 
 #nudge_m #m_message1_contents {
