@@ -22,7 +22,7 @@ and at the same time, i should have a much easier way to debug the first part - 
 
 // Modal default messages
 var modal_test = 'You&rsquo;ve scrolled <div id="m_message1_box">180 screens</div> down <div id="m_message1_favicon" style="background: url(https://assets.guim.co.uk/images/favicons/79d7ab5a729562cebca9c6a13c324f0e/32x32.ico) 32px/32px"></div>.<div id="m_message1_cog"></div>';
-var modal_earn_nothing = '<div id="m_message2_contents">Close tab to earn 1 <a href="' + chrome.extension.getURL("whatisanothing.html") + '" target="_blank" id="m_link_nothing">Nothing</a></div></div>';
+var modal_earn_nothing = '<div id="m_message2_contents">Close tab to escape this site</div>';
 var modal_hide = 'Press &rsquo;Esc&rsquo; or click outside Nudge to hide';
 
 var facebookBlurSetting = true;
@@ -322,7 +322,7 @@ function drawer(domain, message, type) {
 	// Tie up loose ends
 	d_message_rhs.innerHTML = message;
 	d_icon_lhs.style.background = bgPicker(type);
-	d_message_bottom.innerHTML = '<div id="d_message_bottom_contents">Close tab to earn your first <a href="' + chrome.extension.getURL("whatisanothing.html") + '" target="_blank" id="d_link_nothing">Nothing</a>!</div>';
+	d_message_bottom.innerHTML = '<div id="d_message_bottom_contents">Close tab to escape this site</div>';
 	d_message_bottom_contents = document.getElementById('d_message_bottom_contents');	
 	// Initialise
 	d_wrapper.classList.add('d_wrapper_in');
