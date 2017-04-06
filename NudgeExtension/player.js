@@ -170,7 +170,7 @@ var dummyNudge = {
 	"amount": 15,
 	"send_fails": 0,
 	"modal": false,
-	"favicon": 'https://www.facebook.com/rsrc.php/yl/r/H3nktOa7ZMg.ico'
+	"favicon": ""
 };
 
 console.log(faviconUrl);
@@ -189,8 +189,8 @@ function messageCompiler(request) {
 	amount = request.amount;
 	end_div = '</div>';
 	if (faviconUrl === "") {
-		favicon_m = '<div id="m_message1_favicon">this site</div>';
-		favicon_d = '<div id="d_message_favicon">this site</div>';
+		favicon_m = 'this site';
+		favicon_d = 'this site<div id="d_message_favicon" style="margin: 0;width: 0;height: 32px"></div>';
 	} else {
 		bg = 'background: url(' + faviconUrl + ') 32px/32px';
 		favicon_m = '<div id="m_message1_favicon" style="' + bg + '"></div>';
