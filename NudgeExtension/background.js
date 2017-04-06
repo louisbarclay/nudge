@@ -326,27 +326,6 @@ chrome.tabs.onRemoved.addListener(function(tabId) {
 					}
 				);
 			}
-			// This is the part that finds out if there are any other tabs of that kind open. But c'mon, this can be done cleaner and more accurate
-			var nudges = JSON.parse(localStorage["nudges"]);
-			if (nudges.length > 0) {
-				var mostRecentNudge = nudges.slice(-1)[0];
-				if (mostRecentNudge.tabId === tabId && (mostRecentNudge.time_executed > (timeNow() - 30 * 1000))) { // can even serve up notifs outside of chrome. maybe that should be the only one. 'quit Chrome to earn your first Nothing'
-					localStorage.nothings++; // this will need to be modified, of course, for when you can earn 5 nothings. 
-					chrome.notifications.create("",{ // TODO: should probably actually have mostRecentNudge.time_ended instead of mostRecentNudge time executed. can do this
-						type: "basic",
-						iconUrl: chrome.extension.getURL("nothinglogo.png"),
-						title: nothingTitle(localStorage.nothings),
-						message: nothingMessage(localStorage.nothings),
-						isClickable: true,
-						}, function(notificationId) {
-							chrome.notifications.onClicked.addListener(function(notificationId) {
-									window.open(chrome.extension.getURL("whatisanothing.html"),'_blank');
-								}
-							);
-						}
-					);
-				}
-			}
 			delete tabIdStorage[tabId];
 		}
 	}
