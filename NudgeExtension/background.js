@@ -442,11 +442,9 @@ function domainVisitUpdater(domain, time, onUpdated) {
 	var visits = (domainData.totalVisitsToday % curr.visit_s_setting === 0);
 	// Set the visits status
 	var visitsStatus = "pending";
-	if (compulsive/* && onUpdated*/) {
+	if (compulsive) {
 		domainData.last_compulsive = time;
-		console.log(domainData.last_compulsive);
 		visitsStatus = "prefailed";
-		console.log("COMPULSE");
 		messageSender(nudgeObject(domain, (Math.round((timeNow() - domainData.last_shutdown) / 1000)), "compulsive"));
 	}
 	if (visits) {
@@ -482,17 +480,18 @@ function windowChecker() {
 			if (typeof window == 'undefined' || window.focused === false) {
 				if (inWindow) {
 					inWindow = false;
-					timelineAdder(false);
+					timelineAdder(false, false);
 				}
 				return;
 			}
-			// if the tab is one that's loaded with a delayed nudge, run that fuckin' delayed nudge.
+			// if the tab is one that's loaded with a delayed nudge, run that delayed nudge.
 			// in this space here
 			// if you check the tab register and the tab ID has a nudge waiting to go out.
 			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-					var nudge = tabIdStorage[tabs[0].id[nudge]];
+					var nudge = tabIdStorage[tabs[0].id].nudge;
 					if (nudge) {
 						messageSender(nudge);
+						tabIdStorage[tabs[0].id].nudge = false;
 					}
 					if (!inWindow) {
 						inWindow = true;
@@ -501,7 +500,7 @@ function windowChecker() {
 						} else {
 							var domain = false;
 						}
-						timelineAdder(domain);
+						timelineAdder(domain, false);
 					}
 				}
 			);
@@ -517,7 +516,7 @@ setInterval(windowChecker, 1000);
 chrome.idle.onStateChanged.addListener(function(newState) { // TODO: needs checking
 		if (newState !== "active") {
 			isWindow = false;
-			timelineAdder(false);
+			timelineAdder(false, false);
 		}
 	}
 );
@@ -527,9 +526,19 @@ chrome.tabs.onActivated.addListener(function(activatedTab) {
 		chrome.tabs.get(activatedTab.tabId, function(tabDetails) {
 				// Don't need check of whether tab is active, because it is by default
 				var domain = inDomainsSetting(tabDetails.url);
-				timelineAdder(domain);
+				timelineAdder(domain, false);
 			}
 		);
+	}
+);
+
+// Add to tabIdStorage onCreated
+chrome.tabs.onCreated.addListener(function(tab) {
+	// New record in tabIdStorage
+	tabIdStorage[tab.id] = {
+			url: tab.url,
+			nudge: false,
+		};
 	}
 );
 
@@ -537,14 +546,18 @@ chrome.tabs.onActivated.addListener(function(activatedTab) {
 // Update URL in tabIdStorage
 // URL constantiser
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-		// New record in tabIdStorage		
-		tabIdStorage[tabId] = {
-			url: tab.url,
-			nudge: false
-		};
+		// Update record in tabIdStorage
+		if (typeof tabIdStorage[tabId] === "undefined") {
+			tabIdStorage[tabId] = {
+				url: tab.url,
+				nudge: false,
+			};
+		} else {
+			tabIdStorage[tabId].url = tab.url;
+		}
 		var domain = inDomainsSetting(tab.url);
 		// console.log(tab);
-		if (tab.active === true) { //updated 25 march 2017 by ExtFo			
+		if (tab.active === true) {
 			timelineAdder(domain, true);
 		}
 		// For constantising titles
@@ -602,13 +615,10 @@ checks if TAB IS READY= ======= so, has the tab sent the thing to say it's ready
 function messageSender(object) {
 	if (object.status === "prefailed" || object.status === "timeout") {
 		object.time_executed = timeNow();
-		nudgeLogger(object);
 	} else if (tooSoonChecker()) {
 		object.time_executed = timeNow();
 		object.status = "too_soon";
-		nudgeLogger(object);
 	} else {
-		console.log(object.type);
 		chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 				// Send message to the tab here
 				chrome.tabs.sendMessage(tabs[0].id, {type: "ready_check"}, function(response) {
@@ -637,21 +647,9 @@ function messageSender(object) {
 							);
 						} else {
 							console.log("do tab record thing");
-							var tabRecord = tabIdStorage[tabs[0].id];
-							//updated 25 march 2017 by ExtFo
-							if (tabRecord) {
-								tabRecord.nudge = object;
-								console.log(tabIdStorage[tabs[0].id]);
-								if (object.send_fails < sendFailLimit) {
-									object.send_fails++;
-									messageSender(object);
-								} else {
-									object.status = "failed";
-									nudgeLogger(object);
-								}
-							}
-							// delay to the next second, provided that in the next second,
-							// you're still on the same tab. if not, just cancel it?
+							// If tab record is undefined, create it
+							tabIdStorage[tabs[0].id].nudge = object;
+							object.send_fails++;
 							// so...... load the tab ID with the nudge to come (the whole object!)
 							// then the every-seconder asks the current selected tab if there is a nudge waiting, in which case it messageSends
 						}
