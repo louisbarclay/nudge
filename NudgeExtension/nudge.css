@@ -67,7 +67,7 @@
 
 #nudge_m #m_wrapper {
   cursor: default;
-  width: 612px;
+  width: 652px;
   top: 100px;
   display: block;
   color: #000000;
@@ -87,7 +87,7 @@
 }
 
 #nudge_m #m_contents {
-  width: 600px;
+  width: 640px;
   text-align: center;
   min-height: 50px;
   padding: 6px;
