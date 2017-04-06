@@ -133,7 +133,6 @@ function optionsUpdater(setting, update, defaults) {
 
 // Constants (for now)
 var minSec = 60;
-var sendFailLimit = 5; // Can't be more than 5 because then round doesn't evaluate to nearest minute and you don't hit the modal
 var lastSuccessfulNudgeTime = 0; // could consider doing this on a domain by domain basis
 
 var defaultDomainData = {
@@ -321,6 +320,7 @@ chrome.tabs.onRemoved.addListener(function(tabId) {
 						if (tabsChecker(tabs, domain)) {
 							domainData = JSON.parse(localStorage[domain]);
 							domainData.last_shutdown = timeNow();
+							console.log("SHUTDOWN", domain);
 							localStorage[domain] = JSON.stringify(domainData);
 						}
 					}
@@ -410,13 +410,11 @@ function timelineAdder(domain, onUpdated) {
 				if (lastState.domain) {
 					domainTimeUpdater(lastState.domain, currentState.time, lastState.time);
 				}
-				console.log(currentState);
 			}
 			return;
 		} else {
 			// Set the new currentState
 			currentState = timelineObject(domain);
-			console.log(currentState);
 			if (lastState.domain) {
 				domainTimeUpdater(lastState.domain, currentState.time, lastState.time);
 			}
@@ -436,7 +434,7 @@ function domainTimeUpdater(domain, startTime, endTime) {
 function domainVisitUpdater(domain, time, onUpdated) {
 	var domainData = JSON.parse(localStorage[domain]);
 	domainData.totalVisitsToday++;
-	console.log(domain, domainData.totalVisitsToday);
+	console.log("DOMAINVISITUPDATER", domain, domainData.totalVisitsToday);
 	var compulsiveSearch = (time - curr.compulsive_setting * minSec * 1000);
 	// Set the two conditions for nudging 
 	var compulsive = (domainData.last_shutdown !== 0 && domainData.last_shutdown > compulsiveSearch && domainData.last_compulsive < domainData.last_shutdown);
@@ -473,7 +471,7 @@ function domainTimeNudger() {
 function windowChecker() {
 	// Make sure 'today' is up-to-date
 	if (curr.domains_setting) {
-		checkDate(); // FIXME: has to be a better way to do this
+		checkDate();
 	}
 	// Run the counter on the current site
 	domainTimeNudger();
@@ -544,7 +542,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 			nudge: false
 		};
 		var domain = inDomainsSetting(tab.url);
-		console.log(tab);
+		// console.log(tab);
 		if (tab.active === true) { //updated 25 march 2017 by ExtFo			
 			timelineAdder(domain, true);
 		}
@@ -621,7 +619,7 @@ function messageSender(object) {
 										object.time_executed = response.time_executed;
 										object.status = response.status;
 										object.tabId = tabs[0].id;
-										lastSuccessfulNudgeTime = response.time_executed;
+										lastSuccessfulNudgeTime = response.time_executed; // TODO: this stuff is all too heavy. The handler below should cover it
 										nudgeLogger(object);
 									} else if (object.send_fails < sendFailLimit) {
 										object.send_fails++;
@@ -637,6 +635,7 @@ function messageSender(object) {
 								}
 							);
 						} else {
+							console.log("do tab record thing");
 							var tabRecord = tabIdStorage[tabs[0].id];
 							//updated 25 march 2017 by ExtFo
 							if (tabRecord) {
