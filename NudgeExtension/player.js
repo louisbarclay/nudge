@@ -579,6 +579,8 @@ function ordinal(i) {
 function minutes(i) {
 	if (i >= 105) {
 		return Math.round(i / 60) + " minutes";
+	} else if (i === 1) {
+		return "one second";
 	} else if (i < 45) {
 		return Math.round(i) + " seconds";
 	} else if (i < 60) {
