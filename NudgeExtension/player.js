@@ -126,10 +126,10 @@ var drawerNudge = {
 
 var modalNudge = {
 	"time_loaded": timeNow(),
-	"type": "visit",
+	"type": "time",
 	"domain": domain,
 	"status": "executed",
-	"amount": 15,
+	"amount": 20,
 	"send_fails": 0,
 	"modal": true,
 	"favicon": ""
@@ -188,11 +188,7 @@ function listener() {
 
 // =================================================================
 
-
-
-console.log(faviconUrl);
-
-var thisSiteTesting = true;
+var thisSiteTesting = false;
 
 // Message compiler
 function messageCompiler(request) {
