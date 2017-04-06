@@ -36,7 +36,9 @@
     font: inherit;
     vertical-align: baseline;
     box-sizing: initial;
+    position: initial;
 }
+
 #nudge_m div, div#nudge_d, #nudge_d div {
   display: block;
 }
