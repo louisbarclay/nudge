@@ -133,6 +133,7 @@ function optionsUpdater(setting, update, defaults) {
 
 // Constants (for now)
 var minSec = 60;
+var sendFailLimit = 10;
 var lastSuccessfulNudgeTime = 0; // could consider doing this on a domain by domain basis
 
 var defaultDomainData = {
