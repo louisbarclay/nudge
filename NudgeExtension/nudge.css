@@ -417,7 +417,7 @@
 
 #nudge_d #d_wrapper {
   cursor: default;
-    opacity: 1;
+  opacity: 1;
   top: 15px;
   left: 15px;
   width: 340px;
@@ -440,7 +440,7 @@
 #nudge_d #d_container {
   opacity: 1; 
   height: auto;
-    position: relative;
+  position: relative;
   text-overflow: clip;
   min-height: 50px;
   overflow: visible;
@@ -452,12 +452,12 @@
 }
 
 #nudge_d #d_close {
-  top: 0;
-    opacity: 0;
+  top: 25px;
+  opacity: 0;
   width: 14px;
   display: block;
   position: absolute;
-  height: 100%;
+  height: 14px;
   overflow: hidden;
   right: 7px;
   background: url('chrome-extension://__MSG_@@extension_id__/close.png') center center no-repeat;
@@ -514,7 +514,7 @@
   display: block;
   position: absolute;
   height: 100%;
-  background-size: 50px;
+  background-size: 50px !important;
 }
 
 #nudge_d #d_message_box {
@@ -757,6 +757,7 @@ body {
   border-bottom: 5px solid #61a7ff;
   border-right: 5px solid transparent;
 }
+
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5) {
   #nudge_m #m_message1_cog {
     background: url('chrome-extension://__MSG_@@extension_id__/retina-images/coglarge@2x.png') center center no-repeat;
@@ -784,6 +785,4 @@ body {
     background: url('chrome-extension://__MSG_@@extension_id__/retina-images/cogsmallhover@2x.png') center center no-repeat;
     background-size: cover;
   }
-
-
 }
