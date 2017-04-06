@@ -104,20 +104,47 @@ function nudgeSender(nudge) {
 }
 
 // Testing UI elements
-function uiPlayer() {
-	// messageCompiler(dummyNudge);
-	nudgeSender(dummyNudge);
-	// modal("zoopla.co.uk", modal_test,modal_earn_nothing,modal_hide,"time");
+function uiPlayer(type) {
+	if (type === "drawer") {
+		nudgeSender(drawerNudge);
+	} else {
+		nudgeSender(modalNudge);
+	}
 }
+
+// Dummy nudges
+var drawerNudge = {
+	"time_loaded": timeNow(),
+	"type": "visit",
+	"domain": domain,
+	"status": "executed",
+	"amount": 15,
+	"send_fails": 0,
+	"modal": false,
+	"favicon": ""
+};
+
+var modalNudge = {
+	"time_loaded": timeNow(),
+	"type": "visit",
+	"domain": domain,
+	"status": "executed",
+	"amount": 15,
+	"send_fails": 0,
+	"modal": true,
+	"favicon": ""
+};
 
 // Manual UI Player function
 if (window.addEventListener) {
-		var letters = [], prompt = ["z","x"];
+		var letters = [], prompt1 = ["z","x"], prompt2 = ["c","v"];
 		window.addEventListener("keydown", function(e) {
 				letters.push(e.key);
-					if ([letters.slice(-2)[0],letters.slice(-1)[0]].toString() === prompt.toString()) {
-					uiPlayer();
-				} 
+				if ([letters.slice(-2)[0],letters.slice(-1)[0]].toString() === prompt1.toString()) {
+					uiPlayer("drawer");
+				} else if ([letters.slice(-2)[0],letters.slice(-1)[0]].toString() === prompt2.toString()) {
+					uiPlayer("modal");
+				}
 		}, true);
 }
 
@@ -161,19 +188,11 @@ function listener() {
 
 // =================================================================
 
-// Dummy nudges
-var dummyNudge = {
-	"time_loaded": timeNow(),
-	"type": "visit",
-	"domain": domain,
-	"status": "executed",
-	"amount": 15,
-	"send_fails": 0,
-	"modal": false,
-	"favicon": ""
-};
+
 
 console.log(faviconUrl);
+
+var thisSiteTesting = true;
 
 // Message compiler
 function messageCompiler(request) {
@@ -188,7 +207,7 @@ function messageCompiler(request) {
 	min_amount = minutes(request.amount);
 	amount = request.amount;
 	end_div = '</div>';
-	if (faviconUrl === "") {
+	if (faviconUrl === "" || thisSiteTesting) {
 		favicon_m = 'this site';
 		favicon_d = 'this site<div id="d_message_favicon" style="margin: 0;width: 0;height: 32px"></div>';
 	} else {
