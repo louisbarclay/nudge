@@ -24,8 +24,8 @@ clickHandler(scroll_b);
 
 visit_s = {
 	setting: "visit_s_setting",
-	options: [5,10,15,20,25],
-	options_text: ["5 visits","10 visits","15 visits","20 visits","25 visits"],
+	options: [20,30,40,50,60],
+	options_text: ["20 visits","30 visits","40 visits","50 visits","60 visits"],
 	button: $('#visit_s_button'),
 	list: $('#visit_s_list'),
 };

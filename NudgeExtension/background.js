@@ -49,13 +49,13 @@ function currentTabDomain() {
 
 // Init options
 init = {
-	domains_setting: ["messenger.com", "lingumi.com", "facebook.com","twitter.com", "linkedin.com", "reddit.com", "diply.com", "buzzfeed.com", "youtube.com", "theladbible.com", "instagram.com", "pinterest.com", "theguardian.com", "bbc.com", "bbc.co.uk", "theguardian.co.uk", "dailymail.co.uk", "mailonline.com", "imgur.com", "amazon.co.uk", "amazon.com", "netflix.com", "tumblr.com", "thesportbible.com", "telegraph.co.uk"], 
-	scroll_s_setting: 10,
+	domains_setting: ["messenger.com", "facebook.com","twitter.com", "linkedin.com", "reddit.com", "diply.com", "buzzfeed.com", "youtube.com", "theladbible.com", "instagram.com", "pinterest.com", "theguardian.com", "bbc.com", "bbc.co.uk", "theguardian.co.uk", "dailymail.co.uk", "mailonline.com", "imgur.com", "amazon.co.uk", "amazon.com", "netflix.com", "tumblr.com", "thesportbible.com", "telegraph.co.uk"], 
+	scroll_s_setting: 20,
 	scroll_b_setting: 3,
-	visit_s_setting: 20,
-	visit_b_setting: 2,
-	time_s_setting: 10,
-	time_b_setting: 2,
+	visit_s_setting: 50,
+	visit_b_setting: 3,
+	time_s_setting: 20,
+	time_b_setting: 3,
 	compulsive_setting: 10,
 	maxnudge_setting: 0,
 };
@@ -582,6 +582,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 						chrome.tabs.sendMessage(tabs[0].id, {
 							"type": "favicon",
 							"favicon": tab.favIconUrl,
+							"domain": domain
 						}, function(response) {
 							}
 						);
