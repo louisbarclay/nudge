@@ -22,6 +22,7 @@ When you want to Nudge:
  	no: nudge_loaded. once tab registers as true in tab record - scans for any nudge_loaded
 */
 
+/*
 chrome.commands.onCommand.addListener(function(command) {
 	  if (command === "tester") {
 	  	t1 = n1;
@@ -30,6 +31,7 @@ chrome.commands.onCommand.addListener(function(command) {
 	  }
 	}
 );
+*/
 
 n1 = {
 	"time_loaded": timeNow(),
