@@ -424,7 +424,7 @@
   color: #000000;
   background-color: #ffffff;
   position: fixed;
-  z-index: 2147483647;
+  z-index: 2147483646;
   overflow: hidden;
   margin: 0;
   padding: 0;
@@ -442,7 +442,7 @@
   height: auto;
   position: relative;
   text-overflow: clip;
-  min-height: 50px;
+  min-height: 0px;
   overflow: visible;
   text-align: left;
   padding: 7px 7px 7px 8px;
@@ -472,38 +472,38 @@
     height: 50px;
 }
 
-#d_link_options {
+#nudge_d #d_link_options {
   text-decoration: none;
   color: #bdbdbd;
   display: inline-block;
   cursor: pointer;  
 }
 
-#d_link_options:hover {
+#nudge_d #d_link_options:hover {
   text-decoration: none;
   color: #ff61a7;
 }
 
-#d_link_nothing {
+#nudge_d #d_link_nothing {
   text-decoration: none;
   color: #bdbdbd;
   display: inline-block;
   cursor: pointer;  
 }
 
-#d_link_nothing:hover {
+#nudge_d #d_link_nothing:hover {
   text-decoration: none;
   color: #ff61a7;
 }
 
-#d_link_domain {
+#nudge_d #d_link_domain {
   text-decoration: none;
   color: #bdbdbd;
   display: inline-block;
   cursor: pointer; 
 }
 
-#d_link_domain:hover {
+#nudge_d #d_link_domain:hover {
   text-decoration: none;
   color: #ff61a7;
 }
@@ -556,11 +556,11 @@
     transition: all 0.2s;
 }
 
-#d_message #d_message_cog:hover {
+#nudge_d #d_message_cog:hover {
     background: url('chrome-extension://__MSG_@@extension_id__/cogsmallhover.png') center center no-repeat;
 }
 
-#d_message #d_message_rhs {
+#nudge_d #d_message_rhs {
   padding-left: 60px;
     position: relative;
     min-height: 32px;
@@ -706,23 +706,23 @@ body {
   border-right: 5px solid transparent;
 }
 
-#d_link_share {
+#nudge_d #d_link_share {
   text-decoration: none;
   color: #bdbdbd;
   display: inline-block;
   cursor: pointer;
 }
 
-#d_link_share:hover {
+#nudge_d #d_link_share:hover {
   text-decoration: none;
   color: #ff61a7;
 }
 
 #nudge_d #d_hover_window {
-  top: 3px;
-  left: 40px;
+  top: 75px;
+  left: 150px;
   opacity: 0;
-  position: relative;
+  position: fixed;
   width: 210px;
   height: 11px;
   padding: 2px 2px 8px 2px;
@@ -735,7 +735,8 @@ body {
   color: #ffffff;
   margin: 0;
   border: none;
-  resize: none;  
+  resize: none;
+  z-index: 2147483647;
 }
 
 #d_link_share:hover + #d_hover_window {
