@@ -561,6 +561,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 			timelineAdder(domain, true);
 		}
 		// For constantising titles
+		/*
 		if (domain && changeInfo.title) {
 			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 					if (tabs[0] !== undefined) {
@@ -575,6 +576,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 				}
 			);
 		}
+		*/
 		// For sending favicon URL
 		if (domain && tab.favIconUrl) {
 			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
