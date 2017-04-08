@@ -7,6 +7,14 @@ function imageLoader(imageName, url) {
 
 var faviconUrl = '';
 
+/*
+function faviconUrlPrinter() {
+	console.log(faviconUrl);
+}
+
+setInterval(faviconUrlPrinter, 1000);
+*/
+
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
 		if (request.type === "favicon") {

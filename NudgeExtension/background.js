@@ -578,10 +578,10 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 		}
 		*/
 		// For sending favicon URL
-		if (domain && tab.favIconUrl) {
+		if (domain && typeof changeInfo.favIconUrl !== "undefined" && changeInfo.favIconUrl !== "") {
 			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 					if (tabs[0] !== undefined) {
-						chrome.tabs.sendMessage(tabs[0].id, {
+						chrome.tabs.sendMessage(tabId, {
 							"type": "favicon",
 							"favicon": tab.favIconUrl,
 							"domain": domain
