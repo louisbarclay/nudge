@@ -502,7 +502,11 @@ function windowChecker() {
     // in this space here
     // if you check the tab register and the tab ID has a nudge waiting to go out.
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-      var nudge = tabIdStorage[tabs[0].id].nudge;
+      var nudge = false;
+      if (tabIdStorage && tabIdStorage[tabs[0].id] && tabIdStorage[tabs[0].id].nudge) {
+        nudge = tabIdStorage[tabs[0].id].nudge;
+      }
+
       if (nudge) {
         messageSender(nudge);
         tabIdStorage[tabs[0].id].nudge = false;
@@ -628,38 +632,42 @@ function messageSender(object) {
   } else {
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
       // Send message to the tab here
-      chrome.tabs.sendMessage(tabs[0].id, { type: "ready_check" }, function(response) {
-        if (response && response.type) { //updated 25 march 2017 by ExtFo
-          // object.favicon = tabs[0].favIconUrl;
-          chrome.tabs.sendMessage(tabs[0].id, object, function(response) {
-            // log("sentobject", object);
-            if (response) {
-              object.time_executed = response.time_executed;
-              object.status = response.status;
-              object.tabId = tabs[0].id;
-              lastSuccessfulNudgeTime = response.time_executed; // TODO: this stuff is all too heavy. The handler below should cover it
-              nudgeLogger(object);
-            } else if (object.send_fails < sendFailLimit) {
-              object.send_fails++;
-              messageSender(object);
-              // log("SEND_FAIL" + object.send_fails);
-              // log(tabs[0].id);
-            } else {
-              object.status = "failed";
-              // log("MAJOR_FAIL");
-              nudgeLogger(object);
-              // log(tabs[0].id);
-            }
-          });
-        } else {
-          log("do tab record thing");
-          // If tab record is undefined, create it
-          tabIdStorage[tabs[0].id].nudge = object;
-          object.send_fails++;
-          // so...... load the tab ID with the nudge to come (the whole object!)
-          // then the every-seconder asks the current selected tab if there is a nudge waiting, in which case it messageSends
-        }
-      });
+
+      if (tabs[0] && tabs[0].id) {
+
+        chrome.tabs.sendMessage(tabs[0].id, { type: "ready_check" }, function(response) {
+          if (response && response.type) { //updated 25 march 2017 by ExtFo
+            // object.favicon = tabs[0].favIconUrl;
+            chrome.tabs.sendMessage(tabs[0].id, object, function(response) {
+              // log("sentobject", object);
+              if (response) {
+                object.time_executed = response.time_executed;
+                object.status = response.status;
+                object.tabId = tabs[0].id;
+                lastSuccessfulNudgeTime = response.time_executed; // TODO: this stuff is all too heavy. The handler below should cover it
+                nudgeLogger(object);
+              } else if (object.send_fails < sendFailLimit) {
+                object.send_fails++;
+                messageSender(object);
+                // log("SEND_FAIL" + object.send_fails);
+                // log(tabs[0].id);
+              } else {
+                object.status = "failed";
+                // log("MAJOR_FAIL");
+                nudgeLogger(object);
+                // log(tabs[0].id);
+              }
+            });
+          } else {
+            log("do tab record thing");
+            // If tab record is undefined, create it
+            tabIdStorage[tabs[0].id].nudge = object;
+            object.send_fails++;
+            // so...... load the tab ID with the nudge to come (the whole object!)
+            // then the every-seconder asks the current selected tab if there is a nudge waiting, in which case it messageSends
+          }
+        });
+      }
     });
   }
 }
