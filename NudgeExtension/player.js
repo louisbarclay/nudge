@@ -136,7 +136,7 @@ var modalNudge = {
 };
 
 // Manual UI Player function
-
+/*
 if (window.addEventListener) {
         var letters = [], prompt1 = ["z","x"], prompt2 = ["c","v"];
         window.addEventListener("keydown", function(e) {
@@ -148,7 +148,7 @@ if (window.addEventListener) {
                 }
         }, true);
 }
-
+*/
 
 var defaultMessage = 'This is the <div id="d_message_box">default message</div> <div id="d_message_favicon"></div>';
 
