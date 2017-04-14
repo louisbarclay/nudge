@@ -106,7 +106,9 @@
   transition: all 0.3s;
   transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
 }
-
+#nudge_m #m_contents div {
+  text-align: center;
+}
 #nudge_m #m_message1 {
   background-color: #ffffff;
   border-color: #000000;
