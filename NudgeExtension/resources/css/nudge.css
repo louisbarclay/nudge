@@ -77,7 +77,7 @@
   margin: auto;
   padding: 0;
   overflow: visible;
-  font-size: 10px/1.4;
+  font-size: 10px;
   -webkit-font-smoothing: antialiased;
   animation: fade_in 0.3s forwards;
   transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
@@ -665,13 +665,6 @@
 
 .bounceInDown {
   animation: bounceInDown 0.2s forwards;
-}
-
-body { 
-  margin: 50px; 
-  color: #333; 
-  font-family: Verdana, sans-serif;
-  font-size: 16px;
 }
 
 #nudge_m #m_hover_window {
