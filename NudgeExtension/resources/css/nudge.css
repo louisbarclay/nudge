@@ -5,7 +5,7 @@
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
-  src: local('Open Sans'), local('OpenSans'), url('chrome-extension://__MSG_@@extension_id__/opensans.woff2') format('woff2');
+  src: local('Open Sans'), local('OpenSans'), url('chrome-extension://__MSG_@@extension_id__/resources/fonts/opensans.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
 }
 
@@ -145,12 +145,12 @@
     display: inline-block;
     cursor: pointer;
     vertical-align: -2px;
-    background: url('chrome-extension://__MSG_@@extension_id__/coglarge.png') center center no-repeat;
+    background: url('chrome-extension://__MSG_@@extension_id__/resources/images/coglarge.png') center center no-repeat;
     transition: all 0.3s;
 }
 
 #nudge_m #m_message1_cog:hover {
-    background: url('chrome-extension://__MSG_@@extension_id__/coglargehover.png') center center no-repeat;
+    background: url('chrome-extension://__MSG_@@extension_id__/resources/images/coglargehover.png') center center no-repeat;
     transition: all 0.3s;
 }
 
@@ -462,11 +462,11 @@
   height: 14px;
   overflow: hidden;
   right: 7px;
-  background: url('chrome-extension://__MSG_@@extension_id__/close.png') center center no-repeat;
+  background: url('chrome-extension://__MSG_@@extension_id__/resources/images/close.png') center center no-repeat;
 }
 
 #nudge_d #d_close:hover {
-  background: url('chrome-extension://__MSG_@@extension_id__/closehover.png') center center no-repeat;  
+  background: url('chrome-extension://__MSG_@@extension_id__/resources/images/closehover.png') center center no-repeat;  
 }
 
 #nudge_d #d_message {
@@ -554,12 +554,12 @@
     display: inline-block;
     cursor: pointer;
     vertical-align: -2px;
-    background: url('chrome-extension://__MSG_@@extension_id__/cogsmall.png') center center no-repeat;
+    background: url('chrome-extension://__MSG_@@extension_id__/resources/images/cogsmall.png') center center no-repeat;
     transition: all 0.2s;
 }
 
 #nudge_d #d_message_cog:hover {
-    background: url('chrome-extension://__MSG_@@extension_id__/cogsmallhover.png') center center no-repeat;
+    background: url('chrome-extension://__MSG_@@extension_id__/resources/images/cogsmallhover.png') center center no-repeat;
 }
 
 #nudge_d #d_message_rhs {
@@ -763,29 +763,29 @@ body {
 
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5) {
   #nudge_m #m_message1_cog {
-    background: url('chrome-extension://__MSG_@@extension_id__/retina-images/coglarge@2x.png') center center no-repeat;
+    background: url('chrome-extension://__MSG_@@extension_id__/resources/images/retina-images/coglarge@2x.png') center center no-repeat;
     background-size: cover;    
   }
   #nudge_m #m_message1_cog:hover {
-    background: url('chrome-extension://__MSG_@@extension_id__/retina-images/coglargehover@2x.png') center center no-repeat;
+    background: url('chrome-extension://__MSG_@@extension_id__/resources/images/retina-images/coglargehover@2x.png') center center no-repeat;
     background-size: cover;
   }
   #nudge_d #d_close {
-    background: url('chrome-extension://__MSG_@@extension_id__/retina-images/close@2x.png') center center no-repeat;
+    background: url('chrome-extension://__MSG_@@extension_id__/resources/images/retina-images/close@2x.png') center center no-repeat;
     background-size: cover;
   }
   
   #nudge_d #d_close:hover {
-    background: url('chrome-extension://__MSG_@@extension_id__/retina-images/closehover@2x.png') center center no-repeat;  
+    background: url('chrome-extension://__MSG_@@extension_id__/resources/images/retina-images/closehover@2x.png') center center no-repeat;  
     background-size: cover;
   }
   #nudge_d #d_message_cog {
-    background: url('chrome-extension://__MSG_@@extension_id__/retina-images/cogsmall@2x.png') center center no-repeat;
+    background: url('chrome-extension://__MSG_@@extension_id__/resources/images/retina-images/cogsmall@2x.png') center center no-repeat;
     background-size: cover;
   }
   
   #d_message #d_message_cog:hover {
-    background: url('chrome-extension://__MSG_@@extension_id__/retina-images/cogsmallhover@2x.png') center center no-repeat;
+    background: url('chrome-extension://__MSG_@@extension_id__/resources/images/retina-images/cogsmallhover@2x.png') center center no-repeat;
     background-size: cover;
   }
 }
