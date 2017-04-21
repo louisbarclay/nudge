@@ -11,32 +11,34 @@ nudge time out working
 10% concept implemented or almost implemented
 --
 identify non-loaded conditions that nudge can still work under/
-	earliest it can possibly work fine. but do that after?
+  earliest it can possibly work fine. but do that after?
 
 TAB RECORDS. one property is: player.js loaded
     set to true:::: when message comes from tab. goes to tab record and sets that to true
 
 When you want to Nudge:
-	check that's true for that tab Id. 
-	yes: send nudge
- 	no: nudge_loaded. once tab registers as true in tab record - scans for any nudge_loaded
+  check that's true for that tab Id. 
+  yes: send nudge
+  no: nudge_loaded. once tab registers as true in tab record - scans for any nudge_loaded
 */
 
 /*
 chrome.commands.onCommand.addListener(function(command) {
-	  if (command === "tester") {
-	  	t1 = n1;
-	  	t1.domain = currentTabDomain();
-	  	messageSender(n1);
-	  }
-	}
+    if (command === "tester") {
+      t1 = n1;
+      t1.domain = currentTabDomain();
+      messageSender(n1);
+    }
+  }
 );
 */
 
 
+
+
 //  global debug option for logger
 
-debugMode = true; // set this to true if you want information to be output in the debugger
+debugMode = config.debug;
 
 if (debugMode) {
   console.log('in debug mode');
@@ -575,18 +577,18 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   // For constantising titles
   /*
   if (domain && changeInfo.title) {
-  	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-  			if (tabs[0] !== undefined) {
-  				chrome.tabs.sendMessage(tabs[0].id, {
-  					"type": "title",
-  					"title": changeInfo.title,
-  					"domain": domain
-  				}, function(response) {
-  					}
-  				);
-  			}
-  		}
-  	);
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        if (tabs[0] !== undefined) {
+          chrome.tabs.sendMessage(tabs[0].id, {
+            "type": "title",
+            "title": changeInfo.title,
+            "domain": domain
+          }, function(response) {
+            }
+          );
+        }
+      }
+    );
   }
   */
   // For sending favicon URL
@@ -611,8 +613,8 @@ tab that is ACTIVE does something noteworthy. HAS to be active.
 sendsMessage. with tab ID of course
 messageSender checks if that tab is still active
 checks if TAB IS READY= ======= so, has the tab sent the thing to say it's ready?
-		------ or rather, sends message once tab is ready. puts a listener on it
-		------ (tab gets set to NOT READY if tabUpdate and the JS goes... how do we know that?!)
+    ------ or rather, sends message once tab is ready. puts a listener on it
+    ------ (tab gets set to NOT READY if tabUpdate and the JS goes... how do we know that?!)
 */
 
 // FIXME: should be checking if tab complete, if tab active, etc. etc.

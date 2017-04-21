@@ -72,7 +72,7 @@
   ],
   "version": "1.0.8",
   "background": {
-    "scripts": ["lib/jquery/jquery-3.1.0.min.js", "resources/js/background.js"]
+    "scripts": ["config.js", "lib/jquery/jquery-3.1.0.min.js", "resources/js/background.js"]
   },
   "content_scripts": [{
     "matches": ["<all_urls>"],
