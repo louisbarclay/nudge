@@ -36,7 +36,7 @@ chrome.commands.onCommand.addListener(function(command) {
 
 //  global debug option for logger
 
-debugMode = false; // set this to true if you want information to be output in the debugger
+debugMode = true; // set this to true if you want information to be output in the debugger
 
 if (debugMode) {
   console.log('in debug mode');
