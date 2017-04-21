@@ -68,7 +68,8 @@
     "resources/retina-images/compulsive@2x.png",
     "resources/retina-images/scroll@2x.png",
     "resources/retina-images/time@2x.png",
-    "resources/retina-images/visit@2x.png"
+    "resources/retina-images/visit@2x.png",
+    "resources/images/offswitch.svg"
   ],
   "version": "1.0.8",
   "background": {
@@ -76,8 +77,8 @@
   },
   "content_scripts": [{
     "matches": ["<all_urls>"],
-    "js": ["lib/jquery/jquery-3.1.0.min.js", "resources/js/images.js", "resources/js/player.js"],
-    "css": ["resources/css/nudge.css"],
+    "js": ["lib/jquery/jquery-3.1.0.min.js", "resources/js/images.js", "resources/js/player.js", "resources/js/switch.js"],
+    "css": ["resources/css/nudge.css", "resources/css/switch.css"],
     "exclude_globs": [
       "*business.facebook.com*"
     ],
