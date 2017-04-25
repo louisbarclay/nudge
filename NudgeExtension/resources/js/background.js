@@ -36,23 +36,6 @@ chrome.commands.onCommand.addListener(function(command) {
 
 
 
-//  global debug option for logger
-
-debugMode = config.debug;
-
-if (debugMode) {
-  console.log('in debug mode');
-}
-
-function log(data) {
-
-  if (debugMode == true) {
-    console.log(data)
-  }
-}
-
-
-
 n1 = {
   "time_loaded": timeNow(),
   "type": "visit",
