@@ -1,0 +1,98 @@
+/* Copyright 2016, Nudge, All rights reserved. */
+
+/* Latin */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url('chrome-extension://__MSG_@@extension_id__/resources/fonts/opensans.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+}
+
+#nudge_s div,
+#nudge_s span,
+#nudge_s h1,
+#nudge_s h2,
+#nudge_s h3,
+#nudge_s h4,
+#nudge_s h5,
+#nudge_s h6,
+#nudge_s p,
+#nudge_s a,
+#nudge_s em,
+#nudge_s img,
+#nudge_s strong,
+#nudge_s ol,
+#nudge_s ul,
+#nudge_s li {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    top: initial;
+    bottom: initial;
+    left: initial;
+    right: initial;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+    box-sizing: initial;
+    position: initial;
+}
+
+#nudge_s #s_container {
+  position: fixed;
+  bottom: 25px;
+  left: 25px;
+  background-color: #000000;
+  overflow: hidden;
+  display: inline-block;
+  width: auto;
+  min-width: 27px;
+  height: 27px;
+  opacity: .5;
+  z-index: 2147483646;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  transition: all 0.3s;
+  cursor: pointer;
+  border-radius: 40px;
+  font-family: 'Open Sans', Arial, sans-serif;
+  font-style: normal;
+}
+
+#nudge_s #s_container:hover {
+  opacity: .8;
+}
+
+#nudge_s #s_container:hover #s_message {
+  max-width: 350px;
+}
+
+#nudge_s #s_switch {
+  margin: 3px 3px 3px 4px;
+  float: left;
+  opacity: 1;
+  width: 21px;
+  height: 20px;
+  background: url('chrome-extension://__MSG_@@extension_id__/resources/images/offswitch.svg') 0/20px no-repeat;
+}
+
+#nudge_s #s_message {
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+  color: #F0F8FF;
+  width: auto;
+  margin: 0;
+  max-width: 0;
+  height: 100%;
+  float: left;
+  text-align: center;
+  line-height: 24px;
+  white-space: nowrap;
+  overflow: hidden;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  transition: all 0.3s;
+}
+
+#nudge_s #s_message_contents {
+  margin: 1px 25px 0 13px;
+}

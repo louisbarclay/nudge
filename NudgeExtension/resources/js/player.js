@@ -522,15 +522,15 @@ function bgPicker(type) {
 // Background image variables
 //updated 25 march 2017 by ExtFo
 if (window.devicePixelRatio > 1) {
-  var bgImageVisit = "url(" + chrome.extension.getURL("retina-images/visit@2x.png") + ") center center no-repeat";
-  var bgImageTime = "url(" + chrome.extension.getURL("retina-images/time@2x.png") + ") center center no-repeat";
-  var bgImageScroll = "url(" + chrome.extension.getURL("retina-images/scroll@2x.png") + ") center center no-repeat";
-  var bgImageCompulsive = "url(" + chrome.extension.getURL("retina-images/compulsive@2x.png") + ") center center no-repeat";
+  var bgImageVisit = "url(" + chrome.extension.getURL("resources/images/retina-images/visit@2x.png") + ") center center no-repeat";
+  var bgImageTime = "url(" + chrome.extension.getURL("resources/images/retina-images/time@2x.png") + ") center center no-repeat";
+  var bgImageScroll = "url(" + chrome.extension.getURL("resources/images/retina-images/scroll@2x.png") + ") center center no-repeat";
+  var bgImageCompulsive = "url(" + chrome.extension.getURL("resources/images/retina-images/compulsive@2x.png") + ") center center no-repeat";
 } else {
-  var bgImageVisit = "url(" + chrome.extension.getURL("visit.png") + ") center center no-repeat";
-  var bgImageTime = "url(" + chrome.extension.getURL("time.png") + ") center center no-repeat";
-  var bgImageScroll = "url(" + chrome.extension.getURL("scroll.png") + ") center center no-repeat";
-  var bgImageCompulsive = "url(" + chrome.extension.getURL("compulsive.png") + ") center center no-repeat";
+  var bgImageVisit = "url(" + chrome.extension.getURL("resources/images/visit.png") + ") center center no-repeat";
+  var bgImageTime = "url(" + chrome.extension.getURL("resources/images/time.png") + ") center center no-repeat";
+  var bgImageScroll = "url(" + chrome.extension.getURL("resources/images/scroll.png") + ") center center no-repeat";
+  var bgImageCompulsive = "url(" + chrome.extension.getURL("resources/images/compulsive.png") + ") center center no-repeat";
 }
 // Helper function ordinal number parser
 function ordinal(i) {

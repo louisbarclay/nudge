@@ -230,6 +230,9 @@ function inDomainsSetting(url) {
 // URL receiver from content script and init options giver
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
+    if (request.type === "off") {
+      chrome.tabs.update(sender.tab.id, {url: "https://thebrowser.com"}, function() {});
+    }
     if (request.type === "scroll" || request.type === "visit" || request.type === "compulsive" || request.type === "time") {
       messageSender(request);
     }
