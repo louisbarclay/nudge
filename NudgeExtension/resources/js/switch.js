@@ -23,20 +23,8 @@ function switchOff() {
       var s_message_contents = document.getElementById('s_message_contents');
       var s_message = document.getElementById('s_message');
       s_message.style.maxWidth = "350px";
-      s_message_contents.innerHTML = "Switching off in 3";
-      function in2() {
-        s_message_contents.innerHTML = "Switching off in 2";
-      }
-      function in1() {
-        s_message_contents.innerHTML = "Switching off in 1";
-      }
-      function in0() {
-        s_message_contents.innerHTML = "Switching off...";
-      }
-      setTimeout(in2, 1000);
-      setTimeout(in1, 2000);
-      setTimeout(in0, 3000);
-      setTimeout(initOff, 3000);
+      s_message_contents.innerHTML = "Switching off...";
+      initOff();
     }
   );    
 }

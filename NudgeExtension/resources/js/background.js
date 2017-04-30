@@ -227,11 +227,27 @@ function inDomainsSetting(url) {
   return false;
 }
 
+var offDomains = {};
+
 // URL receiver from content script and init options giver
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if (request.type === "off") {
-      chrome.tabs.update(sender.tab.id, {url: "https://thebrowser.com"}, function() {});
+      var domain = inDomainsSetting(sender.url);
+      offDomains[domain] = true;
+      console.log(offDomains);
+      var url = chrome.extension.getURL("nudgeoff.html") + '?' + 'domain=' + domain + "&" + 'url=' + sender.url;
+      if (domain) {
+        chrome.tabs.update(sender.tab.id, {url: url}, function() {});
+      }
+    }
+    if (request.type === "on") {
+      var domain = request.domain;
+      var url = request.url;
+      offDomains[domain] = false;
+      if (domain) {
+        chrome.tabs.update(sender.tab.id, {url: url}, function() {});
+      }
     }
     if (request.type === "scroll" || request.type === "visit" || request.type === "compulsive" || request.type === "time") {
       messageSender(request);
@@ -546,6 +562,11 @@ chrome.tabs.onCreated.addListener(function(tab) {
 // Update URL in tabIdStorage
 // URL constantiser
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+  var domain = inDomainsSetting(tab.url);
+  if (domain in offDomains && offDomains[domain] && domain) {
+    var url = chrome.extension.getURL("nudgeoff.html") + '?' + 'domain=' + domain + "&" + 'url=' + tab.url;
+    chrome.tabs.update(tabId, {url: url}, function() {});
+  }
   // Update record in tabIdStorage
   if (typeof tabIdStorage[tabId] === "undefined") {
     tabIdStorage[tabId] = {
@@ -555,8 +576,6 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   } else {
     tabIdStorage[tabId].url = tab.url;
   }
-  var domain = inDomainsSetting(tab.url);
-  // log(tab);
   if (tab.active === true) {
     timelineAdder(domain, true);
   }
@@ -708,3 +727,32 @@ var funNames_init = [
 ];
 
 var funNames_current = funNames_init.slice();
+
+// Things to do
+var thingsToDo_init = [
+  "Barack Obama",
+  "Kim Kardashian",
+  "Kanye West",
+  "Justin Bieber",
+  "Mark Zuckerberg",
+  "George Clooney",
+  "Amal Clooney",
+  "Brad Pitt",
+  "Angelina Jolie",
+  "Leonardo DiCaprio",
+  "Chris Pratt",
+  "Amy Schumer",
+  "Adele",
+  "Vladimir Putin",
+  "Lindsay Lohan",
+  "Sandra Bullock",
+  "Taylor Swift",
+  "Beyonc&eacute;",
+  "Jay Z",
+  "Harrison Ford",
+  "Tim Cook",
+  "Peter Thiel",
+  "J.K. Rowling",
+];
+
+var thingsToDo_current = thingsToDo_init.slice();
