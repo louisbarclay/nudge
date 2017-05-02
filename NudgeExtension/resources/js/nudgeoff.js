@@ -74,7 +74,6 @@ var niceNames = {
   "mail.google.com": "Gmail"
 };
 
-
 var h1 = document.querySelector(".h1");
 var h2 = document.querySelector(".h2");
 var slidertext = document.querySelector(".slider-text");
@@ -82,10 +81,20 @@ var slidertext = document.querySelector(".slider-text");
 var simpleName = domain;
 if (domain in niceNames) {
   simpleName = niceNames[domain];
+  document.title = niceNames[domain];
+} else {
+  document.title = domain;
 }
 
 h1.innerHTML = simpleName + " is currently switched off.";
-h2.innerHTML = "Why not plan a dinner with your friends?";
+thingsToDo();
+
+function thingsToDo() {
+  chrome.runtime.sendMessage({ type: "thing_to_do" }, function(response) {
+    h2.innerHTML = response.name;
+  });
+}
+
 slidertext.innerHTML = 'Slide right to turn ' + simpleName + ' back on';
 
 t.addEventListener('mousedown', sliderdown, true);
