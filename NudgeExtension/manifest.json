@@ -72,15 +72,16 @@
     "resources/retina-images/scroll@2x.png",
     "resources/retina-images/time@2x.png",
     "resources/retina-images/visit@2x.png",
-    "resources/images/offswitch.svg"
+    "resources/images/offswitch.svg",
+    "resources/js/switch.js"
   ],
   "version": "1.0.8",
   "background": {
-    "scripts": ["config.js", "lib/jquery/jquery-3.1.0.min.js", "resources/js/background.js"]
+    "scripts": ["config.js", "lib/jquery/jquery-3.1.0.min.js", "resources/js/helpers.js", "resources/js/background.js"]
   },
   "content_scripts": [{
     "matches": ["<all_urls>"],
-    "js": ["lib/jquery/jquery-3.1.0.min.js", "resources/js/images.js", "resources/js/player.js", "resources/js/switch.js"],
+    "js": ["lib/jquery/jquery-3.1.0.min.js", "resources/js/helpers.js", "resources/js/images.js", "resources/js/player.js", "resources/js/controller.js"],
     "css": ["resources/css/nudge.css", "resources/css/switch.css"],
     "exclude_globs": [
       "*business.facebook.com*"

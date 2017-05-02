@@ -532,45 +532,8 @@ if (window.devicePixelRatio > 1) {
   var bgImageScroll = "url(" + chrome.extension.getURL("resources/images/scroll.png") + ") center center no-repeat";
   var bgImageCompulsive = "url(" + chrome.extension.getURL("resources/images/compulsive.png") + ") center center no-repeat";
 }
-// Helper function ordinal number parser
-function ordinal(i) {
-  var j = i % 10,
-    k = i % 100;
-  if (j == 1 && k != 11) {
-    return i + "st";
-  }
-  if (j == 2 && k != 12) {
-    return i + "nd";
-  }
-  if (j == 3 && k != 13) {
-    return i + "rd";
-  }
-  return i + "th";
-}
 
-// Helper second to minute parser
-function minutes(i) {
-  if (i >= 105) {
-    return Math.round(i / 60) + " minutes";
-  } else if (i === 1) {
-    return "one second";
-  } else if (i < 45) {
-    return Math.round(i) + " seconds";
-  } else if (i < 60) {
-    return "a minute";
-  } else if (i < 105) {
-    return "2 minutes";
-  } else {
-    console.log("minute function didn't work"); // FIXME: WHY ALWAYS FLAGGING?
-  }
-}
 
-// Helper time generator
-function timeNow() {
-  var time = new Date();
-  time = time.getTime();
-  return time;
-}
 
 // Set titles constant on case by case basis (should be done with object really)
 function titleConstantizer(domain) {

@@ -199,33 +199,7 @@ function checkDate() {
   }
 }
 
-// Extract core domain from URL you want to check
-function extractDomain(url) {
-  var domain;
-  // Find & remove protocol (http, ftp, etc.) and get domain
-  if (url.indexOf("://") > -1) {
-    domain = url.split('/')[2];
-  } else {
-    domain = url.split('/')[0];
-  }
-  // Find & remove port number
-  domain = domain.split(':')[0];
-  return domain;
-}
 
-// Take URL, extract core domain, check against domain list, and return domain it matches if true
-function inDomainsSetting(url) {
-  url = extractDomain(url);
-  if (url === "business.facebook.com") {
-    return false;
-  }
-  for (var i = 0; i < curr.domains_setting.length; i++) {
-    if (url.match(curr.domains_setting[i])) {
-      return curr.domains_setting[i];
-    }
-  }
-  return false;
-}
 
 var offDomains = {};
 
@@ -271,22 +245,16 @@ chrome.runtime.onMessage.addListener(
       log(request);
     }
     if (request.type === "fun_name") {
-      sendResponse({ name: funNameGetter() });
+      sendResponse({name: randomGetter(funNames_init,funNames_current)});
+    }
+    if (request.type === "thing_to_do") {
+      sendResponse({name: randomGetter(thingsToDo_init,thingsToDo_current)});
+    }
+    if (request.type === "inject_switch") {
+      chrome.tabs.executeScript(sender.tab.id, {file: "resources/js/switch.js"});
     }
   }
 );
-
-function funNameGetter() {
-  var index = Math.floor(Math.random() * funNames_current.length);
-  if (funNames_current.length === 0) {
-    funNames_current = funNames_init.slice();
-  }
-  var name = funNames_current[index];
-  if (index > -1) {
-    funNames_current.splice(index, 1);
-  }
-  return name;
-}
 
 // Nudge logger function
 function nudgeLogger(nudgeData) {
@@ -692,13 +660,6 @@ function tooSoonChecker() {
   }
 }
 
-// Time generator
-function timeNow() {
-  var time = new Date();
-  time = time.getTime();
-  return time;
-}
-
 // Let's have some fun with some FUN NAMES
 var funNames_init = [
   "Barack Obama",
@@ -756,3 +717,8 @@ var thingsToDo_init = [
 ];
 
 var thingsToDo_current = thingsToDo_init.slice();
+
+// Helper that simplifies domainChecker for use here
+function inDomainsSetting(url) {
+  return (domainChecker(url, curr.domains_setting));
+}
