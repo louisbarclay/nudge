@@ -7,14 +7,6 @@ function imageLoader(imageName, url) {
 
 var faviconUrl = '';
 
-/*
-function faviconUrlPrinter() {
-	console.log(faviconUrl);
-}
-
-setInterval(faviconUrlPrinter, 1000);
-*/
-
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if (request.type === "favicon") {
@@ -53,3 +45,6 @@ n_scroll.src = chrome.extension.getURL("resources/images/scroll.png");
 
 var n_compulsive = new Image();
 n_compulsive.src = chrome.extension.getURL("resources/images/compulsive.png");
+
+var offswitch = new Image();
+offswitch.src = chrome.extension.getURL("resources/images/offswitch.svg");
