@@ -152,6 +152,52 @@ var defaultDomainData = {
 
 // Set default settings TODO: need resolution to the domainsEver thing. basically: if domain gets dropped off, should still reset it. etc.
 function setDefaults() {
+  function getRandomToken() {
+    // E.g. 8 * 32 = 256 bits token
+    var randomPool = new Uint8Array(32);
+    crypto.getRandomValues(randomPool);
+    var hex = '';
+    for (var i = 0; i < randomPool.length; ++i) {
+      hex += randomPool[i].toString(16);
+    }
+    // E.g. db18458e2782b2b77e36769c569e263a53885a9944dd0a861e5064eac16f1a
+    return hex;
+  }
+
+
+  // set id for each user
+  chrome.storage.sync.get('userid', function(items) {
+    var userId = items.userId;
+    if (userId) {
+      useToken(userId);
+    } else {
+      userId = getRandomToken();
+      chrome.storage.sync.set({ userId: userId }, function() {
+        useToken(userId);
+      });
+    }
+
+    function useToken(userId) {
+      var dataToBeSent = {
+        'userId': userId,
+        data: localStorage
+
+      }
+
+      $.post(config.apiEndpoint + 'user', dataToBeSent, function(data, status) {
+        console.log(status);
+      });
+    }
+  });
+
+  chrome.storage.sync.get(null, function(items) {
+
+    log('chrome storage');
+    log(items);
+  });
+
+
+
   // Send scroll settings out
   chrome.runtime.sendMessage({ type: "scroll_update" }); // TODO: replace with simpler scroll settings
   for (var i = 0; i < curr.domains_setting.length; i++) {
@@ -212,7 +258,7 @@ chrome.runtime.onMessage.addListener(
       console.log(offDomains);
       var url = chrome.extension.getURL("nudgeoff.html") + '?' + 'domain=' + domain + "&" + 'url=' + sender.url;
       if (domain) {
-        chrome.tabs.update(sender.tab.id, {url: url}, function() {});
+        chrome.tabs.update(sender.tab.id, { url: url }, function() {});
       }
     }
     if (request.type === "on") {
@@ -220,7 +266,7 @@ chrome.runtime.onMessage.addListener(
       var url = request.url;
       offDomains[domain] = false;
       if (domain) {
-        chrome.tabs.update(sender.tab.id, {url: url}, function() {});
+        chrome.tabs.update(sender.tab.id, { url: url }, function() {});
       }
     }
     if (request.type === "scroll" || request.type === "visit" || request.type === "compulsive" || request.type === "time") {
@@ -245,16 +291,20 @@ chrome.runtime.onMessage.addListener(
       log(request);
     }
     if (request.type === "fun_name") {
-      sendResponse({name: randomGetter(funNames_init,funNames_current)});
+      sendResponse({ name: randomGetter(funNames_init, funNames_current) });
     }
     if (request.type === "thing_to_do") {
-      sendResponse({name: randomGetter(thingsToDo_init,thingsToDo_current)});
+      sendResponse({ name: randomGetter(thingsToDo_init, thingsToDo_current) });
     }
     if (request.type === "inject_switch") {
+<<<<<<< HEAD
       chrome.tabs.executeScript(sender.tab.id, {file: "resources/js/switch.js"});
       if (config.debug) {
         chrome.tabs.executeScript(sender.tab.id, {file: "resources/js/debugger.js"});
       }
+=======
+      chrome.tabs.executeScript(sender.tab.id, { file: "resources/js/switch.js" });
+>>>>>>> origin/master
     }
   }
 );
@@ -565,7 +615,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   var domain = inDomainsSetting(tab.url);
   if (domain in offDomains && offDomains[domain] && domain) {
     var url = chrome.extension.getURL("nudgeoff.html") + '?' + 'domain=' + domain + "&" + 'url=' + tab.url;
-    chrome.tabs.update(tabId, {url: url}, function() {});
+    chrome.tabs.update(tabId, { url: url }, function() {});
   }
   // Update record in tabIdStorage
   if (typeof tabIdStorage[tabId] === "undefined") {
