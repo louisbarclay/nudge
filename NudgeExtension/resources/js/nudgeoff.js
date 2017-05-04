@@ -1,7 +1,24 @@
 // Copyright 2016, Nudge, All rights reserved.
 
+// http://liveweave.com/NkeiRW
+
 var t = document.querySelector(".custom-slider-button");
 var tc = document.querySelector(".custom-slider-button-centre");
+var t1 = document.querySelector(".t1");
+var bar = document.querySelector(".bar");
+
+// t1.onmouseover = function() {
+//   t1.innerHTML = 'Copy Nudge link to clipboard';
+// };
+
+bar.onmouseleave = function() {
+  t1.innerHTML = 'Nudge a friend';
+};
+
+bar.onclick = function() {
+  copyText();
+  t1.innerHTML = 'Link copied. Go share!';  
+};
 
 var QueryString = function () {
   // This function is anonymous, is executed immediately and 
@@ -86,12 +103,12 @@ if (domain in niceNames) {
   document.title = domain;
 }
 
-h1.innerHTML = simpleName + " is currently switched off.";
+h1.innerHTML = "You&rsquo;ve switched " + simpleName + " off.";
 thingsToDo();
 
 function thingsToDo() {
   chrome.runtime.sendMessage({ type: "thing_to_do" }, function(response) {
-    h2.innerHTML = response.name;
+    h2.innerHTML = 'Why not ' + response.name + ' instead?';
   });
 }
 
@@ -108,8 +125,14 @@ function sliderdown(e) {
   document.addEventListener('mousemove', slidermove, true);
 }
 
+function getPageLeft(el) {
+    var rect = el.getBoundingClientRect();
+    var docEl = document.documentElement;
+    return rect.left + (window.pageXOffset || docEl.scrollLeft || 0);
+}
+
 function sliderup(e) {
-  var newpos = e.clientX - t.parentElement.offsetLeft - (t.offsetWidth/2);
+  var newpos = e.clientX - getPageLeft(t.parentElement) - (t.offsetWidth/2);
   t.classList.remove("active");
   tc.classList.remove("active");
   // unbind
@@ -118,6 +141,7 @@ function sliderup(e) {
   if (newpos > (t.parentElement.offsetWidth - t.offsetWidth)) {
     t.style.left = t.parentElement.offsetWidth - t.offsetWidth +'px';
     tc.classList.add("done");
+    tc.style.backgroundColor = '#ff0097';
     initOn();
   } else {
     t.style.left = 0 +'px';
@@ -126,9 +150,9 @@ function sliderup(e) {
 }
 
 function slidermove(e) {
-  var newpos = e.clientX - t.parentElement.offsetLeft - (t.offsetWidth/2);
+  var newpos = e.clientX - getPageLeft(t.parentElement) - (t.offsetWidth/2);
   if (newpos < 0) {
-    newpos = 0; 
+    newpos = 0;
   } else if ( newpos >= (t.parentElement.offsetWidth - t.offsetWidth)) {
     newpos = t.parentElement.offsetWidth - t.offsetWidth;
     slidertext.classList.remove("h3");
