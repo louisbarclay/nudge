@@ -297,14 +297,10 @@ chrome.runtime.onMessage.addListener(
       sendResponse({ name: randomGetter(thingsToDo_init, thingsToDo_current) });
     }
     if (request.type === "inject_switch") {
-<<<<<<< HEAD
       chrome.tabs.executeScript(sender.tab.id, {file: "resources/js/switch.js"});
       if (config.debug) {
         chrome.tabs.executeScript(sender.tab.id, {file: "resources/js/debugger.js"});
       }
-=======
-      chrome.tabs.executeScript(sender.tab.id, { file: "resources/js/switch.js" });
->>>>>>> origin/master
     }
   }
 );
