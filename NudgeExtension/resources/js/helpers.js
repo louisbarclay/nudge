@@ -43,7 +43,7 @@ function minutes(i) {
   } else if (i < 105) {
     return "2 minutes";
   } else {
-    console.log("minute function didn't work");
+    // console.log("minute function didn't work");
   }
 }
 
@@ -72,11 +72,75 @@ function domainChecker(url, array) {
 function randomGetter(init,current) {
   var index = Math.floor(Math.random() * current.length);
   if (current.length === 0) {
-    current = init.slice();
+    for (var i = 0; i < init.length; i++) {
+      current.push(init[i]);
+    }
+    console.log(current);
   }
   var name = current[index];
   if (index > -1) {
     current.splice(index, 1);
   }
   return name;
+}
+
+function createEl(parent, type, name) {
+  var element = document.createElement(type);
+  if (name) {
+    element.id = name;
+  }
+  parent.appendChild(element);
+  return element;
+}
+
+function deleteEl(element) {
+  if (!element || !element.parentNode) {
+    return;
+  }
+  element.parentNode.removeChild(element);
+}
+
+var nudgeLink = "http://bit.ly/2gFsVrf";
+
+function copyText() {
+  var copyText = createEl(document.body, 'textArea', 'copyText');
+  var selection = $('#copyText').val(nudgeLink).select();
+  document.execCommand('copy');
+  selection.val('');
+  deleteEl(copyText);
+}
+
+// 2 digit slicer
+function lastTwo(number) {
+  var formattedNumber = ("0" + number).slice(-2);
+  return formattedNumber;
+}
+
+// Turn lots of seconds into e.g. 10m15s
+function logMinutes(time) {
+  var minutes = Math.floor(time / 60);
+  var seconds = Math.floor(time) % 60;
+  return minutes + 'm' + lastTwo(seconds) + 's';
+}
+
+// Turn time to date
+function epochToDate(time) {
+  if (time > 9999999999) {
+    time = time/1000;  
+  }
+  var d = new Date(0);
+  d.setUTCSeconds(time);
+  var monthNames = [
+    "Jan", "Feb", "Mar",
+    "Apr", "May", "Jun", "Jul",
+    "Aug", "Sep", "Oct",
+    "Nov", "Dec"
+  ];
+  var day = d.getDate();
+  var monthIndex = d.getMonth();
+  var hours = d.getHours();
+  var minutes = d.getMinutes();
+  var seconds = d.getSeconds();  
+  var year = d.getFullYear();
+  return hours + ":" + lastTwo(minutes) + ":" + lastTwo(seconds) + ' ' + lastTwo(day) + '-' + monthNames[monthIndex] + '-' + lastTwo(year);
 }

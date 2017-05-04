@@ -132,9 +132,7 @@ var modalNudge = {
   "favicon": ""
 };
 
-// Manual UI Player function
-/*
-if (window.addEventListener) {
+if (window.addEventListener && config.debug) {
         var letters = [], prompt1 = ["z","x"], prompt2 = ["c","v"];
         window.addEventListener("keydown", function(e) {
                 letters.push(e.key);
@@ -145,7 +143,6 @@ if (window.addEventListener) {
                 }
         }, true);
 }
-*/
 
 var defaultMessage = 'This is the <div id="d_message_box">default message</div> <div id="d_message_favicon"></div>';
 
@@ -257,21 +254,7 @@ function messageCompiler(request) {
 // TODO: scroll needs to inform of a nudge, or rather check before it does it what the most recent nudge was. and also inform. both things
 // TODO: need to inform the nudge register every time there is a scroll nudge.
 
-function createEl(parent, type, name) {
-  var element = document.createElement(type);
-  if (name) {
-    element.id = name;
-  }
-  parent.appendChild(element);
-  return element;
-}
 
-function deleteEl(element) {
-  if (!element || !element.parentNode) {
-    return;
-  }
-  element.parentNode.removeChild(element);
-}
 // helper function for chaining;
 function classList(elt) {
   var list = elt.classList;
@@ -423,16 +406,6 @@ function classChanger(element, classOut, classIn, message, callback) {
 
 var d_message_options = '<div id="d_link_domain">Don&rsquo;t nudge this site</div> (<div id="d_link_options">more options</div>)';
 var m_message_options = '<div id="m_link_domain">Don&rsquo;t nudge this site</div> (<div id="m_link_options">more options</div>)';
-
-var nudgeLink = "http://bit.ly/2gFsVrf";
-
-function copyText() {
-  var copyText = createEl(document.body, 'textArea', 'copyText');
-  var selection = $('#copyText').val(nudgeLink).select();
-  document.execCommand('copy');
-  selection.val('');
-  deleteEl(copyText);
-}
 
 function shareClick(element, toolTip, link) {
   $(element).on('click', link, function() {
