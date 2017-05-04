@@ -59,9 +59,13 @@
     "resources/images/5nothings.png",
     "resources/images/whatisanothing.html",
     "resources/images/logo.svg",
+    "resources/images/nudgeoff16.png",
+    "resources/images/nudgeoff32.png",
+    "resources/images/nudgeoff96.png",
     "resources/fonts/opensans.woff2",
     "resources/fonts/opensans-bold.woff2",
     "resources/fonts/opensans-italic.woff2",    
+    "resources/fonts/opensans-semibold.woff2",
     "resources/retina-images/close@2x.png",
     "resources/retina-images/closehover@2x.png",
     "resources/retina-images/coglarge@2x.png",
@@ -73,7 +77,8 @@
     "resources/retina-images/time@2x.png",
     "resources/retina-images/visit@2x.png",
     "resources/images/offswitch.svg",
-    "resources/js/switch.js"
+    "resources/js/switch.js",
+    "resources/js/debugger.js"
   ],
   "version": "1.0.8",
   "background": {
@@ -81,8 +86,8 @@
   },
   "content_scripts": [{
     "matches": ["<all_urls>"],
-    "js": ["lib/jquery/jquery-3.1.0.min.js", "resources/js/helpers.js", "resources/js/images.js", "resources/js/player.js", "resources/js/controller.js"],
-    "css": ["resources/css/nudge.css", "resources/css/switch.css"],
+    "js": ["config.js", "lib/jquery/jquery-3.1.0.min.js", "resources/js/helpers.js", "resources/js/images.js", "resources/js/player.js", "resources/js/controller.js"],
+    "css": ["resources/css/nudge.css", "resources/css/switch.css","resources/css/debugger.css"],
     "exclude_globs": [
       "*business.facebook.com*"
     ],

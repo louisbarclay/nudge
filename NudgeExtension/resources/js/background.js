@@ -53,7 +53,7 @@ function currentTabDomain() {
 
 // Init options
 init = {
-  domains_setting: ["messenger.com", "facebook.com", "twitter.com", "linkedin.com", "reddit.com", "diply.com", "buzzfeed.com", "youtube.com", "theladbible.com", "instagram.com", "pinterest.com", "theguardian.com", "bbc.com", "bbc.co.uk", "theguardian.co.uk", "dailymail.co.uk", "mailonline.com", "imgur.com", "amazon.co.uk", "amazon.com", "netflix.com", "tumblr.com", "thesportbible.com", "telegraph.co.uk"],
+  domains_setting: ["mail.google.com", "messenger.com", "facebook.com", "twitter.com", "linkedin.com", "reddit.com", "diply.com", "buzzfeed.com", "youtube.com", "theladbible.com", "instagram.com", "pinterest.com", "theguardian.com", "bbc.com", "bbc.co.uk", "theguardian.co.uk", "dailymail.co.uk", "mailonline.com", "imgur.com", "amazon.co.uk", "amazon.com", "netflix.com", "tumblr.com", "thesportbible.com", "telegraph.co.uk"],
   scroll_s_setting: 20,
   scroll_b_setting: 3,
   visit_s_setting: 50,
@@ -252,6 +252,9 @@ chrome.runtime.onMessage.addListener(
     }
     if (request.type === "inject_switch") {
       chrome.tabs.executeScript(sender.tab.id, {file: "resources/js/switch.js"});
+      if (config.debug) {
+        chrome.tabs.executeScript(sender.tab.id, {file: "resources/js/debugger.js"});
+      }
     }
   }
 );
@@ -382,9 +385,11 @@ function domainDataTweaker(domain, setting, newValue) {
   localStorage[domain] = JSON.stringify(domainData);
 }
 
+// Lots of places will do a timelineAdder and they all come together, with extra jobs (see in function) depending on what 
 function timelineAdder(domain, onUpdated) {
   // Check for tab 'active' should have been done before calling function!
   if (currentState.domain === domain) {
+    console.log("Still on " + domain);
     return;
   } else {
     var lastState = currentState;
@@ -411,17 +416,21 @@ function timelineAdder(domain, onUpdated) {
 
 function domainTimeUpdater(domain, startTime, endTime) {
   var domainData = JSON.parse(localStorage[domain]);
+  console.log(startTime);
+  var previousTimeToday = domainData.totalTimeToday;
   domainData.totalTimeToday += (startTime - endTime);
   domainData.secondsIn = 0;
   localStorage[domain] = JSON.stringify(domainData);
+  debugMessage = logMinutes((startTime - endTime)/1000) + ' added to ' + domain + ', started ' + epochToDate(startTime) + ', ended ' + epochToDate(endTime) + '. Total today was ' + logMinutes(previousTimeToday/1000) + ', now ' + logMinutes(domainData.totalTimeToday/1000) + '.';
+  log(debugMessage);
 }
-
 
 // ths is for any time that the domain visit is updated! doesn't care if it's a tab update or whatever!
 function domainVisitUpdater(domain, time, onUpdated) {
   var domainData = JSON.parse(localStorage[domain]);
   domainData.totalVisitsToday++;
-  log("DOMAINVISITUPDATER", domain, domainData.totalVisitsToday);
+  var debugMessage = 'New ' + domain + ' visit, ' + logMinutes(domainData.totalTimeToday/1000) + ' so far today.';
+  console.log(debugMessage);
   var compulsiveSearch = (time - curr.compulsive_setting * minSec * 1000);
   // Set the two conditions for nudging 
   var compulsive = (domainData.last_shutdown !== 0 && domainData.last_shutdown > compulsiveSearch && domainData.last_compulsive < domainData.last_shutdown);
@@ -441,6 +450,7 @@ function domainVisitUpdater(domain, time, onUpdated) {
 
 var inWindow = false;
 
+// TODO: this is the live time data to send across
 function domainTimeNudger() {
   if (currentState.domain) {
     var domainData = JSON.parse(localStorage[currentState.domain]);
@@ -448,6 +458,14 @@ function domainTimeNudger() {
     var totalTimeTodayTemp = domainData.secondsIn + Math.round(domainData.totalTimeToday / 1000);
     if (totalTimeTodayTemp % (curr.time_s_setting * minSec) === 0) {
       messageSender(nudgeObject(currentState.domain, totalTimeTodayTemp, "time"));
+    }
+    if (config.debug) {
+      chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, { type: "debug_updater", startTime: domainData.totalTimeToday, currentTime: totalTimeTodayTemp, visits: domainData.totalVisitsToday}, function(response) {
+          console.log("sent it");
+        });
+      });
+      // domainData.totalTimeToday
     }
     localStorage[currentState.domain] = JSON.stringify(domainData);
   }
@@ -465,6 +483,7 @@ function windowChecker() {
   chrome.windows.getLastFocused(function(window) {
     if (typeof window == 'undefined' || window.focused === false) {
       if (inWindow) {
+        console.log("Switched to out of window at " + epochToDate(timeNow()));
         inWindow = false;
         timelineAdder(false, false);
       }
@@ -485,6 +504,7 @@ function windowChecker() {
       }
       if (!inWindow) {
         inWindow = true;
+        console.log("Switched to out of window at " + epochToDate(timeNow()));        
         if (typeof tabs[0] != 'undefined') {
           var domain = inDomainsSetting(tabs[0].url);
         } else {
@@ -501,11 +521,23 @@ function windowChecker() {
 setInterval(windowChecker, 1000);
 
 // Add to timeline onStateChanged
+// But you have nothing here that REACTIVATES IT when gone non-idle. FIXME
 chrome.idle.onStateChanged.addListener(function(newState) { // TODO: needs checking
   if (newState !== "active") {
     isWindow = false;
     timelineAdder(false, false);
   }
+  // if (newState === "active") {
+  chrome.windows.getLastFocused(function(window) {
+    if (typeof window == 'undefined' || window.focused === false) {
+      chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+        
+      });
+    }
+  });
+  //   isWindow = true;
+  //   timelineAdder(false, false);
+  // 
 });
 
 // Add to timeline onActivated
@@ -691,29 +723,32 @@ var funNames_current = funNames_init.slice();
 
 // Things to do
 var thingsToDo_init = [
-  "Barack Obama",
-  "Kim Kardashian",
-  "Kanye West",
-  "Justin Bieber",
-  "Mark Zuckerberg",
-  "George Clooney",
-  "Amal Clooney",
-  "Brad Pitt",
-  "Angelina Jolie",
-  "Leonardo DiCaprio",
-  "Chris Pratt",
-  "Amy Schumer",
-  "Adele",
-  "Vladimir Putin",
-  "Lindsay Lohan",
-  "Sandra Bullock",
-  "Taylor Swift",
-  "Beyonc&eacute;",
-  "Jay Z",
-  "Harrison Ford",
-  "Tim Cook",
-  "Peter Thiel",
-  "J.K. Rowling",
+  "plan dinner with friends",
+  "go for a walk outside",
+  "plan your next holiday",
+  "read about your favourite hobby",
+  "call your best friend",
+  "write a diary",
+  "go to the park",
+  "buy some tickets to a show",
+  "figure out the thing that'll make you happiest",
+  "spend time thinking about people you love",
+  "take up a new hobby",
+  "plan a trip to the movies",
+  "find a good book to read",
+  "call someone you haven't spoken to in a while",
+  "find a different job (if you hate your job)",
+  "get involved in your community",
+  "take a dance class",
+  "take a class to learn something new",
+  "make a plan to watch the sunset",
+  "have a spontaneous drink with someone tonight",
+  "go to the gym (if you like the gym) or go buy some chocolate (if you don't)",
+  "go for a swim",
+  // "save yourself tons of hours and unfollow all your friends on Facebook",
+  // "delete Instagram from your phone",
+  // "delete Facebook from your phone",
+  // "more real Nudge tips here"
 ];
 
 var thingsToDo_current = thingsToDo_init.slice();

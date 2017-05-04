@@ -1,0 +1,81 @@
+/* Copyright 2016, Nudge, All rights reserved. */
+
+/* Latin */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url('chrome-extension://__MSG_@@extension_id__/resources/fonts/opensans.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+}
+
+#nudge_db div,
+#nudge_db span,
+#nudge_db h1,
+#nudge_db h2,
+#nudge_db h3,
+#nudge_db h4,
+#nudge_db h5,
+#nudge_db h6,
+#nudge_db p,
+#nudge_db a,
+#nudge_db em,
+#nudge_db img,
+#nudge_db strong,
+#nudge_db ol,
+#nudge_db ul,
+#nudge_db li {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    top: initial;
+    bottom: initial;
+    left: initial;
+    right: initial;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+    box-sizing: initial;
+    position: initial;
+}
+
+#nudge_db #db_container {
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  background-color: #000000;
+  overflow: hidden;
+  display: inline-block;
+  width: auto;
+  min-width: 27px;
+  height: 27px;
+  opacity: .8;
+  z-index: 2147483646;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  transition: all 0.3s;
+  cursor: pointer;
+  border-radius: 40px;
+  font-family: 'Open Sans', Arial, sans-serif;
+  font-style: normal;
+}
+
+#nudge_db #db_message {
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+  color: #F0F8FF;
+  width: auto;
+  margin: 0;
+  max-width: 500px;
+  height: 100%;
+  float: left;
+  text-align: center;
+  line-height: 24px;
+  white-space: nowrap;
+  overflow: hidden;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  transition: all 0.3s;
+}
+
+#nudge_db #db_message_contents {
+  margin: 1px 25px 0 25px;
+}
