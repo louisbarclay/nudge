@@ -42,21 +42,27 @@
 #nudge_db #db_container {
   position: fixed;
   bottom: 25px;
-  left: 50%;
   background-color: #000000;
-  overflow: hidden;
+  overflow: visible;
   display: inline-block;
   width: auto;
-  min-width: 27px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-left: auto;
+  margin-right: auto;  
   height: 27px;
-  opacity: .8;
+  opacity: .5;
   z-index: 2147483646;
   transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
   transition: all 0.3s;
-  cursor: pointer;
+  cursor: default;
   border-radius: 40px;
   font-family: 'Open Sans', Arial, sans-serif;
   font-style: normal;
+}
+
+#nudge_db #db_container:hover {
+  opacity: 0.8;
 }
 
 #nudge_db #db_message {
@@ -65,7 +71,6 @@
   color: #F0F8FF;
   width: auto;
   margin: 0;
-  max-width: 500px;
   height: 100%;
   float: left;
   text-align: center;
