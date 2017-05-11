@@ -76,8 +76,8 @@ var niceNames = {
   "instagram.com": "Instagram",
   "pinterest.com": "Pinterest",
   "theguardian.com": "The Guardian",
-  "bbc.com": "BBC",
-  "bbc.co.uk": "BBC",
+  "bbc.com": "BBC News",
+  "bbc.co.uk": "BBC News",
   "theguardian.co.uk": "The Guardian",
   "dailymail.co.uk": "The Daily Mail",
   "mailonline.com": "Mail Online",
@@ -112,7 +112,7 @@ function thingsToDo() {
   });
 }
 
-slidertext.innerHTML = 'Slide right to turn ' + simpleName + ' back on';
+slidertext.innerHTML = 'Slide to turn ' + simpleName + ' back on';
 
 t.addEventListener('mousedown', sliderdown, true);
 
@@ -161,7 +161,7 @@ function slidermove(e) {
   } else if ( newpos < (t.parentElement.offsetWidth - t.offsetWidth)) {
     slidertext.classList.remove("h4");
     slidertext.classList.add("h3");
-    slidertext.innerHTML = "Slide right to turn " + simpleName + " back on";    
+    slidertext.innerHTML = "Slide to turn " + simpleName + " back on";    
   }
   t.style.left = newpos +'px';
 }
