@@ -327,7 +327,7 @@ function drawer(domain, message, type) {
     '<div id="d_close" class="d_close_fade_in"></div>' +
     '<div id="d_message">' +
     '<div id="d_icon_lhs" style="background: ' + bgPicker(type) + '"></div>' +
-    '<div id="d_message_bottom"><div id="d_message_bottom_contents">Close tab to escape this site</div></div>' +
+    '<div id="d_message_bottom"><div id="d_message_bottom_contents">Try <a href="#" id="d_link_switch">switching off this site</a> if you want a break</div></div>' +
     '<div id="d_message_rhs">' + message + '</div>' +
     '</div>' +
     '</div>' +
@@ -348,6 +348,10 @@ function drawer(domain, message, type) {
   // Add listener to close btn
   $(nudge_d).on('click', '#d_close', function() {
     remover();
+  });
+  // Add listener to switch btn
+  $(nudge_d).on('click', '#d_link_switch', function() {
+    initOff();
   });
   // Add listener to escape key 
   // Esc delete TODO: should probably set canDelete to false
