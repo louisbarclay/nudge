@@ -142,7 +142,9 @@ function epochToDate(time) {
   var minutes = d.getMinutes();
   var seconds = d.getSeconds();  
   var year = d.getFullYear();
-  return hours + ":" + lastTwo(minutes) + ":" + lastTwo(seconds) + ' ' + lastTwo(day) + '-' + monthNames[monthIndex] + '-' + lastTwo(year);
+  return hours + ":" + lastTwo(minutes) + ":" + lastTwo(seconds)/* + ' ' + lastTwo(day) + '-' + monthNames[monthIndex] + '-' + lastTwo(year)*/;
+}
+
 
 function initOff() {
   chrome.runtime.sendMessage({
