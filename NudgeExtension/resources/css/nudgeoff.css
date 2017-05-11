@@ -210,7 +210,8 @@ body {
   height: 90%;
   width: 90%;
   background: #61a7ff;
-  border-radius: 5em;  
+  border-radius: 5em;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 }
 
 .custom-slider-button-centre.active {
