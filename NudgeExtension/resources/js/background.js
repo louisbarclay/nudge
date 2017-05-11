@@ -1,55 +1,4 @@
 // Copyright 2016, Nudge, All rights reserved.
-// FIXME: Finishing touch: think about default settings and clean it up
-
-// replace all undefined checks with proper
-
-/*
-
-by end of day:
-
-nudge time out working
-10% concept implemented or almost implemented
---
-identify non-loaded conditions that nudge can still work under/
-  earliest it can possibly work fine. but do that after?
-
-TAB RECORDS. one property is: player.js loaded
-    set to true:::: when message comes from tab. goes to tab record and sets that to true
-
-When you want to Nudge:
-  check that's true for that tab Id. 
-  yes: send nudge
-  no: nudge_loaded. once tab registers as true in tab record - scans for any nudge_loaded
-*/
-
-/*
-chrome.commands.onCommand.addListener(function(command) {
-    if (command === "tester") {
-      t1 = n1;
-      t1.domain = currentTabDomain();
-      messageSender(n1);
-    }
-  }
-);
-*/
-
-
-
-
-n1 = {
-  "time_loaded": timeNow(),
-  "type": "visit",
-  "status": "pending",
-  "amount": 13,
-  "send_fails": 0,
-  "modal": true
-};
-
-function currentTabDomain() {
-  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-    return tabs[0].url;
-  });
-}
 
 // Init options
 init = {
@@ -182,10 +131,10 @@ function setDefaults() {
         'userId': userId,
         data: localStorage
 
-      }
+      };
 
       $.post(config.apiEndpoint + 'user', dataToBeSent, function(data, status) {
-        console.log(status);
+        log(status);
       });
     }
   });
@@ -195,8 +144,6 @@ function setDefaults() {
     log('chrome storage');
     log(items);
   });
-
-
 
   // Send scroll settings out
   chrome.runtime.sendMessage({ type: "scroll_update" }); // TODO: replace with simpler scroll settings
@@ -244,8 +191,6 @@ function checkDate() {
     localStorage["date"] = todayStr;
   }
 }
-
-
 
 var offDomains = {};
 
@@ -328,7 +273,6 @@ function flushToTabIdStorage() {
         nudge: false
       };
     }
-    log(tabIdStorage);
   });
 }
 
@@ -345,10 +289,9 @@ function tabsChecker(tabs, domain) {
   return true;
 }
 
-// TODO: needs getting head around and fixing for new URL rules
 // Fire when a tab is closed, and tell when there are no other tabs of that kind
 chrome.tabs.onRemoved.addListener(function(tabId) {
-  if (tabIdStorage[tabId] === undefined) {
+  if (typeof tabIdStorage[tabId] === undefined) {
     return;
   } else {
     var tabRecord = tabIdStorage[tabId];
@@ -358,7 +301,6 @@ chrome.tabs.onRemoved.addListener(function(tabId) {
         if (tabsChecker(tabs, domain)) {
           domainData = JSON.parse(localStorage[domain]);
           domainData.last_shutdown = timeNow();
-          log("SHUTDOWN", domain);
           localStorage[domain] = JSON.stringify(domainData);
         }
       });
@@ -367,22 +309,7 @@ chrome.tabs.onRemoved.addListener(function(tabId) {
   }
 });
 
-function nothingTitle(number) {
-  if (number == 1) {
-    return "You just earned your first Nothing";
-  } else {
-    return "You just earned one Nothing...";
-  }
-}
-
-function nothingMessage(number) {
-  if (number == 1) {
-    return "Why? Because you closed a tab after seeing a nudge. Click for more info.";
-  } else {
-    return "...which means you now have " + number + " Nothings. Click for more info.";
-  }
-}
-
+// Checks to see if the visit or time amount that's triggered a nudge should also trigger a modal
 function modalChecker(amount, type) {
   if (type === "visit") {
     if (amount >= curr.visit_s_setting * curr.visit_b_setting) {
@@ -401,6 +328,7 @@ function modalChecker(amount, type) {
   return false;
 }
 
+// Creates a timeline event (or object, same thing)
 function timelineObject(domain) {
   return {
     time: timeNow(),
@@ -408,6 +336,7 @@ function timelineObject(domain) {
   };
 }
 
+// Creates a nudge object easily
 function nudgeObject(domain, amount, type, status) {
   if (!status) {
     status = "pending";
@@ -423,38 +352,49 @@ function nudgeObject(domain, amount, type, status) {
   };
 }
 
-var currentState = new timelineObject(false, "start"); // Why does it have to be 'new' here?
+// Set the initial currentState
+var currentState = new timelineObject(false);
 
-function domainDataTweaker(domain, setting, newValue) {
-  var domainData = JSON.parse(localStorage[domain]);
-  domainData[setting] = newValue;
-  localStorage[domain] = JSON.stringify(domainData);
-}
-
-// Lots of places will do a timelineAdder and they all come together, with extra jobs (see in function) depending on what 
-function timelineAdder(domain, onUpdated) {
-  // Check for tab 'active' should have been done before calling function!
+// Lots of places will do a timelineAdder and they all come together, with extra jobs (see in function) depending on what
+// TODO: but is every single possible event covered in timelineAdder? And does it matter?
+// FIXME: should only be able to add an event if it's in a tab that is the active tab in the active window! right? am i wrong?
+// FIXME: have (for logger) concept of the Timeline Objects That Matter
+function timelineAdder(domain, source) {
+  // Some debugging stuff
+  var logDomain = domain;
+  if (!domain) {
+    logDomain = "*nO dOmAiN*";
+  }
+  console.log(epochToDate(timeNow()), logDomain, source);
+  // If your timeline event has same domain as before, you do nothing
   if (currentState.domain === domain) {
-    console.log("Still on " + domain);
     return;
+  // If your timeline even has different domain as before...
   } else {
+    // First, create new variable lastState, which is what we had before the changes we're about to make
     var lastState = currentState;
+    // If the new timeline event we want to add has a domain we care about (this means previous domain was false or different)
     if (domain) {
+      // Check if we are even inWindow, in other words is a Chrome window focused. If not, we don't care and we return (below)
       if (inWindow) {
-        // Set the new currentState
+        // Set the new currentState if previous domain was false or different. So the new currentState has a different (positive) domain, and associated time stamp
         currentState = timelineObject(domain);
-        // Add a visit and check compulsive
-        domainVisitUpdater(domain, currentState.time, onUpdated);
+        // Run a visit update (which also checks for compulsive), give the new time stamp of this event that just happened
+        domainVisitUpdater(domain, currentState.time);
+        // If the previous timeline event was a domain we care about, we need to do its time adding. startTime is lastState.time, endTime is currentState.time
         if (lastState.domain) {
-          domainTimeUpdater(lastState.domain, currentState.time, lastState.time);
+          domainTimeUpdater(lastState.domain, lastState.time, currentState.time);
         }
       }
       return;
     } else {
-      // Set the new currentState
+      // The domain of current timeline event is NOT one we care about, but the previous one was (because we passed through currentState.domain === domain)
+      // So we still need to put it into currentState, and sum up the time for that previous domain if it was one we care about
+      // First we set the new currentState
       currentState = timelineObject(domain);
+      // Then - this is a weird double check here since we already had currentState.domain === domain above - we do the time updating for the domain in the previous state
       if (lastState.domain) {
-        domainTimeUpdater(lastState.domain, currentState.time, lastState.time);
+        domainTimeUpdater(lastState.domain, lastState.time, currentState.time);
       }
     }
   }
@@ -462,61 +402,78 @@ function timelineAdder(domain, onUpdated) {
 
 function domainTimeUpdater(domain, startTime, endTime) {
   var domainData = JSON.parse(localStorage[domain]);
-  console.log(startTime);
+  // Temporary variable previousTimeToday mainly used for debugging
   var previousTimeToday = domainData.totalTimeToday;
-  domainData.totalTimeToday += (startTime - endTime);
+  // Adds time onto totalTimeToday
+  domainData.totalTimeToday += (endTime - startTime);
+  // Clears the secondsIn since you are closing off the time from a previous visit and starting a fresh new one
   domainData.secondsIn = 0;
   localStorage[domain] = JSON.stringify(domainData);
-  debugMessage = logMinutes((startTime - endTime)/1000) + ' added to ' + domain + ', started ' + epochToDate(startTime) + ', ended ' + epochToDate(endTime) + '. Total today was ' + logMinutes(previousTimeToday/1000) + ', now ' + logMinutes(domainData.totalTimeToday/1000) + '.';
-  log(debugMessage);
+  debugMessage = epochToDate(timeNow()) + ' ' + logMinutes((endTime - startTime)/1000) + ' added to ' + domain + ', started ' + epochToDate(startTime) + ', ended ' + epochToDate(endTime) + '. Total today was ' + logMinutes(previousTimeToday/1000) + ', now ' + logMinutes(domainData.totalTimeToday/1000) + '.';
+  console.log(debugMessage);
 }
 
-// ths is for any time that the domain visit is updated! doesn't care if it's a tab update or whatever!
-function domainVisitUpdater(domain, time, onUpdated) {
+// Runs within timeline adder if the new timeline event does not match the old one
+function domainVisitUpdater(domain, time) {
   var domainData = JSON.parse(localStorage[domain]);
+  // Add a new visit
   domainData.totalVisitsToday++;
-  var debugMessage = 'New ' + domain + ' visit, ' + logMinutes(domainData.totalTimeToday/1000) + ' so far today.';
+  // Debugging stuff
+  var debugMessage = epochToDate(timeNow()) + ' ' + ordinal(domainData.totalVisitsToday) + ' ' + domain + ' visit, ' + logMinutes(domainData.totalTimeToday/1000) + ' so far today.';
   console.log(debugMessage);
+  // Set until which point back in time to look for a shutdown FIXME: shouldn't get a compulsive or a visit in certain situations...pointless
   var compulsiveSearch = (time - curr.compulsive_setting * minSec * 1000);
-  // Set the two conditions for nudging 
+  // Compulsive is true if there has ever been a shutdown, if the last shutdown was after the point back in time we're looking,
+  // and if the last shutdown was after the last compulsive (important because if not, we could do a compulsive when one has already been done)
   var compulsive = (domainData.last_shutdown !== 0 && domainData.last_shutdown > compulsiveSearch && domainData.last_compulsive < domainData.last_shutdown);
+  // Visits is true if the total visits today matches our visits level
   var visits = (domainData.totalVisitsToday % curr.visit_s_setting === 0);
-  // Set the visits status
+  // We set visitsStatus as pending, assuming that we will do the visits nudge
   var visitsStatus = "pending";
+  // But if compulsive is true, we will actually prefail the visits nudge and run our compulsive instead. Sorry, visits nudge
   if (compulsive) {
     domainData.last_compulsive = time;
     visitsStatus = "prefailed";
     messageSender(nudgeObject(domain, (Math.round((timeNow() - domainData.last_shutdown) / 1000)), "compulsive"));
   }
+  // Here is where we do actually send the visits nudge. Woo! It sends prefailed if we just prioritised a compulsive over it
   if (visits) {
     messageSender(nudgeObject(domain, domainData.totalVisitsToday, "visit", visitsStatus));
   }
+  // Obligatory storage of data
   localStorage[domain] = JSON.stringify(domainData);
 }
 
+// Set initial inWindow value as false
 var inWindow = false;
 
-// TODO: this is the live time data to send across
+// Runs every second and sends a time nudge if you hit a time nudge level
 function domainTimeNudger() {
+  // Check if the last timeline object (currentState) is for a domain we care about
   if (currentState.domain) {
     var domainData = JSON.parse(localStorage[currentState.domain]);
     domainData.secondsIn++;
+    // Sets a temporary total time value and evaluates it against our time nudge levels
     var totalTimeTodayTemp = domainData.secondsIn + Math.round(domainData.totalTimeToday / 1000);
     if (totalTimeTodayTemp % (curr.time_s_setting * minSec) === 0) {
       messageSender(nudgeObject(currentState.domain, totalTimeTodayTemp, "time"));
     }
+    // Sends that second by second data to the debug updater, a UI element that helps me figure out where problems are
     if (config.debug) {
-      chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, { type: "debug_updater", startTime: domainData.totalTimeToday, currentTime: totalTimeTodayTemp, visits: domainData.totalVisitsToday}, function(response) {
-          console.log("sent it");
-        });
+      chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(tabs) {
+        if (typeof tabs[0] != "undefined") {
+          chrome.tabs.sendMessage(tabs[0].id, { type: "debug_updater", domain: currentState.domain, before: domainData.totalTimeToday, secondsIn: domainData.secondsIn,  total: totalTimeTodayTemp, visits: domainData.totalVisitsToday}, function(response) {
+          });
+        }
       });
-      // domainData.totalTimeToday
     }
+    // Updates domainData with the secondsIn every second
     localStorage[currentState.domain] = JSON.stringify(domainData);
   }
 }
 
+// Do the sum FIXME FIXME FIXME of whether everything from the day adds to 24 hrs
+// Should be able to create a fair visualisation of every block of time. //not in chrome etc.
 function windowChecker() {
   // Make sure 'today' is up-to-date
   if (curr.domains_setting) {
@@ -524,42 +481,46 @@ function windowChecker() {
   }
   // Run the counter on the current site
   domainTimeNudger();
-  // Check - is TabId of a background extension thing? TODO: THIS to get rid of annoying error
   // Have to factor in when you are scrolling on window despite window not being selected...............ask content script
-  chrome.windows.getLastFocused(function(window) {
-    if (typeof window == 'undefined' || window.focused === false) {
-      if (inWindow) {
-        console.log("Switched to out of window at " + epochToDate(timeNow()));
-        inWindow = false;
-        timelineAdder(false, false);
-      }
+  chrome.windows.getAll(null, function(windows) {
+    if(windows.length === 0) {
       return;
-    }
-    // if the tab is one that's loaded with a delayed nudge, run that delayed nudge.
-    // in this space here
-    // if you check the tab register and the tab ID has a nudge waiting to go out.
-    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-      var nudge = false;
-      if (tabIdStorage && tabIdStorage[tabs[0].id] && tabIdStorage[tabs[0].id].nudge) {
-        nudge = tabIdStorage[tabs[0].id].nudge;
-      }
-
-      if (nudge) {
-        messageSender(nudge);
-        tabIdStorage[tabs[0].id].nudge = false;
-      }
-      if (!inWindow) {
-        inWindow = true;
-        console.log("Switched to out of window at " + epochToDate(timeNow()));        
-        if (typeof tabs[0] != 'undefined') {
-          var domain = inDomainsSetting(tabs[0].url);
-        } else {
-          var domain = false;
+    } else {
+      chrome.windows.getLastFocused(function(window) {
+        if (typeof window == 'undefined' || window.focused === false) {
+          if (inWindow) {
+            inWindow = false;
+            timelineAdder(false, "Left window [§] ->");
+          }
+          return;
         }
-        timelineAdder(domain, false);
-      }
-    });
-    return;
+        // if the tab is one that's loaded with a delayed nudge, run that delayed nudge.
+        // in this space here
+        // if you check the tab register and the tab ID has a nudge waiting to go out.
+        chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(tabs) {
+          if (typeof tabs == 'undefined') {
+            return;
+          }
+          var nudge = false;
+          if (tabIdStorage && tabIdStorage[tabs[0].id] && tabIdStorage[tabs[0].id].nudge) {
+            nudge = tabIdStorage[tabs[0].id].nudge;
+          }
+          if (nudge) {
+            messageSender(nudge);
+            tabIdStorage[tabs[0].id].nudge = false;
+          }
+          if (!inWindow) {
+            inWindow = true;
+            var domain = false;
+            if (typeof tabs[0] != 'undefined') {
+              domain = inDomainsSetting(tabs[0].url);
+            }
+            timelineAdder(domain, "Back in window [§] <-");
+          }
+        });
+        return;
+      });
+    }
   });
 }
 
@@ -567,31 +528,45 @@ function windowChecker() {
 setInterval(windowChecker, 1000);
 
 // Add to timeline onStateChanged
-// But you have nothing here that REACTIVATES IT when gone non-idle. FIXME
-chrome.idle.onStateChanged.addListener(function(newState) { // TODO: needs checking
+chrome.idle.onStateChanged.addListener(function(newState) {
   if (newState !== "active") {
     isWindow = false;
-    timelineAdder(false, false);
+    timelineAdder(false, "Gone idle zZZzZzZZ");
   }
-  // if (newState === "active") {
-  chrome.windows.getLastFocused(function(window) {
-    if (typeof window == 'undefined' || window.focused === false) {
-      chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-        
-      });
-    }
-  });
-  //   isWindow = true;
-  //   timelineAdder(false, false);
-  // 
+  if (newState === "active") {
+    isWindow = true;
+    chrome.windows.getLastFocused(function(window) {
+      if (typeof window == 'undefined' || window.focused === false) {
+        timelineAdder(false, "Back from idle, undefined window");
+      } else {
+        chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(tabs) {
+          var domain = inDomainsSetting(tabs[0].url);
+          timelineAdder(domain, "Back from idle, defined window");
+        });
+      }
+    });
+  }
 });
 
 // Add to timeline onActivated
 chrome.tabs.onActivated.addListener(function(activatedTab) {
+  console.log(activatedTab);
   chrome.tabs.get(activatedTab.tabId, function(tabDetails) {
+    console.log(tabDetails);
     // Don't need check of whether tab is active, because it is by default
     var domain = inDomainsSetting(tabDetails.url);
-    timelineAdder(domain, false);
+    timelineAdder(domain, "onActivated");
+  });
+});
+
+// Add to timeline window onFocusedChange
+chrome.windows.onFocusChanged.addListener(function(windowId) {
+  chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(tabs) {
+    var domain = false;
+    if (typeof tabs[0] != 'undefined') {
+      domain = inDomainsSetting(tabs[0].url);
+    }
+    timelineAdder(domain, "Window changed");
   });
 });
 
@@ -623,13 +598,17 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     tabIdStorage[tabId].url = tab.url;
   }
   if (tab.active === true) {
-    timelineAdder(domain, true);
+    chrome.windows.get(tab.windowId, function(Window) {
+      if (Window.focused) {
+        timelineAdder(domain, "onUpdated, with tab active & window focused");
+      }
+    });
   }
   // For constantising titles
   /*
   if (domain && changeInfo.title) {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        if (tabs[0] !== undefined) {
+    chrome.tabs.query({active: true, lastFocusedWindow: true}, function(tabs) {
+        if (typeof tabs[0] !== undefined) {
           chrome.tabs.sendMessage(tabs[0].id, {
             "type": "title",
             "title": changeInfo.title,
@@ -644,8 +623,8 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   */
   // For sending favicon URL
   if (domain && typeof changeInfo.favIconUrl !== "undefined" && changeInfo.favIconUrl !== "") {
-    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-      if (tabs[0] !== undefined) {
+    chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(tabs) {
+      if (typeof tabs[0] !== undefined) {
         chrome.tabs.sendMessage(tabId, {
           "type": "favicon",
           "favicon": tab.favIconUrl,
@@ -656,25 +635,6 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   }
 });
 
-// Sending to player.js but how does it know it's dealing with the right tab? Tab id should come from nudge.
-// and there should be check onactive and currentwindow just to be 100% sure. those two should be baked in to the nudge
-
-/*
-tab that is ACTIVE does something noteworthy. HAS to be active.
-sendsMessage. with tab ID of course
-messageSender checks if that tab is still active
-checks if TAB IS READY= ======= so, has the tab sent the thing to say it's ready?
-    ------ or rather, sends message once tab is ready. puts a listener on it
-    ------ (tab gets set to NOT READY if tabUpdate and the JS goes... how do we know that?!)
-*/
-
-// FIXME: should be checking if tab complete, if tab active, etc. etc.
-
-// FIXME: whole favicon area still not good enough! solve this with a 'image caching' script that has nothing to dooooo with the player.js
-// this script would ask bg.js what the favicon is. if it shows blank, it would .
-// CANCEL: Or rather, bg.js would pass the favicon url for caching as SOON as it gets it. from onUpdated. and STILL NEED 'this site' fallback eh. so...TODO: make the modal nudge bigger
-// also: should only SHOW nudge AFTER all the elements are loaded. obviously. in other words, only PLAY once everything loaded. ideally as callback
-
 // Send message to player.js
 function messageSender(object) {
   if (object.status === "prefailed" || object.status === "timeout") {
@@ -683,16 +643,12 @@ function messageSender(object) {
     object.time_executed = timeNow();
     object.status = "too_soon";
   } else {
-    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+    chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(tabs) {
       // Send message to the tab here
-
       if (tabs[0] && tabs[0].id) {
-
         chrome.tabs.sendMessage(tabs[0].id, { type: "ready_check" }, function(response) {
-          if (response && response.type) { //updated 25 march 2017 by ExtFo
-            // object.favicon = tabs[0].favIconUrl;
+          if (response && response.type) {
             chrome.tabs.sendMessage(tabs[0].id, object, function(response) {
-              // log("sentobject", object);
               if (response) {
                 object.time_executed = response.time_executed;
                 object.status = response.status;
@@ -702,17 +658,12 @@ function messageSender(object) {
               } else if (object.send_fails < sendFailLimit) {
                 object.send_fails++;
                 messageSender(object);
-                // log("SEND_FAIL" + object.send_fails);
-                // log(tabs[0].id);
               } else {
                 object.status = "failed";
-                // log("MAJOR_FAIL");
                 nudgeLogger(object);
-                // log(tabs[0].id);
               }
             });
           } else {
-            log("do tab record thing");
             // If tab record is undefined, create it
             tabIdStorage[tabs[0].id].nudge = object;
             object.send_fails++;
