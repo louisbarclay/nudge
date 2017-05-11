@@ -486,14 +486,14 @@
   color: #ff61a7;
 }
 
-#nudge_d #d_link_nothing {
+#nudge_d #d_link_switch {
   text-decoration: none;
   color: #bdbdbd;
   display: inline-block;
   cursor: pointer;  
 }
 
-#nudge_d #d_link_nothing:hover {
+#nudge_d #d_link_switch:hover {
   text-decoration: none;
   color: #ff61a7;
 }
