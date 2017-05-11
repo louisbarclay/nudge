@@ -29,12 +29,6 @@ function switchOff() {
   );    
 }
 
-function initOff() {
-  chrome.runtime.sendMessage({
-    type: "off"
-  });
-}
-
 // http://liveweave.com/oedF0V
 
 // store URL that the user was ATTEMPTING to go to in the JS for the newly loaded 'off' page
