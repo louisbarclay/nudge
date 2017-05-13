@@ -92,5 +92,13 @@
       "*business.facebook.com*"
     ],
     "run_at": "document_start"
+  }, {
+    "matches": ["http://www.facebook.com/", "https://www.facebook.com/"],
+    "js": ["resources/js/fbunfollow.js"],
+    "css": ["resources/css/fbunfollow.css"],
+    "exclude_globs": [
+      "*business.facebook.com*"
+    ],
+    "run_at": "document_start"
   }]
 }
