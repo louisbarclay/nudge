@@ -3,7 +3,7 @@
 var messageContents = false;
 
 $(document).ready(function() {
-  bar();
+  // bar();
 });
 
 function bar() {
