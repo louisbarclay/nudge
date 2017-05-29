@@ -95,11 +95,6 @@ $(window).scroll(function() {
   }
 });
 
-// Nudge sender
-function nudgeSender(nudge) {
-  chrome.runtime.sendMessage(nudge);
-}
-
 // Testing UI elements
 function uiPlayer(type) {
   if (type === "drawer") {
@@ -226,7 +221,7 @@ function messageCompiler(request) {
         message = 'Quit ' + favicon_d + ' ' + box_d + min_amount + end_div + ' ago. ' + cog_d;
         break;
       default:
-        console.log("nothing matched");
+        // console.log("nothing matched"); // FIXME: receiving all these messages which it can't do anything with
     }
     if (message) {
       drawer(request.domain, message, request.type);
@@ -243,7 +238,7 @@ function messageCompiler(request) {
         message = "You&rsquo;ve scrolled " + box_m + amount + " screens" + end_div + ' down ' + favicon_m + '.' + cog_m;
         break;
       default:
-        console.log("nothing matched");
+        // console.log("nothing matched");
     }
     if (message) {
       modal(request.domain, message, modal_earn_nothing, modal_hide, request.type);
