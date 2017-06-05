@@ -51,7 +51,7 @@
   margin-left: auto;
   margin-right: auto;  
   height: 27px;
-  opacity: .5;
+  opacity: 0.3;
   z-index: 2147483646;
   transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
   transition: all 0.3s;
