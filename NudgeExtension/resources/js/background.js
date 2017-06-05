@@ -16,6 +16,7 @@ init = {
 // Initialise current options
 curr = {};
 
+
 var domainsEver = init.domains_setting.slice();
 
 // Populates current options with init or sync settings
@@ -99,6 +100,10 @@ var defaultDomainData = {
 // Need to figure out which variables really need to be reset daily
 // Need to simulate day-switching to see what happens
 
+chrome.identity.getAuthToken(null, function(identity) {
+  console.log(identity);
+});
+
 // Set default settings TODO: need resolution to the domainsEver thing. basically: if domain gets dropped off, should still reset it. etc.
 function setDefaults() {
   function getRandomToken() {
@@ -116,6 +121,7 @@ function setDefaults() {
 
   // set id for each user
   chrome.storage.sync.get('userid', function(items) {
+    console.log(items);
     var userId = items.userId;
     if (userId) {
       useToken(userId);
@@ -194,6 +200,16 @@ function checkDate() {
 
 var offDomains = {};
 
+// // Off by default
+// var offByDefault = true;
+
+// if (offByDefault) {
+//   for (var i = 0; i < curr.domains_setting.length; i++) {
+//     var domain = curr.domains_setting[i];
+//     offDomains[domain] = true;
+//   }
+// }
+
 // URL receiver from content script and init options giver
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
@@ -243,12 +259,24 @@ chrome.runtime.onMessage.addListener(
     }
     if (request.type === "inject_switch") {
       chrome.tabs.executeScript(sender.tab.id, {file: "resources/js/switch.js"});
-      if (config.debug) {
+      if (true) {
         chrome.tabs.executeScript(sender.tab.id, {file: "resources/js/debugger.js"});
       }
     }
+    if (request.type === "inject_tabidler") {
+      chrome.tabs.executeScript(sender.tab.id, {file: "resources/js/tabidler.js"});
+    }
+    if (request.type === "tabIdle") {
+      chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(tabs) {
+        if (typeof tabs[0] != "undefined" && tabs[0].id === sender.tab.id) {
+          var domain = inDomainsSetting(sender.url);
+          onTabIdle(request.status, domain);
+        }
+      });
+    }
   }
 );
+
 
 // Nudge logger function
 function nudgeLogger(nudgeData) {
@@ -301,6 +329,7 @@ chrome.tabs.onRemoved.addListener(function(tabId) {
         if (tabsChecker(tabs, domain)) {
           domainData = JSON.parse(localStorage[domain]);
           domainData.last_shutdown = timeNow();
+          console.log("Shutdown of " + domain);
           localStorage[domain] = JSON.stringify(domainData);
         }
       });
@@ -354,6 +383,14 @@ function nudgeObject(domain, amount, type, status) {
 
 // Set the initial currentState
 var currentState = new timelineObject(false);
+
+function onTabIdle(status, domain) {
+  if (status) {
+    timelineAdder(false, "Gone tabIdle");
+  } else {
+    timelineAdder(domain, "Back from tabIdle");
+  }
+}
 
 // Lots of places will do a timelineAdder and they all come together, with extra jobs (see in function) depending on what
 // TODO: but is every single possible event covered in timelineAdder? And does it matter?
@@ -475,6 +512,10 @@ function domainTimeNudger() {
 // Do the sum FIXME FIXME FIXME of whether everything from the day adds to 24 hrs
 // Should be able to create a fair visualisation of every block of time. //not in chrome etc.
 function windowChecker() {
+  // Check idle state every second (deactivated for now)
+  // chrome.idle.queryState(60, function(state) {
+  //   console.log(state);
+  // });
   // Make sure 'today' is up-to-date
   if (curr.domains_setting) {
     checkDate();
@@ -550,9 +591,7 @@ chrome.idle.onStateChanged.addListener(function(newState) {
 
 // Add to timeline onActivated
 chrome.tabs.onActivated.addListener(function(activatedTab) {
-  console.log(activatedTab);
   chrome.tabs.get(activatedTab.tabId, function(tabDetails) {
-    console.log(tabDetails);
     // Don't need check of whether tab is active, because it is by default
     var domain = inDomainsSetting(tabDetails.url);
     timelineAdder(domain, "onActivated");
@@ -742,6 +781,7 @@ var thingsToDo_init = [
   "have a spontaneous drink with someone tonight",
   "go to the gym (if you like the gym) or go buy some chocolate (if you don't)",
   "go for a swim",
+  "try out meditation", // should have link attached. this could be done for lots of them
   // "save yourself tons of hours and unfollow all your friends on Facebook",
   // "delete Instagram from your phone",
   // "delete Facebook from your phone",

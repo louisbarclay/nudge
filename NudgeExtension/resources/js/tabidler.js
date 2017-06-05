@@ -1,20 +1,13 @@
 // Copyright 2016, Nudge, All rights reserved.
 
-// Not using this - for detecting tab focus
-
-// var focused = true;
-
-// window.onfocus = function() {
-//     focused = true;
-//     console.log("focused");
-// };
-
-// window.onblur = function() {
-//     focused = false;
-//     console.log("not focused");
-// };
-
 // if you get an action surely you can just not look for actions for like 1 min and then start looking again after 1 min
+
+// TODO: gotta do the thing. https://stackoverflow.com/questions/41649874/detect-if-chrome-tab-is-playing-audio
+// don't send message if tab is playin audio
+
+function checkVideo() {
+  return !!Array.prototype.find.call(document.querySelectorAll('video'),function(elem){return elem.duration > 0 && !elem.paused});
+}
 
 function inactivityTime() {
   var idle = false;
@@ -29,9 +22,13 @@ function inactivityTime() {
   document.onscroll = resetTimer; // scrolling with arrow keys
   document.onkeypress = resetTimer;
   function idleStart() {
-    idle = true;
-    chrome.runtime.sendMessage({ type: "tabIdle", status: true }, function(response) {
-    }); 
+    if (checkVideo()) {
+      resetTimer();
+    } else {
+      idle = true;
+      chrome.runtime.sendMessage({ type: "tabIdle", status: true }, function(response) {
+      });      
+    }
   }
 
   function resetTimer() {
