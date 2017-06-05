@@ -163,7 +163,7 @@ function listener() {
           if (request.type === "title") {
             document.title = titleConstantizer(request.domain);
           } else {
-            messageCompiler(request); // Wow, this is running way too often. FIXME:!!!!!!!
+            messageCompiler(request); // Wow, this is running way too often. FIXME:!!!!!!! (because you're not actually checking for nudges)
           }
         });
       } else {
@@ -225,6 +225,7 @@ function messageCompiler(request) {
     }
     if (message) {
       drawer(request.domain, message, request.type);
+      classList(document.getElementById('s_container')).add('bounce');
     }
   } else {
     switch (request.type) {
@@ -250,7 +251,7 @@ function messageCompiler(request) {
 // TODO: need to inform the nudge register every time there is a scroll nudge.
 
 
-// helper function for chaining;
+// helper function for chaining; FIXME: this is messed up. stupid change by stupid agency.
 function classList(elt) {
   var list = elt.classList;
   return {
