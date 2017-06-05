@@ -30,7 +30,7 @@
 html { 
   background-size: cover;
   height: 100%;
-  background: linear-gradient(to bottom, #ffffff 30%, #eff6ff 100%);
+  background-color: #fafafa;
 }
 
 body {
@@ -42,45 +42,58 @@ body {
 }
 
 .container {
+  left: 30%;
+  right: 30%;
   top: 0;
   position: fixed;
-  width: 100%;
-  height: 60%;
+  width: 40%;
+  height: 100%;
   overflow: visible;
 }
 
 .logo {
   position: relative;
-  top: 3em;
-  margin-left: auto;
-  margin-right: auto;
-  width: 5em;
-  height: 5em;
-  background: url('chrome-extension://__MSG_@@extension_id__/resources/images/logo.svg') 0em/5em no-repeat;
+  top: 4em;
+  margin-left: 1em;
+  width: 10em;
+  height: 10em;
+  background: url('chrome-extension://__MSG_@@extension_id__/resources/images/logogrey.svg') 0em/10em no-repeat;
 }
 
 .t {
-  text-align: center;
+  text-align: left;
   user-select: none;
   cursor: default;
-}
-
-.h1 {
   position: relative;
-  margin-top: 3em;
-  font-size: 2.0em;
-  font-weight: 600;
+  margin-top: 5em;
+  margin-left: 1em;
+  margin-right: 1em;
+  font-size: 1em;
 }
 
 .h2 {
-  position: relative;
   margin-top: 2em;
-  font-size: 1.2em;
+  color: #bdbdbd;
+}
+
+.subtitle {
+  text-transform: uppercase;
+  font-size: 0.8em;
+  margin: 0;
+  line-height: 1.2em;
+  padding-bottom: 0.5em;
+}
+
+.para {
+  margin: 0;
+  font-size: 0.8em;
+  line-height: 1.8em;
 }
 
 .h3 {
-  font-size: 0.9em;
+  font-size: 0.8em;
   color: #bdbdbd;
+  text-align: center;
 }
 
 .h4 {
@@ -93,7 +106,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  opacity: 0.5;
+  opacity: 0.2;
   margin-left: auto;
   margin-right: auto;
   width: 100%;
@@ -114,25 +127,16 @@ body {
   background-color: #ff0097;
 }
 
-.container2 {
-  bottom: 40px;
-  position: fixed;
-  width: 100%;
-  height: 40%;
-  overflow: visible;
-  text-align: center;
-}
-
 .custom-slider {
   position: absolute;
   margin-bottom: 0;
   left: 0;
   right: 0;
   bottom: 20%;
-  width: 60%;
+  width: 100%;
   display: block;
-  height: 7em;
-  margin: 0 auto;
+  height: 5em;
+  margin: 0;
   padding: 1em;
   box-sizing: border-box;
 }
@@ -143,7 +147,7 @@ body {
   background: #ffffff;
   box-sizing: border-box;
   position: relative;
-  border-radius: 5em;
+  border-radius: 6em;
   text-align: center;
 }
 
@@ -157,20 +161,14 @@ body {
   height: 1.4em;
 }
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 800px) {
     .slider-text {
         display: none;
     }
 }
 
-@media only screen and (max-width: 900px) {
-    .custom-slider {
-      width: 80%;
-    }
-}
-
-@media only screen and (max-height: 650px) {
-    .h2 {
+@media only screen and (max-height: 680px) {
+    .t {
       display: none;
     }
 }
@@ -181,9 +179,15 @@ body {
     }
 }
 
+@media only screen and (max-height: 500px) {
+    .h2 {
+      display: none;
+    }
+}
+
 @media only screen and (max-height: 355px) {
     .logo {
-      opacity: 0.2;
+      display: none;
     }
 }
 
@@ -192,13 +196,13 @@ body {
 }
 
 .custom-slider-button {
-  width: 5em;
-  height: 5em;
+  width: 3em;
+  height: 3em;
   box-sizing: border-box;
   position: absolute; 
   top:0;
   left:0;
-  border-radius: 5em;
+  border-radius: 4em;
   cursor: pointer;
 }
 
@@ -209,9 +213,8 @@ body {
   transform: translateY(-50%);
   height: 90%;
   width: 90%;
-  background: #61a7ff;
-  border-radius: 5em;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  background: #CFCDCD;
+  border-radius: 4em;
 }
 
 .custom-slider-button-centre.active {

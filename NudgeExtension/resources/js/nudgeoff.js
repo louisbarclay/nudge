@@ -1,6 +1,6 @@
 // Copyright 2016, Nudge, All rights reserved.
 
-// http://liveweave.com/NkeiRW
+// http://liveweave.com/Z9ALJD
 
 var t = document.querySelector(".custom-slider-button");
 var tc = document.querySelector(".custom-slider-button-centre");
@@ -11,14 +11,30 @@ var bar = document.querySelector(".bar");
 //   t1.innerHTML = 'Copy Nudge link to clipboard';
 // };
 
-bar.onmouseleave = function() {
-  t1.innerHTML = 'Nudge a friend';
-};
+// bar.onmouseleave = function() {
+//   t1.innerHTML = 'Nudge a friend';
+// };
 
 bar.onclick = function() {
+  barClick();
+};
+
+bar.ontap = function() {
+  barClick();
+};
+
+bar.onmousedown = function() {
+  barClick();
+};
+
+bar.ondblclick = function() {
+  barClick();
+};
+
+function barClick() {
   copyText();
   t1.innerHTML = 'Link copied. Go share!';  
-};
+}
 
 var QueryString = function () {
   // This function is anonymous, is executed immediately and 
@@ -95,24 +111,13 @@ var h1 = document.querySelector(".h1");
 var h2 = document.querySelector(".h2");
 var slidertext = document.querySelector(".slider-text");
 
-var simpleName = domain;
-if (domain in niceNames) {
-  simpleName = niceNames[domain];
-  document.title = niceNames[domain];
-} else {
-  document.title = domain;
-}
+// thingsToDo();
 
-h1.innerHTML = "You&rsquo;ve switched " + simpleName + " off.";
-thingsToDo();
-
-function thingsToDo() {
-  chrome.runtime.sendMessage({ type: "thing_to_do" }, function(response) {
-    h2.innerHTML = 'Why not ' + response.name + ' instead?';
-  });
-}
-
-slidertext.innerHTML = 'Slide to turn ' + simpleName + ' back on';
+// function thingsToDo() {
+//   chrome.runtime.sendMessage({ type: "thing_to_do" }, function(response) {
+//     h2.innerHTML = 'Why not ' + response.name + ' instead?';
+//   });
+// }
 
 t.addEventListener('mousedown', sliderdown, true);
 
@@ -157,11 +162,11 @@ function slidermove(e) {
     newpos = t.parentElement.offsetWidth - t.offsetWidth;
     slidertext.classList.remove("h3");
     slidertext.classList.add("h4");
-    slidertext.innerHTML = "Release mouse to turn " + simpleName + " back on";
+    slidertext.innerHTML = "Release mouse to switch back on";
   } else if ( newpos < (t.parentElement.offsetWidth - t.offsetWidth)) {
     slidertext.classList.remove("h4");
     slidertext.classList.add("h3");
-    slidertext.innerHTML = "Slide to turn " + simpleName + " back on";    
+    slidertext.innerHTML = "Slide to switch back on";    
   }
   t.style.left = newpos +'px';
 }
