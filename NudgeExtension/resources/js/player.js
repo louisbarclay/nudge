@@ -95,6 +95,11 @@ $(window).scroll(function() {
   }
 });
 
+// Nudge sender
+function nudgeSender(nudge) {
+  chrome.runtime.sendMessage(nudge);
+}
+
 // Testing UI elements
 function uiPlayer(type) {
   if (type === "drawer") {
