@@ -33,7 +33,7 @@ bar.ondblclick = function() {
 
 function barClick() {
   copyText();
-  t1.innerHTML = 'Link copied. Go share!';  
+  t1.innerHTML = 'Link copied to your clipboard. Over to you now!';  
 }
 
 var QueryString = function () {

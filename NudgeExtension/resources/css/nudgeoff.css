@@ -97,8 +97,9 @@ body {
 }
 
 .h4 {
-  font-size: 0.9em;
-  color: #ff0097;
+  font-size: 0.8em;  
+  color: #61a7ff;
+  text-align: center;
 }
 
 .bar {
@@ -124,7 +125,8 @@ body {
 }
 
 .bar:hover {
-  background-color: #ff0097;
+  background-color: #61a7ff;
+  opacity: 1;
 }
 
 .custom-slider {
@@ -218,7 +220,7 @@ body {
 }
 
 .custom-slider-button-centre.active {
-  background:  #ff0097;
+  background:  #61a7ff;
  }
 
 .custom-slider-button.returning {
