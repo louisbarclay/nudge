@@ -1,53 +1,14 @@
 // Copyright 2016, Nudge, All rights reserved.
 
-/*
-
-look up exponential back off.
-5 times is fine, most people just try once.
-You could try once, then try again but after a longer wait.
-That's back-off.
-He asks what the reasons are that it fails- perhaps it means it won't work ever?
-So you need to dig deeper into failure conditions
-
-Try putting in console logs for various load points
-Like if you move the order of things / delay it, does it run every time
-
-you have reached the point where you need to start using source control
-
-just had a few more great ideas on how to debug inspired by this convo, i think i need to basically have a 'pretend as if nudge event happened' function on keypress, which does the whole background.js to player.js message sending thing. if i keep on trying that under tons of different page loading scenarios, i'll be able to create fuck ups to solve
-
-and at the same time, i should have a much easier way to debug the first part - the 'thing that causes nudge event to trigger'
-
-*/
-
 // Modal default messages
 var modal_test = 'You&rsquo;ve scrolled <div id="m_message1_box">180 screens</div> down <div id="m_message1_favicon" style="background: url(https://assets.guim.co.uk/images/favicons/79d7ab5a729562cebca9c6a13c324f0e/32x32.ico) 32px/32px"></div>.<div id="m_message1_cog"></div>';
 var modal_earn_nothing = '<div id="m_message2_contents">Close tab to escape this site</div>';
 var modal_hide = 'Press &rsquo;Esc&rsquo; or click outside Nudge to hide';
 
-var facebookBlurSetting = true;
+// For setting domain
+var domain = extractDomain(window.location.href);
 
-if (document.getElementById('contentCol')) {
-  var fbContentCol = document.getElementById('contentCol');
-  var fbLeftCol = document.getElementById('leftCol');
-  if (!facebookBlurSetting) {
-    fbContentCol.style = "filter: blur(0px)";
-    fbLeftCol.style = "filter: blur(0px)";
-  }
-}
-
-function kickstarter() {
-  chrome.runtime.sendMessage({ type: "player_init", url: document.URL }, function(response) {
-    if (!response.domain) {
-      throw new Error("cancel_player");
-    } else {
-      listener();
-      domain = response.domain;
-      return domain;
-    }
-  });
-}
-
+// For updating options
 function optionsUpdater() {
   var settingObj = {};
   settingObj.scroll_s_setting = init.scroll_s_setting;
@@ -58,18 +19,17 @@ function optionsUpdater() {
   });
 }
 
+// For making some options there initially, just in case
 init = {
   scroll_s_setting: 10,
   scroll_b_setting: 2,
 };
 
+// Scroll options
 var scroll_s_setting = 0;
 var scroll_b_setting = 0;
 var last_scroll_screens_hit = 0;
 var domain = "";
-
-kickstarter();
-optionsUpdater();
 
 // Scroll caller
 $(window).scroll(function() {
@@ -103,13 +63,15 @@ function nudgeSender(nudge) {
 // Testing UI elements
 function uiPlayer(type) {
   if (type === "drawer") {
+    drawerNudge.domain = extractDomain(window.location.href);
     nudgeSender(drawerNudge);
   } else {
+    modalNudge.domain = extractDomain(window.location.href);    
     nudgeSender(modalNudge);
   }
 }
 
-// Dummy nudges
+// The two test nudges
 var drawerNudge = {
   "time_loaded": timeNow(),
   "type": "visit",
@@ -132,6 +94,7 @@ var modalNudge = {
   "favicon": ""
 };
 
+// Keyboard shortcuts for testing
 if (window.addEventListener && config.debug) {
         var letters = [], prompt1 = ["z","x"], prompt2 = ["c","v"];
         window.addEventListener("keydown", function(e) {
@@ -144,12 +107,13 @@ if (window.addEventListener && config.debug) {
         }, true);
 }
 
+// Default message
 var defaultMessage = 'This is the <div id="d_message_box">default message</div> <div id="d_message_favicon"></div>';
 
 // Safeguard: amounts should be high enough
-// This whole redirection part with the switch case feels inefficient
 // TODO: should always call sendMessage with SOMETHING
 function listener() {
+  domain = extractDomain(window.location.href); // This is clumsy
   chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
       if (request.type === "ready_check") {
@@ -163,8 +127,8 @@ function listener() {
         scrollCheckerUpdater(scrollSArray, scrollScreens);
         return;
       }
-      if (document.URL.match(request.domain)) { // This is not OK - you're matching URL against domain, without having extracted core domain from URL first
-        $(document).ready(function() {
+      if (domainChecker(domain, [request.domain])) {
+        $(document).ready(function() { // TODO: This is where you could wait for no running processes
           if (request.type === "title") {
             document.title = titleConstantizer(request.domain);
           } else {
@@ -180,6 +144,9 @@ function listener() {
   );
   // AM READY FOR STUFF!!!!!!!!!!!!!!!!!!!! TODO: send message from here
 }
+
+listener();
+optionsUpdater();
 
 // =================================================================
 
@@ -230,7 +197,6 @@ function messageCompiler(request) {
     }
     if (message) {
       drawer(request.domain, message, request.type);
-      classList(document.getElementById('s_container')).add('bounce');
     }
   } else {
     switch (request.type) {
@@ -254,20 +220,6 @@ function messageCompiler(request) {
 
 // TODO: scroll needs to inform of a nudge, or rather check before it does it what the most recent nudge was. and also inform. both things
 // TODO: need to inform the nudge register every time there is a scroll nudge.
-
-
-// helper function for chaining; FIXME: this is messed up. stupid change by stupid agency.
-function classList(elt) {
-  var list = elt.classList;
-  return {
-    toggle: function(c) { list.toggle(c);
-      return this; },
-    add: function(c) { list.add(c);
-      return this; },
-    remove: function(c) { list.remove(c);
-      return this; }
-  };
-}
 
 // change id of the element so that the popup only works on the friend one :)
 // need to pass 'domain' into here
@@ -319,6 +271,7 @@ function modal(domain, message1, message2, message3, type) {
 
 // need to pass 'domain' in here
 function drawer(domain, message, type) {
+  bouncer();
   var clickNumber = 1;
   var canDelete = true;
   // Create all divs
