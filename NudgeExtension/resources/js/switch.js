@@ -29,6 +29,14 @@ function switchOff() {
   );    
 }
 
+function bouncer() {
+  classList(document.getElementById('s_container')).add('bounce');
+  function clear() {
+    classList(document.getElementById('s_container')).remove('bounce');
+  }
+  setTimeout(clear, 2000);
+}
+
 // http://liveweave.com/oedF0V
 
 // store URL that the user was ATTEMPTING to go to in the JS for the newly loaded 'off' page

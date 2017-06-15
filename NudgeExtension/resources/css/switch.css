@@ -57,7 +57,6 @@
   border-radius: 40px;
   font-family: 'Open Sans', Arial, sans-serif;
   font-style: normal;
-  animation: 2s;
 }
 
 #nudge_s #s_container:hover {
@@ -99,8 +98,7 @@
 }
 
 .bounce {
-  animation-name: bounce;
-  transform-origin: center bottom;
+  animation: bounce 1.3s;
 }
 
 @keyframes bounce {
@@ -111,15 +109,15 @@
 
   40%, 43% {
     animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
-    transform: translate3d(0, -30px, 0);
+    transform: translate3d(0, -60px, 0);
   }
 
   70% {
     animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
-    transform: translate3d(0, -15px, 0);
+    transform: translate3d(0, -30px, 0);
   }
 
   90% {
-    transform: translate3d(0,-4px,0);
+    transform: translate3d(0,-8px,0);
   }
 }
