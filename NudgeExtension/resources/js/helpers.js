@@ -151,3 +151,16 @@ function initOff() {
     type: "off"
   });
 }
+
+// Helper function for chaining
+function classList(element) {
+  var list = element.classList;
+  return {
+    toggle: function(c) { list.toggle(c);
+      return this; },
+    add: function(c) { list.add(c);
+      return this; },
+    remove: function(c) { list.remove(c);
+      return this; }
+  };
+}
