@@ -16,6 +16,11 @@ init = {
 // Initialise current options
 curr = {};
 
+// Off stuff
+var offDomains = {};
+
+// Off by default
+var offByDefault = true;
 
 var domainsEver = init.domains_setting.slice();
 
@@ -198,17 +203,7 @@ function checkDate() {
   }
 }
 
-var offDomains = {};
 
-// // Off by default
-// var offByDefault = true;
-
-// if (offByDefault) {
-//   for (var i = 0; i < curr.domains_setting.length; i++) {
-//     var domain = curr.domains_setting[i];
-//     offDomains[domain] = true;
-//   }
-// }
 
 // URL receiver from content script and init options giver
 chrome.runtime.onMessage.addListener(
@@ -259,6 +254,7 @@ chrome.runtime.onMessage.addListener(
     }
     if (request.type === "inject_switch") {
       chrome.tabs.executeScript(sender.tab.id, {file: "resources/js/switch.js"});
+      chrome.tabs.executeScript(sender.tab.id, {file: "resources/js/player.js"});
       if (true) {
         chrome.tabs.executeScript(sender.tab.id, {file: "resources/js/debugger.js"});
       }
@@ -387,7 +383,9 @@ var currentState = new timelineObject(false);
 function onTabIdle(status, domain) {
   if (status) {
     timelineAdder(false, "Gone tabIdle");
+    isIdle = true;
   } else {
+    isIdle = false;
     timelineAdder(domain, "Back from tabIdle");
   }
 }
@@ -397,6 +395,10 @@ function onTabIdle(status, domain) {
 // FIXME: should only be able to add an event if it's in a tab that is the active tab in the active window! right? am i wrong?
 // FIXME: have (for logger) concept of the Timeline Objects That Matter
 function timelineAdder(domain, source) {
+  // If Chrome or tab is idle, don't do anything!
+  if (isIdle) {
+    return;
+  }
   // Some debugging stuff
   var logDomain = domain;
   if (!domain) {
@@ -420,6 +422,7 @@ function timelineAdder(domain, source) {
         domainVisitUpdater(domain, currentState.time);
         // If the previous timeline event was a domain we care about, we need to do its time adding. startTime is lastState.time, endTime is currentState.time
         if (lastState.domain) {
+          // TODO: this is also the point that you'll want to close off a visit
           domainTimeUpdater(lastState.domain, lastState.time, currentState.time);
         }
       }
@@ -475,14 +478,15 @@ function domainVisitUpdater(domain, time) {
   }
   // Here is where we do actually send the visits nudge. Woo! It sends prefailed if we just prioritised a compulsive over it
   if (visits) {
-    messageSender(nudgeObject(domain, domainData.totalVisitsToday, "visit", visitsStatus));
+    // messageSender(nudgeObject(domain, domainData.totalVisitsToday, "visit", visitsStatus)); // TURNED OFF VISITS NUDGES
   }
   // Obligatory storage of data
   localStorage[domain] = JSON.stringify(domainData);
 }
 
-// Set initial inWindow value as false
+// Set initial inWindow and idle values as false
 var inWindow = false;
+var isIdle = false;
 
 // Runs every second and sends a time nudge if you hit a time nudge level
 function domainTimeNudger() {
@@ -512,10 +516,6 @@ function domainTimeNudger() {
 // Do the sum FIXME FIXME FIXME of whether everything from the day adds to 24 hrs
 // Should be able to create a fair visualisation of every block of time. //not in chrome etc.
 function windowChecker() {
-  // Check idle state every second (deactivated for now)
-  // chrome.idle.queryState(60, function(state) {
-  //   console.log(state);
-  // });
   // Make sure 'today' is up-to-date
   if (curr.domains_setting) {
     checkDate();
@@ -573,15 +573,18 @@ chrome.idle.onStateChanged.addListener(function(newState) {
   if (newState !== "active") {
     isWindow = false;
     timelineAdder(false, "Gone idle zZZzZzZZ");
+    isIdle = true;
   }
   if (newState === "active") {
     isWindow = true;
     chrome.windows.getLastFocused(function(window) {
       if (typeof window == 'undefined' || window.focused === false) {
+        isIdle = false;
         timelineAdder(false, "Back from idle, undefined window");
       } else {
         chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(tabs) {
           var domain = inDomainsSetting(tabs[0].url);
+          isIdle = false;
           timelineAdder(domain, "Back from idle, defined window");
         });
       }
