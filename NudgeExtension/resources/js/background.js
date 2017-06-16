@@ -186,10 +186,13 @@ function setDefaults() {
 initOptions();
 
 // Reset data daily
-function checkDate() {
+function checkDate(test) {
+  if (test) {
+    console.log(localStorage);
+  }
   var todayStr = new Date().toLocaleDateString();
   var saved_day = localStorage["date"];
-  if (saved_day !== todayStr) {
+  if (saved_day !== todayStr || test) {
     // Reset today's data
     for (var i = 0; i < curr.domains_setting.length; i++) { // Would be better to filter in localStorage by object as that type
       var domain = curr.domains_setting[i];
@@ -200,6 +203,9 @@ function checkDate() {
     }
     // Update date
     localStorage["date"] = todayStr;
+  }
+  if (test) {
+    console.log(localStorage);
   }
 }
 
@@ -518,7 +524,7 @@ function domainTimeNudger() {
 function windowChecker() {
   // Make sure 'today' is up-to-date
   if (curr.domains_setting) {
-    checkDate();
+    checkDate(false);
   }
   // Run the counter on the current site
   domainTimeNudger();
