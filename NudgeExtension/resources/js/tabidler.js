@@ -6,7 +6,9 @@
 // don't send message if tab is playin audio
 
 function checkVideo() {
-  return !!Array.prototype.find.call(document.querySelectorAll('video'),function(elem){return elem.duration > 0 && !elem.paused});
+  return !!Array.prototype.find.call(document.querySelectorAll('video'),function(elem) {
+    return elem.duration > 0 && !elem.paused;
+  });
 }
 
 function inactivityTime() {
