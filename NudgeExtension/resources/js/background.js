@@ -13,6 +13,23 @@ init = {
   maxnudge_setting: 0,
 };
 
+chrome.commands.onCommand.addListener(function(command) {
+  if (command == 'offshortcut') {
+    chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(tabs) {
+      var domain = false;
+      if (typeof tabs[0] != "undefined") {
+        var tabUrl = tabs[0].url;
+        domain = inDomainsSetting(tabUrl);
+        if (domain) {
+          offDomains[domain] = true;
+          url = chrome.extension.getURL("nudgeoff.html") + '?' + 'domain=' + domain + "&" + 'url=' + tabUrl;
+          chrome.tabs.update(tabs[0].id, { url: url }, function() {});
+        }
+      }
+    });
+  }
+});
+
 // Initialise current options
 curr = {};
 
@@ -264,6 +281,9 @@ chrome.runtime.onMessage.addListener(
       if (true) {
         chrome.tabs.executeScript(sender.tab.id, {file: "resources/js/debugger.js"});
       }
+    }
+    if (request.type === "inject_fbunfollow") {
+      chrome.tabs.executeScript(sender.tab.id, {file: "resources/js/fbunfollow.js"});
     }
     if (request.type === "inject_tabidler") {
       chrome.tabs.executeScript(sender.tab.id, {file: "resources/js/tabidler.js"});
