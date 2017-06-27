@@ -95,17 +95,17 @@ var modalNudge = {
 };
 
 // Keyboard shortcuts for testing
-if (window.addEventListener && config.debug) {
-        var letters = [], prompt1 = ["z","x"], prompt2 = ["c","v"];
-        window.addEventListener("keydown", function(e) {
-                letters.push(e.key);
-                if ([letters.slice(-2)[0],letters.slice(-1)[0]].toString() === prompt1.toString()) {
-                    uiPlayer("drawer");
-                } else if ([letters.slice(-2)[0],letters.slice(-1)[0]].toString() === prompt2.toString()) {
-                    uiPlayer("modal");
-                }
-        }, true);
-}
+// if (window.addEventListener && config.debug) {
+//         var letters = [], prompt1 = ["z","x"], prompt2 = ["c","v"];
+//         window.addEventListener("keydown", function(e) {
+//                 letters.push(e.key);
+//                 if ([letters.slice(-2)[0],letters.slice(-1)[0]].toString() === prompt1.toString()) {
+//                     uiPlayer("drawer");
+//                 } else if ([letters.slice(-2)[0],letters.slice(-1)[0]].toString() === prompt2.toString()) {
+//                     uiPlayer("modal");
+//                 }
+//         }, true);
+// }
 
 // Default message
 var defaultMessage = 'This is the <div id="d_message_box">default message</div> <div id="d_message_favicon"></div>';
