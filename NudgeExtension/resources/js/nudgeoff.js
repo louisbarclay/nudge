@@ -145,8 +145,6 @@ function sliderup(e) {
   document.removeEventListener('mouseup', sliderup, true);
   if (newpos > (t.parentElement.offsetWidth - t.offsetWidth)) {
     t.style.left = t.parentElement.offsetWidth - t.offsetWidth +'px';
-    tc.classList.add("done");
-    tc.style.backgroundColor = '#ff0097';
     initOn();
   } else {
     t.style.left = 0 +'px';
