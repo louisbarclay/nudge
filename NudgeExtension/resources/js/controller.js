@@ -11,8 +11,19 @@ chrome.storage.sync.get(null, function(items) {
   }
 });
 
+if (domainChecker(window.location.href, ["facebook.com"])) {
+  fbunfollow();
+} else {
+  console.log("didnt eval");
+}
+
 function init() {
   chrome.runtime.sendMessage({ type: "inject_switch"}, function(response) {
+  });
+}
+
+function fbunfollow() {
+  chrome.runtime.sendMessage({ type: "inject_fbunfollow"}, function(response) {
   });
 }
 
