@@ -1,7 +1,7 @@
 // Copyright 2016, Nudge, All rights reserved.
 
 $(document).ready(function() {
-  // listener(debuggerInit());
+  listener(debuggerInit());
 });
 
 function debuggerInit() {
