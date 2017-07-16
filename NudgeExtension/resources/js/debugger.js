@@ -1,7 +1,7 @@
 // Copyright 2016, Nudge, All rights reserved.
 
 $(document).ready(function() {
-  listener(debuggerInit());
+  // listener(debuggerInit());
 });
 
 function debuggerInit() {
@@ -28,3 +28,10 @@ function listener(element) {
     }
   });
 }
+
+$(document).keyup(function(key) {
+  var db_container = document.getElementById('db_container');
+  if (key.keyCode === 27) {
+    deleteEl(db_container);
+  }
+});

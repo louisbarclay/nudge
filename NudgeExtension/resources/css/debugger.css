@@ -41,7 +41,7 @@
 
 #nudge_db #db_container {
   position: fixed;
-  bottom: 25px;
+  bottom: 55px;
   background-color: #000000;
   overflow: visible;
   display: inline-block;
@@ -51,7 +51,7 @@
   margin-left: auto;
   margin-right: auto;  
   height: 27px;
-  opacity: 0.3;
+  opacity: 0.8;
   z-index: 2147483646;
   transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
   transition: all 0.3s;
@@ -62,7 +62,7 @@
 }
 
 #nudge_db #db_container:hover {
-  opacity: 0.8;
+  opacity: 1;
 }
 
 #nudge_db #db_message {
