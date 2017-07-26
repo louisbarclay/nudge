@@ -380,10 +380,18 @@ function modalChecker(amount, type) {
 }
 
 // Creates a timeline event (or object, same thing)
-function timelineObject(domain) {
+function timelineObject(domain, source) {
+  console.log(
+    {
+    time: timeNow(),
+    domain: domain,
+    source: source
+  }
+    );
   return {
     time: timeNow(),
-    domain: domain
+    domain: domain,
+    source: source
   };
 }
 
@@ -404,7 +412,7 @@ function nudgeObject(domain, amount, type, status) {
 }
 
 // Set the initial currentState
-var currentState = new timelineObject(false);
+var currentState = new timelineObject(false, 'initial');
 
 function onTabIdle(status, domain) {
   if (status) {
@@ -443,7 +451,7 @@ function timelineAdder(domain, source) {
       // Check if we are even inWindow, in other words is a Chrome window focused. If not, we don't care and we return (below)
       if (inWindow) {
         // Set the new currentState if previous domain was false or different. So the new currentState has a different (positive) domain, and associated time stamp
-        currentState = timelineObject(domain);
+        currentState = timelineObject(domain, source);
         // Run a visit update (which also checks for compulsive), give the new time stamp of this event that just happened
         domainVisitUpdater(domain, currentState.time);
         // If the previous timeline event was a domain we care about, we need to do its time adding. startTime is lastState.time, endTime is currentState.time
@@ -457,7 +465,7 @@ function timelineAdder(domain, source) {
       // The domain of current timeline event is NOT one we care about, but the previous one was (because we passed through currentState.domain === domain)
       // So we still need to put it into currentState, and sum up the time for that previous domain if it was one we care about
       // First we set the new currentState
-      currentState = timelineObject(domain);
+      currentState = timelineObject(domain, source);
       // Then - this is a weird double check here since we already had currentState.domain === domain above - we do the time updating for the domain in the previous state
       if (lastState.domain) {
         domainTimeUpdater(lastState.domain, lastState.time, currentState.time);
@@ -530,6 +538,8 @@ function domainTimeNudger() {
       chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(tabs) {
         if (typeof tabs[0] != "undefined") {
           chrome.tabs.sendMessage(tabs[0].id, { type: "debug_updater", domain: currentState.domain, before: domainData.totalTimeToday, secondsIn: domainData.secondsIn,  total: totalTimeTodayTemp, visits: domainData.totalVisitsToday}, function(response) {
+          chrome.browserAction.setBadgeBackgroundColor({ color: '#000000', tabId: tabs[0].id });
+          chrome.browserAction.setBadgeText({ text: badgeTime(totalTimeTodayTemp), tabId: tabs[0].id });
           });
         }
       });
@@ -573,7 +583,13 @@ function windowChecker() {
             nudge = tabIdStorage[tabs[0].id].nudge;
           }
           if (nudge) {
-            messageSender(nudge);
+            console.log(currentState);
+            if (nudge.type === 'compulsive' && currentState.source != "onUpdated, with tab active & window focused") {
+              messageSender(nudge);
+              console.log("stopped broken nudge"); // ask the question - did facebook already exist? or something like that
+            } else {
+              messageSender(nudge);
+            }
             tabIdStorage[tabs[0].id].nudge = false;
           }
           if (!inWindow) {
@@ -596,11 +612,11 @@ setInterval(windowChecker, 1000);
 
 // Add to timeline onStateChanged
 chrome.idle.onStateChanged.addListener(function(newState) {
-  if (newState !== "active") {
-    isWindow = false;
-    timelineAdder(false, "Gone idle zZZzZzZZ");
-    isIdle = true;
-  }
+  // if (newState !== "active") { // switching this part off because onTabIdle can handle it on its own
+  //   isWindow = false;
+  //   timelineAdder(false, "Gone idle zZZzZzZZ");
+  //   isIdle = true;
+  // }
   if (newState === "active") {
     isWindow = true;
     chrome.windows.getLastFocused(function(window) {
