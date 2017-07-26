@@ -122,9 +122,9 @@ var defaultDomainData = {
 // Need to figure out which variables really need to be reset daily
 // Need to simulate day-switching to see what happens
 
-chrome.identity.getAuthToken(null, function(identity) {
-  console.log(identity);
-});
+// chrome.identity.getAuthToken(null, function(identity) { // TODO:  DISABLED for now
+//   console.log(identity);
+// });
 
 // Set default settings TODO: need resolution to the domainsEver thing. basically: if domain gets dropped off, should still reset it. etc.
 function setDefaults() {
@@ -145,26 +145,26 @@ function setDefaults() {
   chrome.storage.sync.get('userid', function(items) {
     console.log(items);
     var userId = items.userId;
-    if (userId) {
-      useToken(userId);
-    } else {
-      userId = getRandomToken();
-      chrome.storage.sync.set({ userId: userId }, function() {
-        useToken(userId);
-      });
-    }
+    // if (userId) { // TODO: DISABLED for now
+    //   useToken(userId);
+    // } else {
+    //   userId = getRandomToken();
+    //   chrome.storage.sync.set({ userId: userId }, function() {
+    //     useToken(userId);
+    //   });
+    // }
 
-    function useToken(userId) {
-      var dataToBeSent = {
-        'userId': userId,
-        data: localStorage
+    // function useToken(userId) {
+    //   var dataToBeSent = {
+    //     'userId': userId,
+    //     data: localStorage
 
-      };
+    //   };
 
-      $.post(config.apiEndpoint + 'user', dataToBeSent, function(data, status) {
-        log(status);
-      });
-    }
+    //   $.post(config.apiEndpoint + 'user', dataToBeSent, function(data, status) {
+    //     log(status);
+    //   });
+    // }
   });
 
   chrome.storage.sync.get(null, function(items) {
