@@ -1,5 +1,7 @@
 /* Copyright 2016, Nudge, All rights reserved. */
 
+@namespace xlink 'http://www.w3.org/1999/xlink';
+
 /* Latin */
 @font-face {
   font-family: 'Open Sans';
@@ -42,22 +44,40 @@
 #nudge_uf #uf_container {
   position: fixed;
   bottom: 25px;
-  background-color: #000000;
+  background-color: #61a7ff;
   overflow: visible;
   display: inline-block;
   width: auto;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) rotate(0) translateZ(0);
   margin-left: auto;
   margin-right: auto;  
   height: 27px;
-  opacity: .8;
+  opacity: .6;
   z-index: 2147483646;
   transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
   transition: all 0.3s;
   border-radius: 40px;
   font-family: 'Open Sans', Arial, sans-serif;
   font-style: normal;
+  animation: fadein 3s, colorchange 10s infinite;
+  font-smoothing: antialiased;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 0.6; }
+}
+
+#nudge_uf #uf_container:hover {
+  opacity: 0.9;
+}
+
+@keyframes colorchange
+{
+  0%   {background-color: #61a7ff;}
+  50%  {background-color: #ff61a7;}
+  100% {background-color: #61a7ff;}
 }
 
 #nudge_uf #uf_message {
@@ -81,22 +101,35 @@
   cursor: pointer;
   right: 7px;
   top: 6px;
-  width: 14px;
-  height: 14px;
+  width: 15px;
+  height: 15px;
+  opacity: 0.6;
   background-color: #00FFFF;
-  background: url('chrome-extension://__MSG_@@extension_id__/resources/images/closewhite.svg')  0/14px no-repeat;
+  background: url('chrome-extension://__MSG_@@extension_id__/resources/images/closewhite.svg')  0/15px no-repeat;
 }
 
 #nudge_uf #uf_logo {
   position: absolute;
   left: 8px;
   top: 7px;
-  width: 12px;
-  height: 12px;
-  background-color: #00FFFF;
-  background: url('chrome-extension://__MSG_@@extension_id__/resources/images/logowhite.svg')  0/12px no-repeat;
-  opacity: 0.00;
-  transition-timing-function: cubic-bezier(0.25,0.1,0.25,1);
+  width: 13px;
+  height: 13px;
+  background: url('chrome-extension://__MSG_@@extension_id__/resources/images/smalllogowhite.svg')  0/13px no-repeat;
+  opacity: 0.6;
+}
+
+#nudge_uf #uf_logo:hover {
+  position: absolute;
+  left: 8px;
+  top: 7px;
+  width: 13px;
+  height: 13px;
+  background: url('chrome-extension://__MSG_@@extension_id__/resources/images/smalllogowhite.svg')  0/13px no-repeat;
+  opacity: 1;
+}
+
+svg image[xlink|href*="temp"] {
+    outline: 3px solid red;
 }
 
 #nudge_uf #uf_bottom {
@@ -110,10 +143,10 @@
   background-color: #F0F8FF;
 }
 
-#nudge_uf:hover #uf_logo {
+/*#nudge_uf:hover #uf_logo {
   opacity: 1;
-  background: url('chrome-extension://__MSG_@@extension_id__/resources/images/logo.svg')  0/12px no-repeat;  
-}
+  background: url('chrome-extension://__MSG_@@extension_id__/resources/images/logosmallcolour.svg')  0/13px no-repeat;  
+}*/
 
 #nudge_uf #uf_close:hover {
     background: url('chrome-extension://__MSG_@@extension_id__/resources/images/closehoverwhite.svg') no-repeat;
