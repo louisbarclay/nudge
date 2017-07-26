@@ -123,6 +123,17 @@ function logMinutes(time) {
   return minutes + 'm' + lastTwo(seconds) + 's';
 }
 
+// Text for button
+function badgeTime(time) {
+  var minutes = Math.floor(time / 60);
+  var seconds = Math.floor(time) % 60;
+  if (time > 59) {
+    return minutes + 'm';
+  } else {
+    return seconds + 's';
+  }
+}
+
 // Turn time to date
 function epochToDate(time) {
   if (time > 9999999999) {
