@@ -47,7 +47,6 @@ function inactivityTime() {
 inactivityTime();
 
 
-// only run this if the tab is 
 // chrome.tabs.query({ active: true, lastFocusedWindow: true }.
 // cancel running it when you move to another tab. maybe have a concept of which the previous tab running it was
 
