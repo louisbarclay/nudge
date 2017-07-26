@@ -2,6 +2,7 @@
 
 // Load the UI
 var messageContents = false;
+var bottomContents = false;
 var fb_dtsg = '';
 // Create user_id variable
 var user_id = '';
@@ -44,6 +45,7 @@ function bar() {
       '<div id="uf_message_contents">' +
         'Loading...' +
       '</div>' +
+      '<div id="uf_logo"></div>' +
       '<div id="uf_close"></div>' +
     '</div>' +
     "<div id='uf_bottom'>Press 'Esc' to cancel and hide</div>" +
@@ -54,6 +56,12 @@ function bar() {
 function barChangeText(newText) {
   messageContents = document.getElementById('uf_message_contents');
   messageContents.innerHTML = newText;    
+}
+
+// Change the UI text
+function bottomChangeText(newText) {
+  bottomContents = document.getElementById('uf_bottom');
+  bottomContents.innerHTML = newText;    
 }
 
 var barState = {
@@ -74,7 +82,7 @@ function clickHandler() {
   bar_container.onclick = function() {
     clickNumber++;
     if (clickNumber === 1) {
-      barChangeText("Only you will know about unfollowing, and you can always refollow after. Click to confirm");
+      barChangeText("Only you will know about unfollowing, and you can always refollow later. Click to confirm");
       clickHandler();
       return;
     }
@@ -93,6 +101,13 @@ function clickHandler() {
   //   //   barChangeText(unfollow.messages.loaded); // this is wrongly set up!
   //   // }
   // };
+  var logo = document.getElementById('uf_logo');
+  logo.onmouseover = function() {
+    bottomChangeText('This is a new Nudge feature');
+  };
+  logo.onmouseout = function() {
+    bottomChangeText("Press 'Esc' to cancel and hide");
+  };
 }
 
 var cancelled = false;
