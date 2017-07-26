@@ -33,16 +33,20 @@ $(document).ready(function() {
   }
 });
 
+var nudge_uf = null;
+
 // Load the UI
 function bar() {
-  var nudge_uf = createEl(document.body, 'div', 'nudge_uf');
+  nudge_uf = createEl(document.body, 'div', 'nudge_uf');
   nudge_uf.innerHTML =
   '<div id="uf_container">' +
-      '<div id="uf_message">' +
-        '<div id="uf_message_contents">' +
-          'Loading...' +
-        '</div>' +
+    '<div id="uf_message">' +
+      '<div id="uf_message_contents">' +
+        'Loading...' +
       '</div>' +
+      '<div id="uf_close"></div>' +
+    '</div>' +
+    "<div id='uf_bottom'>Press 'Esc' to cancel and hide</div>" +
   '</div>';
 }
 
@@ -61,11 +65,16 @@ var clickNumber = 0;
 
 // Click handler
 function clickHandler() {
-  var bar_container = document.getElementById('uf_message_contents');
+  var close = document.getElementById('uf_close');
+  close.onclick = function() {
+    deleteEl(nudge_uf);
+    cancelled = true;
+  };
+  var bar_container = document.getElementById('uf_message_contents'); // FIXME: danger. should only be for the part that is NOT the close button
   bar_container.onclick = function() {
     clickNumber++;
     if (clickNumber === 1) {
-      barChangeText("Click to confirm that you want to unfollow all your friends");
+      barChangeText("Only you will know about unfollowing, and you can always refollow after. Click to confirm");
       clickHandler();
       return;
     }
@@ -74,24 +83,38 @@ function clickHandler() {
       return;
     }
   };
+  // nudge_uf.onmouseover = function() {
+  //   if (clickNumber === 0) {
+  //     barChangeText('yeah really do it go on babe');
+  //   }
+  // };
+  // nudge_uf.onmouseout = function() {
+  //   // if (clickNumber === 0) {
+  //   //   barChangeText(unfollow.messages.loaded); // this is wrongly set up!
+  //   // }
+  // };
 }
 
+var cancelled = false;
+
+// Hide bar and cancel anything that's happening
 $(document).keyup(function(key) {
-  var bar_container = document.getElementById('uf_message_contents');
   if (key.keyCode === 27) {
-    deleteEl(bar_container);
+    deleteEl(nudge_uf);
+    cancelled = true;
   }
+  window.onbeforeunload = null;
 });
 
 // Keyboard shortcuts for testing
-if (window.addEventListener) {
-  var letters = [], prompt1 = ["z","x"];
-  window.addEventListener("keydown", function(e) {
-          letters.push(e.key);
-          if ([letters.slice(-2)[0],letters.slice(-1)[0]].toString() === prompt1.toString()) {
-          }
-  }, true);
-}
+// if (window.addEventListener) {
+//   var letters = [], prompt1 = ["z","x"];
+//   window.addEventListener("keydown", function(e) {
+//     letters.push(e.key);
+//     if ([letters.slice(-2)[0],letters.slice(-1)[0]].toString() === prompt1.toString()) {
+//     }
+//   }, true);
+// }
 
 // Create a random delay between XMLHttpRequests
 function randomTime(floor, variance) {
@@ -116,7 +139,7 @@ var unfollow = {
   actionUrl: "https://www.facebook.com/ajax/follow/unfollow_profile.php",
   profiles: [],
   messages: {
-    loaded: 'Ready to unfollow ',
+    loaded: 'Delete your News Feed forever by unfollowing all your friends, pages, and groups',
     empty: 'No profiles to unfollow',
     start: 'Trying to unfollow ',
     success: 'Successfully unfollowed ', // FIXME: Recommend that you go and do something else - leave tab open
@@ -193,11 +216,15 @@ function friendAndPageListGenerator(option) {
         if (!document.getElementById('uf_message_contents') && option.profiles.length > 0) {
           bar();
           clickHandler();
-          barChangeText(option.messages.loaded + option.profiles.length + " friends (click to start, press 'Esc' to hide)");
+          var friends = " friends ";
+          if (option.profiles.length === 1) {
+            friends = " friend ";
+          }
+          barChangeText(option.messages.loaded); //  + option.profiles.length + friends + "(click to start, press 'Esc' to hide)"
         }
       }
       // Loop again with higher 'i', unless keepGoing is false
-      if (option.keepGoing && option.i < option.safetylock) {
+      if (option.keepGoing && option.i < option.safetylock && !cancelled) {
         option.i++;
         friendAndPageListGenerator(option);
       } else {
@@ -217,10 +244,19 @@ function friendAndPageListGenerator(option) {
 
 // add up from unfollow and refollow . see if matches that figure you got earlier. if that makes sense.
 
+// window.onbeforeunload = function(){
+//   return "";
+// };
+
+// FIXME: some safety features to make sure this can't be abused (i.e. somehow set off friendtoggler multiple times within short space of time leading to acct getting blocked by fb)
+
 function friendAndPageToggler(option) {
+  if (option.j === 0) {
+    barChangeText('Starting to unfollow ' + option.profiles.length + ' friends, pages, and groups');
+  }
   // Check if there are profiles to toggle
   console.log(option);
-  if (option.profiles.length === 0) {
+  if (option.profiles.  length === 0) {
     console.log(option.messages.empty);
     barChangeText(option.messages.empty);
     return;
@@ -246,10 +282,7 @@ function friendAndPageToggler(option) {
   params += "&profile_id=" + profile_id;
   params += "&nctr[_mod]=pagelet_timeline_profile_actions";
   params += "&__req=65";  
-  if (option === unfollow) {
-    console.log("yea");
-  }
-  // params += "&confirmed=" + 1; // add this back in only when it's needed?
+  // params += "&confirmed=" + 1; // Keep this in the back pocket
   friendandpage_toggle.onreadystatechange = function() {
     if (friendandpage_toggle.readyState == 4) {
       var data = friendandpage_toggle.responseText;
@@ -257,20 +290,24 @@ function friendAndPageToggler(option) {
       data = JSON.parse(data);
       if (typeof data != 'undefined') {
         if (typeof data.error != 'undefined') {
-          console.log(data.error);
-          console.log(data.errorDescription);
-          console.log(data.errorSummary);          
-          console.log(option.j + ' completed out of ' + option.profiles.length + ' when error hit. Please try again tomorrow');
+          console.log(data);
+          barChangeText("Something went wrong. Please try again in 24 hours" + ' (' + (option.j) + ' unfollowed out of ' + option.profiles.length + ")");
           return;
         }
         if (typeof data.onload != 'undefined' && data.onload[0] === (option.verifText.start + profile_id + option.verifText.end)) {
-          console.log(option.messages.success + name + ' (' + option.j + ' out of ' + option.profiles.length + ')');
-          barChangeText(option.messages.success + name);
           option.j++;
-          if (option.j < option.profiles.length && option.j < option.safetylock) {
+          console.log(option.messages.success + name + ' (' + (option.j) + ' out of ' + option.profiles.length + ")");
+          barChangeText(option.messages.success + name + ' (' + (option.j) + ' out of ' + option.profiles.length + ")");
+          if (option.j < option.profiles.length && option.j < option.safetylock && !cancelled) {
             setTimeout(function () {
               friendAndPageToggler(option);
-            }, randomTime(1,0.5)); // This is too aggressive - have to do every 1000ms
+            }, randomTime(1,0.1));
+          }
+          if ((option.j) === option.profiles.length) {
+            setTimeout(function() {
+              barChangeText(option.messages.success + "all " + option.profiles.length + " friends, pages and groups");
+            }, 2000);
+            window.onbeforeunload = null;
           }
         } else {
           console.log(option.messages.fail + name);
@@ -284,18 +321,6 @@ function friendAndPageToggler(option) {
   friendandpage_toggle.send(params);
 }
 
-// took 1hr for 1400. more or less. one every 1.5 seconds, actually a bit more
-
-// FIXME: Only you will know. IMPORTANT MESSAGE TO INCLUDE
-
-var errorUrl = "https://www.facebook.com/ajax/haste-response/?modules=ConfirmationDialog&__user=1613880018&__a=1";
-
-function errorDialog() {
-  error_dialog = new XMLHttpRequest();
-  error_dialog.open("GET", errorUrl, true);
-  var params = '';
-  params += "&__a=1"; // Need this
-  params += "&modules=ConfirmationDialog"; // Need this
-  params += "&__user=" + user_id;
-  error_dialog.send(params);
-}
+// want to make clear that person can do something else in other tabs
+// want to make clear where you go to refollow
+// want to make clear how much time it's going to take
