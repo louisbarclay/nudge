@@ -68,3 +68,18 @@
     left: $inset
     top: $inset
     z-index: $z-index
+
+@mixin container($left: 25%, $width: 50%, $spacing: 10px)
+  position: absolute
+  align-items: flex-start
+  display: flex
+  flex-direction: column
+  left: $left
+  width: $width
+
+  >div
+    align-items: baseline
+    align-self: stretch
+    display: flex
+    justify-content: space-between
+    margin-top: $spacing

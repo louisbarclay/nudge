@@ -1,12 +1,16 @@
+// Options
+
+.options-container
+  +container($left: 200px, $width: 600px)
+
 // Popup
 
 .popup-body
   +size(300px)
 
 .popup-container
-  @extend .container
+  +container($left: 0, $width: 300px)
   align-items: center
-  width: 300px
 
 // Nudges
 
@@ -14,19 +18,14 @@
   @extend %reset
 
 .nudge-tl-container
-  @extend .container
-  left: 500px
-  width: 300px
+  +container($left: 500px, $width: 300px, $spacing: 5px)
 
   >div
     align-self: flex-start
-    margin-top: 5px
 
 .nudge-m-container
   @extend .nudge-tl-container
   top: 500px
-  left: 500px
-  width: 300px
 
 .nudge-b-container
   @extend .nudge-tl-container
