@@ -14,6 +14,14 @@ function extractDomain(url) {
   return domain;
 }
 
+function notUndefined(x) {
+  if (typeof x === "undefined") {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 function extractHostname(url) {
   var hostname;
   // Find and remove protocol (http, ftp, etc.) and get hostname
