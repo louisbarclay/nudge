@@ -29,10 +29,13 @@ $(document).ready(function() {
       }
     }
     friendAndPageListGenerator(unfollow);
+    ad();
   } catch (error) {
     // Error catching
   }
 });
+
+var nudge_ad = null;
 
 var nudge_uf = null;
 
@@ -75,6 +78,7 @@ var clickNumber = 0;
 function clickHandler() {
   var close = document.getElementById('uf_close');
   close.onclick = function() {
+    // change html. add 2 links. closing in 5 seconds (close now / close forever, close for 10 weeks). only do this once? and in future hide forever?
     deleteEl(nudge_uf);
     cancelled = true;
   };
@@ -91,16 +95,16 @@ function clickHandler() {
       return;
     }
   };
-  // nudge_uf.onmouseover = function() {
-  //   if (clickNumber === 0) {
-  //     barChangeText('yeah really do it go on babe');
-  //   }
-  // };
-  // nudge_uf.onmouseout = function() {
-  //   // if (clickNumber === 0) {
-  //   //   barChangeText(unfollow.messages.loaded); // this is wrongly set up!
-  //   // }
-  // };
+  nudge_uf.onmouseover = function() {
+    if (clickNumber === 0) {
+      barChangeText('Delete your News Feed forever by unfollowing all your friends, pages, and groups');
+    }
+  };
+  nudge_uf.onmouseout = function() {
+    // if (clickNumber === 0) {
+    //   barChangeText(unfollow.messages.loaded); // this is wrongly set up!
+    // }
+  };
   var logo = document.getElementById('uf_logo');
   logo.onmouseover = function() {
     bottomChangeText('This is a new Nudge feature');
@@ -154,7 +158,7 @@ var unfollow = {
   actionUrl: "https://www.facebook.com/ajax/follow/unfollow_profile.php",
   profiles: [],
   messages: {
-    loaded: 'Delete your News Feed forever by unfollowing all your friends, pages, and groups',
+    loaded: 'Unfollow everything',
     empty: 'No profiles to unfollow',
     start: 'Trying to unfollow ',
     success: 'Successfully unfollowed ', // FIXME: Recommend that you go and do something else - leave tab open

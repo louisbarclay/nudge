@@ -1,7 +1,7 @@
 // Copyright 2016, Nudge, All rights reserved.
 
 $(document).ready(function() {
-  // listener(debuggerInit());
+  listener(debuggerInit());
 });
 
 function debuggerInit() {
@@ -23,7 +23,7 @@ function listener(element) {
     function(request, sender, sendResponse) {
     if (request.type === "debug_updater") {
       if (element) {
-        element.innerHTML = request.domain + ' | Now: ' + logMinutes(request.secondsIn) + ' | Total: ' + logMinutes(request.total) + ' | Before: ' + logMinutes(request.before/1000) + ' | Visits: ' + request.visits + ' | Time per visit: ' + logMinutes((request.total)/request.visits);
+        element.innerHTML = request.domain + ' | Now: ' + logMinutes(request.runningCounter) + ' | Total: ' + logMinutes(request.total) + ' | Before: ' + logMinutes(request.before/1000) + ' | Visits: ' + request.visits + ' | Time per visit: ' + logMinutes((request.total)/request.visits);
       }
     }
   });

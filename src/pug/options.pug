@@ -1,0 +1,29 @@
+html
+  head
+    title
+    link(rel="stylesheet", href="../css/main.css")
+  body
+    div.header
+    div.logo
+    div.container
+      h2 Your Nudge domains
+      div
+        div Add a domain
+        ul.text-input
+          li
+            input#addDomain(type='text' placeholder='likethis.com' onblur="this.placeholder = 'likethis.com'" onfocus="this.placeholder = ''") 
+      ul.tags#domainList
+      h2 Other options
+      mixin optionBoolean(name)
+        div
+          div=name
+          button.toggle
+            div.left Yes
+            div.right.on No
+      +optionBoolean('Get rid of Facebook notifications')
+      +optionBoolean('Take notification numbers out of page titles')
+      +optionBoolean('Show Facebook unfollow')
+      +optionBoolean('Switch off Nudge domains by default')
+      +optionBoolean('Keep page favicons from showing red icons')
+      p your Nudge ID is this string: keep it safe if you are participating in a Nudge study.
+  script(src="../js/options.js")

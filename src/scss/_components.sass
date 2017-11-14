@@ -1,0 +1,103 @@
+.arrow
+  border-left: 1px solid #a9a9a9
+  border-top: 1px solid #a9a9a9
+  cursor: pointer
+  display: inline-block
+  font-size: 12px
+  height: 4em
+  left: 20px
+  margin-top: -2em
+  overflow: hidden
+  position: absolute
+  top: 50%
+  transform: rotate(-135deg)
+  width: 4em
+
+.toggle
+  color: $primary
+  display: flex
+  padding: 0
+
+  .left
+    +padding
+    color: inherit
+
+  .right
+    +padding
+    color: inherit
+
+  .on
+    background: $primary
+    background-clip: border-box
+    color: $light
+
+  &:hover
+    background: inherit
+    border-color: $secondary
+    color: $secondary
+
+    .on
+      background: $secondary
+      color: $light
+
+.tags
+  li
+    +border($style: none)
+    +left-icon
+    padding-right: 1em
+    float: left
+    height: 2em
+    line-height: 2em
+    position: relative
+    color: $light
+    font-size: (6 / 7) * 1rem
+    background-color: $primary
+    margin-right: .5em
+    margin-bottom: .33em
+    
+    &::after
+      filter: grayscale(100%)
+      opacity: 0.5
+
+    &:hover
+      background: none
+      cursor: pointer
+
+      &::before
+        +pseudo
+        +background-gradient
+        border-color: transparent
+        border-radius: inherit
+        color: $light
+        content: 'Remove'
+        height: 100%
+        left: 0
+        text-align: center
+        top: 0
+        width: 100%
+        z-index: 1
+
+.text-input
+  input
+    border-bottom: $border-primary
+    border-bottom-color: $primary
+    left: 0
+    list-style: none
+    margin: 0
+    padding: 0 0 (2 / 6) * 1em 0
+    position: relative
+    width: 20em
+
+    &::placeholder
+      color: $primary
+
+    &:focus
+      border-bottom: $border-primary
+
+.logo
+  position: relative
+  top: 3em
+  margin-left: 1em
+  width: 120px
+  height: 120px
+  background: url('chrome-extension://__MSG_@@extension_id__/resources/images/logogrey.svg') 0/120px no-repeat

@@ -48,3 +48,6 @@ n_compulsive.src = chrome.extension.getURL("resources/images/compulsive.png");
 
 var offswitch = new Image();
 offswitch.src = chrome.extension.getURL("resources/images/offswitch.svg");
+
+var logo = new Image();
+logo.src = chrome.extension.getURL("resources/images/logo.svg");

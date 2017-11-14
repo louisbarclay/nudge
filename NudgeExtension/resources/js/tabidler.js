@@ -11,6 +11,12 @@ function checkVideo() {
   });
 }
 
+setInterval(thing,5000);
+
+function thing() {
+  console.log('here' + timeNow())
+}
+
 function inactivityTime() {
   var idle = false;
   var t;
@@ -30,6 +36,7 @@ function inactivityTime() {
       idle = true;
       chrome.runtime.sendMessage({ type: "tabIdle", status: true }, function(response) {
       });      
+      console.log('gone tab idle');
     }
   }
 
@@ -38,6 +45,7 @@ function inactivityTime() {
         idle = false;
         chrome.runtime.sendMessage({ type: "tabIdle", status: false }, function(response) {
         });
+        console.log('back from tab idle');
       }
       clearTimeout(t);
       t = setTimeout(idleStart, 60000);

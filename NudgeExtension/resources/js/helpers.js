@@ -5,13 +5,58 @@ function extractDomain(url) {
   var domain;
   // Find & remove protocol (http, ftp, etc.) and get domain
   if (url.indexOf("://") > -1) {
-    domain = url.split('/')[2];
+    domain = url.split("/")[2];
   } else {
-    domain = url.split('/')[0];
+    domain = url.split("/")[0];
   }
   // Find & remove port number
-  domain = domain.split(':')[0];
+  domain = domain.split(":")[0];
   return domain;
+}
+
+function extractHostname(url) {
+  var hostname;
+  // Find and remove protocol (http, ftp, etc.) and get hostname
+  if (url.indexOf("://") > -1) {
+    hostname = url.split("/")[2];
+  } else {
+    hostname = url.split("/")[0];
+  }
+  // Find and remove port number
+  hostname = hostname.split(":")[0];
+  // Find and remove "?"
+  hostname = hostname.split("?")[0];
+  return hostname;
+}
+
+function extractRootDomain(url) {
+  var domain = extractHostname(url),
+    splitArr = domain.split("."),
+    arrLen = splitArr.length;
+  // Extracting the root domain here
+  // If there is a subdomain
+  if (arrLen > 2) {
+    domain = splitArr[arrLen - 2] + "." + splitArr[arrLen - 1];
+    // Check to see if it's using a CCTLD, i.e. ".me.uk"
+    if (splitArr[arrLen - 1].length == 2 && splitArr[arrLen - 1].length == 2) {
+      // This is using a CCTLD
+      domain = splitArr[arrLen - 3] + "." + domain;
+    }
+  }
+  return domain;
+}
+
+// Generate userId
+function getUserId() {
+  // E.g. 8 * 32 = 256 bits token
+  var randomPool = new Uint8Array(32);
+  crypto.getRandomValues(randomPool);
+  var hex = "";
+  for (var i = 0; i < randomPool.length; ++i) {
+    hex += randomPool[i].toString(16);
+  }
+  // E.g. db18458e2782b2b77e36769c569e263a53885a9944dd0a861e5064eac16f1a
+  return hex;
 }
 
 // Helper function ordinal number parser
@@ -68,8 +113,16 @@ function domainChecker(url, array) {
   return false;
 }
 
+// Checks if object is empty
+function isEmpty(obj) {
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key)) return false;
+  }
+  return true;
+}
+
 // Helper - gets random from array
-function randomGetter(init,current) {
+function randomGetter(init, current) {
   var index = Math.floor(Math.random() * current.length);
   if (current.length === 0) {
     for (var i = 0; i < init.length; i++) {
@@ -102,11 +155,21 @@ function deleteEl(element) {
 
 var nudgeLink = "http://bit.ly/2gFsVrf";
 
+function ifDoesntExistMakeZero(a, b) {
+  if (!a || a == "undefined" || a == null) {
+    return b;
+  } else {
+    return a;
+  }
+}
+
 function copyText() {
-  var copyText = createEl(document.body, 'textArea', 'copyText');
-  var selection = $('#copyText').val(nudgeLink).select();
-  document.execCommand('copy');
-  selection.val('');
+  var copyText = createEl(document.body, "textArea", "copyText");
+  var selection = $("#copyText")
+    .val(nudgeLink)
+    .select();
+  document.execCommand("copy");
+  selection.val("");
   deleteEl(copyText);
 }
 
@@ -120,7 +183,7 @@ function lastTwo(number) {
 function logMinutes(time) {
   var minutes = Math.floor(time / 60);
   var seconds = Math.floor(time) % 60;
-  return minutes + 'm' + lastTwo(seconds) + 's';
+  return minutes + "m" + lastTwo(seconds) + "s";
 }
 
 // Text for button
@@ -128,34 +191,111 @@ function badgeTime(time) {
   var minutes = Math.floor(time / 60);
   var seconds = Math.floor(time) % 60;
   if (time > 59) {
-    return minutes + 'm';
+    return minutes + "m";
   } else {
-    return seconds + 's';
+    return seconds + "s";
   }
+}
+
+// Adds together two numbers onto the second
+function addTogether(a, b) {
+  if (!a || a == "undefined" || a == null) {
+    a = 0;
+  }
+  b = a + b;
+  return b;
+}
+
+// Add style to document
+function styleAdder(id, style) {
+  var styleText = id + style;
+  style = document.createElement("style");
+  style.innerHTML = styleText;
+  document.head.appendChild(style);
+}
+
+// Run when an element is ready
+function whenElementReady(callback) {
+  $(document).ready(function() {
+    callback();
+  });
+}
+
+// Send event from content script
+function eventLogSender(domain, eventType, detailsObj) {
+  if (!detailsObj) {
+    detailsObj = false;
+  }
+  // should be a SENDMESSAGE so it can happen from anywhere in the app
+  chrome.runtime.sendMessage({
+    type: "event",
+    domain,
+    eventType,
+    detailsObj,
+    date: todayDate(),
+    time: timeNow()
+  }); // needs receiver
+}
+
+// Helper to check if key defined
+function keyDefined(object, key) {
+  if (object[key] !== undefined) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+// Returns today's date
+function todayDate(yesterday) {
+  var d = new Date();
+  if (yesterday) {
+    d.setDate(d.getDate() - 1);
+  }
+  var day = d.getDate();
+  var monthIndex = d.getMonth();
+  var year = d.getFullYear();
+  return lastTwo(day) + "-" + monthNames[monthIndex] + "-" + lastTwo(year);
 }
 
 // Turn time to date
 function epochToDate(time) {
   if (time > 9999999999) {
-    time = time/1000;  
+    time = time / 1000;
   }
   var d = new Date(0);
   d.setUTCSeconds(time);
-  var monthNames = [
-    "Jan", "Feb", "Mar",
-    "Apr", "May", "Jun", "Jul",
-    "Aug", "Sep", "Oct",
-    "Nov", "Dec"
-  ];
   var day = d.getDate();
   var monthIndex = d.getMonth();
   var hours = d.getHours();
   var minutes = d.getMinutes();
-  var seconds = d.getSeconds();  
+  var seconds = d.getSeconds();
   var year = d.getFullYear();
-  return hours + ":" + lastTwo(minutes) + ":" + lastTwo(seconds)/* + ' ' + lastTwo(day) + '-' + monthNames[monthIndex] + '-' + lastTwo(year)*/;
+  return (
+    hours +
+    ":" +
+    lastTwo(minutes) +
+    ":" +
+    lastTwo(
+      seconds
+    ) /* + ' ' + lastTwo(day) + '-' + monthNames[monthIndex] + '-' + lastTwo(year)*/
+  );
 }
 
+var monthNames = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec"
+];
 
 function initOff() {
   chrome.runtime.sendMessage({
@@ -167,11 +307,17 @@ function initOff() {
 function classList(element) {
   var list = element.classList;
   return {
-    toggle: function(c) { list.toggle(c);
-      return this; },
-    add: function(c) { list.add(c);
-      return this; },
-    remove: function(c) { list.remove(c);
-      return this; }
+    toggle: function(c) {
+      list.toggle(c);
+      return this;
+    },
+    add: function(c) {
+      list.add(c);
+      return this;
+    },
+    remove: function(c) {
+      list.remove(c);
+      return this;
+    }
   };
 }

@@ -110,20 +110,20 @@ function replacer(object, selection, isClick) {
   });
 }
 
-function storageSetter(setting, value, isClick) {
-  settingObj = {};
-  settingObj[setting] = value;
-  chrome.storage.sync.set(settingObj);
-  if (isClick) {
-    var saved_div = document.getElementById('saved_div');
-    $(saved_div).fadeIn();
-    $(saved_div).fadeOut();
-    updateObj = {};
-    updateObj.type = "update";
-    updateObj.setting = setting;
-    optionUpdater(updateObj);
-  }
-}
+// function storageSetter(setting, value, isClick) {
+//   settingObj = {};
+//   settingObj[setting] = value;
+//   chrome.storage.sync.set(settingObj);
+//   if (isClick) {
+//     var saved_div = document.getElementById('saved_div');
+//     $(saved_div).fadeIn();
+//     $(saved_div).fadeOut();
+//     updateObj = {};
+//     updateObj.type = "update";
+//     updateObj.setting = setting;
+//     optionUpdater(updateObj);
+//   }
+// }
 
 // Update that single setting in background script
 function optionUpdater(object) {

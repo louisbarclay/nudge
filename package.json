@@ -1,0 +1,27 @@
+{
+  "name": "nudge",
+  "version": "1.0.0",
+  "description": "Nudge app",
+  "main": "node.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build:pug": "pug -w src/pug -o NudgeExtension/html",
+    "build:sass": "sass --watch src/scss:NudgeExtension/css --sourcemap=none",
+    "dev": "npm-run-all -p build:*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lgwb89/nudge.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lgwb89/nudge/issues"
+  },
+  "homepage": "https://github.com/lgwb89/nudge#readme",
+  "dependencies": {
+    "npm-run-all": "^4.1.2"
+  }
+}

@@ -53,7 +53,7 @@
   margin-left: auto;
   margin-right: auto;  
   height: 27px;
-  opacity: .6;
+  opacity: 1;
   z-index: 2147483646;
   transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
   transition: all 0.3s;
@@ -66,12 +66,12 @@
 
 @keyframes fadein {
     from { opacity: 0; }
-    to   { opacity: 0.6; }
+    to   { opacity: 1; }
 }
 
-#nudge_uf #uf_container:hover {
-  opacity: 0.9;
-}
+/*#nudge_uf #uf_container:hover {
+  opacity: 1;
+}*/
 
 @keyframes colorchange
 {

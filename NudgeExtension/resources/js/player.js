@@ -116,6 +116,7 @@ function listener() {
   domain = extractDomain(window.location.href); // This is clumsy
   chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
+      console.log(request);
       if (request.type === "ready_check") {
         sendResponse({ type: true });
         return;
@@ -130,7 +131,14 @@ function listener() {
       if (domainChecker(domain, [request.domain])) {
         $(document).ready(function() { // TODO: This is where you could wait for no running processes
           if (request.type === "title") {
+            // https://stackoverflow.com/questions/27847616/making-document-title-untouchable-for-javascript
             document.title = titleConstantizer(request.domain);
+            Object.defineProperty(document, 'title', {
+              enumerable: false,
+              configurable: false,
+              writable: false,
+              value: document.title
+            });
           } else {
             messageCompiler(request); // Wow, this is running way too often. FIXME:!!!!!!! (because you're not actually checking for nudges)
           }
@@ -487,3 +495,10 @@ function domainChange(type, domain) {
     console.log(response);
   });
 }
+
+// setInterval(changeTitle,10000);
+
+// function changeTitle() {
+//   console.log('attempted');
+//   document.title = "Test";
+// }

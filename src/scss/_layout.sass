@@ -1,0 +1,37 @@
+.header
+  +size(100%, 2em)
+  border-bottom: $border-primary
+
+.container
+  +center
+  align-items: flex-start
+  display: flex
+  flex-direction: column
+  width: 750px
+
+  >div
+    display: flex
+    align-self: stretch
+    justify-content: space-between
+    align-items: baseline
+    margin-top: 10px
+
+  button
+    margin: 0
+
+.leftPara
+  flex-basis: 50%
+  display: block
+  padding-right: 15px
+
+.rightImage
+  flex-basis: 50%
+  height: 200px
+  background: $nudgeLightGrey
+
+.paraImage
+  border-bottom: solid 1px
+  height: 90vh
+  width: 100vw
+  background-color: yellow
+  align-items: flex-start

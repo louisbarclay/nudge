@@ -9,12 +9,11 @@ var config = {
 debugMode = config.debug;
 
 if (debugMode) {
-  console.log('in debug mode');
+  console.log('In debug mode - switch off before finishing');
 }
 
 function log(data) {
-
-  if (debugMode == true) {
+  if (debugMode) {
     console.log(data)
   }
 }

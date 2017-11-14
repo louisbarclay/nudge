@@ -8,8 +8,6 @@ Get a nudge whenever you:
 - get stuck scrolling down Twitter's infinite feed
 - quit Pinterest but compulsively go back straight away
 
-
-
 # Installation
 
 1. Pull the project onto your local machine
