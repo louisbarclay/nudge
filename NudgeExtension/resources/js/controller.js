@@ -93,11 +93,15 @@ var circleHoverStyle = `{
 }`;
 
 function addCircle(element) {
-  var hiddenElement = document.getElementById(element.name);
-  var container2 = document.createElement("div");
-  container2.id = "container2";
-  hiddenElement.insertAdjacentElement("afterbegin", container2); // is there a way of doing this shit with before pseudoelement?
-  container2.innerHTML = '<div id="circle"></div>';
+  try {
+    var hiddenElement = document.getElementById(element.name);
+    var container2 = document.createElement("div");
+    container2.id = "container2";
+    hiddenElement.insertAdjacentElement("afterbegin", container2); // is there a way of doing this shit with before pseudoelement?
+    container2.innerHTML = '<div id="circle"></div>';
+  } catch(e) {
+    console.log(e);
+  }
 }
 
 function doAtEarliest(callback) {

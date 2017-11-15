@@ -11,12 +11,6 @@ function checkVideo() {
   });
 }
 
-setInterval(thing,5000);
-
-function thing() {
-  console.log('here' + timeNow())
-}
-
 function inactivityTime() {
   var idle = false;
   var t;

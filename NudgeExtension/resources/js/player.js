@@ -116,7 +116,6 @@ function listener() {
   domain = extractDomain(window.location.href); // This is clumsy
   chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-      console.log(request);
       if (request.type === "ready_check") {
         sendResponse({ type: true });
         return;

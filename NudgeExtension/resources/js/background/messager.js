@@ -108,7 +108,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   }
   if (request.type === "inject_fbunfollow" && !chromeTab) {
     chrome.tabs.executeScript(sender.tab.id, {
-      file: "resources/js/fbunfollow.js"
+      file: "resources/js/facebook/unfollow.js"
     });
   }
   if (request.type === "inject_fbhide" && !chromeTab) {

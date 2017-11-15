@@ -3,13 +3,18 @@
 .options-container
   +container($left: 200px, $width: 600px)
 
+.options-logo
+  position: relative
+  +size(100px)
+  background: url('chrome-extension://__MSG_@@extension_id__/resources/images/logogrey.svg') 0/100px no-repeat
+
 // Popup
 
 .popup-body
   +size(300px)
 
 .popup-container
-  +container($left: 0, $width: 300px)
+  +container($left: 0, $width: 300px, $spacing: 5px)
   align-items: center
 
 // Nudges

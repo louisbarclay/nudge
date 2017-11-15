@@ -35,8 +35,6 @@ var defaultDomains = [
   "iwastesomuchtime.com",
   "mailonline.com",
   "imgur.com",
-  "amazon.co.uk",
-  "amazon.com",
   "netflix.com",
   "tumblr.com",
   "thesportbible.com",

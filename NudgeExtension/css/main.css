@@ -25,7 +25,7 @@ input {
   outline: none;
   border: 0; }
 
-body {
+body, p {
   padding: 0;
   margin: 0; }
 
@@ -169,17 +169,7 @@ a .small {
   .text-input input:focus {
     border-bottom: 1px solid #bdbdbd; }
 
-.logo {
-  position: relative;
-  top: 3em;
-  margin-left: 1em;
-  width: 120px;
-  height: 120px;
-  background: url("chrome-extension://__MSG_@@extension_id__/resources/images/logogrey.svg") 0/120px no-repeat; }
-
 .header {
-  width: 100%;
-  height: 2em;
   border-bottom: 1px solid #bdbdbd; }
 
 .leftPara {
@@ -213,6 +203,12 @@ a .small {
     justify-content: space-between;
     margin-top: 10px; }
 
+.options-logo {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  background: url("chrome-extension://__MSG_@@extension_id__/resources/images/logogrey.svg") 0/100px no-repeat; }
+
 .popup-body {
   width: 300px;
   height: 300px; }
@@ -230,7 +226,7 @@ a .small {
     align-self: stretch;
     display: flex;
     justify-content: space-between;
-    margin-top: 10px; }
+    margin-top: 5px; }
 
 .nudge-tl-container, .nudge-m-container, .nudge-b-container {
   position: absolute;
