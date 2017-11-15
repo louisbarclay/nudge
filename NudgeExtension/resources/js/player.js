@@ -385,7 +385,7 @@ function optionsClick(element, link) {
       type: "options"
     });
   });
-}
+} 
 
 function domainClick(element, link, domain) {
   $(element).on('click', '#' + link, function() {

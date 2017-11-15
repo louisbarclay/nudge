@@ -17,8 +17,8 @@
     backface-visibility: hidden
   perspective: $perspective
 
-@mixin center
-  position: absolute
+@mixin center($pos: absolute)
+  position: $pos
   left: 50%
   transform: translate(-50%, 0%)
 

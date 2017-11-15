@@ -211,7 +211,9 @@ a .small {
 
 .popup-body {
   width: 300px;
-  height: 300px; }
+  height: 300px;
+  margin: 5px;
+  padding: 5px; }
 
 .popup-container {
   position: absolute;
@@ -219,14 +221,15 @@ a .small {
   display: flex;
   flex-direction: column;
   left: 0;
-  width: 300px;
-  align-items: center; }
+  width: 300px; }
   .popup-container > div {
     align-items: baseline;
     align-self: stretch;
     display: flex;
     justify-content: space-between;
     margin-top: 5px; }
+  .popup-container > div {
+    margin: auto; }
 
 .nudge-tl-container, .nudge-m-container, .nudge-b-container {
   position: absolute;

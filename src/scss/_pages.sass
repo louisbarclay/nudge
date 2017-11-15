@@ -12,10 +12,15 @@
 
 .popup-body
   +size(300px)
+  margin: 5px
+  padding: 5px
 
 .popup-container
   +container($left: 0, $width: 300px, $spacing: 5px)
-  align-items: center
+
+  // This is for perfect centering
+  >div
+    margin: auto
 
 // Nudges
 
