@@ -44,15 +44,21 @@
 
 .nudge-main
   +border($color: $nudgeLightestGrey)
-  +padding
-  display: inline-block
-  align-self: flex-start
+  +padding($left: 0)
+  display: flex
   color: $nudgeDarkGrey
-  width: auto
-  +left-icon($size: 1em, $inset: 1em)
+  animation: pulse-shadow--onboarding 2s infinite
+  vertical-align: middle
+  +left-icon($size: 1.2em)
+  margin-bottom: 10px
+
+  &::before
+    background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo.svg') center center/1.2em no-repeat
 
 .nudge-menu
   @extend .nudge-main
+  animation: none
+  margin-bottom: 0
   font-size: (6 / 7) * 1rem
   background: $nudgeLightestGrey
   +border($style: none)

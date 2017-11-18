@@ -1,9 +1,9 @@
 // Copyright 2016, Nudge, All rights reserved.
 
+
 $(document).ready(function() {
   try {
-    console.log('trying');
-    styleAdder(pageletObjbefore.name, pageletBeforeStyle)
+    console.log("trying");
     // ad();
   } catch (error) {
     // Error catching
@@ -12,7 +12,7 @@ $(document).ready(function() {
 
 var container = null;
 
-console.log('somsestihsrgisdag');
+console.log("somsestihsrgisdag");
 
 // // Load the UI
 // function ad() {
@@ -44,32 +44,6 @@ console.log('somsestihsrgisdag');
 var pageletHideStyle = "{ opacity: 1; }";
 var pageletShowStyle = "{ opacity: 1; }";
 
-var pageletObjbefore = {
-  name: "pagelet_composer:before",
-  type: "id",
-  domain: "facebook.com"
-};
-
-var pageletBeforeStyle = `
-{
-  opacity: 1;
-  content: "";
-  display: block;
-  position: absolute;
-  z-index: 1500;
-  width: 100%;
-  height: 155px;
-  background-color: #ffffff;
-  text-align: center;
-  border: 1px solid;
-  border-color: #e5e6e9 #dfe0e4 #d0d1d5;
-  border-radius: 4px;
-  top: -1px;
-  bottom: -1px;
-  left: -1px;
-  right: -1px; }
-`;
-
 var pageletBeforeDelete = "{ content: none; }";
 
 var pageletObj = {
@@ -80,7 +54,7 @@ var pageletObj = {
 
 function modifyElFromStart(object, style) {
   var loc = document.location.href;
-  console.log('hey');
+  console.log("hey");
   document.addEventListener("DOMSubtreeModified", injectCSS, false);
   function injectCSS() {
     if (document.head) {

@@ -1,4 +1,4 @@
-// Copyright 2016, Nudge, All rights reserved.
+// SHOW:  automatically unfollow any new friends or pages detected. with the slider button
 
 // Load the UI
 var messageContents = false;

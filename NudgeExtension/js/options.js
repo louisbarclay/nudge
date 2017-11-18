@@ -68,5 +68,5 @@ function loadFavicon(elementId, domain) {
     '{ color: red; border: 3px; background: url("http://www.google.com/s2/favicons?domain=www.' +
     domain +
     '") 16px 16px; }';
-  styleAdder("#" + elementId + ":after", bgStyle);
+  styleAdder("#" + elementId + ":before", bgStyle);
 }

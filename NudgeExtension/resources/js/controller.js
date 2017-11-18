@@ -42,6 +42,8 @@ if (keyDefined(divs, domain)) {
   var elementHideStyle =
     "{ visibility: hidden; pointer-events: none; cursor: default }";
   doAtEarliest(function() {
+    styleAdder("#" + pageletObjbefore.name, pageletBeforeStyle);
+    styleAdder("#" + pageletObjHoverbefore.name, pageletHoverBeforeStyle);
     styleAdder("#container2", container2Style);
     styleAdder("#circle", circleStyle);
     styleAdder("@keyframes circleTransition", circleTransitionKeyframe);
@@ -83,6 +85,50 @@ var circleStyle = `{
   )}') center 0px/24px no-repeat;
 }`;
 
+var pageletObjbefore = {
+  name: "pagelet_composer:before",
+  type: "id",
+  domain: "facebook.com"
+};
+
+var pageletObjHoverbefore = {
+  name: "pagelet_composer:hover:before",
+  type: "id",
+  domain: "facebook.com"
+};
+
+// CHANGE THE URL OF BG IMAGE
+var pageletBeforeStyle = `
+{
+  opacity: 1;
+  text-align: center;
+  vertical-align: middle;
+  font-family: 'Open Sans';
+  cursor: pointer;
+  line-height: 220px;
+  color: #6d6d6d;
+  font-size: 26px;
+  content: "Get rid of your News Feed";
+  display: block;
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 155px;
+  background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo.svg') center 20px/50px 50px no-repeat #ffffff;
+  text-align: center;
+  border: 1px solid;
+  border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+  border-radius: 4px;
+  top: -1px;
+  bottom: -1px;
+  left: -1px;
+  right: -1px; }
+`;
+
+var pageletHoverBeforeStyle = `
+  background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo.svg') center 10px/50px 50px no-repeat #ffffff;
+`;
+
 var circleTransitionKeyframe = `{
   0% { opacity: 0; }
   100% { opacity: 0.5; }
@@ -99,7 +145,7 @@ function addCircle(element) {
     container2.id = "container2";
     hiddenElement.insertAdjacentElement("afterbegin", container2); // is there a way of doing this shit with before pseudoelement?
     container2.innerHTML = '<div id="circle"></div>';
-  } catch(e) {
+  } catch (e) {
     console.log(e);
   }
 }
