@@ -38,7 +38,8 @@ var defaultDomains = [
   "netflix.com",
   "tumblr.com",
   "thesportbible.com",
-  "telegraph.co.uk"
+  "telegraph.co.uk",
+  "worldsmostboringwebsite.com"
 ];
 
 var defaultSettings = {

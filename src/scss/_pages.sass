@@ -52,8 +52,13 @@
   +left-icon($size: 1.2em)
   margin-bottom: 10px
 
+  &:hover
+    animation: none
+    background-color: $nudgeLightestGrey
+
   &::before
     background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo.svg') center center/1.2em no-repeat
+  
 
 .nudge-menu
   @extend .nudge-main

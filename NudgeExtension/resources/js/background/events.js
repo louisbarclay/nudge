@@ -37,16 +37,14 @@ function everySecond() {
               }
               // Check if there is a nudge waiting to go out on the active tab
               if (tabIdStorage[window.tabs[i].id].nudge) {
-                if (
-                  nudge.type === "compulsive" &&
-                  currentState.source !== "tabs.onActivated" // fuck need to check this.
-                ) {
+                var nudge = tabIdStorage[window.tabs[i].id].nudge;
+                if (nudge.type === "compulsive") {
                   messageSender(nudge);
-                  console.log("stopped broken nudge"); // ask the question - did facebook already exist? or something like that
+                  tabIdStorage[window.tabs[i].id].nudge = false;
                 } else {
                   messageSender(nudge);
+                  tabIdStorage[window.tabs[i].id].nudge = false;
                 }
-                tabIdStorage[tabs[0].id].nudge = false;
               }
             }
           }
@@ -101,7 +99,9 @@ chrome.tabs.onRemoved.addListener(function(tabId) {
         if (tabsChecker(tabs, domain)) {
           var statusObj = open("status");
           var time = timeNow();
-          statusObj = dataAdder(statusObj, domain, time, "lastShutdown");
+          dataAdder(statusObj, domain, time, "lastShutdown");
+          console.log(JSON.parse(localStorage['status'])[domain]);
+          // Find out whether the domain has been nudged recently
           var nudged = false;
           if (
             keyDefined(statusObj, domain) &&
@@ -146,11 +146,12 @@ chrome.windows.onRemoved.addListener(function(windowId) {
 chrome.idle.onStateChanged.addListener(function(newState) {
   if (newState !== "active") {
     // switching this part off because onTabIdle can handle it on its own
-    timelineAdder(false, "Gone idle zZZzZzZZ");
+    timeline(false, "Gone idle zZZzZzZZ");
   }
   if (newState === "active") {
     chrome.windows.getLastFocused(function(window) {
       if (typeof window == "undefined" || window.focused === false) {
+        // This may be the problem
         timeline(false, "idle.onStateChanged");
       } else {
         chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(

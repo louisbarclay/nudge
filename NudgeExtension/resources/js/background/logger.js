@@ -35,12 +35,14 @@ function consoleLogger(domain, eventType, detailsObj, date, time) {
 
 // Nudge logger function
 function nudgeLogger(nudgeObject) {
+  // Nudges get recorded in the 'nudges' object within each date
+  // Also, 'lastNudged' gets recorded in the status object
   var date = todayDate();
   var time = timeNow();
   var statusObj = open("status");
   var dateObj = open(date);
   dateObj = dataAdder(dateObj, "nudges", nudgeObject, time);
-  statusObj = dataAdder(statusObj, nudgeObject.domain, time);
+  statusObj = dataAdder(statusObj, nudgeObject.domain, time, "lastNudged");
   close("status", statusObj);
   close(date, dateObj);
 }

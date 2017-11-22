@@ -1,5 +1,7 @@
 // Send message to player.js
 function messageSender(object) {
+  console.log(currentState.domain);
+  console.log(object);
   if (
     currentState.domain === notInChrome ||
     currentState.domain === chromeOrTabIdle ||

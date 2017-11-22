@@ -47,15 +47,19 @@ function domainVisitUpdater(domain, time) {
   // Compulsive is true if there has ever been a shutdown, if the last shutdown was after the point back in time we're looking,
   // and if the last shutdown was after the last compulsive (important because if not, we could do a compulsive when one has already been done)
   var statusObj = open("status");
+  // Initialise domain statusObj keys if don't exist
   dataAdder(statusObj, domain, 0, "lastShutdown", ifDoesntExistMakeZero);
   dataAdder(statusObj, domain, 0, "lastCompulsive", ifDoesntExistMakeZero);
+  console.log(statusObj);
   var domainStatusObj = statusObj[domain];
+  console.log(domainStatusObj);
   var compulsive =
     domainStatusObj.lastShutdown !== 0 &&
     domainStatusObj.lastShutdown > compulsiveSearch &&
     domainStatusObj.lastCompulsive < domainStatusObj.lastShutdown;
   if (compulsive) {
-    dataAdder(statusObj, domain, time, "lastCompulsive");
+    console.log("tried!!!!!", domain);
+    dataAdder(statusObj, domain, time, "lastCompulsive", ifDoesntExistMakeZero);
     messageSender(
       nudgeObject(
         domain,

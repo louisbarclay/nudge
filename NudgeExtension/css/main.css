@@ -289,6 +289,9 @@ a .small {
     width: 1.2em;
     height: 1.2em;
     z-index: 0; }
+  .nudge-main:hover, .nudge-menu:hover, .nudge-banner:hover {
+    animation: none;
+    background-color: #ededed; }
   .nudge-main::before, .nudge-menu::before, .nudge-banner::before {
     background: url("chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo.svg") center center/1.2em no-repeat; }
 
