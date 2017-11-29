@@ -10,7 +10,9 @@ function consoleLogger(domain, eventType, detailsObj, date, time) {
   switch (eventType) {
     case "visit":
       logWithColor(
-        `${detailsObj.startTime} ${detailsObj.endTime} ${domain} ${detailsObj.duration} (${detailsObj.totalTimeToday} today)`,
+        `${detailsObj.startTime} ${detailsObj.endTime} ${domain} ${
+          detailsObj.duration
+        } (${detailsObj.totalTimeToday} today). Source: ${detailsObj.source}`,
         "green"
       );
       break;
@@ -25,8 +27,17 @@ function consoleLogger(domain, eventType, detailsObj, date, time) {
       break;
     case "update":
       logWithColor(
-        `${time} update ${detailsObj.previousVersion} ${detailsObj.thisVersion}`,
+        `${time} update ${detailsObj.previousVersion} ${
+          detailsObj.thisVersion
+        }`,
         "yellow"
+      );
+    case "visitStart":
+      logWithColor(
+        `${time} new Visit ${domain} no.${detailsObj.totalVisits}. Source: ${
+          detailsObj.source
+        }`,
+        "brown"
       );
       break;
     default:
@@ -76,7 +87,9 @@ function eventLog(domain, eventType, detailsObj, date, time) {
   time = epochToDate(time);
   consoleLogger(domain, eventType, detailsObj, date, time);
   // should match up perfectly
-  var dateObj = open(date);
-  dateObj = dataAdder(dateObj, "events", event, time);
-  close(date, dateObj);
+  if (eventType != "visitStart") {
+    var dateObj = open(date);
+    dateObj = dataAdder(dateObj, "events", event, time);
+    close(date, dateObj);
+  }
 }

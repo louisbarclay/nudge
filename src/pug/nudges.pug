@@ -4,20 +4,37 @@ html
     link(rel="stylesheet", href="../css/main.css")
   body
     div.nudge-wrapper
-      p so basically, the glowing starts at blue. at 5min. but by the time you get to more, the glowing has coloured redder
-      div border animation
-      div.nudge-tl-container
-        div.nudge-main 19m47s
-        div.nudge-menu.nudge-top Switch off this site
-        div.nudge-menu Pause Nudge
-        div.nudge-menu Go to settings
-        div.nudge-menu Don't Nudge this site
-      div.scroll 5 yards
-      div.nudge-m-container
-        div.nudge-main Just quit!
+      //- p so basically, the glowing starts at blue. at 5min. but by the time you get to more, the glowing has coloured redder
+      //- div border animation
+      //- div.nudge-tl-container
+      //-   div.nudge-main
+      //-     div.nudge-highlight 19m47s
+      //-     p on
+      //-     div.nudge-favicon
+      //-     p today
+      //-   div.nudge-menu Don't nudge this site
+      //-   div.nudge-menu Pause
+      //-   div.nudge-menu Settings
+      div.nudge-z-container
+        div.nudge-main
+          p Last on
+          div.nudge-favicon
+          p just 
+          div.nudge-highlight 4m34
+          p ago
+        div.nudge-menu Don't nudge this site
+        div.nudge-menu Pause
+        div.nudge-menu Settings  
+      //- div.scroll 5 yards
+      //- div.nudge-m-container
+      //-   div.nudge-main Just quit!
       div.nudge-b-container
-        div.nudge-banner Hey hey hey compulsive. should actually be a pseudo-element banner on the whole doc i think!
-  div ruler, slides in from left. stays for a while
-    ul.nudge-scale
-      each val in ['1cm','2cm','3cm','4cm','5cm']
-        li= val
+        div.nudge-banner Hey hey hey compulsive. should actually be a pseudo-element banner on the whole doc i think!. asterisk in a circle. that works i think
+        div last visited F.com 4.32 ago
+        div.call-out Some stuff
+  //- div ruler, slides in from left. stays for a while
+  //-   ul.nudge-scale
+  //-     each val in ['1m',' ',' ',' ',' ','1.05m',' ',' ',' ',' ']
+  //-       li= val
+  script(src="../resources/js/helpers.js")
+  script(src="../js/nudges.js")

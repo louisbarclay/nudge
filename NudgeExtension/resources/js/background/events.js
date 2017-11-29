@@ -39,11 +39,11 @@ function everySecond() {
               if (tabIdStorage[window.tabs[i].id].nudge) {
                 var nudge = tabIdStorage[window.tabs[i].id].nudge;
                 if (nudge.type === "compulsive") {
-                  messageSender(nudge);
                   tabIdStorage[window.tabs[i].id].nudge = false;
+                  messageSender(nudge);
                 } else {
-                  messageSender(nudge);
                   tabIdStorage[window.tabs[i].id].nudge = false;
+                  messageSender(nudge);
                 }
               }
             }

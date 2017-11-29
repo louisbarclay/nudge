@@ -14,7 +14,7 @@ function nudgeObject(domain, amount, type, status) {
   };
 }
 
-function domainTimeUpdater(domain, startTime, endTime) {
+function domainTimeUpdater(domain, startTime, endTime, source) {
   var addTime = endTime - startTime;
   var date = todayDate();
   var dateObj = open(date);
@@ -30,11 +30,11 @@ function domainTimeUpdater(domain, startTime, endTime) {
   var totalTimeToday = logMinutes(totalTime / 1000);
   startTime = epochToDate(startTime);
   endTime = epochToDate(endTime);
-  eventLog(domain, "visit", { startTime, endTime, duration, totalTimeToday });
+  eventLog(domain, "visit", { startTime, endTime, duration, totalTimeToday, source });
 }
 
 // Runs within timeline adder if the new timeline event does not match the old one
-function domainVisitUpdater(domain, time) {
+function domainVisitUpdater(domain, time, source) {
   var date = todayDate();
   var dateObj = open(date);
   dataAdder(dateObj, domain, 1, "visits", addTogether);
@@ -50,16 +50,13 @@ function domainVisitUpdater(domain, time) {
   // Initialise domain statusObj keys if don't exist
   dataAdder(statusObj, domain, 0, "lastShutdown", ifDoesntExistMakeZero);
   dataAdder(statusObj, domain, 0, "lastCompulsive", ifDoesntExistMakeZero);
-  console.log(statusObj);
   var domainStatusObj = statusObj[domain];
-  console.log(domainStatusObj);
   var compulsive =
     domainStatusObj.lastShutdown !== 0 &&
     domainStatusObj.lastShutdown > compulsiveSearch &&
     domainStatusObj.lastCompulsive < domainStatusObj.lastShutdown;
   if (compulsive) {
-    console.log("tried!!!!!", domain);
-    dataAdder(statusObj, domain, time, "lastCompulsive", ifDoesntExistMakeZero);
+    dataAdder(statusObj, domain, time, "lastCompulsive");
     messageSender(
       nudgeObject(
         domain,
@@ -68,6 +65,7 @@ function domainVisitUpdater(domain, time) {
       )
     );
   }
+  eventLog(domain, "visitStart", { totalVisits, source });
   close("status", statusObj);
 }
 

@@ -45,7 +45,7 @@ var defaultDomains = [
 var defaultSettings = {
   scroll_s_setting: 5,
   scroll_b_setting: 3,
-  time_s_setting: 3,
+  time_s_setting: 10,
   time_b_setting: 5,
   compulsive_setting: 10,
   show_fb_unfollow: true,

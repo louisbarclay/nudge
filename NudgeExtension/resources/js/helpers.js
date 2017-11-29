@@ -215,11 +215,14 @@ function addTogether(a, b) {
 }
 
 // Add style to document
-function styleAdder(id, style) {
+function styleAdder(id, style, log) {
   var styleText = id + style;
   style = document.createElement("style");
   style.innerHTML = styleText;
   document.head.appendChild(style);
+  if (log) {
+    console.log(styleText);
+  }
 }
 
 // Run when an element is ready
@@ -287,6 +290,29 @@ function epochToDate(time) {
     lastTwo(
       seconds
     ) /* + ' ' + lastTwo(day) + '-' + monthNames[monthIndex] + '-' + lastTwo(year)*/
+  );
+}
+
+// Turn time to minute and second past hour
+function epochToMinSec(time) {
+  if (time > 9999999999) {
+    time = time / 1000;
+  }
+  var d = new Date(0);
+  d.setUTCSeconds(time);
+  var day = d.getDate();
+  var monthIndex = d.getMonth();
+  var hours = d.getHours();
+  var minutes = d.getMinutes();
+  var seconds = d.getSeconds();
+  var year = d.getFullYear();
+  return (
+    lastTwo(minutes) +
+    "m" +
+    lastTwo(
+      seconds
+    ) + 
+    's' /* + ' ' + lastTwo(day) + '-' + monthNames[monthIndex] + '-' + lastTwo(year)*/
   );
 }
 

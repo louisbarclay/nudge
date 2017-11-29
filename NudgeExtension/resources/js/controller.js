@@ -42,8 +42,9 @@ if (keyDefined(divs, domain)) {
   var elementHideStyle =
     "{ visibility: hidden; pointer-events: none; cursor: default }";
   doAtEarliest(function() {
-    styleAdder("#" + pageletObjbefore.name, pageletBeforeStyle);
-    styleAdder("#" + pageletObjHoverbefore.name, pageletHoverBeforeStyle);
+    styleAdder(bodyBefore.name, bodyBeforeStyle, true);
+    styleAdder("#" + pageletObjBefore.name, pageletBeforeStyle, true);
+    styleAdder("#" + pageletObjHoverBefore.name, pageletHoverBeforeStyle);
     styleAdder("#container2", container2Style);
     styleAdder("#circle", circleStyle);
     styleAdder("@keyframes circleTransition", circleTransitionKeyframe);
@@ -85,14 +86,33 @@ var circleStyle = `{
   )}') center 0px/24px no-repeat;
 }`;
 
-var pageletObjbefore = {
+var bodyBefore = {
+  name: "body:before",
+  type: "id",
+  domain: "facebook.com"
+};
+
+var bodyBeforeStyle = `
+{
+  content: 'You just left this site';
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 30px;
+  opacity: .5;
+  background-color: pink;
+  position: fixed;
+  z-index: 100000;
+}`;
+
+var pageletObjBefore = {
   name: "pagelet_composer:before",
   type: "id",
   domain: "facebook.com"
 };
 
-var pageletObjHoverbefore = {
-  name: "pagelet_composer:hover:before",
+var pageletObjHoverBefore = {
+  name: "pagelet_composer:hover::before",
   type: "id",
   domain: "facebook.com"
 };
@@ -122,11 +142,12 @@ var pageletBeforeStyle = `
   top: -1px;
   bottom: -1px;
   left: -1px;
-  right: -1px; }
+  right: -1px;
+}
 `;
 
 var pageletHoverBeforeStyle = `
-  background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo.svg') center 10px/50px 50px no-repeat #ffffff;
+  background-color: black;
 `;
 
 var circleTransitionKeyframe = `{

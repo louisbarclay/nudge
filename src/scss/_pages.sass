@@ -28,10 +28,31 @@
   @extend %reset
 
 .nudge-tl-container
-  +container($left: 500px, $width: 300px, $spacing: 5px)
+  +container($left: 20px, $top: 20px, $width: auto, $spacing: 0.4em)
+  height: auto
+  animation: fade-in-left 0.3s
 
   >div
     align-self: flex-start
+
+  .nudge-menu
+    display: none
+    animation: fade-in-left 0.3s
+
+  .nudge-main
+    display: flex
+
+
+  &:hover
+    >div
+      opacity: 1
+    
+    .nudge-menu
+      display: flex
+
+    .nudge-highlight
+      animation: none
+      background: $nudgeBlue
 
 .nudge-m-container
   @extend .nudge-tl-container
@@ -39,38 +60,74 @@
 
 .nudge-b-container
   @extend .nudge-tl-container
+  top: 500px
   bottom: 100px
   width: 100%
 
-.nudge-main
-  +border($color: $nudgeLightestGrey)
-  +padding($left: 0)
-  display: flex
-  color: $nudgeDarkGrey
+.nudge-z-container
+  @extend .nudge-tl-container
+  top: 300px
+
+.nudge-pulse
   animation: pulse-shadow--onboarding 2s infinite
+
+.nudge-menu
+  +border($style: none)
+  +padding
+  animation: none
+  background: $nudgeLightestGrey
+  cursor: pointer
+  font-size: (13 / 14) * $default-font-size
+  margin-bottom: 0
+  opacity: 0
   vertical-align: middle
-  +left-icon($size: 1.2em)
-  margin-bottom: 10px
 
   &:hover
-    animation: none
-    background-color: $nudgeLightestGrey
+    background: $nudgeLightGrey
+    color: $white
+
+.nudge-main
+  @extend .nudge-menu
+  +border($color: $nudgeLightestGrey)
+  +padding($left: 0)
+  +left-icon($size: 1.2em)
+  +hardware
+  background: $white
+  color: $nudgeDarkGrey
+  font-size: (18/14) * $default-font-size
+  margin-bottom: 0.5em
+  opacity: 1
 
   &::before
     background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo.svg') center center/1.2em no-repeat
-  
+    border-right: $border-primary
+    border-color: $nudgeLightestGrey
+    margin-left: 0
+    padding-right: 1em
 
-.nudge-menu
-  @extend .nudge-main
-  animation: none
-  margin-bottom: 0
-  font-size: (6 / 7) * 1rem
-  background: $nudgeLightestGrey
+  &:hover
+    background-color: $nudgeLightestGrey
+
+    &::before
+      border-color: $nudgeLightGrey
+
+.nudge-highlight
+  background: $nudgeLightGrey
+  color: $white
   +border($style: none)
+  padding: 0em .3em .1em .3em
+  margin-left: 0.3em
+  margin-right: 0.3em
+  animation: pulse-background 1s infinite
+  transition: transform 2s ease
 
-.nudge-top
-  background: $nudgePink
-  color: $light
+.nudge-favicon
+  @extend .nudge-highlight
+  background-color: $nudgePink
+  animation: none
+  height: 1.2em
+  width: 0.7em
+  align-self: center
 
 .nudge-banner
   @extend .nudge-main
@@ -82,14 +139,21 @@
   text-indent: -1em
 
   li
-    margin-top: 1cm
     padding: 0 0 0 2em
     font-size: (6 / 7) * 1rem
     width: 1em
+    height: 1cm
 
     &::before
       +pseudo
       left: 0
       padding: (3 / 4) * 1em 0 0 0
-      width: 2em
+      width: 1em
+      border-bottom: $border-primary
+
+    &::after
+      +pseudo
+      left: 0
+      padding: (3 / 4) * 1em 0 0 0
+      width: 0.25em
       border-bottom: $border-primary

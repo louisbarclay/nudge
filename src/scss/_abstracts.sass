@@ -66,12 +66,13 @@
     +size($size)
     z-index: $z-index
 
-@mixin container($left: 25%, $width: 50%, $spacing: 10px)
+@mixin container($left: 25%, $top: 0, $width: 50%, $spacing: 10px)
   position: absolute
   align-items: flex-start
   display: flex
   flex-direction: column
   left: $left
+  top: $top
   width: $width
 
   >div
@@ -79,4 +80,18 @@
     align-self: stretch
     display: flex
     justify-content: space-between
-    margin-top: $spacing
+    margin-bottom: $spacing
+
+@mixin arrow($background-color: $white, $size: 1em)
+  &:before
+    content: ''
+    position: absolute
+    top: calc(100% - #{$size / 2})
+    left: $size
+    height: $size
+    width: $size  
+    background: $background-color
+    transform: rotate(45deg)
+    border-bottom: inherit
+    border-right: inherit    
+    box-shadow: inherit

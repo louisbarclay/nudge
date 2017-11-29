@@ -55,7 +55,8 @@
                 "resources/js/background/settings.js",
                 "resources/js/background/switch-on-off.js",
                 "resources/js/background/vars.js",
-                "resources/js/background/background.js"
+                "resources/js/background/background.js",
+                "resources/js/background/tests.js"
               ]
   },
   "content_scripts": [{

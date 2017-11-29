@@ -1,4 +1,4 @@
-@import url("fonts.googleapis.com/css?family=Open+Sans");
+@import url("https://fonts.googleapis.com/css?family=Open+Sans");
 @keyframes background-move {
   0% {
     background-position: 17% 0%; }
@@ -6,7 +6,7 @@
     background-position: 84% 100%; }
   100% {
     background-position: 17% 0%; } }
-.nudge-wrapper * {
+.call-out *, .nudge-wrapper * {
   border: 0;
   bottom: initial;
   box-sizing: initial;
@@ -90,9 +90,23 @@ a .small {
   30% {
     box-shadow: 0 0 0 0 #61a7ff; }
   80% {
-    box-shadow: 0 0 5px 10px rgba(255, 255, 255, 0); }
+    box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0); }
   100% {
     box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+@keyframes fade-in-left {
+  from {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0); }
+  to {
+    opacity: 1;
+    transform: none; } }
+@keyframes pulse-background {
+  0% {
+    background-color: #bdbdbd; }
+  20% {
+    background-color: #61a7ff; }
+  100% {
+    background-color: #bdbdbd; } }
 .arrow {
   border-left: 1px solid #a9a9a9;
   border-top: 1px solid #a9a9a9;
@@ -189,6 +203,27 @@ a .small {
   .text-input input:focus {
     border-bottom: 1px solid #bdbdbd; }
 
+.call-out {
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  padding: 0.3333333333em 0.8333333333em 0.3333333333em 0.8333333333em;
+  width: 500px; }
+  .call-out:before {
+    content: "";
+    position: absolute;
+    top: calc(100% - 0.5em);
+    left: 1em;
+    height: 1em;
+    width: 1em;
+    background: #ffffff;
+    transform: rotate(45deg);
+    border-bottom: inherit;
+    border-right: inherit;
+    box-shadow: inherit; }
+
 .header {
   border-bottom: 1px solid #bdbdbd; }
 
@@ -215,13 +250,14 @@ a .small {
   display: flex;
   flex-direction: column;
   left: 200px;
+  top: 0;
   width: 600px; }
   .options-container > div {
     align-items: baseline;
     align-self: stretch;
     display: flex;
     justify-content: space-between;
-    margin-top: 10px; }
+    margin-bottom: 10px; }
 
 .options-logo {
   position: relative;
@@ -241,71 +277,122 @@ a .small {
   display: flex;
   flex-direction: column;
   left: 0;
+  top: 0;
   width: 300px; }
   .popup-container > div {
     align-items: baseline;
     align-self: stretch;
     display: flex;
     justify-content: space-between;
-    margin-top: 5px; }
+    margin-bottom: 5px; }
   .popup-container > div {
     margin: auto; }
 
-.nudge-tl-container, .nudge-m-container, .nudge-b-container {
+.nudge-tl-container, .nudge-m-container, .nudge-b-container, .nudge-z-container {
   position: absolute;
   align-items: flex-start;
   display: flex;
   flex-direction: column;
-  left: 500px;
-  width: 300px; }
-  .nudge-tl-container > div, .nudge-m-container > div, .nudge-b-container > div {
+  left: 20px;
+  top: 20px;
+  width: auto;
+  height: auto;
+  animation: fade-in-left 0.3s; }
+  .nudge-tl-container > div, .nudge-m-container > div, .nudge-b-container > div, .nudge-z-container > div {
     align-items: baseline;
     align-self: stretch;
     display: flex;
     justify-content: space-between;
-    margin-top: 5px; }
-  .nudge-tl-container > div, .nudge-m-container > div, .nudge-b-container > div {
+    margin-bottom: 0.4em; }
+  .nudge-tl-container > div, .nudge-m-container > div, .nudge-b-container > div, .nudge-z-container > div {
     align-self: flex-start; }
+  .nudge-tl-container .nudge-menu, .nudge-m-container .nudge-menu, .nudge-b-container .nudge-menu, .nudge-z-container .nudge-menu, .nudge-tl-container .nudge-main, .nudge-m-container .nudge-main, .nudge-b-container .nudge-main, .nudge-z-container .nudge-main, .nudge-tl-container .nudge-banner, .nudge-m-container .nudge-banner, .nudge-b-container .nudge-banner, .nudge-z-container .nudge-banner {
+    display: none;
+    animation: fade-in-left 0.3s; }
+  .nudge-tl-container .nudge-main, .nudge-m-container .nudge-main, .nudge-b-container .nudge-main, .nudge-z-container .nudge-main, .nudge-tl-container .nudge-banner, .nudge-m-container .nudge-banner, .nudge-b-container .nudge-banner, .nudge-z-container .nudge-banner {
+    display: flex; }
+  .nudge-tl-container:hover > div, .nudge-m-container:hover > div, .nudge-b-container:hover > div, .nudge-z-container:hover > div {
+    opacity: 1; }
+  .nudge-tl-container:hover .nudge-menu, .nudge-m-container:hover .nudge-menu, .nudge-b-container:hover .nudge-menu, .nudge-z-container:hover .nudge-menu, .nudge-tl-container:hover .nudge-main, .nudge-m-container:hover .nudge-main, .nudge-b-container:hover .nudge-main, .nudge-z-container:hover .nudge-main, .nudge-tl-container:hover .nudge-banner, .nudge-m-container:hover .nudge-banner, .nudge-b-container:hover .nudge-banner, .nudge-z-container:hover .nudge-banner {
+    display: flex; }
+  .nudge-tl-container:hover .nudge-highlight, .nudge-m-container:hover .nudge-highlight, .nudge-b-container:hover .nudge-highlight, .nudge-z-container:hover .nudge-highlight, .nudge-tl-container:hover .nudge-favicon, .nudge-m-container:hover .nudge-favicon, .nudge-b-container:hover .nudge-favicon, .nudge-z-container:hover .nudge-favicon {
+    animation: none;
+    background: #61a7ff; }
 
 .nudge-m-container {
   top: 500px; }
 
 .nudge-b-container {
+  top: 500px;
   bottom: 100px;
   width: 100%; }
 
-.nudge-main, .nudge-menu, .nudge-banner {
+.nudge-z-container {
+  top: 300px; }
+
+.nudge-pulse {
+  animation: pulse-shadow--onboarding 2s infinite; }
+
+.nudge-menu, .nudge-main, .nudge-banner {
+  border: 1px none #bdbdbd;
+  border-radius: 4px;
+  padding: 0.3333333333em 0.8333333333em 0.3333333333em 0.8333333333em;
+  animation: none;
+  background: #ededed;
+  cursor: pointer;
+  font-size: 13px;
+  margin-bottom: 0;
+  opacity: 0;
+  vertical-align: middle; }
+  .nudge-menu:hover, .nudge-main:hover, .nudge-banner:hover {
+    background: #bdbdbd;
+    color: #ffffff; }
+
+.nudge-main, .nudge-banner {
   border: 1px solid #ededed;
   border-radius: 4px;
   padding: 0.3333333333em 0.8333333333em 0.3333333333em 0;
-  display: flex;
+  backface-visibility: hidden;
+  perspective: 1000;
+  background: #ffffff;
   color: #4f4f4f;
-  animation: pulse-shadow--onboarding 2s infinite;
-  vertical-align: middle;
-  margin-bottom: 10px; }
-  .nudge-main::before, .nudge-menu::before, .nudge-banner::before {
+  font-size: 18px;
+  margin-bottom: 0.5em;
+  opacity: 1; }
+  .nudge-main::before, .nudge-banner::before {
     content: "";
     margin: auto 0.3em auto 0.3em;
     width: 1.2em;
     height: 1.2em;
     z-index: 0; }
-  .nudge-main:hover, .nudge-menu:hover, .nudge-banner:hover {
-    animation: none;
+  .nudge-main::before, .nudge-banner::before {
+    background: url("chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo.svg") center center/1.2em no-repeat;
+    border-right: 1px solid #bdbdbd;
+    border-color: #ededed;
+    margin-left: 0;
+    padding-right: 1em; }
+  .nudge-main:hover, .nudge-banner:hover {
     background-color: #ededed; }
-  .nudge-main::before, .nudge-menu::before, .nudge-banner::before {
-    background: url("chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo.svg") center center/1.2em no-repeat; }
+    .nudge-main:hover::before, .nudge-banner:hover::before {
+      border-color: #bdbdbd; }
 
-.nudge-menu {
-  animation: none;
-  margin-bottom: 0;
-  font-size: 0.8571428571rem;
-  background: #ededed;
+.nudge-highlight, .nudge-favicon {
+  background: #bdbdbd;
+  color: #ffffff;
   border: 1px none #bdbdbd;
-  border-radius: 4px; }
+  border-radius: 4px;
+  padding: 0em 0.3em 0.1em 0.3em;
+  margin-left: 0.3em;
+  margin-right: 0.3em;
+  animation: pulse-background 1s infinite;
+  transition: transform 2s ease; }
 
-.nudge-top {
-  background: #ff61a7;
-  color: #ffffff; }
+.nudge-favicon {
+  background-color: #ff61a7;
+  animation: none;
+  height: 1.2em;
+  width: 0.7em;
+  align-self: center; }
 
 .nudge-banner {
   position: absolute;
@@ -317,15 +404,23 @@ a .small {
   padding-left: 1em;
   text-indent: -1em; }
   .nudge-scale li {
-    margin-top: 1cm;
     padding: 0 0 0 2em;
     font-size: 0.8571428571rem;
-    width: 1em; }
+    width: 1em;
+    height: 1cm; }
     .nudge-scale li::before {
       content: "";
       display: block;
       position: absolute;
       left: 0;
       padding: 0.75em 0 0 0;
-      width: 2em;
+      width: 1em;
+      border-bottom: 1px solid #bdbdbd; }
+    .nudge-scale li::after {
+      content: "";
+      display: block;
+      position: absolute;
+      left: 0;
+      padding: 0.75em 0 0 0;
+      width: 0.25em;
       border-bottom: 1px solid #bdbdbd; }

@@ -95,7 +95,8 @@ var currentState = new timelineObject(false, "initial");
 
 function timeline(domain, source) {
   console.log(domain, source);
-  // check date stuff goes here!!!!!
+  // if currentState.time is not the same day as today
+  // does the date now exist?
   // If your timeline event has same domain as before, you do nothing
   if (currentState.domain === domain) {
     return;
@@ -104,10 +105,10 @@ function timeline(domain, source) {
     // First, create new variable lastState, which is what we had before the changes we're about to make
     var lastState = currentState;
     currentState = timelineObject(domain, source);
-    // Update visit
-    domainVisitUpdater(domain, currentState.time);
     // Update time (close off visit)
-    domainTimeUpdater(lastState.domain, lastState.time, currentState.time);
+    domainTimeUpdater(lastState.domain, lastState.time, currentState.time, source);
+    // Update visit
+    domainVisitUpdater(domain, currentState.time, source);
     return;
   }
 }
