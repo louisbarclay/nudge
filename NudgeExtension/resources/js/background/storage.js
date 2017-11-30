@@ -79,7 +79,7 @@ function changeSetting(newSetting, setting, domain, domainSetting) {
   } catch (e) {
     console.log(e);
   }
-  // send out settingsLocal?
+  // send out settingsLocal? yes. and every single js has a receiver waiting for it
 }
 
 function syncSettingsPeriodically(settingsLocal) {

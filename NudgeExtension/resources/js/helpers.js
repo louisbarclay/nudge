@@ -1,4 +1,4 @@
-// Copyright 2016, Nudge, All rights reserved.
+console.log("helpers loaded");
 
 // Extract core domain from URL you want to check
 function extractDomain(url) {
@@ -309,10 +309,8 @@ function epochToMinSec(time) {
   return (
     lastTwo(minutes) +
     "m" +
-    lastTwo(
-      seconds
-    ) + 
-    's' /* + ' ' + lastTwo(day) + '-' + monthNames[monthIndex] + '-' + lastTwo(year)*/
+    lastTwo(seconds) +
+    "s" /* + ' ' + lastTwo(day) + '-' + monthNames[monthIndex] + '-' + lastTwo(year)*/
   );
 }
 
@@ -335,6 +333,33 @@ function initOff() {
   chrome.runtime.sendMessage({
     type: "off"
   });
+}
+
+function toggleClass(el, className) {
+  if (el.classList) {
+    el.classList.toggle(className);
+  } else {
+    var classes = el.className.split(" ");
+    var existingIndex = classes.indexOf(className);
+    if (existingIndex >= 0) classes.splice(existingIndex, 1);
+    else classes.push(className);
+    el.className = classes.join(" ");
+  }
+}
+
+function doAtEarliest(callback) {
+  document.addEventListener("DOMSubtreeModified", runCallback, false);
+  function runCallback() {
+    if (document.head) {
+      document.removeEventListener("DOMSubtreeModified", runCallback, false);
+      callback();
+    }
+  }
+}
+
+function sendMessage(type, object) {
+  object.type = type;
+  chrome.runtime.sendMessage(object);
 }
 
 // Helper function for chaining

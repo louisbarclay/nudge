@@ -21,6 +21,8 @@ var defaultDomains = [
   "diply.com",
   "buzzfeed.com",
   "youtube.com",
+  "mail.google.com",
+  "gmail.com",
   "theladbible.com",
   "ladbible.com",
   "news.ycombinator.com",

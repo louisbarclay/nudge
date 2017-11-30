@@ -1,6 +1,5 @@
 // Copyright 2016, Nudge, All rights reserved.
 
-
 $(document).ready(function() {
   try {
     console.log("trying");

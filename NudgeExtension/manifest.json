@@ -24,8 +24,10 @@
     "clipboardRead",
     "clipboardWrite"
   ],
-  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgH4rfKJ3fys5vEjI9bl8eXew3SdQeTbs8IOuITsRDzEik97iZb5cBB2Gg6G9n9wtg73qhvZaRFOX0FEfOmIG6Qw3g4dxFZn2+gESbEY2fFnMnF8Std0yJ/qqAMARpTqeKrzYd4h6mkC4A5Rt7bhaAmeUFdjjBaMvTLTZo3kgtXuIXRyxX3U+Y7N5b2kYC4X+fZ30iuFeKEn7Hega/QbEuTgEiIRfNMe3gvQ7vqmJkByXfZWZexODaOwJmG9SF/+Ijj7QsNyfBzWDuwFsfJwYD43+jVZfIfYOEGYSqFu51ZyT8JjHFz9HSQHErNNNPNrGjfmSdavKgb7lE2UnGAzhAQIDAQAB",
-  "description": "Escape addictive sites with nudges that tell you when you're getting sucked in.",
+  "key":
+    "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgH4rfKJ3fys5vEjI9bl8eXew3SdQeTbs8IOuITsRDzEik97iZb5cBB2Gg6G9n9wtg73qhvZaRFOX0FEfOmIG6Qw3g4dxFZn2+gESbEY2fFnMnF8Std0yJ/qqAMARpTqeKrzYd4h6mkC4A5Rt7bhaAmeUFdjjBaMvTLTZo3kgtXuIXRyxX3U+Y7N5b2kYC4X+fZ30iuFeKEn7Hega/QbEuTgEiIRfNMe3gvQ7vqmJkByXfZWZexODaOwJmG9SF/+Ijj7QsNyfBzWDuwFsfJwYD43+jVZfIfYOEGYSqFu51ZyT8JjHFz9HSQHErNNNPNrGjfmSdavKgb7lE2UnGAzhAQIDAQAB",
+  "description":
+    "Escape addictive sites with nudges that tell you when you're getting sucked in.",
   "icons": {
     "128": "resources/images/128.png",
     "16": "resources/images/16.png",
@@ -40,40 +42,55 @@
     "open_in_tab": true
   },
   "options_page": "html/options.html",
-  "web_accessible_resources": [
-    "resources/*"
-  ],
+  "web_accessible_resources": ["resources/*", "html/*"],
   "version": "1.0.10",
   "background": {
-    "scripts": ["config.js",
-                "resources/js/helpers.js",
-                "resources/js/background/storage.js",
-                "resources/js/background/logger.js",
-                "resources/js/background/events.js",
-                "resources/js/background/messager.js",
-                "resources/js/background/nudger-recorder.js",
-                "resources/js/background/settings.js",
-                "resources/js/background/switch-on-off.js",
-                "resources/js/background/vars.js",
-                "resources/js/background/background.js",
-                "resources/js/background/tests.js"
-              ]
+    "scripts": [
+      "config.js",
+      "resources/js/helpers.js",
+      "resources/js/background/storage.js",
+      "resources/js/background/logger.js",
+      "resources/js/background/events.js",
+      "resources/js/background/messager.js",
+      "resources/js/background/nudger-recorder.js",
+      "resources/js/background/settings.js",
+      "resources/js/background/switch-on-off.js",
+      "resources/js/background/vars.js",
+      "resources/js/background/background.js",
+      "resources/js/background/tests.js"
+    ]
   },
-  "content_scripts": [{
-    "matches": ["<all_urls>"],
-    "js": ["config.js", "lib/jquery/jquery-3.1.0.min.js", "resources/js/helpers.js", "resources/js/images.js", "resources/js/divs.js", "resources/js/controller.js"],
-    "css": ["resources/css/nudge.css", "resources/css/switch.css","resources/css/debugger.css"],
-    "exclude_globs": [
-      "*business.facebook.com*"
-    ],
-    "run_at": "document_start"
-  }, {
-    "matches": ["http://www.facebook.com/", "https://www.facebook.com/"],
-    "js": ["resources/js/facebook/unfollow.js", "resources/js/facebook/ad.js" ],
-    "css": ["resources/css/fbunfollow.css", "resources/css/fbtweaks.css"],
-    "exclude_globs": [
-      "*business.facebook.com*"
-    ],
-    "run_at": "document_start"
-  }]
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "config.js",
+        "lib/jquery/jquery-3.1.0.min.js",
+        "resources/js/helpers.js",
+        "resources/js/images.js",
+        "resources/js/divs.js",
+        "resources/js/controller.js",
+        "resources/js/nudge-transporter.js"
+      ],
+      "css": [
+        "resources/css/nudge.css",
+        "resources/css/switch.css",
+        "resources/css/debugger.css",
+        "css/main.css"
+      ],
+      "exclude_globs": ["*business.facebook.com*"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["http://www.facebook.com/", "https://www.facebook.com/"],
+      "js": [
+        "resources/js/facebook/unfollow.js",
+        "resources/js/facebook/ad.js",
+        "resources/js/constantise.js"
+      ],
+      "css": ["resources/css/fbunfollow.css", "resources/css/fbtweaks.css"],
+      "exclude_globs": ["*business.facebook.com*"],
+      "run_at": "document_start"
+    }
+  ]
 }

@@ -100,7 +100,8 @@ chrome.tabs.onRemoved.addListener(function(tabId) {
           var statusObj = open("status");
           var time = timeNow();
           dataAdder(statusObj, domain, time, "lastShutdown");
-          console.log(JSON.parse(localStorage['status'])[domain]);
+          changeSetting(true, 'domains', domain, 'off');
+          console.log(JSON.parse(localStorage["status"])[domain]);
           // Find out whether the domain has been nudged recently
           var nudged = false;
           if (
@@ -199,7 +200,6 @@ chrome.tabs.onCreated.addListener(function(tab) {
 
 // Add to timeline onUpdated
 // Update URL in tabIdStorage
-// URL constantiser
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   var domain = inDomainsSetting(tab.url);
   if (domain in settingsLocal.domains && settingsLocal.domains[domain]["off"]) {
@@ -222,13 +222,13 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     });
   }
   // For constantising titles
-  if (domain && changeInfo.title) {
+  if (domain) {
     chrome.tabs.sendMessage(
       tabId,
       {
         type: "title",
         title: changeInfo.title,
-        domain: domain
+        domain
       },
       function(response) {}
     );

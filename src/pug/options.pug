@@ -1,10 +1,11 @@
 html
   head
-    title
+    title Options
     link(rel="stylesheet", href="../css/main.css")
   body
     div.options-container
       div.options-logo
+        h1 Options
       div.header
       h2 Your Nudge domains
       div
@@ -14,16 +15,21 @@ html
             input#addDomain(type='text' placeholder='likethis.com' onblur="this.placeholder = 'likethis.com'" onfocus="this.placeholder = ''") 
       ul.tags#domainList
       h2 Other options
-      mixin optionBoolean(name)
-        div
+      mixin optionBoolean(name, divId)
+        div(id=divId)
           div=name
           button.toggle
-            div.left Yes
-            div.right.on No
-      +optionBoolean('Get rid of Facebook notifications')
+            div.left.on Yes
+            div.right No
+      +optionBoolean('Get rid of Facebook notifications', 'facebookNotif')
       +optionBoolean('Take notification numbers out of page titles')
       +optionBoolean('Show Facebook unfollow')
       +optionBoolean('Switch off Nudge domains by default')
       +optionBoolean('Keep page favicons from showing red icons')
-      p your Nudge ID is this string: keep it safe if you are participating in a Nudge study.
+      h2 Nudge ID
+      p your Nudge ID is
+      div#id
+      p Keep it safe if you are participating in a Nudge study.
+  script(src="../resources/js/background/storage.js")
+  script(src="../resources/js/helpers.js")
   script(src="../js/options.js")

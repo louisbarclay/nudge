@@ -129,18 +129,8 @@ function listener() {
       }
       if (domainChecker(domain, [request.domain])) {
         $(document).ready(function() { // TODO: This is where you could wait for no running processes
-          if (request.type === "title") {
-            // https://stackoverflow.com/questions/27847616/making-document-title-untouchable-for-javascript
-            document.title = titleConstantizer(request.domain);
-            Object.defineProperty(document, 'title', {
-              enumerable: false,
-              configurable: false,
-              writable: false,
-              value: document.title
-            });
-          } else {
-            messageCompiler(request); // Wow, this is running way too often. FIXME:!!!!!!! (because you're not actually checking for nudges)
-          }
+
+          messageCompiler(request); // Wow, this is running way too often. FIXME:!!!!!!! (because you're not actually checking for nudges)
         });
       } else {
         sendResponse({ "time_executed": timeNow(), "status": "url_mismatch" });
@@ -472,32 +462,9 @@ if (window.devicePixelRatio > 1) {
 }
 
 
-
-// Set titles constant on case by case basis (should be done with object really)
-function titleConstantizer(domain) {
-  switch (domain) {
-    case "facebook.com":
-      return "Facebook";
-    case "twitter.com":
-      return "Twitter";
-    case "pinterest.com":
-      return "Pinterest";
-    case "mail.google.com":
-      return "Gmail";
-    default:
-      return document.title;
-  }
-}
-
 function domainChange(type, domain) {
   chrome.runtime.sendMessage({ type: type, domain: domain }, function(response) {
     console.log(response);
   });
 }
 
-// setInterval(changeTitle,10000);
-
-// function changeTitle() {
-//   console.log('attempted');
-//   document.title = "Test";
-// }

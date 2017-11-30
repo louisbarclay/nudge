@@ -171,16 +171,6 @@ function addCircle(element) {
   }
 }
 
-function doAtEarliest(callback) {
-  document.addEventListener("DOMSubtreeModified", runCallback, false);
-  function runCallback() {
-    if (document.head) {
-      document.removeEventListener("DOMSubtreeModified", runCallback, false);
-      callback();
-    }
-  }
-}
-
 if (domain === "facebook.com") {
   fbunfollow();
 }

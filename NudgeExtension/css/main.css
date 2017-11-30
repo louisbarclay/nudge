@@ -70,6 +70,15 @@ a:hover {
 a .small {
   font-size: 12px; }
 
+h1 {
+  font-size: 2rem;
+  color: #6d6d6d; }
+
+h2 {
+  text-transform: uppercase;
+  font-size: 0.8571428571rem;
+  color: #6d6d6d; }
+
 @keyframes pulse-shadow {
   0% {
     box-shadow: 0 0 0 0 #61a7ff; }
@@ -251,7 +260,7 @@ a .small {
   flex-direction: column;
   left: 200px;
   top: 0;
-  width: 600px; }
+  width: 800px; }
   .options-container > div {
     align-items: baseline;
     align-self: stretch;
@@ -297,7 +306,8 @@ a .small {
   top: 20px;
   width: auto;
   height: auto;
-  animation: fade-in-left 0.3s; }
+  animation: fade-in-left 0.3s;
+  z-index: 2147483647; }
   .nudge-tl-container > div, .nudge-m-container > div, .nudge-b-container > div, .nudge-z-container > div {
     align-items: baseline;
     align-self: stretch;
@@ -347,6 +357,16 @@ a .small {
   .nudge-menu:hover, .nudge-main:hover, .nudge-banner:hover {
     background: #bdbdbd;
     color: #ffffff; }
+
+.nudge-switch {
+  opacity: 0;
+  width: 3.2em;
+  height: 3.2em;
+  background: url("chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/offswitch.svg") center 0.35em/2.2em no-repeat #6d6d6d;
+  border-radius: 1.8em;
+  position: absolute;
+  bottom: 0;
+  right: 0; }
 
 .nudge-main, .nudge-banner {
   border: 1px solid #ededed;

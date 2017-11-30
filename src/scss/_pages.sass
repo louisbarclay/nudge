@@ -1,7 +1,7 @@
 // Options
 
 .options-container
-  +container($left: 200px, $width: 600px)
+  +container($left: 200px, $width: 800px)
 
 .options-logo
   position: relative
@@ -31,6 +31,7 @@
   +container($left: 20px, $top: 20px, $width: auto, $spacing: 0.4em)
   height: auto
   animation: fade-in-left 0.3s
+  z-index: $max-z
 
   >div
     align-self: flex-start
@@ -85,6 +86,15 @@
   &:hover
     background: $nudgeLightGrey
     color: $white
+
+.nudge-switch
+  opacity: 0
+  +size(3.2em)
+  background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/offswitch.svg') center 0.35em /2.2em no-repeat $nudgeMediumGrey
+  border-radius: 1.8em
+  position: absolute
+  bottom: 0
+  right: 0
 
 .nudge-main
   @extend .nudge-menu
