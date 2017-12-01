@@ -1,3 +1,6 @@
+// Setting
+// Kill function
+
 var domainTitle = title(domain);
 
 // Set titles constant on case by case basis (should be done with object really)

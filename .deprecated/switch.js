@@ -36,7 +36,3 @@ function bouncer() {
   }
   setTimeout(clear, 2000);
 }
-
-// http://liveweave.com/oedF0V
-
-// store URL that the user was ATTEMPTING to go to in the JS for the newly loaded 'off' page

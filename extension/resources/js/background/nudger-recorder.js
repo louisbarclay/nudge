@@ -30,7 +30,13 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
   var totalTimeToday = logMinutes(totalTime / 1000);
   startTime = epochToDate(startTime);
   endTime = epochToDate(endTime);
-  eventLog(domain, "visit", { startTime, endTime, duration, totalTimeToday, source });
+  eventLog(domain, "visit", {
+    startTime,
+    endTime,
+    duration,
+    totalTimeToday,
+    source
+  });
 }
 
 // Runs within timeline adder if the new timeline event does not match the old one

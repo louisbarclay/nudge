@@ -37,19 +37,41 @@
   100%
     background-position: 17% 0%
 
-%reset *
-  border: 0
-  bottom: initial
-  box-sizing: initial
-  font: inherit
-  font-size: 100%
-  left: initial
-  margin: 0
-  padding: 0
-  position: initial
-  right: initial
-  top: initial
-  vertical-align: baseline
+%reset
+  *
+    border: 0
+    bottom: initial
+    box-sizing: initial
+    font: inherit
+    font-size: 100%
+    left: initial
+    margin: 0
+    padding: 0
+    position: initial
+    right: initial
+    top: initial
+    vertical-align: baseline
+
+%typography
+  *
+    color: $primary
+    font-family: 'Open Sans'
+
+  a
+    &:hover
+      color: $secondary
+
+  .small
+    font-size: 12px
+
+  h1
+    font-size: (28/14) * 1rem
+    color: $secondary
+
+  h2
+    text-transform: uppercase
+    font-size: (12/14) * 1rem
+    color: $secondary    
 
 @mixin border($width: $border-width-primary, $style: $border-style-primary, $color: $border-color-primary)
   border: $width $style $color

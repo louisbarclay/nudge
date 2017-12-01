@@ -99,9 +99,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     chrome.tabs.executeScript(sender.tab.id, {
       file: "resources/js/switch.js"
     });
-    chrome.tabs.executeScript(sender.tab.id, {
-      file: "resources/js/player.js"
-    });
     if (true) {
       chrome.tabs.executeScript(sender.tab.id, {
         file: "resources/js/debugger.js"

@@ -7,8 +7,8 @@
     "test": "tests"
   },
   "scripts": {
-    "build:pug": "pug -w src/pug -o NudgeExtension/html",
-    "build:sass": "sass --watch src/scss:NudgeExtension/css --sourcemap=none",
+    "build:pug": "pug -w src/pug -o extension/html",
+    "build:sass": "sass --watch src/scss:extension/css --sourcemap=none",
     "dev": "npm-run-all -p build:*"
   },
   "repository": {

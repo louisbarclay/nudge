@@ -1,6 +1,6 @@
 function switchOff(domain, url, tabId) {
   url =
-    chrome.extension.getURL("nudgeoff.html") +
+    chrome.extension.getURL("html/off.html") +
     "?" +
     "domain=" +
     domain +

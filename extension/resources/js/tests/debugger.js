@@ -18,7 +18,7 @@ function debuggerInit() {
   return messageContents;
 }
 
-function listener(element) {
+function liveUpdater(element) {
   chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
     if (request.type === "debug_updater") {

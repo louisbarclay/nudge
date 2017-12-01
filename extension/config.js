@@ -10,6 +10,9 @@ debugMode = config.debug;
 
 if (debugMode) {
   console.log('In debug mode - switch off before finishing');
+} else {
+  console.log('In production - all logging is off');
+  console.log = function() {}
 }
 
 function log(data) {
