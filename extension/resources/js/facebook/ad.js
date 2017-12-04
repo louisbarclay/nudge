@@ -1,6 +1,6 @@
 // Copyright 2016, Nudge, All rights reserved.
 
-$(document).ready(function() {
+docReady(function() {
   try {
     console.log("trying");
     // ad();

@@ -24,7 +24,7 @@
 
 @mixin background-gradient
   animation: background-move 15s ease infinite
-  background: linear-gradient(145deg, $nudgeBlue, $nudgePink)
+  background: linear-gradient(145deg, $nudge-blue, $nudge-pink)
   background-size: 400% 400%
 
 @keyframes background-move
@@ -56,6 +56,7 @@
   *
     color: $primary
     font-family: 'Open Sans'
+    -webkit-font-smoothing: antialiased
 
   a
     &:hover
@@ -65,7 +66,7 @@
     font-size: 12px
 
   h1
-    font-size: (28/14) * 1rem
+    font-size: (22/14) * 1rem
     color: $secondary
 
   h2
@@ -88,7 +89,7 @@
     +size($size)
     z-index: $z-index
 
-@mixin container($left: 25%, $top: 0, $width: 50%, $spacing: 10px)
+@mixin container($left: 25%, $top: 0, $width: 50%, $min-width: 300px, $spacing: 1em)
   position: absolute
   align-items: flex-start
   display: flex
@@ -96,6 +97,7 @@
   left: $left
   top: $top
   width: $width
+  min-width: $min-width
 
   >div
     align-items: baseline
@@ -117,3 +119,29 @@
     border-bottom: inherit
     border-right: inherit    
     box-shadow: inherit
+@mixin arrow($background-color: $white, $size: 1em)
+  &:before
+    content: ''
+    position: absolute
+    top: calc(100% - #{$size / 2})
+    left: $size
+    height: $size
+    width: $size  
+    background: $background-color
+    transform: rotate(45deg)
+    border-bottom: inherit
+    border-right: inherit    
+    box-shadow: inherit
+
+@mixin logo-grey($size: 1em)
+  +size($width: $size)
+  background:
+    image: url('chrome-extension://__MSG_@@extension_id__/resources/images/logo-grey.svg')
+    position: 0
+    size: 100% 100%
+    repeat: no-repeat
+
+@mixin logo-color($size: 1em)
+  +logo-grey($size: $size)
+  background:
+    image: url('chrome-extension://__MSG_@@extension_id__/resources/images/logo-color.svg')

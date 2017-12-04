@@ -1,6 +1,7 @@
 {
   "name": "nudge",
   "version": "1.0.0",
+  "sasslintConfig": ".vscode/.sass-lintrc",
   "description": "Nudge app",
   "main": "node.js",
   "directories": {

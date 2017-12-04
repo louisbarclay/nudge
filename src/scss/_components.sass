@@ -51,7 +51,7 @@
     line-height: 2em
     position: relative
     color: $light
-    font-size: (6 / 7) * 1rem
+    font-size: (5 / 7) * 1rem
     background-color: $primary
     margin-right: .5em
     margin-bottom: .5em
@@ -60,6 +60,9 @@
       filter: grayscale(100%)
       opacity: 0.5
       border-radius: 2px
+      background:
+        repeat: no-repeat
+        position: center center
 
     &:hover
       background: none
@@ -98,8 +101,55 @@
 
 .call-out
   @extend %reset
-  +border($color: $nudgeLightGrey)
+  +border($color: $nudge-grey-light)
   +center
   +padding
   +arrow
   width: 500px
+
+.slider 
+  width: 100%
+  height: $slider-height
+  margin-top: 10em
+  border-radius: 6em
+  text-align: center
+  background: lighten($nudge-grey-lightest, 4%)
+
+.button
+  position: relative
+  height: $slider-height
+  width: $slider-height
+  box-sizing: border-box
+  top: 0
+  left: 0
+  border-radius: $slider-height / 2
+  cursor: pointer
+  user-select: none
+  +hardware
+
+.slider-text 
+  position: absolute
+  margin: auto
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  height: 1.4em
+
+.button-centre 
+  position: relative
+  margin: auto
+  top: 50%
+  transform: translateY(-50%)
+  height: $slider-height - (6/7) * 1em
+  width: $slider-height - (6/7) * 1em
+  background: $nudge-grey-lightest
+  border-radius: $slider-height / 2
+  transition: background-color 0.2s ease
+  +hardware
+
+  &:active
+    background: $nudge-grey-light
+ 
+.returning
+  transition: all 0.2s ease

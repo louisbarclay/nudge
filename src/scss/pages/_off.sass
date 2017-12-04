@@ -1,0 +1,50 @@
+.off-background
+  background-size: cover
+  height: 100%
+  background-color: $nudge-grey-lightest
+
+.off-typography
+  *
+    color: $nudge-grey-light
+
+.off-logo
+  margin-top: 4em
+  +size($width: 4em)
+  &::before
+    +pseudo
+    +logo-grey($size: 4em)
+    opacity: 0.05
+  &::after
+    +pseudo
+    +logo-color($size: 4em)
+    opacity: 0.1
+    filter: grayscale(100%)
+
+.off-module
+  margin-top: 1em
+  +border($style: none)
+  +padding
+  flex-direction: column
+  >*
+    margin-bottom: 1em
+
+.off-row
+  display: flex
+  justify-content: space-between
+  height: auto
+  width: 100%
+  flex-wrap: wrap
+
+  >div
+    +border
+    +padding
+    width: auto
+    height: 40px
+
+.off-para 
+  margin: 0
+  font-size: 0.8em
+  line-height: 1.8em
+
+.off-container
+  +container

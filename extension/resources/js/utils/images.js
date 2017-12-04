@@ -50,4 +50,4 @@ var offswitch = new Image();
 offswitch.src = chrome.extension.getURL("resources/images/offswitch.svg");
 
 var logo = new Image();
-logo.src = chrome.extension.getURL("resources/images/logo.svg");
+logo.src = chrome.extension.getURL("resources/images/logo-color.svg");

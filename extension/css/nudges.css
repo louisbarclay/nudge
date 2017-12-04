@@ -58,64 +58,21 @@
 
 .nudge-wrapper * {
   color: #bdbdbd;
-  font-family: "Open Sans"; }
+  font-family: "Open Sans";
+  -webkit-font-smoothing: antialiased; }
 .nudge-wrapper a:hover {
   color: #6d6d6d; }
 .nudge-wrapper .small {
   font-size: 12px; }
 .nudge-wrapper h1 {
-  font-size: 2rem;
+  font-size: 1.5714285714rem;
   color: #6d6d6d; }
 .nudge-wrapper h2 {
   text-transform: uppercase;
   font-size: 0.8571428571rem;
   color: #6d6d6d; }
 
-.options-container {
-  position: absolute;
-  align-items: flex-start;
-  display: flex;
-  flex-direction: column;
-  left: 200px;
-  top: 0;
-  width: 800px; }
-  .options-container > div {
-    align-items: baseline;
-    align-self: stretch;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px; }
-
-.options-logo {
-  position: relative;
-  width: 100px;
-  height: 100px;
-  background: url("chrome-extension://__MSG_@@extension_id__/resources/images/logogrey.svg") 0/100px no-repeat; }
-
-.popup-body {
-  width: 300px;
-  height: 300px;
-  margin: 5px;
-  padding: 5px; }
-
-.popup-container {
-  position: absolute;
-  align-items: flex-start;
-  display: flex;
-  flex-direction: column;
-  left: 0;
-  top: 0;
-  width: 300px; }
-  .popup-container > div {
-    align-items: baseline;
-    align-self: stretch;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 5px; }
-  .popup-container > div {
-    margin: auto; }
-
-.nudge-tl-container, .nudge-m-container, .nudge-b-container, .nudge-z-container {
+.nudge-container {
   position: absolute;
   align-items: flex-start;
   display: flex;
@@ -123,40 +80,30 @@
   left: 20px;
   top: 20px;
   width: auto;
+  min-width: 300px;
   height: auto;
   animation: fade-in-left 0.3s;
   z-index: 2147483647; }
-  .nudge-tl-container > div, .nudge-m-container > div, .nudge-b-container > div, .nudge-z-container > div {
+  .nudge-container > div {
     align-items: baseline;
     align-self: stretch;
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.4em; }
-  .nudge-tl-container > div, .nudge-m-container > div, .nudge-b-container > div, .nudge-z-container > div {
+  .nudge-container > div {
     align-self: flex-start; }
-  .nudge-tl-container .nudge-menu, .nudge-m-container .nudge-menu, .nudge-b-container .nudge-menu, .nudge-z-container .nudge-menu, .nudge-tl-container .nudge-main, .nudge-m-container .nudge-main, .nudge-b-container .nudge-main, .nudge-z-container .nudge-main, .nudge-tl-container .nudge-banner, .nudge-m-container .nudge-banner, .nudge-b-container .nudge-banner, .nudge-z-container .nudge-banner {
+  .nudge-container .nudge-menu, .nudge-container .nudge-main, .nudge-container .nudge-banner {
     display: none;
     animation: fade-in-left 0.3s; }
-  .nudge-tl-container .nudge-main, .nudge-m-container .nudge-main, .nudge-b-container .nudge-main, .nudge-z-container .nudge-main, .nudge-tl-container .nudge-banner, .nudge-m-container .nudge-banner, .nudge-b-container .nudge-banner, .nudge-z-container .nudge-banner {
+  .nudge-container .nudge-main, .nudge-container .nudge-banner {
     display: flex; }
-  .nudge-tl-container:hover > div, .nudge-m-container:hover > div, .nudge-b-container:hover > div, .nudge-z-container:hover > div {
+  .nudge-container:hover > div {
     opacity: 1; }
-  .nudge-tl-container:hover .nudge-menu, .nudge-m-container:hover .nudge-menu, .nudge-b-container:hover .nudge-menu, .nudge-z-container:hover .nudge-menu, .nudge-tl-container:hover .nudge-main, .nudge-m-container:hover .nudge-main, .nudge-b-container:hover .nudge-main, .nudge-z-container:hover .nudge-main, .nudge-tl-container:hover .nudge-banner, .nudge-m-container:hover .nudge-banner, .nudge-b-container:hover .nudge-banner, .nudge-z-container:hover .nudge-banner {
+  .nudge-container:hover .nudge-menu, .nudge-container:hover .nudge-main, .nudge-container:hover .nudge-banner {
     display: flex; }
-  .nudge-tl-container:hover .nudge-highlight, .nudge-m-container:hover .nudge-highlight, .nudge-b-container:hover .nudge-highlight, .nudge-z-container:hover .nudge-highlight, .nudge-tl-container:hover .nudge-favicon, .nudge-m-container:hover .nudge-favicon, .nudge-b-container:hover .nudge-favicon, .nudge-z-container:hover .nudge-favicon {
+  .nudge-container:hover .nudge-highlight, .nudge-container:hover .nudge-favicon {
     animation: none;
     background: #61a7ff; }
-
-.nudge-m-container {
-  top: 500px; }
-
-.nudge-b-container {
-  top: 500px;
-  bottom: 100px;
-  width: 100%; }
-
-.nudge-z-container {
-  top: 300px; }
 
 .nudge-pulse {
   animation: pulse-shadow--onboarding 2s infinite; }
@@ -204,7 +151,7 @@
     height: 1.2em;
     z-index: 0; }
   .nudge-main::before, .nudge-banner::before {
-    background: url("chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo.svg") center center/1.2em no-repeat;
+    background: url("chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo-color.svg") center center/1.2em no-repeat;
     border-right: 1px solid #bdbdbd;
     border-color: #ededed;
     margin-left: 0;

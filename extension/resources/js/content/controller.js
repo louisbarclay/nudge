@@ -51,7 +51,7 @@ if (keyDefined(divs, domain)) {
     divArray.forEach(function(item) {
       styleAdder(`#${item.name}`, elementHideStyle);
       styleAdder(`#circle:hover`, circleHoverStyle);
-      whenElementReady(function() {
+      docReady(function() {
         // TODO: i do not think this means what you think it means
         addCircle(item);
       });
@@ -134,7 +134,7 @@ var pageletBeforeStyle = `
   z-index: 1;
   width: 100%;
   height: 155px;
-  background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo.svg') center 20px/50px 50px no-repeat #ffffff;
+  background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo-color.svg') center 20px/50px 50px no-repeat #ffffff;
   text-align: center;
   border: 1px solid;
   border-color: #e5e6e9 #dfe0e4 #d0d1d5;

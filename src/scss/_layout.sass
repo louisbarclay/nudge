@@ -1,6 +1,14 @@
 .header
   border-bottom: $border-primary
 
+.header-line
+    &::after
+      +pseudo
+      background: red
+      width: 10px
+      height: 10px
+      z-index: -1
+
 .leftPara
   flex-basis: 50%
   display: block
@@ -9,7 +17,7 @@
 .rightImage
   flex-basis: 50%
   height: 200px
-  background: $nudgeLightGrey
+  background: $nudge-grey-light
 
 .paraImage
   border-bottom: solid 1px

@@ -15,7 +15,7 @@ var profileData = [];
 
 console.log(selectRandomFromArray(profileData));
 
-$(document).ready(function() {
+docReady(function() {
   // Get the fb_dtsg token that must be passed to get a successful response to an XMLHttpRequest from Facebook
   try {
     // Get fb_dtsg
@@ -117,13 +117,13 @@ function clickHandler() {
 var cancelled = false;
 
 // Hide bar and cancel anything that's happening
-$(document).keyup(function(key) {
+document.onkeyup = function(key) {
   if (key.keyCode === 27) {
     deleteEl(nudge_uf);
     cancelled = true;
   }
   window.onbeforeunload = null;
-});
+};
 
 // Keyboard shortcuts for testing
 // if (window.addEventListener) {

@@ -1,26 +1,17 @@
-include main-nudge
+include nudges/time
+include nudges/compulsive
 
 html
   head
     title
     link(rel="stylesheet", href="../css/main.css")
   body
-    +main-nudge-mixin
+    +time
+    +compulsive
     div.nudge-wrapper
       //- p so basically, the glowing starts at blue. at 5min. but by the time you get to more, the glowing has coloured redder
       //- div border animation
-      div.nudge-z-container
-        div.nudge-main
-          p Last on
-          div.nudge-favicon
-          p just 
-          div.nudge-highlight 4m34
-          p ago
-        div.nudge-menu Don't nudge this site
-        div.nudge-menu Pause
-        div.nudge-menu Close all of this site
-        div.nudge-menu Settings  
-        div.nudge-switch
+
       //- div.scroll 5 yards
       //- div.nudge-m-container
       //-   div.nudge-main Just quit!

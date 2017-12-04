@@ -28,11 +28,12 @@ button
   padding: 0
   outline: none
   box-shadow: none
-  +border
+  color: $primary
+  +border($color: $primary)
   +padding
   &:hover
     box-shadow: none
     color: $light
     border-color: transparent
-    background: $secondary
+    background: $primary
     box-shadow: none

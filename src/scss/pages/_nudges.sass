@@ -1,34 +1,8 @@
-// Options
-
-.options-container
-  +container($left: 200px, $width: 800px)
-
-.options-logo
-  position: relative
-  +size(100px)
-  background: url('chrome-extension://__MSG_@@extension_id__/resources/images/logogrey.svg') 0/100px no-repeat
-
-// Popup
-
-.popup-body
-  +size(300px)
-  margin: 5px
-  padding: 5px
-
-.popup-container
-  +container($left: 0, $width: 300px, $spacing: 5px)
-
-  // This is for perfect centering
-  >div
-    margin: auto
-
-// Nudges
-
 .nudge-wrapper
   @extend %reset
   @extend %typography
 
-.nudge-tl-container
+.nudge-container
   +container($left: 20px, $top: 20px, $width: auto, $spacing: 0.4em)
   height: auto
   animation: fade-in-left 0.3s
@@ -54,21 +28,7 @@
 
     .nudge-highlight
       animation: none
-      background: $nudgeBlue
-
-.nudge-m-container
-  @extend .nudge-tl-container
-  top: 500px
-
-.nudge-b-container
-  @extend .nudge-tl-container
-  top: 500px
-  bottom: 100px
-  width: 100%
-
-.nudge-z-container
-  @extend .nudge-tl-container
-  top: 300px
+      background: $nudge-blue
 
 .nudge-pulse
   animation: pulse-shadow--onboarding 2s infinite
@@ -77,7 +37,7 @@
   +border($style: none)
   +padding
   animation: none
-  background: $nudgeLightestGrey
+  background: $nudge-grey-lightest
   cursor: pointer
   font-size: (13 / 14) * $default-font-size
   margin-bottom: 0
@@ -85,13 +45,13 @@
   vertical-align: middle
 
   &:hover
-    background: $nudgeLightGrey
+    background: $nudge-grey-light
     color: $white
 
 .nudge-switch
   opacity: 0
   +size(3.2em)
-  background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/offswitch.svg') center 0.35em /2.2em no-repeat $nudgeMediumGrey
+  background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/offswitch.svg') center 0.35em /2.2em no-repeat $nudge-grey-medium
   border-radius: 1.8em
   position: absolute
   bottom: 0
@@ -99,31 +59,31 @@
 
 .nudge-main
   @extend .nudge-menu
-  +border($color: $nudgeLightestGrey)
+  +border($color: $nudge-grey-lightest)
   +padding($left: 0)
   +left-icon($size: 1.2em)
   +hardware
   background: $white
-  color: $nudgeDarkGrey
+  color: $nudge-grey-dark
   font-size: (40/14) * $default-font-size
   margin-bottom: 0.5em
   opacity: 1
 
   &::before
-    background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo.svg') center center/1.2em no-repeat
+    background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo-color.svg') center center/1.2em no-repeat
     border-right: $border-primary
-    border-color: $nudgeLightestGrey
+    border-color: $nudge-grey-lightest
     margin-left: 0
     padding-right: 1em
 
   &:hover
-    background-color: $nudgeLightestGrey
+    background-color: $nudge-grey-lightest
 
     &::before
-      border-color: $nudgeLightGrey
+      border-color: $nudge-grey-light
 
 .nudge-highlight
-  background: $nudgeLightGrey
+  background: $nudge-grey-light
   color: $white
   +border($style: none)
   padding: 0em .3em .1em .3em
@@ -134,7 +94,7 @@
 
 .nudge-favicon
   @extend .nudge-highlight
-  background-color: $nudgePink
+  background-color: $nudge-pink
   animation: none
   height: 1.2em
   width: 0.7em

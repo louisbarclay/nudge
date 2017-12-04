@@ -55,7 +55,7 @@
       "resources/js/background/nudger-recorder.js",
       "resources/js/background/settings.js",
       "resources/js/background/switch-on-off.js",
-      "resources/js/background/vars/vars.js",
+      "resources/js/vars/vars.js",
       "resources/js/background/background.js",
       "resources/js/background/tests.js"
     ]
@@ -69,7 +69,7 @@
         "resources/js/utils/images.js",
         "resources/js/vars/divs.js",
         "resources/js/content/controller.js",
-        "resources/js/nudger.js"
+        "resources/js/content/nudger.js"
       ],
       "css": [
         "resources/css/nudge.css",

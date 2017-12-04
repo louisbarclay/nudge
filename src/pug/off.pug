@@ -1,0 +1,37 @@
+html
+  head
+    title Site off
+    link(href="../images/nudgeoff32.png", rel="icon", type="image/png", sizes="32x32")
+    link(href="../resources/images/nudgeoff96.png", rel="icon", type="image/png", sizes="96x96")
+    link(href="../resources/images/nudgeoff16.png", rel="icon", type="image/png", sizes="16x16")
+    link(rel="stylesheet", href="../css/main.css")
+  body.off-background.off-typography
+    div.off-container
+      div.off-logo
+      h1 Switched off
+      p 
+        | Drag slider across to switch THIS SITE
+        | back on.
+      div.slider
+        div.button
+          div.button-centre
+      div.off-module
+        h2 What's happening?
+        p 
+          | Nudge switches off 
+          a addictive sites
+          |  by default, so you have to drag the slider across to visit them.
+        p Switching off happens automatically when you close all tabs of a site.
+        div.off-row
+          div Don't sw off F.com by def
+          div Nev Nudge Facebook.com
+          div Dot sw off any by def
+          div Snooze
+        div
+          button.toggle
+            div.left.on Works for me
+            div.right No thanks, turn this feature off completely
+          p You can always switch it back on in settings
+        a I'd like to change the sites Nudge works on
+    script(src="../resources/js/helpers.js")      
+    script(src="../js/off.js")
