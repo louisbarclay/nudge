@@ -2,7 +2,7 @@
 
 docReady(function() {
   try {
-    console.log("trying");
+    // console.log("trying");
     // ad();
   } catch (error) {
     // Error catching
@@ -10,8 +10,6 @@ docReady(function() {
 });
 
 var container = null;
-
-console.log("somsestihsrgisdag");
 
 // // Load the UI
 // function ad() {

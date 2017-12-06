@@ -1,10 +1,7 @@
 // Copyright 2016, Nudge, All rights reserved.
 
-// this will load on every page and so should be tiny
-
-// create new simpler sendMessage object.
+// This will load on every page and so should be tiny
 // type: start script. contains URL of script. that way you know it gets carried out
-// needs a new receiver in background.js
 
 // needs a function which listens for any option changes, and re-runs if a new domain is added?
 // i.e. if domain gets added, and its window is open, it IMMEDIATELY starts being nudged
@@ -23,7 +20,6 @@ document.addEventListener("keyup", switchOffShortcut, false);
 // Is this legit?
 chrome.storage.sync.get("settings", function(items) {
   try {
-    console.log(items);
     if (keyDefined(items.settings.domains, domain)) {
       if (items.settings.domains[domain].nudge) {
         // Should maybe have an option to turn this off?
@@ -42,9 +38,9 @@ if (keyDefined(divs, domain)) {
   var elementHideStyle =
     "{ visibility: hidden; pointer-events: none; cursor: default }";
   doAtEarliest(function() {
-    styleAdder(bodyBefore.name, bodyBeforeStyle, true);
-    styleAdder("#" + pageletObjBefore.name, pageletBeforeStyle, true);
-    styleAdder("#" + pageletObjHoverBefore.name, pageletHoverBeforeStyle);
+    elementReady();
+    styleAdder(bodyBefore.name, bodyBeforeStyle);
+    addCSS("nudge-facebook", "css/pages/facebook.css");
     styleAdder("#container2", container2Style);
     styleAdder("#circle", circleStyle);
     styleAdder("@keyframes circleTransition", circleTransitionKeyframe);
@@ -52,10 +48,46 @@ if (keyDefined(divs, domain)) {
       styleAdder(`#${item.name}`, elementHideStyle);
       styleAdder(`#circle:hover`, circleHoverStyle);
       docReady(function() {
-        // TODO: i do not think this means what you think it means
         addCircle(item);
       });
     });
+  });
+}
+
+function insertClose() {
+  function appendAfterHTMLRequest(response) {
+    var ad = document.getElementById("pagelet_composer");
+    var close = createEl(ad, "div", "pagelet-close");
+    close.innerHTML = response;
+    close.onclick = function() {
+      styleAdder("#pagelet_composer::before", "{content: none;}");
+      deleteEl(close);
+    };
+  }
+  sendHTMLRequest(getUrl("html/facebook/close.html"), appendAfterHTMLRequest);
+}
+
+function elementReady() {
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (!mutation.addedNodes) return;
+
+      for (var i = 0; i < mutation.addedNodes.length; i++) {
+        var node = mutation.addedNodes[i];
+        if (node.id === "pagelet_composer") {
+          console.log(node);
+          insertClose();
+          observer.disconnect();
+        }
+      }
+    });
+  });
+
+  observer.observe(document, {
+    childList: true,
+    subtree: true,
+    attributes: false,
+    characterData: false
   });
 }
 
@@ -104,51 +136,6 @@ var bodyBeforeStyle = `
   position: fixed;
   z-index: 100000;
 }`;
-
-var pageletObjBefore = {
-  name: "pagelet_composer:before",
-  type: "id",
-  domain: "facebook.com"
-};
-
-var pageletObjHoverBefore = {
-  name: "pagelet_composer:hover::before",
-  type: "id",
-  domain: "facebook.com"
-};
-
-// CHANGE THE URL OF BG IMAGE
-var pageletBeforeStyle = `
-{
-  opacity: 1;
-  text-align: center;
-  vertical-align: middle;
-  font-family: 'Open Sans';
-  cursor: pointer;
-  line-height: 220px;
-  color: #6d6d6d;
-  font-size: 26px;
-  content: "Get rid of your News Feed";
-  display: block;
-  position: absolute;
-  z-index: 1;
-  width: 100%;
-  height: 155px;
-  background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo-color.svg') center 20px/50px 50px no-repeat #ffffff;
-  text-align: center;
-  border: 1px solid;
-  border-color: #e5e6e9 #dfe0e4 #d0d1d5;
-  border-radius: 4px;
-  top: -1px;
-  bottom: -1px;
-  left: -1px;
-  right: -1px;
-}
-`;
-
-var pageletHoverBeforeStyle = `
-  background-color: black;
-`;
 
 var circleTransitionKeyframe = `{
   0% { opacity: 0; }

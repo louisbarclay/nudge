@@ -97,6 +97,54 @@ function notUndefined(x) {
   }
 }
 
+function getUrl(path) {
+  return chrome.extension.getURL(path);
+}
+
+function sendHTMLRequest(url, callback, errorFunction) {
+  var request = new XMLHttpRequest();
+  request.open("GET", url, true);
+
+  request.onload = function() {
+    if (request.status >= 200 && request.status < 400) {
+      // Success!
+      var response = request.responseText;
+      callback(response);
+    } else {
+      // We reached our target server, but it returned an error
+    }
+  };
+
+  request.onerror = function() {
+    console.log("Error in HTML request");
+    if (errorFunction) {
+      errorFunction;
+    }
+  };
+
+  request.send();
+}
+
+function append(parent, newChild) {
+  console.log(parent);
+  console.log(newChild);
+  parent.appendChild(newChild);
+}
+
+function addCSS(cssId, nudgeUrl) {
+  if (!document.getElementById(cssId)) {
+    var head = document.getElementsByTagName("head")[0];
+    var link = document.createElement("link");
+    link.id = cssId;
+    link.rel = "stylesheet";
+    link.type = "text/css";
+    link.href = chrome.extension.getURL(nudgeUrl);
+    link.media = "all";
+    head.appendChild(link);
+    console.log(cssId, nudgeUrl);
+  }
+}
+
 function extractHostname(url) {
   var hostname;
   // Find and remove protocol (http, ftp, etc.) and get hostname

@@ -28,6 +28,11 @@
   to {
     opacity: 1;
     transform: none; } }
+@keyframes fade-in {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
 @keyframes pulse-background {
   0% {
     background-color: #bdbdbd; }
@@ -141,7 +146,7 @@
   perspective: 1000;
   background: #ffffff;
   color: #4f4f4f;
-  font-size: 40px;
+  font-size: 20px;
   margin-bottom: 0.5em;
   opacity: 1; }
   .nudge-main::before, .nudge-banner::before {

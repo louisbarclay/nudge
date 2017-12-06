@@ -141,12 +141,16 @@
   margin: auto
   top: 50%
   transform: translateY(-50%)
-  height: $slider-height - (6/7) * 1em
-  width: $slider-height - (6/7) * 1em
-  background: $nudge-grey-lightest
+  height: $slider-height - (9/14) * 1em
+  width: $slider-height - (9/14) * 1em
+  background:
+    color: $nudge-grey-lightest
   border-radius: $slider-height / 2
   transition: background-color 0.2s ease
   +hardware
+
+  &:hover
+    background: darken($nudge-grey-lightest, 3%)
 
   &:active
     background: $nudge-grey-light

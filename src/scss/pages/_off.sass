@@ -8,21 +8,20 @@
     color: $nudge-grey-light
 
 .off-logo
-  margin-top: 4em
-  +size($width: 4em)
+  margin-top: 8em
+  +size($width: 8em)
   &::before
     +pseudo
-    +logo-grey($size: 4em)
+    +logo-grey($size: 8em)
     opacity: 0.05
   &::after
     +pseudo
-    +logo-color($size: 4em)
+    +logo-color($size: 8em)
     opacity: 0.1
     filter: grayscale(100%)
 
 .off-module
   margin-top: 1em
-  +border($style: none)
   +padding
   flex-direction: column
   >*
@@ -36,7 +35,8 @@
   flex-wrap: wrap
 
   >div
-    +border
+    +border($style: none)
+    background: $light
     +padding
     width: auto
     height: 40px

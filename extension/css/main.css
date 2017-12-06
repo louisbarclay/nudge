@@ -110,6 +110,11 @@ body {
   to {
     opacity: 1;
     transform: none; } }
+@keyframes fade-in {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
 @keyframes pulse-background {
   0% {
     background-color: #bdbdbd; }
@@ -271,13 +276,15 @@ body {
   margin: auto;
   top: 50%;
   transform: translateY(-50%);
-  height: 4.1428571429em;
-  width: 4.1428571429em;
-  background: #ededed;
+  height: 4.3571428571em;
+  width: 4.3571428571em;
+  background-color: #ededed;
   border-radius: 2.5em;
   transition: background-color 0.2s ease;
   backface-visibility: hidden;
   perspective: 1000; }
+  .button-centre:hover {
+    background: #e5e5e5; }
   .button-centre:active {
     background: #bdbdbd; }
 
@@ -382,7 +389,7 @@ body {
   perspective: 1000;
   background: #ffffff;
   color: #4f4f4f;
-  font-size: 40px;
+  font-size: 20px;
   margin-bottom: 0.5em;
   opacity: 1; }
   .nudge-main::before, .nudge-banner::before {
@@ -460,15 +467,15 @@ body {
   color: #bdbdbd; }
 
 .off-logo {
-  margin-top: 4em;
-  width: 4em;
-  height: 4em; }
+  margin-top: 8em;
+  width: 8em;
+  height: 8em; }
   .off-logo::before {
     content: "";
     display: block;
     position: absolute;
-    width: 4em;
-    height: 4em;
+    width: 8em;
+    height: 8em;
     background-image: url("chrome-extension://__MSG_@@extension_id__/resources/images/logo-grey.svg");
     background-position: 0;
     background-size: 100% 100%;
@@ -478,8 +485,8 @@ body {
     content: "";
     display: block;
     position: absolute;
-    width: 4em;
-    height: 4em;
+    width: 8em;
+    height: 8em;
     background-image: url("chrome-extension://__MSG_@@extension_id__/resources/images/logo-grey.svg");
     background-position: 0;
     background-size: 100% 100%;
@@ -490,8 +497,6 @@ body {
 
 .off-module {
   margin-top: 1em;
-  border: 1px none #bdbdbd;
-  border-radius: 4px;
   padding: 0.3333333333em 0.8333333333em 0.3333333333em 0.8333333333em;
   flex-direction: column; }
   .off-module > * {
@@ -504,8 +509,9 @@ body {
   width: 100%;
   flex-wrap: wrap; }
   .off-row > div {
-    border: 1px solid #bdbdbd;
+    border: 1px none #bdbdbd;
     border-radius: 4px;
+    background: #ffffff;
     padding: 0.3333333333em 0.8333333333em 0.3333333333em 0.8333333333em;
     width: auto;
     height: 40px; }
