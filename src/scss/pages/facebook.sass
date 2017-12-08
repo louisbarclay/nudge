@@ -1,28 +1,41 @@
 @import 'variables'
 @import 'abstracts'
 @import 'animations'
+@import 'components'
+
+#nudge-dropdown
+  width: 100px
+  height: 100px
+  bottom: 0
+  left: 0
+  background: red
+  opacity: 1
+  +center
 
 .facebook-intro-container
   @extend %typography
   width: 100%
-  height: 60px
+  height: 70px
   position: absolute
   opacity: 0
-  bottom: 0
+  top: 75px
   z-index: 1
-  animation: fade-in 0.4s forwards
+  animation: fade-in 2s forwards
   display: flex
   flex-direction: column
-  justify-content: center
+  align-items: center
+  justify-content: space-between
   overflow: hidden
-
-.facebook-button
-  width: auto
-  +border
-  +padding
+  
+  >*
+    font-size: 20px
 
 .facebook-link
   font-size: 12px
+  text-decoration: underline
+
+.facebook-button
+  @extend %button
 
 .pagelet-close
   width: 30px
@@ -34,12 +47,12 @@
   right: 5px
   display: block
   z-index: 1
-  animation: fade-in 0.4s forwards
+  animation: fade-in 2s forwards
   background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/closegrey.svg') center center/15px no-repeat
   &:hover
     opacity: 1
 
-.pagelet-container
+.facebook-playground-container
   width: 100%
   display: flex
   margin: auto
@@ -59,11 +72,9 @@
     text-align: center
     vertical-align: middle
     font-family: 'Open Sans'
-    cursor: pointer
-    line-height: 180px
     color: #6d6d6d
     font-size: 18px
-    content: "Get rid of your News Feed"
+    content: ""
     display: block
     position: absolute
     z-index: 1

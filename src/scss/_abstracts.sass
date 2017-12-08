@@ -52,6 +52,7 @@
     top: initial
     vertical-align: baseline
 
+
 %typography
   *
     color: $primary
@@ -145,3 +146,21 @@
   +logo-grey($size: $size)
   background:
     image: url('chrome-extension://__MSG_@@extension_id__/resources/images/logo-color.svg')
+
+%button
+  background: none
+  cursor: pointer
+  margin: 0
+  padding: 0
+  outline: none
+  box-shadow: none
+  color: $primary
+  +border($color: $primary)
+  +padding
+  transition: all 0.2s
+  &:hover
+    box-shadow: none
+    color: $light
+    border-color: transparent
+    background: $primary
+    box-shadow: none

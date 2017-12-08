@@ -109,7 +109,7 @@ function sendHTMLRequest(url, callback, errorFunction) {
     if (request.status >= 200 && request.status < 400) {
       // Success!
       var response = request.responseText;
-      callback(response);
+      callback(url, response);
     } else {
       // We reached our target server, but it returned an error
     }
@@ -275,6 +275,12 @@ function createEl(parent, type, name) {
   }
   parent.appendChild(element);
   return element;
+}
+
+function parseHtml(htmlText) {
+  parser = new DOMParser();
+  doc = parser.parseFromString(htmlText, "text/html").body.childNodes;
+  return doc;
 }
 
 function deleteEl(element) {

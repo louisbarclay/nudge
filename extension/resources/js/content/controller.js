@@ -1,3 +1,19 @@
+function constantiseTitle() {
+  document.getElementsByTagName("title")[0].remove();
+  var title = createEl(document.head, "title");
+  title.innerHTML = "Bonkers";
+  Object.defineProperty(document, "title", {
+    enumerable: false,
+    configurable: false,
+    writable: false,
+    value: document.title
+  });
+  console.log("title constantised");
+}
+
+doAtEarliest(constantiseTitle);
+docReady(constantiseTitle);
+
 // Copyright 2016, Nudge, All rights reserved.
 
 // This will load on every page and so should be tiny
@@ -38,8 +54,7 @@ if (keyDefined(divs, domain)) {
   var elementHideStyle =
     "{ visibility: hidden; pointer-events: none; cursor: default }";
   doAtEarliest(function() {
-    elementReady();
-    styleAdder(bodyBefore.name, bodyBeforeStyle);
+    elementReady("pagelet_composer", insertClose);
     addCSS("nudge-facebook", "css/pages/facebook.css");
     styleAdder("#container2", container2Style);
     styleAdder("#circle", circleStyle);
@@ -54,29 +69,31 @@ if (keyDefined(divs, domain)) {
   });
 }
 
-function insertClose() {
+function insertClose(element) {
   function appendAfterHTMLRequest(response) {
-    var ad = document.getElementById("pagelet_composer");
-    var close = createEl(ad, "div", "pagelet-close");
-    close.innerHTML = response;
-    close.onclick = function() {
-      styleAdder("#pagelet_composer::before", "{content: none;}");
-      deleteEl(close);
-    };
+    var newEl = createEl(element, "div");
+    newEl.innerHTML = response;
   }
-  sendHTMLRequest(getUrl("html/facebook/close.html"), appendAfterHTMLRequest);
 }
 
-function elementReady() {
+var objecttt = {};
+
+sendHTMLRequest(getUrl("html/facebook/intro.html"), storeForUse);
+
+function storeForUse(url, response) {
+  url = url.split("/").pop();
+  objecttt[url] = response;
+}
+
+function elementReady(id, callback) {
   var observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
       if (!mutation.addedNodes) return;
 
       for (var i = 0; i < mutation.addedNodes.length; i++) {
         var node = mutation.addedNodes[i];
-        if (node.id === "pagelet_composer") {
-          console.log(node);
-          insertClose();
+        if (node.id === id) {
+          callback(node);
           observer.disconnect();
         }
       }
@@ -118,25 +135,6 @@ var circleStyle = `{
   )}') center 0px/24px no-repeat;
 }`;
 
-var bodyBefore = {
-  name: "body:before",
-  type: "id",
-  domain: "facebook.com"
-};
-
-var bodyBeforeStyle = `
-{
-  content: 'You just left this site';
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 30px;
-  opacity: .5;
-  background-color: pink;
-  position: fixed;
-  z-index: 100000;
-}`;
-
 var circleTransitionKeyframe = `{
   0% { opacity: 0; }
   100% { opacity: 0.5; }
@@ -153,6 +151,9 @@ function addCircle(element) {
     container2.id = "container2";
     hiddenElement.insertAdjacentElement("afterbegin", container2); // is there a way of doing this shit with before pseudoelement?
     container2.innerHTML = '<div id="circle"></div>';
+    var circle = document.getElementById('circle');
+    var dropdown = createEl(circle, 'div');
+    dropdown.id = 'nudge-dropdown';
   } catch (e) {
     console.log(e);
   }

@@ -100,7 +100,7 @@ chrome.tabs.onRemoved.addListener(function(tabId) {
           var statusObj = open("status");
           var time = timeNow();
           dataAdder(statusObj, domain, time, "lastShutdown");
-          changeSetting(true, 'domains', domain, 'off');
+          changeSetting(true, "domains", domain, "off");
           console.log(JSON.parse(localStorage["status"])[domain]);
           // Find out whether the domain has been nudged recently
           var nudged = false;
@@ -203,7 +203,10 @@ chrome.tabs.onCreated.addListener(function(tab) {
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   var domain = inDomainsSetting(tab.url);
   if (domain in settingsLocal.domains && settingsLocal.domains[domain]["off"]) {
-    switchOff(domain, tab.url, tabId);
+    var lastShutdown = open("status")[domain].lastShutdown;
+    var date = todayDate();
+    var timeToday = open(date)[domain].time;
+    switchOff(domain, tab.url, tabId, lastShutdown, timeToday);
   }
   // Update record in tabIdStorage
   if (typeof tabIdStorage[tabId] === "undefined") {

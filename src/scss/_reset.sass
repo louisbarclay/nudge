@@ -22,18 +22,4 @@ h6
   font-weight: 400
 
 button
-  background: none
-  cursor: pointer
-  margin: 0
-  padding: 0
-  outline: none
-  box-shadow: none
-  color: $primary
-  +border($color: $primary)
-  +padding
-  &:hover
-    box-shadow: none
-    color: $light
-    border-color: transparent
-    background: $primary
-    box-shadow: none
+  @extend %button

@@ -5,6 +5,20 @@
     background-position: 84% 100%; }
   100% {
     background-position: 17% 0%; } }
+.call-out * {
+  border: 0;
+  bottom: initial;
+  box-sizing: initial;
+  font: inherit;
+  font-size: 100%;
+  left: initial;
+  margin: 0;
+  padding: 0;
+  position: initial;
+  right: initial;
+  top: initial;
+  vertical-align: baseline; }
+
 .facebook-intro-container * {
   color: #bdbdbd;
   font-family: "Open Sans";
@@ -20,6 +34,25 @@
   text-transform: uppercase;
   font-size: 0.8571428571rem;
   color: #6d6d6d; }
+
+.facebook-button {
+  background: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  box-shadow: none;
+  color: #bdbdbd;
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  padding: 0.3333333333em 0.8333333333em 0.3333333333em 0.8333333333em;
+  transition: all 0.2s; }
+  .facebook-button:hover {
+    box-shadow: none;
+    color: #ffffff;
+    border-color: transparent;
+    background: #bdbdbd;
+    box-shadow: none; }
 
 @keyframes pulse-shadow {
   0% {
@@ -63,27 +96,205 @@
     background-color: #61a7ff; }
   100% {
     background-color: #bdbdbd; } }
-.facebook-intro-container {
-  width: 100%;
-  height: 60px;
+.arrow {
+  border-left: 1px solid #a9a9a9;
+  border-top: 1px solid #a9a9a9;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 12px;
+  height: 4em;
+  left: 20px;
+  margin-top: -2em;
+  overflow: hidden;
   position: absolute;
-  opacity: 0;
-  bottom: 0;
-  z-index: 1;
-  animation: fade-in 0.4s forwards;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: hidden; }
+  top: 50%;
+  transform: rotate(-135deg);
+  width: 4em; }
 
-.facebook-button {
-  width: auto;
+.toggle {
+  color: #bdbdbd;
+  display: flex;
+  padding: 0; }
+  .toggle .left {
+    padding: 0.3333333333em 0.8333333333em 0.3333333333em 0.8333333333em;
+    color: inherit; }
+  .toggle .right {
+    padding: 0.3333333333em 0.8333333333em 0.3333333333em 0.8333333333em;
+    color: inherit; }
+  .toggle .on {
+    background: #bdbdbd;
+    background-clip: border-box;
+    color: #ffffff; }
+  .toggle:hover {
+    background: inherit;
+    border-color: #6d6d6d;
+    color: #6d6d6d; }
+    .toggle:hover .on {
+      background: #6d6d6d;
+      color: #ffffff; }
+
+.tags li {
+  border: 1px none #bdbdbd;
+  border-radius: 4px;
+  display: flex;
+  padding-right: 1em;
+  float: left;
+  height: 2em;
+  line-height: 2em;
+  position: relative;
+  color: #ffffff;
+  font-size: 0.7142857143rem;
+  background-color: #bdbdbd;
+  margin-right: 0.5em;
+  margin-bottom: 0.5em; }
+  .tags li::before {
+    content: "";
+    margin: auto 0.3333333333em auto 0.3333333333em;
+    width: 1.3333333333em;
+    height: 1.3333333333em;
+    z-index: 0; }
+  .tags li::before {
+    filter: grayscale(100%);
+    opacity: 0.5;
+    border-radius: 2px;
+    background-repeat: no-repeat;
+    background-position: center center; }
+  .tags li:hover {
+    background: none;
+    cursor: pointer; }
+    .tags li:hover::after {
+      content: "";
+      display: block;
+      position: absolute;
+      animation: background-move 15s ease infinite;
+      background: linear-gradient(145deg, #61a7ff, #ff61a7);
+      background-size: 400% 400%;
+      border-color: transparent;
+      border-radius: inherit;
+      color: #ffffff;
+      content: "Remove";
+      height: 100%;
+      left: 0;
+      text-align: center;
+      top: 0;
+      width: 100%;
+      z-index: 1; }
+
+.text-input input {
+  border-bottom: 1px solid #bdbdbd;
+  border-bottom-color: #bdbdbd;
+  left: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0.3333333333em 0;
+  position: relative;
+  width: 20em; }
+  .text-input input::placeholder {
+    color: #bdbdbd; }
+  .text-input input:focus {
+    border-bottom: 1px solid #bdbdbd; }
+
+.call-out {
   border: 1px solid #bdbdbd;
   border-radius: 4px;
-  padding: 0.3333333333em 0.8333333333em 0.3333333333em 0.8333333333em; }
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  padding: 0.3333333333em 0.8333333333em 0.3333333333em 0.8333333333em;
+  width: 500px; }
+  .call-out:before {
+    content: "";
+    position: absolute;
+    top: calc(100% - 0.5em);
+    left: 1em;
+    height: 1em;
+    width: 1em;
+    background: #ffffff;
+    transform: rotate(45deg);
+    border-bottom: inherit;
+    border-right: inherit;
+    box-shadow: inherit; }
+
+.slider {
+  width: 100%;
+  height: 5em;
+  margin-top: 10em;
+  border-radius: 6em;
+  text-align: center;
+  background: #f7f7f7; }
+
+.button {
+  position: relative;
+  height: 5em;
+  width: 5em;
+  box-sizing: border-box;
+  top: 0;
+  left: 0;
+  border-radius: 2.5em;
+  cursor: pointer;
+  user-select: none;
+  backface-visibility: hidden;
+  perspective: 1000; }
+
+.slider-text {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1.4em; }
+
+.button-centre {
+  position: relative;
+  margin: auto;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 4.3571428571em;
+  width: 4.3571428571em;
+  background-color: #ededed;
+  border-radius: 2.5em;
+  transition: background-color 0.2s ease;
+  backface-visibility: hidden;
+  perspective: 1000; }
+  .button-centre:hover {
+    background: #e5e5e5; }
+  .button-centre:active {
+    background: #bdbdbd; }
+
+.returning {
+  transition: all 0.2s ease; }
+
+#nudge-dropdown {
+  width: 100px;
+  height: 100px;
+  bottom: 0;
+  left: 0;
+  background: red;
+  opacity: 1;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0%); }
+
+.facebook-intro-container {
+  width: 100%;
+  height: 70px;
+  position: absolute;
+  opacity: 0;
+  top: 75px;
+  z-index: 1;
+  animation: fade-in 2s forwards;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden; }
+  .facebook-intro-container > * {
+    font-size: 20px; }
 
 .facebook-link {
-  font-size: 12px; }
+  font-size: 12px;
+  text-decoration: underline; }
 
 .pagelet-close {
   width: 30px;
@@ -95,12 +306,12 @@
   right: 5px;
   display: block;
   z-index: 1;
-  animation: fade-in 0.4s forwards;
+  animation: fade-in 2s forwards;
   background: url("chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/closegrey.svg") center center/15px no-repeat; }
   .pagelet-close:hover {
     opacity: 1; }
 
-.pagelet-container {
+.facebook-playground-container {
   width: 100%;
   display: flex;
   margin: auto;
@@ -109,7 +320,7 @@
   top: 0;
   left: 0;
   position: relative; }
-  .pagelet-container > div {
+  .facebook-playground-container > div {
     display: block;
     position: static; }
 
@@ -118,11 +329,9 @@
   text-align: center;
   vertical-align: middle;
   font-family: "Open Sans";
-  cursor: pointer;
-  line-height: 180px;
   color: #6d6d6d;
   font-size: 18px;
-  content: "Get rid of your News Feed";
+  content: "";
   display: block;
   position: absolute;
   z-index: 1;

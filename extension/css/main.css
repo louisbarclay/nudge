@@ -36,6 +36,25 @@ body h2, .nudge-wrapper h2 {
   font-size: 0.8571428571rem;
   color: #6d6d6d; }
 
+button {
+  background: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  box-shadow: none;
+  color: #bdbdbd;
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  padding: 0.3333333333em 0.8333333333em 0.3333333333em 0.8333333333em;
+  transition: all 0.2s; }
+  button:hover {
+    box-shadow: none;
+    color: #ffffff;
+    border-color: transparent;
+    background: #bdbdbd;
+    box-shadow: none; }
+
 textarea,
 input {
   outline: none;
@@ -58,24 +77,6 @@ h4,
 h5,
 h6 {
   font-weight: 400; }
-
-button {
-  background: none;
-  cursor: pointer;
-  margin: 0;
-  padding: 0;
-  outline: none;
-  box-shadow: none;
-  color: #bdbdbd;
-  border: 1px solid #bdbdbd;
-  border-radius: 4px;
-  padding: 0.3333333333em 0.8333333333em 0.3333333333em 0.8333333333em; }
-  button:hover {
-    box-shadow: none;
-    color: #ffffff;
-    border-color: transparent;
-    background: #bdbdbd;
-    box-shadow: none; }
 
 body {
   font-size: 14px; }

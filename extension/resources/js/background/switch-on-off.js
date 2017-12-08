@@ -1,4 +1,4 @@
-function switchOff(domain, url, tabId) {
+function switchOff(domain, url, tabId, lastShutdown, timeToday) {
   url =
     chrome.extension.getURL("html/off.html") +
     "?" +
@@ -6,7 +6,13 @@ function switchOff(domain, url, tabId) {
     domain +
     "&" +
     "url=" +
-    encodeURIComponent(url);
+    encodeURIComponent(url) +
+    "&" +
+    "lastShutdown=" +
+    lastShutdown +
+    "&" +
+    "timeToday=" +
+    timeToday;
   var nudged = false;
   // if ( domain last nudged was within 1 minute,,, ,, , , , )
   eventLog(domain, "off", { nudged, url });

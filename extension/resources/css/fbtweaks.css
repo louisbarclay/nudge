@@ -81,11 +81,3 @@
   height: 48px;
   background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo-color.svg') center/48px no-repeat;
 }
-
-._2n_9 {
-  background-image: url('chrome-extension://__MSG_@@extension_id__/resources/images/stabilisefb.png');
-  background-repeat: no-repeat;
-  background-size: auto;
-  background-position: 0 -263px;
-  opacity: .6;
-}

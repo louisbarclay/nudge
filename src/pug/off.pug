@@ -6,12 +6,17 @@ html
     link(href="../resources/images/nudgeoff16.png", rel="icon", type="image/png", sizes="16x16")
     link(rel="stylesheet", href="../css/main.css")
   body.off-background.off-typography
-    div.off-container
+    div.off-container#somethng
       div.off-logo
       h1 Site off
       p 
-        | Drag slider across to switch THIS SITE
-        | back on.
+        | Drag slider across to switch 
+        span#domain-text this site
+        |  back on. You were last on this site 
+        span#domain-last-visited [not sure]
+        |  ago. You've spent 
+        span#domain-time-today 
+        |  there today.
       div.slider
         div.button
           div.button-centre

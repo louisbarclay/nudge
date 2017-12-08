@@ -1,5 +1,8 @@
 var button = document.querySelector(".button");
 var centre = document.querySelector(".button-centre");
+var domainText = document.querySelector("#domain-text");
+var domainLastVisited = document.querySelector("#domain-last-visited");
+var domainTimeToday = document.querySelector("#domain-time-today");
 
 var QueryString = (function() {
   // This function is anonymous, is executed immediately and
@@ -30,10 +33,31 @@ if ("url" in QueryString) {
   url = QueryString.url;
 }
 
+console.log(document.body);
+
 var domain = false;
 if ("domain" in QueryString) {
   domain = QueryString.domain;
-  domainText = domain;
+  console.log(domain);
+  domainText.innerHTML = domain;
+}
+
+if ("lastShutdown" in QueryString) {
+  lastShutdown = QueryString.lastShutdown;
+  if (lastShutdown === 0) {
+    // cancel everything. not quite everything but you get the point
+  }
+  function updateLastVisited() {
+    var lastVisited = logMinutes(timeNow() / 1000 - lastShutdown / 1000);
+    domainLastVisited.innerHTML = lastVisited;
+  }
+  updateLastVisited();
+  setInterval(updateLastVisited, 1000);
+}
+
+if ("timeToday" in QueryString) {
+  timeToday = QueryString.timeToday / 1000;
+  domainTimeToday.innerHTML = logMinutes(timeToday);
 }
 
 function initOn() {
@@ -82,10 +106,9 @@ var initPosition = false;
 
 function slidermove(e) {
   if (!initPosition) {
-    initPosition = e.clientX
+    initPosition = e.clientX;
   }
-  var position =
-    e.clientX - initPosition;
+  var position = e.clientX - initPosition;
   if (position < 0) {
     position = 0;
   } else if (
