@@ -4,14 +4,17 @@ var chromeOrTabIdle = "$chromeOrTabIdle";
 var inChromeFalseDomain = "$inChromeFalseDomain";
 var allDomains = "$allDomains";
 
+// Quick access to settings
 var settingsLocal = {};
 
-// This goes into settings (sync, local)
+// Default domain info
 var defaultDomainInfo = {
   nudge: true,
-  off: true
+  off: false,
+  offByDefault: false
 };
 
+// Default domains
 var defaultDomains = [
   "messenger.com",
   "facebook.com",
@@ -44,6 +47,7 @@ var defaultDomains = [
   "worldsmostboringwebsite.com"
 ];
 
+// Default non-domain settings
 var defaultSettings = {
   scroll_s_setting: 5,
   scroll_b_setting: 3,
@@ -56,7 +60,7 @@ var defaultSettings = {
   reshow_time: false
 };
 
-// Constants (for now)
+// Other constants
 var minSec = 60;
 var sendFailLimit = 10;
 var lastSuccessfulNudgeTime = 0; // could consider doing this on a domain by domain basis

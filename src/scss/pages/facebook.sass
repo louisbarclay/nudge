@@ -3,22 +3,13 @@
 @import 'animations'
 @import 'components'
 
-#nudge-dropdown
-  width: 100px
-  height: 100px
-  bottom: 0
-  left: 0
-  background: red
-  opacity: 1
-  +center
-
-.facebook-intro-container
+.facebook-container
   @extend %typography
   width: 100%
-  height: 70px
+  height: 145px
   position: absolute
   opacity: 0
-  top: 75px
+  top: 0
   z-index: 1
   animation: fade-in 2s forwards
   display: flex
@@ -36,8 +27,9 @@
 
 .facebook-button
   @extend %button
+  display: block
 
-.pagelet-close
+.facebook-close
   width: 30px
   height: 30px
   position: absolute
@@ -51,6 +43,19 @@
   background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/closegrey.svg') center center/15px no-repeat
   &:hover
     opacity: 1
+
+.facebook-logo
+  margin-top: 10px
+  +size(50px)
+  background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo-color.svg') center/50px no-repeat
+
+.facebook-logo-corner
+  +size(20px)
+  position: absolute
+  left: 10px
+  top: 10px
+  z-index: 1
+  background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo-color.svg') center/20px no-repeat
 
 .facebook-playground-container
   width: 100%
@@ -66,8 +71,10 @@
     display: block
     position: static
 
+// Facebook reset
 #pagelet_composer
   &::before
+    background: $white
     opacity: 1
     text-align: center
     vertical-align: middle
@@ -80,8 +87,6 @@
     z-index: 1
     width: 100%
     height: 155px
-    background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo-color.svg') center 10px/50px no-repeat #ffffff
-    text-align: center
     border: 1px solid
     border-color: #e5e6e9 #dfe0e4 #d0d1d5
     border-radius: 4px

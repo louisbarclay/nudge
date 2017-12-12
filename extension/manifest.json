@@ -83,8 +83,7 @@
       "matches": ["http://www.facebook.com/", "https://www.facebook.com/"],
       "js": [
         "resources/js/facebook/unfollow.js",
-        "resources/js/facebook/ad.js",
-        "resources/js/content/constantiser.js"
+        "resources/js/facebook/ad.js"
       ],
       "css": ["resources/css/fbunfollow.css", "resources/css/fbtweaks.css"],
       "exclude_globs": ["*business.facebook.com*"],

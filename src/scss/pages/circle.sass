@@ -1,0 +1,39 @@
+@import 'variables'
+@import 'abstracts'
+@import 'animations'
+
+.circle-container
+  width: 100%
+  height: 0
+  position: static
+  text-align: center
+  top: 0
+
+.circle-dropdown
+  width: 100px
+  height: 100px
+  top: 24px
+  +border
+  opacity: 0
+  left: 0
+  background: $white
+  +center
+  transition: all 0.2s
+
+.circle-content
+  visibility: visible
+  animation: circleTransition 1s forwards
+  transition: all 1s
+  z-index: 15
+  top: 0px
+  margin: 0
+  padding: 0
+  cursor: pointer
+  pointer-events: auto
+  width: 100%
+  background-color: red
+  height: 24px
+  background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/circleheavy.svg') center 0px/24px no-repeat
+  &:hover
+    .circle-dropdown
+      opacity: 1

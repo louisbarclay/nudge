@@ -1,28 +1,24 @@
-function constantiseTitle() {
-  document.getElementsByTagName("title")[0].remove();
-  var title = createEl(document.head, "title");
-  title.innerHTML = "Bonkers";
-  Object.defineProperty(document, "title", {
-    enumerable: false,
-    configurable: false,
-    writable: false,
-    value: document.title
-  });
-  console.log("title constantised");
+// Listen for option changes
+
+setTimeout(doAtTime, 3000);
+
+function doAtTime() {
+  addScript("nudge-facebook-script", "resources/js/content/constantiser.js");
 }
 
-doAtEarliest(constantiseTitle);
-docReady(constantiseTitle);
+var tempStorage = {};
 
-// Copyright 2016, Nudge, All rights reserved.
+sendHTMLRequest(getUrl("html/facebook/intro.html"), storeForUse);
+sendHTMLRequest(getUrl("html/components/circle.html"), storeForUse);
 
-// This will load on every page and so should be tiny
-// type: start script. contains URL of script. that way you know it gets carried out
-
-// needs a function which listens for any option changes, and re-runs if a new domain is added?
-// i.e. if domain gets added, and its window is open, it IMMEDIATELY starts being nudged
+function storeForUse(url, response) {
+  url = url.split("/").pop();
+  tempStorage[url] = response;
+}
 
 var domain = extractRootDomain(window.location.href);
+
+var divHider = true;
 
 // define a handler
 function switchOffShortcut(e) {
@@ -54,14 +50,13 @@ if (keyDefined(divs, domain)) {
   var elementHideStyle =
     "{ visibility: hidden; pointer-events: none; cursor: default }";
   doAtEarliest(function() {
-    elementReady("pagelet_composer", insertClose);
+    elementReady("pagelet_composer", function(node) {
+      appendHTML(node, tempStorage['intro.html']);
+    });
     addCSS("nudge-facebook", "css/pages/facebook.css");
-    styleAdder("#container2", container2Style);
-    styleAdder("#circle", circleStyle);
-    styleAdder("@keyframes circleTransition", circleTransitionKeyframe);
+    addCSS("nudge-divhider", "css/pages/divhider.css");
     divArray.forEach(function(item) {
       styleAdder(`#${item.name}`, elementHideStyle);
-      styleAdder(`#circle:hover`, circleHoverStyle);
       docReady(function() {
         addCircle(item);
       });
@@ -69,20 +64,10 @@ if (keyDefined(divs, domain)) {
   });
 }
 
-function insertClose(element) {
-  function appendAfterHTMLRequest(response) {
-    var newEl = createEl(element, "div");
-    newEl.innerHTML = response;
-  }
-}
-
-var objecttt = {};
-
-sendHTMLRequest(getUrl("html/facebook/intro.html"), storeForUse);
-
-function storeForUse(url, response) {
-  url = url.split("/").pop();
-  objecttt[url] = response;
+function appendHTML(parent, child) {
+  var newEl = createEl(parent, "div");
+  newEl.innerHTML = child;
+  console.log(newEl);
 }
 
 function elementReady(id, callback) {
@@ -108,52 +93,11 @@ function elementReady(id, callback) {
   });
 }
 
-var container2Style = `{
-  background-color: #00ff00;
-  width: 100%;
-  height: 0;
-  position: static;
-  text-align: center;
-  top: 0;
-}`;
-
-var circleStyle = `{
-  visibility: visible;
-  animation: circleTransition 1s forwards;
-  transition: all 1s;
-  z-index: 15;
-  top: 0px;
-  margin: 0;
-  padding: 0;
-  opacity: 0;
-  cursor: pointer;
-  pointer-events: auto;
-  width: 100%;
-  height: 24px;
-  background: url('${chrome.extension.getURL(
-    "resources/images/circleheavy.svg"
-  )}') center 0px/24px no-repeat;
-}`;
-
-var circleTransitionKeyframe = `{
-  0% { opacity: 0; }
-  100% { opacity: 0.5; }
-}`;
-
-var circleHoverStyle = `{
-  background-color: yellow;
-}`;
-
 function addCircle(element) {
   try {
     var hiddenElement = document.getElementById(element.name);
-    var container2 = document.createElement("div");
-    container2.id = "container2";
-    hiddenElement.insertAdjacentElement("afterbegin", container2); // is there a way of doing this shit with before pseudoelement?
-    container2.innerHTML = '<div id="circle"></div>';
-    var circle = document.getElementById('circle');
-    var dropdown = createEl(circle, 'div');
-    dropdown.id = 'nudge-dropdown';
+    console.log(tempStorage);
+    hiddenElement.insertAdjacentElement("afterbegin", tempStorage['circle.html']);
   } catch (e) {
     console.log(e);
   }

@@ -1,0 +1,86 @@
+@keyframes background-move {
+  0% {
+    background-position: 17% 0%; }
+  50% {
+    background-position: 84% 100%; }
+  100% {
+    background-position: 17% 0%; } }
+@keyframes pulse-shadow {
+  0% {
+    box-shadow: 0 0 0 0 #61a7ff; }
+  70% {
+    box-shadow: 0 0 5px 10px rgba(255, 255, 255, 0); }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+@keyframes pulse-shadow--collection {
+  0% {
+    box-shadow: 0 0; }
+  70% {
+    box-shadow: 0 0 5px 10px rgba(255, 255, 255, 0); }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+@keyframes pulse-shadow--onboarding {
+  0% {
+    box-shadow: 0 0 0 0 #61a7ff; }
+  30% {
+    box-shadow: 0 0 0 0 #61a7ff; }
+  80% {
+    box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0); }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+@keyframes fade-in-left {
+  from {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0); }
+  to {
+    opacity: 1;
+    transform: none; } }
+@keyframes fade-in {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+@keyframes pulse-background {
+  0% {
+    background-color: #bdbdbd; }
+  20% {
+    background-color: #61a7ff; }
+  100% {
+    background-color: #bdbdbd; } }
+.circle-container {
+  width: 100%;
+  height: 0;
+  position: static;
+  text-align: center;
+  top: 0; }
+
+.circle-dropdown {
+  width: 100px;
+  height: 100px;
+  top: 24px;
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  opacity: 0;
+  left: 0;
+  background: #ffffff;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  transition: all 0.2s; }
+
+.circle-content {
+  visibility: visible;
+  animation: circleTransition 1s forwards;
+  transition: all 1s;
+  z-index: 15;
+  top: 0px;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  pointer-events: auto;
+  width: 100%;
+  background-color: red;
+  height: 24px;
+  background: url("chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/circleheavy.svg") center 0px/24px no-repeat; }
+  .circle-content:hover .circle-dropdown {
+    opacity: 1; }

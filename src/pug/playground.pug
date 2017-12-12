@@ -1,13 +1,11 @@
-include nudges/time
-include nudges/compulsive
 
 html
   head
     title
     link(rel="stylesheet", href="../css/main.css")
-  body
-    +time
-    //- +compulsive
+  body.space-out
+    include nudges/time
+    include nudges/compulsive
     div.nudge-wrapper
       //- p so basically, the glowing starts at blue. at 5min. but by the time you get to more, the glowing has coloured redder
       //- div border animation

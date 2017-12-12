@@ -19,18 +19,18 @@
   top: initial;
   vertical-align: baseline; }
 
-.facebook-intro-container * {
+.facebook-container * {
   color: #bdbdbd;
   font-family: "Open Sans";
   -webkit-font-smoothing: antialiased; }
-.facebook-intro-container a:hover {
+.facebook-container a:hover {
   color: #6d6d6d; }
-.facebook-intro-container .small {
+.facebook-container .small {
   font-size: 12px; }
-.facebook-intro-container h1 {
+.facebook-container h1 {
   font-size: 1.5714285714rem;
   color: #6d6d6d; }
-.facebook-intro-container h2 {
+.facebook-container h2 {
   text-transform: uppercase;
   font-size: 0.8571428571rem;
   color: #6d6d6d; }
@@ -265,23 +265,12 @@
 .returning {
   transition: all 0.2s ease; }
 
-#nudge-dropdown {
-  width: 100px;
-  height: 100px;
-  bottom: 0;
-  left: 0;
-  background: red;
-  opacity: 1;
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%, 0%); }
-
-.facebook-intro-container {
+.facebook-container {
   width: 100%;
-  height: 70px;
+  height: 145px;
   position: absolute;
   opacity: 0;
-  top: 75px;
+  top: 0;
   z-index: 1;
   animation: fade-in 2s forwards;
   display: flex;
@@ -289,14 +278,17 @@
   align-items: center;
   justify-content: space-between;
   overflow: hidden; }
-  .facebook-intro-container > * {
+  .facebook-container > * {
     font-size: 20px; }
 
 .facebook-link {
   font-size: 12px;
   text-decoration: underline; }
 
-.pagelet-close {
+.facebook-button {
+  display: block; }
+
+.facebook-close {
   width: 30px;
   height: 30px;
   position: absolute;
@@ -308,8 +300,23 @@
   z-index: 1;
   animation: fade-in 2s forwards;
   background: url("chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/closegrey.svg") center center/15px no-repeat; }
-  .pagelet-close:hover {
+  .facebook-close:hover {
     opacity: 1; }
+
+.facebook-logo {
+  margin-top: 10px;
+  width: 50px;
+  height: 50px;
+  background: url("chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo-color.svg") center/50px no-repeat; }
+
+.facebook-logo-corner {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  z-index: 1;
+  background: url("chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo-color.svg") center/20px no-repeat; }
 
 .facebook-playground-container {
   width: 100%;
@@ -325,6 +332,7 @@
     position: static; }
 
 #pagelet_composer::before {
+  background: #ffffff;
   opacity: 1;
   text-align: center;
   vertical-align: middle;
@@ -337,8 +345,6 @@
   z-index: 1;
   width: 100%;
   height: 155px;
-  background: url("chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo-color.svg") center 10px/50px no-repeat #ffffff;
-  text-align: center;
   border: 1px solid;
   border-color: #e5e6e9 #dfe0e4 #d0d1d5;
   border-radius: 4px;

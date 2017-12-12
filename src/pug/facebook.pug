@@ -1,5 +1,3 @@
-include facebook/intro
-
 html
   head
     title
@@ -7,4 +5,7 @@ html
   body
     div.facebook-playground-container
       div#pagelet_composer
-        +intro
+        include facebook/intro
+    div.facebook-playground-container
+      div#pagelet_composer
+        include facebook/confirm

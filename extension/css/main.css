@@ -321,6 +321,9 @@ body {
   background-color: yellow;
   align-items: flex-start; }
 
+.space-out > * {
+  margin-top: 100px; }
+
 .nudge-container {
   position: absolute;
   align-items: flex-start;
