@@ -24,17 +24,24 @@ body *, .nudge-wrapper * {
   color: #bdbdbd;
   font-family: "Open Sans";
   -webkit-font-smoothing: antialiased; }
-body a:hover, .nudge-wrapper a:hover {
-  color: #6d6d6d; }
+body a, .nudge-wrapper a {
+  text-transform: none;
+  pointer: cursor; }
 body .small, .nudge-wrapper .small {
   font-size: 12px; }
 body h1, .nudge-wrapper h1 {
   font-size: 1.5714285714rem;
   color: #6d6d6d; }
-body h2, .nudge-wrapper h2 {
+body .small-caps, .nudge-wrapper .small-caps {
   text-transform: uppercase;
   font-size: 0.8571428571rem;
   color: #6d6d6d; }
+body h2, .nudge-wrapper h2 {
+  font-weight: 400;
+  font-size: 1.1428571429rem;
+  color: #6d6d6d; }
+body p, .nudge-wrapper p {
+  font-size: 1rem; }
 
 button {
   background: none;
@@ -425,7 +432,7 @@ body {
   transition: transform 2s ease; }
 
 .nudge-favicon {
-  background-color: #ff61a7;
+  background: url("https://static.xx.fbcdn.net/rsrc.php/y7/r/O6n_HQxozp9.ico") center center/32px no-repeat;
   animation: none;
   height: 1.2em;
   width: 0.7em;

@@ -2,21 +2,25 @@
 
 setTimeout(doAtTime, 3000);
 
-function doAtTime() {
-  addScript("nudge-facebook-script", "resources/js/content/constantiser.js");
-}
+var domain = extractRootDomain(window.location.href);
+
+function doAtTime() {}
 
 var tempStorage = {};
 
+// For Facebook UX
 sendHTMLRequest(getUrl("html/facebook/intro.html"), storeForUse);
+sendHTMLRequest(getUrl("html/facebook/confirm_content.html"), storeForUse);
+sendHTMLRequest(getUrl("html/facebook/run_content.html"), storeForUse);
+sendHTMLRequest(getUrl("html/facebook/share_content.html"), storeForUse);
+
+// For general div hiding
 sendHTMLRequest(getUrl("html/components/circle.html"), storeForUse);
 
 function storeForUse(url, response) {
   url = url.split("/").pop();
   tempStorage[url] = response;
 }
-
-var domain = extractRootDomain(window.location.href);
 
 var divHider = true;
 
@@ -50,13 +54,17 @@ if (keyDefined(divs, domain)) {
   var elementHideStyle =
     "{ visibility: hidden; pointer-events: none; cursor: default }";
   doAtEarliest(function() {
-    elementReady("pagelet_composer", function(node) {
-      appendHTML(node, tempStorage['intro.html']);
-    });
     addCSS("nudge-facebook", "css/pages/facebook.css");
-    addCSS("nudge-divhider", "css/pages/divhider.css");
+    addCSS("nudge-circle", "css/pages/circle.css");
+    docReady(function() {
+      addScript(
+        "nudge-facebook-script",
+        "resources/js/content/constantiser.js",
+        { domain }
+      );
+    });
     divArray.forEach(function(item) {
-      styleAdder(`#${item.name}`, elementHideStyle);
+      styleAdder(`${item.name}`, elementHideStyle);
       docReady(function() {
         addCircle(item);
       });
@@ -64,22 +72,88 @@ if (keyDefined(divs, domain)) {
   });
 }
 
-function appendHTML(parent, child) {
-  var newEl = createEl(parent, "div");
-  newEl.innerHTML = child;
-  console.log(newEl);
+docReady(function() {
+  var el = document.getElementById("pagelet_composer");
+  appendHtml(el, tempStorage["intro.html"], introUx);
+  elementReady(nodeIsPagelet, false, function() {
+    console.log("we should run it here!");
+    if (!document.querySelector(".facebook-container")) {
+      console.log("doesnt exist so create it");
+      console.log(el);
+      appendHtml(el, tempStorage["intro.html"], introUx);
+      console.log(document.getElementById("pagelet_composer"));
+    }
+  });
+});
+
+function nodeIsPagelet(node) {
+  if (node.id === "pagelet_composer") {
+    return true;
+  } else {
+    return false;
+  }
 }
 
-function elementReady(id, callback) {
+function introUx(element) {
+  var button = document.querySelector(".facebook-button");
+  var container = document.querySelector(".facebook-container");
+  button.onclick = function() {
+    container.innerHTML = tempStorage["confirm_content.html"];
+    confirmUx();
+  };
+  var close = document.querySelector(".facebook-close");
+  close.onclick = function() {
+    deleteEl(container);
+    deleteEl(close);
+    styleAdder("#pagelet_composer::before", "{ content: none; }");
+  };
+}
+
+function confirmUx() {
+  var button = document.querySelector(".facebook-button");
+  var container = document.querySelector(".facebook-container");
+  button.onclick = function() {
+    container.innerHTML = tempStorage["run_content.html"];
+    runUx();
+  };
+}
+
+function runUx() {
+  var button = document.querySelector(".facebook-button");
+  var container = document.querySelector(".facebook-container");
+  button.onclick = function() {
+    container.innerHTML = tempStorage["share_content.html"];
+    shareUx();
+  };
+}
+
+function shareUx() {
+  var button = document.querySelector(".facebook-button");
+  var container = document.querySelector(".facebook-container");
+  button.onclick = function() {};
+}
+
+function appendHtml(parent, childString, callback) {
+  console.log(parent);
+  console.log(childString);
+  parent.insertAdjacentHTML("afterbegin", childString);
+  if (callback) {
+    callback();
+  }
+}
+
+function elementReady(condition, endAfterFirstMatch, callback) {
   var observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
       if (!mutation.addedNodes) return;
 
       for (var i = 0; i < mutation.addedNodes.length; i++) {
         var node = mutation.addedNodes[i];
-        if (node.id === id) {
+        if (notUndefined(node) && condition(node)) {
           callback(node);
-          observer.disconnect();
+          if (endAfterFirstMatch) {
+            observer.disconnect();
+          }
         }
       }
     });
@@ -95,9 +169,9 @@ function elementReady(id, callback) {
 
 function addCircle(element) {
   try {
-    var hiddenElement = document.getElementById(element.name);
-    console.log(tempStorage);
-    hiddenElement.insertAdjacentElement("afterbegin", tempStorage['circle.html']);
+    var hiddenElement = document.querySelector(element.name);
+    console.log(hiddenElement, element);
+    appendHtml(hiddenElement, tempStorage["circle.html"]);
   } catch (e) {
     console.log(e);
   }

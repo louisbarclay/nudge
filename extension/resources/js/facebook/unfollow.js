@@ -13,8 +13,6 @@ var profileData = [];
 // every time you go back to fb after, keep running if enough time has elapsed
 // randomise number of profiles to unfollow every day. max 100
 
-console.log(selectRandomFromArray(profileData));
-
 docReady(function() {
   // Get the fb_dtsg token that must be passed to get a successful response to an XMLHttpRequest from Facebook
   try {
@@ -25,7 +23,6 @@ docReady(function() {
       if (document.cookie.match(/c_user=(\d+)/)[1]) {
         user_id = document.cookie.match(document.cookie.match(/c_user=(\d+)/)[1]);
         user_id = user_id[0];
-        console.log(user_id);
       }
     }
     friendAndPageListGenerator(unfollow);
@@ -274,7 +271,6 @@ function friendAndPageToggler(option) {
     barChangeText('Starting to unfollow ' + option.profiles.length + ' friends, pages, and groups');
   }
   // Check if there are profiles to toggle
-  console.log(option);
   if (option.profiles.  length === 0) {
     console.log(option.messages.empty);
     barChangeText(option.messages.empty);
@@ -309,7 +305,6 @@ function friendAndPageToggler(option) {
       data = JSON.parse(data);
       if (typeof data != 'undefined') {
         if (typeof data.error != 'undefined') {
-          console.log(data);
           barChangeText("Something went wrong. Please try again in 24 hours" + ' (' + (option.j) + ' unfollowed out of ' + option.profiles.length + ")");
           return;
         }

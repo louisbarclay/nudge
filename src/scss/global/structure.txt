@@ -1,0 +1,77 @@
+
+global
+- reset / typo mixins that can be used for pages and for main
+
+
+main
+- components. root
+- by page
+
+
+nudge
+- its own components
+- reset
+
+off page
+- color theme
+
+popup page
+- color theme
+
+options page
+- color theme
+
+do this for selectors:
+http://www.scottohara.me/article/sass-selector-variables.html
+
+.block {
+    &__element {
+    }
+    &--modifier {
+    }
+}
+
+.block {
+}
+.block__element {
+}
+.block--modifier {
+}
+
+https://css-tricks.com/snippets/sass/use-sass-variable-selector/
+
+// _my-module.scss:
+$message-color: blue !default;
+
+$message-color: black;
+@import 'my-module';
+
+OVERRRIDE!!!!!!!!!!!!
+
+USE DEBUG OPTION to set bg red on everything, and add red borders always?
+
+$debug: false; // TODO: move to _settings.scss
+
+article {
+    color: black;
+
+    @if ($debug) { // visualizing layout internals
+        border: 1px dotted red;
+    }
+}
+
+@each $name in 'save' 'cancel' 'help' {
+    .icon-#{$name} {
+        background-image: url('/images/#{$name}.png');
+    }
+}
+/* compiled CSS */
+.icon-save {
+  background-image: url("/images/save.png");
+}
+.icon-cancel {
+  background-image: url("/images/cancel.png");
+}
+.icon-help {
+  background-image: url("/images/help.png");
+}

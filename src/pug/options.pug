@@ -7,14 +7,14 @@ html
       div.options-logo
         h1 Options
       div.header
-      h2 Your Nudge domains
+      span.small-caps Your Nudge domains
       div
         div Add a domain
         ul.text-input
           li
             input#addDomain(type='text' placeholder='likethis.com' onblur="this.placeholder = 'likethis.com'" onfocus="this.placeholder = ''") 
       ul.tags#domainList
-      h2 Other options
+      span.small-caps Other options
       mixin optionBoolean(name, divId)
         div(id=divId)
           div=name
@@ -26,7 +26,7 @@ html
       +optionBoolean('Show Facebook unfollow')
       +optionBoolean('Switch off Nudge domains by default')
       +optionBoolean('Keep page favicons from showing red icons')
-      h2 Nudge ID
+      span.small-caps Nudge ID
       p your Nudge ID is
       div#id
       p Keep it safe if you are participating in a Nudge study.

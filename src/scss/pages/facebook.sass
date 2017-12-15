@@ -3,73 +3,107 @@
 @import 'animations'
 @import 'components'
 
-.facebook-container
-  @extend %typography
-  width: 100%
-  height: 145px
-  position: absolute
-  opacity: 0
-  top: 0
-  z-index: 1
-  animation: fade-in 2s forwards
-  display: flex
-  flex-direction: column
-  align-items: center
-  justify-content: space-between
-  overflow: hidden
-  
-  >*
-    font-size: 20px
+.facebook-
+  &container
+    @extend %reset
+    @extend %typography
+    left: 5%
+    right: 5%
+    width: 90%
+    height: 135px
+    position: absolute
+    opacity: 0
+    top: 0
+    margin-top: 10px
+    z-index: 1
+    animation: fade-in 2s forwards
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: space-between
+    overflow: hidden
+    
+    >*
+      color: $nudge-grey-medium
+      font-size: 20px
 
-.facebook-link
-  font-size: 12px
-  text-decoration: underline
+  &bottom-text
+    color: $nudge-grey-light
+    font-size: 12px
 
-.facebook-button
-  @extend %button
-  display: block
+  &text
+    font-size: 13px
+    text-align: center
+    line-height: 1.5em
+    color: $nudge-grey-dark
 
-.facebook-close
-  width: 30px
-  height: 30px
-  position: absolute
-  top: 5px
-  opacity: 0
-  cursor: pointer
-  right: 5px
-  display: block
-  z-index: 1
-  animation: fade-in 2s forwards
-  background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/closegrey.svg') center center/15px no-repeat
-  &:hover
-    opacity: 1
+  &link
+    cursor: pointer
+    text-decoration: none
+    &:hover
+      color: $nudge-pink
 
-.facebook-logo
-  margin-top: 10px
-  +size(50px)
-  background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo-color.svg') center/50px no-repeat
-
-.facebook-logo-corner
-  +size(20px)
-  position: absolute
-  left: 10px
-  top: 10px
-  z-index: 1
-  background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo-color.svg') center/20px no-repeat
-
-.facebook-playground-container
-  width: 100%
-  display: flex
-  margin: auto
-  width: 502px
-  height: 157px
-  top: 0
-  left: 0
-  position: relative
-
-  >div
+  &button
+    @extend %button
     display: block
-    position: static
+    +border($style: none)
+    font-size: 13px
+    color: $white
+    background: $nudge-pink
+    border-color: $nudge-grey-dark
+    &:hover
+      background: darken($nudge-pink, 10%)
+
+  &button-blue
+    background: $nudge-blue
+    &:hover
+      background: darken($nudge-blue, 10%)
+
+  &headline
+    font-size: 20px  
+    font-weight: 400
+    color: $nudge-grey-dark
+
+  &close
+    width: 20px
+    height: 20px
+    position: absolute
+    top: 5px
+    opacity: 0.3
+    cursor: pointer
+    right: 5px
+    display: block
+    z-index: 2
+    // animation: fade-in 2s forwards
+    background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/closegrey.svg') center center/12px no-repeat
+    &:hover
+      opacity: 1
+
+  &logo
+    +size(30px)
+    background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo-color.svg') center/30px no-repeat
+
+  &logo-corner
+    +size(20px)
+    position: absolute
+    left: 10px
+    top: 10px
+    z-index: 1
+    background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo-color.svg') center/20px no-repeat
+
+  &playground-container
+    width: 100%
+    display: flex
+    margin: auto
+    width: 502px
+    height: 157px
+    top: 0
+    left: 0
+    position: relative
+  
+    >div
+      display: block
+      position: static
 
 // Facebook reset
 #pagelet_composer

@@ -228,18 +228,6 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
       }
     });
   }
-  // For constantising titles
-  if (domain) {
-    chrome.tabs.sendMessage(
-      tabId,
-      {
-        type: "title",
-        title: changeInfo.title,
-        domain
-      },
-      function(response) {}
-    );
-  }
   // For sending favicon URL
   if (
     domain &&

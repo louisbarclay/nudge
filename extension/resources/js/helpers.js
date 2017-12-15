@@ -140,22 +140,23 @@ function addCSS(cssId, nudgeUrl) {
     link.type = "text/css";
     link.href = chrome.extension.getURL(nudgeUrl);
     link.media = "all";
-    console.log(head);
     head.appendChild(link);
-    console.log(cssId, nudgeUrl);
   }
 }
 
-function addScript(scriptId, nudgeUrl) {
+function addScript(scriptId, nudgeUrl, dataObj) {
   if (!document.getElementById(scriptId)) {
     var head = document.getElementsByTagName("head")[0];
-    var link = document.createElement("script");
-    link.id = scriptId;
-    link.type = "text/javascript";
-    link.src = chrome.extension.getURL(nudgeUrl);
-    console.log(head);
-    head.appendChild(link);
-    console.log(link);
+    var script = document.createElement("script");
+    script.id = scriptId;
+    script.type = "text/javascript";
+    script.src = chrome.extension.getURL(nudgeUrl);
+    if (dataObj) {
+      Object.keys(dataObj).forEach(function(key) {
+        script.dataset[key] = dataObj[key];
+      });
+    }
+    head.appendChild(script);
   }
 }
 
@@ -358,8 +359,8 @@ function addTogether(a, b) {
 }
 
 // Add style to document
-function styleAdder(id, style, log) {
-  var styleText = id + style;
+function styleAdder(name, style, log) {
+  var styleText = name + style;
   style = document.createElement("style");
   style.innerHTML = styleText;
   document.head.appendChild(style);

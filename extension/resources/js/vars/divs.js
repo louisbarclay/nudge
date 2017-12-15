@@ -3,32 +3,23 @@
 var divs = {
   "dailymail.co.uk": [
     {
-      name: 'p-916',
-      type: "id",
+      name: '#p-916',
     },
     {
-      name: 'p-2588',
-      type: 'id',
+      name: '#p-2588',
     }
   ],
   "linkedin.com": [
     {
-      name: 'ember1484',
-      type: "id",
+      name: '#ember1484',
     },
   ],
   "facebook.com": [
     {
-      name: "sideNav",
-      type: "id",
+      name: "#pagelet_navigation",
     },
     {
-      name: "rightCol",
-      type: "id",
-    },
-    {
-      name: "_4un6",
-      type: "class",
+      name: "#rightCol",
     }
   ],
 };
