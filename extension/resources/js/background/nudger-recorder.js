@@ -1,10 +1,10 @@
-// Creates a nudge object easily
+// Creates a nudge object
 function nudgeObject(domain, amount, type, status) {
   if (!status) {
     status = "pending";
   }
   return {
-    time_loaded: timeNow(),
+    time_loaded: moment(),
     type: type,
     domain: domain,
     status: status,
@@ -15,79 +15,110 @@ function nudgeObject(domain, amount, type, status) {
 }
 
 function domainTimeUpdater(domain, startTime, endTime, source) {
-  var addTime = endTime - startTime;
-  var date = todayDate();
+  // Last shutdown if domain is true, and not an odd domain, and if there are not any tabs of that kind when visit is closed off
+  if (domain && domain !== notInChrome && domain !== chromeOrTabIdle) {
+    chrome.tabs.query({}, function(tabs) {
+      if (tabsChecker(tabs, domain)) {
+        // Check if domain is off - if it is, the visit will have ended in an 'off' redirect so let's not call that a shutdown
+        if (!settingsLocal.domains[domain].off) {
+          var statusObj = open("status");
+          console.log(endTime);
+          dataAdder(statusObj, domain, endTime, "lastShutdown");
+          close("status", statusObj);
+          if (settingsLocal.domains[domain].offByDefault) {
+            changeSetting(true, "domains", domain, "off");
+          }
+          // Find out whether the domain has been nudged recently
+          // Because we are going to log the shutdown and ask if there's been a recent nudge
+          var nudged = false;
+          if (
+            keyDefined(statusObj, domain) &&
+            keyDefined(statusObj[domain], "lastNudged")
+          ) {
+            // untested
+            var timeSinceLastNudged = endTime - statusObj[domain].lastNudged;
+            if (timeSinceLastNudged < 60000) {
+              nudged = true;
+            }
+          }
+          eventLog(domain, "shutdown", { nudged });
+        }
+      }
+    });
+  }
+  var addTime = endTime.diff(startTime);
+  var date = moment().format("YYYY-MM-DD");
   var dateObj = open(date);
   dataAdder(dateObj, domain, addTime, "time", addTogether);
   dataAdder(dateObj, allDomains, addTime, "time", addTogether);
+  dataAdder(dateObj, domain, 0, "runningCounter");
+  close(date, dateObj);
   var totalTime = dateObj[domain].time;
   var previousTime = totalTime - addTime;
   // Need to reset the runningCounter after updating time
-  dataAdder(dateObj, domain, 0, "runningCounter");
-  close(date, dateObj);
   // Convert time to readable format
   var duration = logMinutes(addTime / 1000);
   var totalTimeToday = logMinutes(totalTime / 1000);
-  startTime = epochToDate(startTime);
-  endTime = epochToDate(endTime);
   eventLog(domain, "visit", {
-    startTime,
-    endTime,
+    startTime: startTime.format("HH:mm:ss"),
+    endTime: endTime.format("HH:mm:ss"),
     duration,
     totalTimeToday,
     source
   });
+  if ((source = "dateSplit_previousDay")) {
+    // Closes off the previous day and sends it to cloud storage
+    // Keeps what it needs from it
+  }
 }
 
 // Runs within timeline adder if the new timeline event does not match the old one
 function domainVisitUpdater(domain, time, source) {
-  var date = todayDate();
+  var date = moment().format("YYYY-MM-DD");
   var dateObj = open(date);
   dataAdder(dateObj, domain, 1, "visits", addTogether);
+  close(date, dateObj);
   var totalVisits = dateObj[domain].visits;
   var totalTime = dateObj[domain].time;
-  close(date, dateObj);
   // Set until which point back in time to look for a shutdown FIXME: shouldn't get a compulsive or a visit in certain situations...pointless
-  var compulsiveSearch =
-    time - settingsLocal.compulsive_setting * minSec * 1000;
+  var compulsiveSearch = time - settingsLocal.compulsive * minSec * 1000;
   // Compulsive is true if there has ever been a shutdown, if the last shutdown was after the point back in time we're looking,
   // and if the last shutdown was after the last compulsive (important because if not, we could do a compulsive when one has already been done)
   var statusObj = open("status");
+  if (!keyDefined(statusObj, domain)) {
+    statusObj[domain] = {};
+  }
   // Initialise domain statusObj keys if don't exist
-  dataAdder(statusObj, domain, 0, "lastShutdown", ifDoesntExistMakeZero);
-  dataAdder(statusObj, domain, 0, "lastCompulsive", ifDoesntExistMakeZero);
   var domainStatusObj = statusObj[domain];
   var compulsive =
-    domainStatusObj.lastShutdown !== 0 &&
+    keyDefined(domainStatusObj, "lastShutdown") &&
     domainStatusObj.lastShutdown > compulsiveSearch &&
-    domainStatusObj.lastCompulsive < domainStatusObj.lastShutdown;
+    (!keyDefined(domainStatusObj, "lastCompulsive") ||
+      domainStatusObj.lastCompulsive < domainStatusObj.lastShutdown);
   if (compulsive) {
+    dataAdder(dateObj, domain, 1, "compulsives", addTogether);
+    console.log("tried to send compulsive");
     dataAdder(statusObj, domain, time, "lastCompulsive");
     messageSender(
-      nudgeObject(
-        domain,
-        Math.round((timeNow() - domainStatusObj.lastShutdown) / 1000),
-        "compulsive"
-      )
+      nudgeObject(domain, domainStatusObj.lastShutdown, "compulsive")
     );
   }
-  eventLog(domain, "visitStart", { totalVisits, source });
   close("status", statusObj);
+  eventLog(domain, "visitStart", { totalVisits, source });
 }
 
 // Runs every second and sends a time nudge if you hit a time nudge level
 function domainTimeNudger() {
+  return;
+  var statusObj = open("status");
+  var currentState = checkCurrentState();
   // Check if currentState is for a domain we care about
   var domain = currentState.domain;
   if (domain) {
-    var nonDomain =
-      domain === notInChrome ||
-      domain === chromeOrTabIdle ||
-      domain === inChromeFalseDomain;
-    var date = todayDate();
+    var nonDomain = domain === notInChrome || domain === chromeOrTabIdle;
+    var date = moment().format("YYYY-MM-DD");
     var dateObj = open(date);
     dataAdder(dateObj, domain, 1, "runningCounter", addTogether);
-    // Close it off already
     close(date, dateObj);
     var runningCounter = dateObj[domain].runningCounter;
     var time = dateObj[domain].time;
@@ -97,28 +128,17 @@ function domainTimeNudger() {
     }
     // Sets a temporary total time value and evaluates it against our time nudge levels
     var totalTimeTemp = runningCounter + Math.round(time / 1000);
-    if (
-      totalTimeTemp % (settingsLocal.time_s_setting * minSec) === 0 &&
-      !nonDomain
-    ) {
+    if (totalTimeTemp % (settingsLocal.time * minSec) === 0 && !nonDomain) {
       messageSender(nudgeObject(domain, totalTimeTemp, "time"));
     }
-    // Sends that second by second data to the debug updater, a UI element that helps me figure out where problems are
-    if (config.debug) {
-      chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(
-        tabs
-      ) {
-        if (typeof tabs[0] != "undefined") {
-          chrome.tabs.sendMessage(tabs[0].id, {
-            type: "debug_updater",
-            domain: domain,
-            before: time,
-            runningCounter: runningCounter,
-            total: totalTimeTemp,
-            visits: dateObj[domain].visits
-          });
-        }
-      });
-    }
+    // Live updater
+    chrome.runtime.sendMessage({
+      type: "live_update",
+      domain,
+      before: time,
+      runningCounter: runningCounter,
+      total: totalTimeTemp,
+      visits: dateObj[domain].visits
+    });
   }
 }

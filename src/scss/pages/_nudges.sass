@@ -1,130 +1,130 @@
-.nudge-wrapper
+#nudge
   @extend %reset
-  @extend %typography
+  display: block
 
-.nudge-container
-  +container($left: 20px, $top: 20px, $width: auto, $spacing: 0.4em)
-  height: auto
-  animation: fade-in-left 0.3s
-  z-index: $max-z
+  #nudge-
+    &container
+      @extend %typography
+      +container($left: -5px, $top: -5px, $width: auto, $spacing: 0.4em)
+      position: fixed
+      height: auto
+      font-size: 16px
+      animation: fade-in 0.3s
+      z-index: $max-z
 
-  >div
-    align-self: flex-start
+      >div
+        align-self: flex-start
 
-  .nudge-menu
-    display: none
-    animation: fade-in-left 0.3s
+      &menu
+        >div
+          display: block
+          animation: fade-in 0.3s
 
-  .nudge-main
-    display: flex
-
-
-  &:hover
-    >div
-      opacity: 1
     
-    .nudge-menu
+    &main
       display: flex
+      +border()
+      +padding($left: 0)
+      padding-bottom: 0.15em
+      padding-right: 0.5em
+      +left-icon($size: 1.2em)
+      +hardware
+      background: $white
+      color: $nudge-grey-medium
+      font-size: (17/14) * $default-font-size
+      flex-direction: row
+      margin-bottom: 0.5em
+      opacity: 1
+      align-items: baseline
+      // +shadow4
 
-    .nudge-highlight
+      p
+        padding: 0 0 .1em 0
+        align-self: center
+
+      *
+        cursor: default
+        user-select: none
+
+      &::before
+        background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo-color.svg') center center/1.2em no-repeat
+        border-right: $border-primary
+        border-color: $nudge-grey-lightest
+        margin-left: 0
+        padding-right: 1em
+
+    &menu
+      +border($style: none)
+      +padding
       animation: none
+      background: $white
+      cursor: pointer
+      font-size: (13 / 14) * $default-font-size
+      margin-bottom: 0
+      align-items: center
+      +shadow4
+
+      &:hover
+        background: darken($nudge-grey-lightest, 10%)
+
+    &switch
+      opacity: 0
+      +size(3.2em)
+      background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/offswitch.svg') center 0.35em /2.2em no-repeat $nudge-grey-medium
+      border-radius: 1.8em
+      position: absolute
+      bottom: 0
+      right: 0
+
+      &:hover
+        background-color: $nudge-grey-lightest
+
+        &::before
+          border-color: $nudge-grey-light
+
+    &highlight
       background: $nudge-blue
+      color: $white
+      +border($style: none)
+      padding: 0em .3em .1em .3em
+      margin-left: 0.3em
+      margin-right: 0.3em
+      align-self: center
 
-.nudge-pulse
-  animation: pulse-shadow--onboarding 2s infinite
+    &favicon
+      animation: none
+      width: 32px
+      height: 32px
+      align-self: center
+      padding: 0
+      +border($style: none)
+      margin-left: 0.3em
+      margin-right: 0.3em
 
-.nudge-menu
-  +border($style: none)
-  +padding
-  animation: none
-  background: $nudge-grey-lightest
-  cursor: pointer
-  font-size: (13 / 14) * $default-font-size
-  margin-bottom: 0
-  opacity: 0
-  vertical-align: middle
+    &banner
+      +center
+      bottom: 0
 
-  &:hover
-    background: $nudge-grey-light
-    color: $white
+    &scale
+      padding-left: 1em
+      text-indent: -1em
 
-.nudge-switch
-  opacity: 0
-  +size(3.2em)
-  background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/offswitch.svg') center 0.35em /2.2em no-repeat $nudge-grey-medium
-  border-radius: 1.8em
-  position: absolute
-  bottom: 0
-  right: 0
+      li
+        padding: 0 0 0 2em
+        font-size: (6 / 7) * 1em
+        width: 1em
+        height: 1cm
 
-.nudge-main
-  @extend .nudge-menu
-  +border($color: $nudge-grey-lightest)
-  +padding($left: 0)
-  +left-icon($size: 1.2em)
-  +hardware
-  background: $white
-  color: $nudge-grey-dark
-  font-size: (20/14) * $default-font-size
-  margin-bottom: 0.5em
-  opacity: 1
+        &::before
+          +pseudo
+          left: 0
+          padding: (3 / 4) * 1em 0 0 0
+          width: 1em
+          border-bottom: $border-primary
 
-  &::before
-    background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo-color.svg') center center/1.2em no-repeat
-    border-right: $border-primary
-    border-color: $nudge-grey-lightest
-    margin-left: 0
-    padding-right: 1em
-
-  &:hover
-    background-color: $nudge-grey-lightest
-
-    &::before
-      border-color: $nudge-grey-light
-
-.nudge-highlight
-  background: $nudge-grey-light
-  color: $white
-  +border($style: none)
-  padding: 0em .3em .1em .3em
-  margin-left: 0.3em
-  margin-right: 0.3em
-  animation: pulse-background 1s infinite
-  transition: transform 2s ease
-
-.nudge-favicon
-  @extend .nudge-highlight
-  background: url('https://static.xx.fbcdn.net/rsrc.php/y7/r/O6n_HQxozp9.ico') center center/32px no-repeat
-  animation: none
-  height: 1.2em
-  width: 0.7em
-  align-self: center
-
-.nudge-banner
-  @extend .nudge-main
-  +center
-  bottom: 0
-
-.nudge-scale
-  padding-left: 1em
-  text-indent: -1em
-
-  li
-    padding: 0 0 0 2em
-    font-size: (6 / 7) * 1rem
-    width: 1em
-    height: 1cm
-
-    &::before
-      +pseudo
-      left: 0
-      padding: (3 / 4) * 1em 0 0 0
-      width: 1em
-      border-bottom: $border-primary
-
-    &::after
-      +pseudo
-      left: 0
-      padding: (3 / 4) * 1em 0 0 0
-      width: 0.25em
-      border-bottom: $border-primary
+        &::after
+          +pseudo
+          left: 0
+          padding: (3 / 4) * 1em 0 0 0
+          width: 0.25em
+          border-bottom: $border-primary

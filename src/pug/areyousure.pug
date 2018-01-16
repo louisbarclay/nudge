@@ -1,0 +1,21 @@
+html
+  head
+    title Are you sure?
+    link(href="../resources/images/nudgeoff32.png", rel="icon", type="image/png", sizes="32x32")
+    link(href="../resources/images/nudgeoff96.png", rel="icon", type="image/png", sizes="96x96")
+    link(href="../resources/images/nudgeoff16.png", rel="icon", type="image/png", sizes="16x16")
+    link(rel="stylesheet", href="../css/main.css")
+  body.off-background.off-typography
+    div.off-container#somethng
+      div.off-logo
+      h1#tagline 
+      p 
+        | Drag slider across to switch
+        span#domain-text.off-highlight this site
+        | back on. I want to change my settings
+      div.slider
+        div.button
+          div.button-centre
+    script(src="../resources/js/vendor/moment.min.js")      
+    script(src="../resources/js/helpers.js")      
+    script(src="../js/off.js")

@@ -1,21 +1,5 @@
-var time = document.getElementsByClassName("nudge-highlight")[0];
+var faviconTest = "https://static.xx.fbcdn.net/rsrc.php/y7/r/O6n_HQxozp9.ico";
 
-timeSet();
-
-setInterval(timeSet, 1000);
-
-function timeSet() {
-  time.innerHTML = epochToMinSec(timeNow());
-}
-
-// var canChangeText = true;
-
-// time.onmouseenter = function() {
-//   canChangeText = false;
-//   time.innerHTML = "Don't Nudge";
-// };
-
-// time.onmouseout = function() {
-//   canChangeText = true;
-//   timeSet();
-// };
+document.getElementById(
+  "nudge-favicon"
+).style.background = `url(${faviconTest}) center center/32px no-repeat`;

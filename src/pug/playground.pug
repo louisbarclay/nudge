@@ -2,25 +2,26 @@
 html
   head
     title
-    link(rel="stylesheet", href="../css/main.css")
-  body.space-out
-    include nudges/time
-    include nudges/compulsive
-    div.nudge-wrapper
-      //- p so basically, the glowing starts at blue. at 5min. but by the time you get to more, the glowing has coloured redder
-      //- div border animation
+    link(rel="stylesheet", href="../css/nudges.css")
+  body
+    div#nudge
+      include nudges/time
+    //- include nudges/compulsive
+  //-   div.nudge-wrapper
+  //-     //- p so basically, the glowing starts at blue. at 5min. but by the time you get to more, the glowing has coloured redder
+  //-     //- div border animation
 
-      //- div.scroll 5 yards
-      //- div.nudge-m-container
-      //-   div.nudge-main Just quit!
-      div.nudge-b-container
-        div.nudge-banner Hey hey hey compulsive. should actually be a pseudo-element banner on the whole doc i think!. asterisk in a circle. that works i think
-        div last visited F.com 4.32 ago
-        div.call-out Some stuff
-    div.favicon-test
-  //- div ruler, slides in from left. stays for a while
-  //-   ul.nudge-scale
-  //-     each val in ['1m',' ',' ',' ',' ','1.05m',' ',' ',' ',' ']
-  //-       li= val
+  //-     //- div.scroll 5 yards
+  //-     //- div.nudge-m-container
+  //-     //-   div.nudge-main Just quit!
+  //-     div.nudge-b-container
+  //-       div.nudge-banner Hey hey hey compulsive. should actually be a pseudo-element banner on the whole doc i think!. asterisk in a circle. that works i think
+  //-       div last visited F.com 4.32 ago
+  //-       div.call-out Some stuff
+  //-   div.favicon-test
+  //- //- div ruler, slides in from left. stays for a while
+  //- //-   ul.nudge-scale
+  //- //-     each val in ['1m',' ',' ',' ',' ','1.05m',' ',' ',' ',' ']
+  //- //-       li= val
   script(src="../resources/js/helpers.js")
   script(src="../js/nudges.js")

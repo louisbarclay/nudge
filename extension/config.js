@@ -1,7 +1,8 @@
 var config = {
-  'debug': true,
+  debug: true,
+  // 'apiEndpoint': 'http://localhost:3000/'
   'apiEndpoint': 'http://ec2-34-252-87-55.eu-west-1.compute.amazonaws.com:3000/'
-}
+};
 
 // http://ec2-34-252-87-55.eu-west-1.compute.amazonaws.com:3000/
 
@@ -9,14 +10,14 @@ var config = {
 debugMode = config.debug;
 
 if (debugMode) {
-  console.log('In debug mode - switch off before finishing');
+  console.log("In debug mode - switch off before finishing");
 } else {
-  console.log('In production - all logging is off');
-  console.log = function() {}
+  console.log("In production - all logging is off");
+  console.log = function() {};
 }
 
 function log(data) {
   if (debugMode) {
-    console.log(data)
+    console.log(data);
   }
 }

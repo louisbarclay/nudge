@@ -2,3 +2,14 @@
 
 .options-container
   +container($left: 200px, $width: 800px)
+
+.data-banner
+  background: $nudge-pink
+  flex-direction: column
+  ::before
+    +pseudo
+    width: 100%
+    background: blue
+
+.data-text
+  margin-bottom: 2em

@@ -3,40 +3,59 @@
 @import 'animations'
 
 .circle-container
+  @extend %reset
+  @extend %typography
   width: 100%
   position: static
   text-align: center
   top: 0
   background: blue
+  font-family: initial
 
 .circle-dropdown
+  margin-top: 0px
   width: 100px
-  height: 100px
-  position: relative
-  top: 0
-  +border
-  opacity: 0
+  height: auto
+  top: 0px
+  z-index: 1
+  +border($style: none)
   left: 0
+  opacity: 1
+  margin-right: 0.3em
+  margin-left: 0.3em
   background: $white
   +center
-  transition: all 0.2s
+  visibility: visible
+  opacity: 0
+  font-size: 12px
+
+  >div
+    margin-top: 0.2em
+    margin-bottom: 0.2em
+    display: block
 
 .circle-content
   visibility: visible
-  animation: circleTransition 1s forwards
   transition: all 1s
-  z-index: 15
+  z-index: 18
   top: 0
   margin: 0
-  padding: 0
-  opacity: 0.5
-  cursor: pointer
+  display: flex
+  opacity: 0.8
   pointer-events: auto
   width: 100%
-  height: 24px
-  background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo-color.svg') center 0px/20px no-repeat
-  filter: grayscale(0%)
+  height: 150px
+  transition: top 0.3s
+  background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/circleheavy.svg') center 0px/20px no-repeat
   &:hover
-    filter: grayscale(0%)
-    .circle-dropdown
+    border: 3px $white
+    top: 5px
+    ~.circle-dropdown
       opacity: 1
+
+.circle-link
+  font-size: 11px
+  cursor: pointer
+  color: $nudge-pink
+  ::hover
+    color: darken($nudge-pink, 10%)

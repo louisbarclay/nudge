@@ -1,13 +1,10 @@
 // Send message to player.js
 function messageSender(object) {
-  console.log(currentState.domain);
-  console.log(object);
+  var currentState = checkCurrentState();
   if (
     currentState.domain === notInChrome ||
-    currentState.domain === chromeOrTabIdle ||
-    currentState.domain === inChromeFalseDomain
+    currentState.domain === chromeOrTabIdle
   ) {
-    console.log("never sent");
     return;
   } else {
     chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(
@@ -24,7 +21,6 @@ function messageSender(object) {
                 object.time_executed = response.time_executed;
                 object.status = response.status;
                 object.tabId = tabs[0].id;
-                lastSuccessfulNudgeTime = response.time_executed; // TODO: this stuff is all too heavy. The handler below should cover it
                 nudgeLogger(object);
               } else if (object.send_fails < sendFailLimit) {
                 object.send_fails++;
@@ -38,6 +34,10 @@ function messageSender(object) {
             // If tab record is undefined, create it
             tabIdStorage[tabs[0].id].nudge = object;
             object.send_fails++;
+            if (object.send_fails > 3) {
+              tabIdStorage[tabs[0].id].nudge = false;
+              console.log("abort");
+            }
             // so...... load the tab ID with the nudge to come (the whole object!)
             // then the every-seconder asks the current selected tab if there is a nudge waiting, in which case it messageSends
           }
@@ -49,24 +49,38 @@ function messageSender(object) {
 
 // URL receiver from content script and init options giver
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  // Avoid sending a message to a tab that is part of the extension
+  var chromeTab = sender.tab.url.includes("chrome-extension:");
+  // Get settings
+  if (request.type === "settings") {
+    sendResponse({ settings: settingsLocal });
+  }
+  if (request.type === "get_localStorage") {
+    sendResponse({ localStorage });
+  }
+  if (request.type === "change_setting") {
+    changeSetting(
+      request.newVal,
+      request.setting,
+      request.domain,
+      request.domainSetting
+    );
+  }
   if (request.type === "event") {
-    console.log(request);
     eventLogReceiver(request);
   }
   if (request.type === "off") {
-    var domain = inDomainsSetting(sender.url);
-    if (domain) {
-      changeSetting("domains", domain, "off", true);
+    if (inDomainsSetting(sender.url)) {
+      changeSetting(true, "domains", request.domain, "off");
       switchOff(domain, sender.url, sender.tabId);
     }
   }
   if (request.type === "on") {
-    var domain = request.domain;
-    if (domain) {
+    if (request.domain) {
       var url = request.url;
       console.log(url);
-      changeSetting("domains", domain, "off", false);
-      switchOn(domain, request.url, sender.tabId);
+      changeSetting(false, "domains", request.domain, "off");
+      switchOn(request.domain, request.url, sender.tabId);
     }
   }
   if (
@@ -77,44 +91,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   ) {
     messageSender(request);
   }
-  if (request.type === "player_init") {
-    sendResponse({ domain: inDomainsSetting(request.url) });
-  }
   if (request.type === "options") {
     chrome.runtime.openOptionsPage();
-  }
-  if (request.type === "domains_add") {
-    changeSetting(true, "domains", request.domain, "add");
-    log(request);
-  }
-  if (request.type === "domains_remove") {
-    changeSetting(false, "domains", request.domain, "nudge");
-    log(request);
-  }
-  if (request.type === "fun_name") {
-    sendResponse({ name: randomGetter(funNames_init, funNames_current) });
-  }
-  var chromeTab = sender.tab.url.includes("chrome-extension:");
-  if (request.type === "inject_switch" && !chromeTab) {
-    chrome.tabs.executeScript(sender.tab.id, {
-      file: "resources/js/switch.js"
-    });
-    if (true) {
-      chrome.tabs.executeScript(sender.tab.id, {
-        file: "resources/js/debugger.js"
-      });
-    }
-  }
-  if (request.type === "inject_fbunfollow" && !chromeTab) {
-    chrome.tabs.executeScript(sender.tab.id, {
-      file: "resources/js/facebook/unfollow.js"
-    });
-  }
-  if (request.type === "inject_fbhide" && !chromeTab) {
-    chrome.tabs.insertCSS(sender.tab.id, {
-      file: "resources/css/fbtweaks.css",
-      runAt: "document_start"
-    });
   }
   if (request.type === "inject_tabidler" && !chromeTab) {
     chrome.tabs.executeScript(sender.tab.id, {

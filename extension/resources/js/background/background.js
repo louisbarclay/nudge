@@ -1,15 +1,8 @@
-// Copyright 2016, Nudge, All rights reserved.
+var reload = false;
 
-// // This gets added to localStorage and sent to server
-// history: [], // TODAY: shutdowns. nudgeShutdowns. time: 0, visits: 0,
-// // visits (array. time started. time (length). number, in the day that is)
-// last_shutdown: 0,
-// last_compulsive: 0,
-// last_nudge: 0,
-// secondsIn: 0
-// "outOfWindow", // don't put here? create for first time when running domain stuff?
-// "idle", // don't put here? create for first time when running domain stuff?
-// 'notDomain' + random hash? eventually?
+initialise();
+
+setInterval(everySecond, 1000);
 
 // TODO: need security around this!
 function initialise() {
@@ -23,8 +16,7 @@ function initialise() {
       syncStorageClear();
       storageSet(
         {
-          settings: initSettings(),
-          journey: { hasSeenTour: false }
+          settings: initSettings()
         },
         syncSettingsLocal
       );
@@ -36,80 +28,123 @@ function initialise() {
   });
 }
 
-initialise();
+// Set the initial currentState
+function checkCurrentState() {
+  var initialState = {
+    domain: false,
+    source: "initial",
+    time: moment(),
+    lastEverySecond: moment()
+  };
+  var statusObj = open("status");
+  if (!keyDefined(statusObj, "currentState")) {
+    dataAdder(statusObj, "currentState", initialState);
+  } else {
+    // Only if any tabs exist
+    if (statusObj.currentState.domain !== notInChrome) {
+      statusObj.currentState.lastEverySecond = moment();
+    }
+  }
+  close("status", statusObj);
+  return statusObj.currentState;
+}
 
 // Add to timeline on window in and window out
-setInterval(everySecond, 1000);
 
-// receptors on each of the js files. they say 'these are options i care about'. and they say 'this is my domain. if you change it, i need to know'
-// for control
+var testState = {
+  domain: "facebook.com",
+  source: "initial",
+  lastEverySecond: moment(),
+  time: moment()
+    .add(-1, "days")
+    .toString()
+};
 
-// TODO: if you hit switch off: also switch off all other instances of that domain?
+var testCounter = 0;
 
-// init:
-// check if there is a username in sync settings (user: )
-// if not, clear all settings; then set defaults. one time operation here. apologise?
-// if yes, update with values from sync
+function timeline(domain, source, timeOverride, callback) {
+  // Open status to look at currentState
+  var s = open("status");
+  // Test counter at 2. currentState constant for first call, then for second, after which it can be changed
+  // if (testCounter < 2) {
+  //   s.currentState = testState;
+  //   testCounter++;
+  // }
+  var newS = timelineObject(domain, source);
+  // Override time if needed
+  if (notUndefined(timeOverride)) {
+    newS.time = timeOverride;
+  }
 
-// set defaults:
-// grab all domains. forEach domain sync.storage object (name is that domain). isOff, isNudged, etc. properties.
+  // If it's a current day splitter, take currentState time as start of newS day
+  if (source === "dateSplit_currentDay") {
+    s.currentState.time = moment(newS.time).startOf("day");
+  }
 
-// change option
-// always receive from somewhere
-// tell chrome.sync to change
-// send message out to everywhere saying it's changed
-//
-
-// option to set all domains to off in one go
-// make the switch back on thing harder?
-
-// STUFF TO PASS INFO ON:
-// number of facebook friends - each day. no. of friends and friends followed. or something.
-// that stuff you know.
-// you'll be able to see for existing users whether they 'probably' used the unfollow everything feature.
-// you'll be able to see people's daily interactions with the app (if they even have it switched on)
-// worth getting the info on how many friends people are currently following.
-
-// TODO: in case someone changes settings (actually don't believe this is necessary)
-// 1. have a thing in each domaindata to say last visit nudged etc.
-// 2. check that you're definitely > last visit nudged etc.
-// 3. make sure that you're at least X where X is the interval setting from last visit nudged
-// 4. think that's it!
-
-// Need to simulate day-switching to see what happens
-
-// just find the domain. is there the current date there? new Date().toLocaleDateString(); if not, set it, add first value. if yes
-// grab it, add onto it, set it again. straight in the stuff though eh.
-
-// Set the initial currentState
-var currentState = new timelineObject(false, "initial");
-
-// initial timelineadder
-
-// Lots of places will do a timelineAdder and they all come together, with extra jobs (see in function) depending on what
-// change so that you ask what domain is. if false you do a domainvisitupdater for a $inChromeFalseDomain
-// if true you ask if $notInChrome or $idle
-// you have all the info here that you need. you even have source
-
-// but those operate as safeguards
-
-function timeline(domain, source) {
-  console.log(domain, source);
-  // if currentState.time is not the same day as today
-  // does the date now exist?
-  // If your timeline event has same domain as before, you do nothing
-  if (currentState.domain === domain) {
+  // If there is a gap, do a gap
+  if (
+    moment(newS.time).diff(moment(s.currentState.lastEverySecond), "seconds") >
+      2 &&
+    // Prevent gap recursion
+    !source.includes("gap")
+  ) {
+    // Check whether there is a gap where everySecond didn't ping
+    // New retro-active event
+    timeline(
+      notInChrome,
+      source + " gap",
+      s.currentState.lastEverySecond,
+      function() {
+        // Original event
+        timeline(domain, source + " gap");
+      }
+    );
     return;
-    // If your timeline event has different domain to before... UNLESS YOU ARE ON A DIFFERENT DAY! does this mean needing to keep currentState in memory?
+  }
+
+  // Check whether dates match
+  // If they don't, we close off the previous date (and send it to the cloud, taking what we need!)
+  if (
+    moment(s.currentState.time).format("YYYY-MM-DD") !==
+      moment(newS.time).format("YYYY-MM-DD") &&
+    // Safety feature to stop recursion
+    !source.includes("dateSplit")
+  ) {
+    timeline(
+      domain,
+      "dateSplit_previousDay",
+      moment(s.currentState.time).endOf("day"),
+      function() {
+        timeline(domain, "dateSplit_currentDay");
+      }
+    );
+    return;
+  }
+
+  // If previous domain is same as current domain, don't do anything - unless day has changed
+  if (
+    s.currentState.domain === domain &&
+    source !== "dateSplit_previousDay" &&
+    source !== "dateSplit_currentDay"
+  ) {
+    // Do nothing
   } else {
     // First, create new variable lastState, which is what we had before the changes we're about to make
-    var lastState = currentState;
-    currentState = timelineObject(domain, source);
+    var lastState = s.currentState;
+    s.currentState = newS;
     // Update time (close off visit)
-    domainTimeUpdater(lastState.domain, lastState.time, currentState.time, source);
+    domainTimeUpdater(
+      lastState.domain,
+      moment(lastState.time),
+      s.currentState.time,
+      source
+    );
     // Update visit
-    domainVisitUpdater(domain, currentState.time, source);
-    return;
+    domainVisitUpdater(domain, newS.time, source);
+  }
+  close("status", s);
+  if (callback) {
+    callback();
   }
 }
 

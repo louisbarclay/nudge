@@ -4,46 +4,70 @@ var id_button = document.getElementById("id");
 var domains = {};
 var facebookNotif = document.getElementById("facebookNotif");
 
-console.log(facebookNotif.childNodes[1].childNodes);
+getSettings(setSettings);
 
-change('facebookNotif');
+var settingsLocal = {};
 
-function change(id) {
-  var div = document.getElementById(id);
-  var button = div.childNodes[1];
-  var left = button.childNodes[0];
-  var right = button.childNodes[1];
-  button.onclick = function() {
-    toggleClass(left, "on");
-    toggleClass(right, "on");
-    console.log('change option here');
-    confirmSave();
-  };
+function setSettings(settings) {
+  settingsLocal = settings;
+  populateDomains(settings.domains);
+  populateBooleans(settings);
+  id_button.innerHTML = settings.userId;
 }
 
-syncSettingsGet(populateDomains);
-
-function confirmSave(element) {
-  console.log("setting saved");
-}
-
-function populateDomains(item) {
-  console.log(item);
-  domains = item.settings.domains;
+function populateDomains(domains) {
   Object.keys(domains).forEach(function(key) {
     if (domains[key].nudge) {
       addLi(key);
     }
   });
-  var id = item.settings.userId;
-  id_button.innerHTML = id;
+}
+
+function populateBooleans(settings) {
+  var booleans = document.getElementsByClassName("boolean");
+  Array.from(booleans).forEach(function(item) {
+    if (keyDefined(settings, item.id)) {
+      handleBoolean(item.id);
+      // If not already on the right setting, change it
+      if (!settings[item.id]) {
+        toggleBoolean(item.id);
+      }
+    }
+  });
+}
+
+function handleBoolean(id) {
+  var div = document.getElementById(id);
+  var button = div.childNodes[1];
+  button.onclick = function() {
+    toggleBoolean(id);
+    changeSettingRequest("toggle", id);
+  };
+}
+
+function toggleBoolean(id) {
+  var div = document.getElementById(id);
+  var button = div.childNodes[1];
+  var left = button.childNodes[0];
+  var right = button.childNodes[1];
+  toggleClass(left, "on");
+  toggleClass(right, "on");
 }
 
 addDomain.addEventListener("keydown", function(event) {
   if (event.key === "Enter") {
     var newDomain = addDomain.value;
-    addLi(newDomain);
-    addDomain.value = "";
+    var domainCheck = new RegExp(
+      "^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9])).([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}.[a-zA-Z]{2,3})(/(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,200}[a-zA-Z0-9]))?)?(/)?$"
+    );
+    // Regex check
+    if (domainCheck.test(newDomain)) {
+      addLi(newDomain);
+      changeSettingRequest(true, "domains", newDomain, "add");
+      addDomain.value = "";
+    } else {
+      console.log("wrong format");
+    }
   }
 });
 
@@ -59,8 +83,7 @@ function addLi(domain) {
 function removeDomainOnClick(li, domain) {
   li.onclick = function() {
     deleteEl(li);
-    sendMessage("domains_remove", { domain });
-    confirmSave();
+    changeSettingRequest(false, "domains", domain, "nudge");
   };
 }
 

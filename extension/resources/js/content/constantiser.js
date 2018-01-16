@@ -1,7 +1,7 @@
 var currentScript = document.currentScript;
 var domain = currentScript.getAttribute("data-domain");
 
-function constantiseTitle(newTitle) {
+function constantiser(newTitle) {
   if (newTitle) {
     document.getElementsByTagName("title")[0].remove();
     document.title = newTitle;
@@ -11,6 +11,13 @@ function constantiseTitle(newTitle) {
       writable: false,
       value: document.title
     });
+    var iconArray = ["link[rel*='shortcut icon']", "link[rel*='icon']"];
+    for (var i = 0; i < iconArray.length; i++) {
+      var element = document.querySelector(iconArray[i]);
+      if (element) {
+        element.remove();
+      }
+    }
   }
 }
 
@@ -27,9 +34,10 @@ function domainTranslate(domain) {
   if (domain === "mail.google.com") {
     return "Gmail";
   }
+  if (domain === "linkedin.com") {
+    return "LinkedIn";
+  }
   return false;
 }
 
-constantiseTitle(domainTranslate(domain));
-
-// https://static.xx.fbcdn.net/rsrc.php/y7/r/O6n_HQxozp9.ico
+constantiser(domainTranslate(domain));

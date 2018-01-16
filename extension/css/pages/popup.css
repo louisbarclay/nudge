@@ -1,0 +1,312 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans");
+@import url("https://fonts.googleapis.com/css?family=Open+Sans");
+@keyframes background-move {
+  0% {
+    background-position: 17% 0%; }
+  50% {
+    background-position: 84% 100%; }
+  100% {
+    background-position: 17% 0%; } }
+.call-out * {
+  border: 0;
+  bottom: initial;
+  box-sizing: content-box;
+  font: inherit;
+  font-size: 100%;
+  font-family: inherit;
+  left: initial;
+  margin: 0;
+  padding: 0;
+  position: initial;
+  right: initial;
+  top: initial;
+  vertical-align: baseline;
+  display: initial; }
+
+body * {
+  font-family: "Open Sans";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: normal; }
+body a {
+  text-decoration: none;
+  color: initial; }
+  body a:hover {
+    color: #ff61a7; }
+
+.toggle, .popup-button {
+  background: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  box-shadow: none;
+  color: #bdbdbd;
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  padding: 0.3333333333em 0.8333333333em 0.3333333333em 0.8333333333em;
+  transition: all 0.2s; }
+  .toggle:hover, .popup-button:hover {
+    box-shadow: none;
+    color: #ffffff;
+    border-color: transparent;
+    background: #bdbdbd;
+    box-shadow: none; }
+
+.arrow {
+  border-left: 1px solid #a9a9a9;
+  border-top: 1px solid #a9a9a9;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 12px;
+  height: 4em;
+  left: 20px;
+  margin-top: -2em;
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  transform: rotate(-135deg);
+  width: 4em; }
+
+.toggle {
+  color: #bdbdbd;
+  display: flex;
+  padding: 0; }
+  .toggle .left {
+    padding: 0.3333333333em 0.8333333333em 0.3333333333em 0.8333333333em;
+    color: inherit; }
+  .toggle .right {
+    padding: 0.3333333333em 0.8333333333em 0.3333333333em 0.8333333333em;
+    color: inherit; }
+  .toggle .on {
+    background: #bdbdbd;
+    background-clip: border-box;
+    color: #ffffff; }
+  .toggle:hover {
+    background: inherit;
+    border-color: #6d6d6d;
+    color: #6d6d6d; }
+    .toggle:hover .on {
+      background: #6d6d6d;
+      color: #ffffff; }
+
+.tags li {
+  border: 1px none #bdbdbd;
+  border-radius: 4px;
+  display: flex;
+  padding-right: 1em;
+  float: left;
+  height: 2em;
+  line-height: 2em;
+  position: relative;
+  color: #ffffff;
+  font-size: 0.8571428571em;
+  background-color: #bdbdbd;
+  margin-right: 0.5em;
+  margin-bottom: 0.5em; }
+  .tags li::before {
+    content: "";
+    margin: auto 0.3333333333em auto 0.3333333333em;
+    width: 1.3333333333em;
+    height: 1.3333333333em;
+    z-index: 0; }
+  .tags li::before {
+    filter: grayscale(100%);
+    opacity: 0.5;
+    border-radius: 2px;
+    background-repeat: no-repeat;
+    background-position: center center; }
+  .tags li:hover {
+    background: none;
+    cursor: pointer; }
+    .tags li:hover::after {
+      content: "";
+      display: block;
+      position: absolute;
+      animation: background-move 15s ease infinite;
+      background: linear-gradient(145deg, #61a7ff, #ff61a7);
+      background-size: 400% 400%;
+      border-color: transparent;
+      border-radius: inherit;
+      color: #ffffff;
+      content: "Remove";
+      height: 100%;
+      left: 0;
+      text-align: center;
+      top: 0;
+      width: 100%;
+      z-index: 1; }
+
+.text-input input {
+  border-bottom: 1px solid #bdbdbd;
+  border-bottom-color: #bdbdbd;
+  left: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0.3333333333em 0;
+  position: relative;
+  width: 20em; }
+  .text-input input::placeholder {
+    color: #bdbdbd; }
+  .text-input input:focus {
+    border-bottom: 1px solid #bdbdbd; }
+
+.call-out {
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  padding: 0.3333333333em 0.8333333333em 0.3333333333em 0.8333333333em;
+  width: 500px; }
+  .call-out:before {
+    content: "";
+    position: absolute;
+    top: calc(100% - 0.5em);
+    left: 1em;
+    height: 1em;
+    width: 1em;
+    background: #ffffff;
+    transform: rotate(45deg);
+    border-bottom: inherit;
+    border-right: inherit;
+    box-shadow: inherit; }
+
+.slider {
+  width: 100%;
+  height: 5em;
+  margin-top: 10em;
+  border-radius: 6em;
+  text-align: center;
+  background: #f7f7f7; }
+
+.button {
+  position: relative;
+  height: 5em;
+  width: 5em;
+  box-sizing: border-box;
+  top: 0;
+  left: 0;
+  border-radius: 2.5em;
+  cursor: pointer;
+  user-select: none;
+  backface-visibility: hidden;
+  perspective: 1000; }
+
+.slider-text {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1.4em; }
+
+.button-centre {
+  position: relative;
+  margin: auto;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 4.3571428571em;
+  width: 4.3571428571em;
+  background-color: #ededed;
+  border-radius: 2.5em;
+  transition: background-color 0.2s ease;
+  backface-visibility: hidden;
+  perspective: 1000; }
+  .button-centre:hover {
+    background: #e5e5e5; }
+  .button-centre:active {
+    background: #bdbdbd; }
+
+.returning {
+  transition: all 0.2s ease; }
+
+.header {
+  border-bottom: 1px solid #bdbdbd; }
+
+.header-line::after {
+  content: "";
+  display: block;
+  position: absolute;
+  background: red;
+  width: 10px;
+  height: 10px;
+  z-index: -1; }
+
+.leftPara {
+  flex-basis: 50%;
+  display: block;
+  padding-right: 15px; }
+
+.rightImage {
+  flex-basis: 50%;
+  height: 200px;
+  background: #bdbdbd; }
+
+.paraImage {
+  border-bottom: solid 1px;
+  height: 90vh;
+  width: 100vw;
+  background-color: yellow;
+  align-items: flex-start; }
+
+.space-out > * {
+  margin-top: 100px; }
+
+textarea,
+input {
+  outline: none;
+  border: 0; }
+
+body, p {
+  padding: 0;
+  margin: 0; }
+
+ul {
+  padding: 0; }
+
+li {
+  list-style: none; }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 400; }
+
+body {
+  width: 300px;
+  height: 300px;
+  margin: 5px;
+  padding: 5px; }
+
+.popup-container {
+  position: absolute;
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  top: 0;
+  width: 300px;
+  min-width: 300px;
+  height: 300px; }
+  .popup-container > div {
+    align-items: baseline;
+    align-self: stretch;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px; }
+  .popup-container > div {
+    margin: auto;
+    background: red; }
+
+.popup-button {
+  border: 1px none #bdbdbd;
+  border-radius: 4px;
+  background: #61a7ff;
+  color: #ffffff; }
+  .popup-button:hover {
+    background: #2e8bff; }

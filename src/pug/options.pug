@@ -5,31 +5,42 @@ html
   body
     div.options-container
       div.options-logo
-        h1 Options
+        h1 Options DO YOU MIND GIVING ME YOUR DATA?
+        span u can get back 2 this screen by clicking on Nudge icon and clicking thing thing
       div.header
+      div.data-banner
+        h1 Welcome to Nudge
+        div.data-text Thanks for installing the beta version of Nudge. This is where you can find options for Nudge,   . You can always come back here by right-clicking on the Nudge icon in the top bar and choosing 'Options'.
+          p I really want your feedback to make Nudge better, so email me directly on feedback@nudgeware.io with any thoughts.
+          p First and foremost though, I want to tell you about Nudge's use of data
+        button.toggle
+          div.left.on I'm OK with Nudge seeing this data
+          div.right I'd rather not share my data with Nudge
       span.small-caps Your Nudge domains
       div
         div Add a domain
         ul.text-input
           li
-            input#addDomain(type='text' placeholder='likethis.com' onblur="this.placeholder = 'likethis.com'" onfocus="this.placeholder = ''") 
+            input#addDomain(type='text' placeholder='likethis.com') 
       ul.tags#domainList
       span.small-caps Other options
       mixin optionBoolean(name, divId)
-        div(id=divId)
+        div.boolean(id=divId)
           div=name
           button.toggle
             div.left.on Yes
             div.right No
       +optionBoolean('Get rid of Facebook notifications', 'facebookNotif')
-      +optionBoolean('Take notification numbers out of page titles')
-      +optionBoolean('Show Facebook unfollow')
+      +optionBoolean('Take notification numbers out of page titles', 'constantise')
+      +optionBoolean('Auto-unfollow new friends, pages and groups', 'fb_auto_unfollow')
+      +optionBoolean('Show Facebook unfollow', 'fb_show_unfollow')
       +optionBoolean('Switch off Nudge domains by default')
       +optionBoolean('Keep page favicons from showing red icons')
       span.small-caps Nudge ID
       p your Nudge ID is
       div#id
       p Keep it safe if you are participating in a Nudge study.
+  script(src="../config.js")
   script(src="../resources/js/background/storage.js")
   script(src="../resources/js/helpers.js")
   script(src="../js/options.js")

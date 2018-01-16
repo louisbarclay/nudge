@@ -1,18 +1,18 @@
 function open(key) {
-  checkExistsInLocalStorage(key);
-  return localStorageOpenItem(key);
-}
-
-function close(key, data) {
-  data = JSON.stringify(data);
-  localStorage.setItem(key, data);
-}
-
-function checkExistsInLocalStorage(key) {
+  var localStorageObject = {};
   if (keyDefined(localStorage, key)) {
-  } else {
-    close(key, {});
+    localStorageObject = JSON.parse(localStorage[key]);
   }
+  return localStorageObject;
+}
+
+function read(key) {
+  return JSON.parse(localStorage[key]);
+}
+
+function close(key, object) {
+  object = JSON.stringify(object);
+  localStorage.setItem(key, object);
 }
 
 // Helper to add key if doesn't exist
@@ -52,38 +52,6 @@ function flushToTabIdStorage() {
       };
     }
   });
-}
-
-// Download storage item
-function syncSettingsGet(callback) {
-  chrome.storage.sync.get("settings", function(item) {
-    callback(item);
-  });
-}
-
-function changeSetting(newSetting, setting, domain, domainSetting) {
-  try {
-    if (domain && domainSetting) {
-      if (domainSetting === "add") {
-        settingsLocal[setting][domain] = defaultDomainInfo;
-      } else {
-        settingsLocal[setting][domain][domainSetting] = newSetting;
-      }
-    } else if (domain) {
-      log("Error which should never happen");
-    } else {
-      settingsLocal[setting] = newSetting;
-    }
-    // Whatever has happened, sync settingsLocal and show new sync settings in log
-    storageSet({ settings: settingsLocal }, s);
-  } catch (e) {
-    console.log(e);
-  }
-  // send out settingsLocal? yes. and every single js has a receiver waiting for it
-}
-
-function syncSettingsPeriodically(settingsLocal) {
-  // just run this every whenever to make sure you're syncing up?
 }
 
 // Show local storage
@@ -129,12 +97,49 @@ flushToTabIdStorage();
 
 function localStorageCheckSize() {}
 
-function localStorageOpenItem(key) {
-  localStorageCheckSize();
-  // Check size of localStorage and send to server - everything but today - (clear from localStorage) if getting too large. at some sensible limit
-  return JSON.parse(localStorage[key]);
-}
-
 function localStorageClear() {
   localStorage.clear();
 }
+
+// every day, look at old localStorage info. delete it. and send it to the server if that is allowed.
+
+// // This gets added to localStorage and sent to server
+// history: [], // TODAY: shutdowns. nudgeShutdowns. time: 0, visits: 0,
+// // visits (array. time started. time (length). number, in the day that is)
+// last_shutdown: 0,
+// last_compulsive: 0,
+// last_nudge: 0,
+// secondsIn: 0
+// "outOfWindow", // don't put here? create for first time when running domain stuff?
+// "idle", // don't put here? create for first time when running domain stuff?
+// 'notDomain' + random hash? eventually?
+
+function sendData(userId, data) {
+  var dataToBeSent = {
+    "userId": userId,
+    "data": data
+  };
+  dataToBeSent = JSON.stringify(dataToBeSent);
+  var request = new XMLHttpRequest();
+  console.log(config.apiEndpoint);
+  request.open("POST", config.apiEndpoint + "user", true);
+  console.log(request);
+  request.setRequestHeader(
+    "Content-Type",
+    "application/json"
+  );
+  request.send(dataToBeSent);
+  console.log(dataToBeSent);
+  request.onreadystatechange = function() {
+    console.log(this.readyState, this.status);
+  };
+}
+
+var obj1 = {
+  this: "is",
+  fucking: "sick"
+};
+
+// sendData('db18458e2782b2b77e36769c569e263a53885a9944dd0a861e5064eac16f1a', obj1);
+
+// settings stuff should all just go through one message thing

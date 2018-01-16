@@ -4,6 +4,7 @@ function everySecond() {
   // Run the counter on the current domain
   domainTimeNudger();
   // Don't do anything else if currently idle
+  var currentState = checkCurrentState();
   if (currentState.domain === chromeOrTabIdle) {
     return;
   }
@@ -68,9 +69,10 @@ function onTabIdle(status, domain) {
 // Creates a timeline event (or object, same thing)
 function timelineObject(domain, source) {
   return {
-    time: timeNow(),
+    time: moment(),
     domain: domain,
-    source: source
+    source: source,
+    lastEverySecond: moment()
   };
 }
 
@@ -97,27 +99,7 @@ chrome.tabs.onRemoved.addListener(function(tabId) {
     if (domain) {
       chrome.tabs.query({}, function(tabs) {
         if (tabsChecker(tabs, domain)) {
-          var statusObj = open("status");
-          var time = timeNow();
-          dataAdder(statusObj, domain, time, "lastShutdown");
-          if (settingsLocal[domain].offByDefault) {
-            changeSetting(true, "domains", domain, "off");
-          }
-          console.log(JSON.parse(localStorage["status"])[domain]);
-          // Find out whether the domain has been nudged recently
-          var nudged = false;
-          if (
-            keyDefined(statusObj, domain) &&
-            keyDefined(statusObj[domain], "lastNudged")
-          ) {
-            // untested
-            var timeSinceLastNudged = time - statusObj[domain];
-            if (timeSinceLastNudged < 60000) {
-              nudged = true;
-            }
-          }
-          eventLog(domain, "shutdown", { nudged });
-          close("status", statusObj);
+          // TODO: If removed, if no tabs of domain left, if wasn't active at the time, last visit of domain should be shutdown time
         }
       });
     }
@@ -170,6 +152,7 @@ chrome.idle.onStateChanged.addListener(function(newState) {
 
 // Add to timeline onActivated
 chrome.tabs.onActivated.addListener(function(activatedTab) {
+  console.log(activatedTab);
   if (typeof activatedTab == "undefined") {
     return;
   }
@@ -204,13 +187,11 @@ chrome.tabs.onCreated.addListener(function(tab) {
 // Update URL in tabIdStorage
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   var domain = inDomainsSetting(tab.url);
-  if (domain in settingsLocal.domains &&
-    settingsLocal.domains[domain]["off"]
-  ) {
-    var lastShutdown = open("status")[domain].lastShutdown;
-    var date = todayDate();
-    var timeToday = open(date)[domain].time;
-    switchOff(domain, tab.url, tabId, lastShutdown, timeToday);
+  var switchedOff = false;
+  if (domain in settingsLocal.domains && settingsLocal.domains[domain]["off"]) {
+    var date = moment().format("YYYY-MM-DD");
+    switchOff(domain, tab.url, tabId);
+    domain = false;
   }
   // Update record in tabIdStorage
   if (typeof tabIdStorage[tabId] === "undefined") {
@@ -228,7 +209,8 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
       }
     });
   }
-  // For sending favicon URL
+
+  // Send favicon URL
   if (
     domain &&
     typeof changeInfo.favIconUrl !== "undefined" &&

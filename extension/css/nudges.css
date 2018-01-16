@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans");
 @keyframes pulse-shadow {
   0% {
     box-shadow: 0 0 0 0 #61a7ff; }
@@ -47,177 +48,165 @@
     background-position: 84% 100%; }
   100% {
     background-position: 17% 0%; } }
-.nudge-wrapper * {
+#nudge * {
   border: 0;
   bottom: initial;
-  box-sizing: initial;
+  box-sizing: content-box;
   font: inherit;
   font-size: 100%;
+  font-family: inherit;
   left: initial;
   margin: 0;
   padding: 0;
   position: initial;
   right: initial;
   top: initial;
-  vertical-align: baseline; }
+  vertical-align: baseline;
+  display: initial; }
 
-.nudge-wrapper * {
-  color: #bdbdbd;
+#nudge #nudge-container * {
   font-family: "Open Sans";
-  -webkit-font-smoothing: antialiased; }
-.nudge-wrapper a {
-  text-transform: none;
-  pointer: cursor; }
-.nudge-wrapper .small {
-  font-size: 12px; }
-.nudge-wrapper h1 {
-  font-size: 1.5714285714rem;
-  color: #6d6d6d; }
-.nudge-wrapper .small-caps {
-  text-transform: uppercase;
-  font-size: 0.8571428571rem;
-  color: #6d6d6d; }
-.nudge-wrapper h2 {
-  font-weight: 400;
-  font-size: 1.1428571429rem;
-  color: #6d6d6d; }
-.nudge-wrapper p {
-  font-size: 1rem; }
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: normal; }
+#nudge #nudge-container a {
+  text-decoration: none;
+  color: initial; }
+  #nudge #nudge-container a:hover {
+    color: #ff61a7; }
 
-.nudge-container {
-  position: absolute;
-  align-items: flex-start;
-  display: flex;
-  flex-direction: column;
-  left: 20px;
-  top: 20px;
-  width: auto;
-  min-width: 300px;
-  height: auto;
-  animation: fade-in-left 0.3s;
-  z-index: 2147483647; }
-  .nudge-container > div {
-    align-items: baseline;
-    align-self: stretch;
+#nudge {
+  display: block; }
+  #nudge #nudge-container {
+    position: absolute;
+    align-items: flex-start;
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.4em; }
-  .nudge-container > div {
-    align-self: flex-start; }
-  .nudge-container .nudge-menu, .nudge-container .nudge-main, .nudge-container .nudge-banner {
-    display: none;
-    animation: fade-in-left 0.3s; }
-  .nudge-container .nudge-main, .nudge-container .nudge-banner {
-    display: flex; }
-  .nudge-container:hover > div {
-    opacity: 1; }
-  .nudge-container:hover .nudge-menu, .nudge-container:hover .nudge-main, .nudge-container:hover .nudge-banner {
-    display: flex; }
-  .nudge-container:hover .nudge-highlight, .nudge-container:hover .nudge-favicon {
+    flex-direction: column;
+    left: -5px;
+    top: -5px;
+    width: auto;
+    min-width: 300px;
+    position: fixed;
+    height: auto;
+    font-size: 16px;
+    animation: fade-in 0.3s;
+    z-index: 2147483647; }
+    #nudge #nudge-container > div {
+      align-items: baseline;
+      align-self: stretch;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.4em; }
+    #nudge #nudge-container > div {
+      align-self: flex-start; }
+    #nudge #nudge-containermenu > div {
+      display: block;
+      animation: fade-in 0.3s; }
+  #nudge #nudge-main {
+    display: flex;
+    border: 1px solid #bdbdbd;
+    border-radius: 4px;
+    padding: 0.3333333333em 0.8333333333em 0.3333333333em 0;
+    padding-bottom: 0.15em;
+    padding-right: 0.5em;
+    backface-visibility: hidden;
+    perspective: 1000;
+    background: #ffffff;
+    color: #6d6d6d;
+    font-size: 17px;
+    flex-direction: row;
+    margin-bottom: 0.5em;
+    opacity: 1;
+    align-items: baseline; }
+    #nudge #nudge-main::before {
+      content: "";
+      margin: auto 0.3em auto 0.3em;
+      width: 1.2em;
+      height: 1.2em;
+      z-index: 0; }
+    #nudge #nudge-main p {
+      padding: 0 0 0.1em 0;
+      align-self: center; }
+    #nudge #nudge-main * {
+      cursor: default;
+      user-select: none; }
+    #nudge #nudge-main::before {
+      background: url("chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo-color.svg") center center/1.2em no-repeat;
+      border-right: 1px solid #bdbdbd;
+      border-color: #ededed;
+      margin-left: 0;
+      padding-right: 1em; }
+  #nudge #nudge-menu {
+    border: 1px none #bdbdbd;
+    border-radius: 4px;
+    padding: 0.3333333333em 0.8333333333em 0.3333333333em 0.8333333333em;
     animation: none;
-    background: #61a7ff; }
-
-.nudge-pulse {
-  animation: pulse-shadow--onboarding 2s infinite; }
-
-.nudge-menu, .nudge-main, .nudge-banner {
-  border: 1px none #bdbdbd;
-  border-radius: 4px;
-  padding: 0.3333333333em 0.8333333333em 0.3333333333em 0.8333333333em;
-  animation: none;
-  background: #ededed;
-  cursor: pointer;
-  font-size: 13px;
-  margin-bottom: 0;
-  opacity: 0;
-  vertical-align: middle; }
-  .nudge-menu:hover, .nudge-main:hover, .nudge-banner:hover {
-    background: #bdbdbd;
-    color: #ffffff; }
-
-.nudge-switch {
-  opacity: 0;
-  width: 3.2em;
-  height: 3.2em;
-  background: url("chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/offswitch.svg") center 0.35em/2.2em no-repeat #6d6d6d;
-  border-radius: 1.8em;
-  position: absolute;
-  bottom: 0;
-  right: 0; }
-
-.nudge-main, .nudge-banner {
-  border: 1px solid #ededed;
-  border-radius: 4px;
-  padding: 0.3333333333em 0.8333333333em 0.3333333333em 0;
-  backface-visibility: hidden;
-  perspective: 1000;
-  background: #ffffff;
-  color: #4f4f4f;
-  font-size: 20px;
-  margin-bottom: 0.5em;
-  opacity: 1; }
-  .nudge-main::before, .nudge-banner::before {
-    content: "";
-    margin: auto 0.3em auto 0.3em;
-    width: 1.2em;
-    height: 1.2em;
-    z-index: 0; }
-  .nudge-main::before, .nudge-banner::before {
-    background: url("chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo-color.svg") center center/1.2em no-repeat;
-    border-right: 1px solid #bdbdbd;
-    border-color: #ededed;
-    margin-left: 0;
-    padding-right: 1em; }
-  .nudge-main:hover, .nudge-banner:hover {
-    background-color: #ededed; }
-    .nudge-main:hover::before, .nudge-banner:hover::before {
-      border-color: #bdbdbd; }
-
-.nudge-highlight, .nudge-favicon {
-  background: #bdbdbd;
-  color: #ffffff;
-  border: 1px none #bdbdbd;
-  border-radius: 4px;
-  padding: 0em 0.3em 0.1em 0.3em;
-  margin-left: 0.3em;
-  margin-right: 0.3em;
-  animation: pulse-background 1s infinite;
-  transition: transform 2s ease; }
-
-.nudge-favicon {
-  background: url("https://static.xx.fbcdn.net/rsrc.php/y7/r/O6n_HQxozp9.ico") center center/32px no-repeat;
-  animation: none;
-  height: 1.2em;
-  width: 0.7em;
-  align-self: center; }
-
-.nudge-banner {
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%, 0%);
-  bottom: 0; }
-
-.nudge-scale {
-  padding-left: 1em;
-  text-indent: -1em; }
-  .nudge-scale li {
-    padding: 0 0 0 2em;
-    font-size: 0.8571428571rem;
-    width: 1em;
-    height: 1cm; }
-    .nudge-scale li::before {
-      content: "";
-      display: block;
-      position: absolute;
-      left: 0;
-      padding: 0.75em 0 0 0;
+    background: #ffffff;
+    cursor: pointer;
+    font-size: 13px;
+    margin-bottom: 0;
+    align-items: center;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.25); }
+    #nudge #nudge-menu:hover {
+      background: #d4d4d4; }
+  #nudge #nudge-switch {
+    opacity: 0;
+    width: 3.2em;
+    height: 3.2em;
+    background: url("chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/offswitch.svg") center 0.35em/2.2em no-repeat #6d6d6d;
+    border-radius: 1.8em;
+    position: absolute;
+    bottom: 0;
+    right: 0; }
+    #nudge #nudge-switch:hover {
+      background-color: #ededed; }
+      #nudge #nudge-switch:hover::before {
+        border-color: #bdbdbd; }
+  #nudge #nudge-highlight {
+    background: #61a7ff;
+    color: #ffffff;
+    border: 1px none #bdbdbd;
+    border-radius: 4px;
+    padding: 0em 0.3em 0.1em 0.3em;
+    margin-left: 0.3em;
+    margin-right: 0.3em;
+    align-self: center; }
+  #nudge #nudge-favicon {
+    animation: none;
+    width: 32px;
+    height: 32px;
+    align-self: center;
+    padding: 0;
+    border: 1px none #bdbdbd;
+    border-radius: 4px;
+    margin-left: 0.3em;
+    margin-right: 0.3em; }
+  #nudge #nudge-banner {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    bottom: 0; }
+  #nudge #nudge-scale {
+    padding-left: 1em;
+    text-indent: -1em; }
+    #nudge #nudge-scale li {
+      padding: 0 0 0 2em;
+      font-size: 0.8571428571em;
       width: 1em;
-      border-bottom: 1px solid #bdbdbd; }
-    .nudge-scale li::after {
-      content: "";
-      display: block;
-      position: absolute;
-      left: 0;
-      padding: 0.75em 0 0 0;
-      width: 0.25em;
-      border-bottom: 1px solid #bdbdbd; }
+      height: 1cm; }
+      #nudge #nudge-scale li::before {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 0;
+        padding: 0.75em 0 0 0;
+        width: 1em;
+        border-bottom: 1px solid #bdbdbd; }
+      #nudge #nudge-scale li::after {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 0;
+        padding: 0.75em 0 0 0;
+        width: 0.25em;
+        border-bottom: 1px solid #bdbdbd; }

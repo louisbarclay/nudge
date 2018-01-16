@@ -46,11 +46,12 @@
   "version": "1.0.10",
   "background": {
     "scripts": [
+      "resources/js/vendor/moment.min.js",
       "config.js",
       "resources/js/helpers.js",
       "resources/js/background/storage.js",
       "resources/js/background/logger.js",
-      "resources/js/background/events.js",
+      "resources/js/background/listeners.js",
       "resources/js/background/messager.js",
       "resources/js/background/nudger-recorder.js",
       "resources/js/background/settings.js",
@@ -64,28 +65,22 @@
     {
       "matches": ["<all_urls>"],
       "js": [
+        "resources/js/vendor/moment.min.js",
         "config.js",
+        "resources/js/vars/vars.js",
         "resources/js/helpers.js",
         "resources/js/utils/images.js",
         "resources/js/vars/divs.js",
         "resources/js/content/controller.js",
         "resources/js/content/nudger.js"
       ],
-      "css": [
-        "resources/css/nudge.css",
-        "resources/css/switch.css",
-        "resources/css/debugger.css"
-      ],
+      "css": [],
       "exclude_globs": ["*business.facebook.com*"],
       "run_at": "document_start"
     },
     {
-      "matches": ["http://www.facebook.com/", "https://www.facebook.com/"],
-      "js": [
-        "resources/js/facebook/unfollow.js",
-        "resources/js/facebook/ad.js"
-      ],
-      "css": ["resources/css/fbunfollow.css", "resources/css/fbtweaks.css"],
+      "matches": ["*://www.facebook.com/*", "*://facebook.com/*"],
+      "js": ["resources/js/facebook/unfollow.js"],
       "exclude_globs": ["*business.facebook.com*"],
       "run_at": "document_start"
     }

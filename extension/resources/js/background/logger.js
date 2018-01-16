@@ -32,6 +32,7 @@ function consoleLogger(domain, eventType, detailsObj, date, time) {
         }`,
         "yellow"
       );
+      break;
     case "visitStart":
       logWithColor(
         `${time} new Visit ${domain} no.${detailsObj.totalVisits}. Source: ${
@@ -48,8 +49,8 @@ function consoleLogger(domain, eventType, detailsObj, date, time) {
 function nudgeLogger(nudgeObject) {
   // Nudges get recorded in the 'nudges' object within each date
   // Also, 'lastNudged' gets recorded in the status object
-  var date = todayDate();
-  var time = timeNow();
+  var date = moment().format("YYYY-MM-DD");
+  var time = moment().format("HH:mm:ss");
   var statusObj = open("status");
   var dateObj = open(date);
   dateObj = dataAdder(dateObj, "nudges", nudgeObject, time);
@@ -81,15 +82,14 @@ function eventLog(domain, eventType, detailsObj, date, time) {
   }
   // Define date and time
   if (!date && !time) {
-    date = todayDate();
-    time = timeNow();
+    date = moment().format("YYYY-MM-DD");
+    time = moment().format("HH:mm:ss");
   }
-  time = epochToDate(time);
   consoleLogger(domain, eventType, detailsObj, date, time);
   // should match up perfectly
   if (eventType != "visitStart") {
-    var dateObj = open(date);
-    dateObj = dataAdder(dateObj, "events", event, time);
-    close(date, dateObj);
+    open(date, function(dateObj) {
+      dataAdder(dateObj, "events", event, time);
+    });
   }
 }

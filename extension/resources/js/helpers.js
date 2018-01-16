@@ -1,16 +1,13 @@
-console.log("helpers loaded");
-
 // Extract core domain from URL you want to check
 function extractDomain(url) {
-  var domain;
-  // Find & remove protocol (http, ftp, etc.) and get domain
-  if (url.indexOf("://") > -1) {
-    domain = url.split("/")[2];
-  } else {
-    domain = url.split("/")[0];
-  }
-  // Find & remove port number
-  domain = domain.split(":")[0];
+  var getLocation = function(href) {
+    var location = document.createElement("a");
+    location.href = href;
+    return location;
+  };
+  var location = getLocation(url);
+  var path = "/" + location.pathname.split("/")[1];
+  var domain = location.hostname + path;
   return domain;
 }
 
@@ -160,38 +157,6 @@ function addScript(scriptId, nudgeUrl, dataObj) {
   }
 }
 
-function extractHostname(url) {
-  var hostname;
-  // Find and remove protocol (http, ftp, etc.) and get hostname
-  if (url.indexOf("://") > -1) {
-    hostname = url.split("/")[2];
-  } else {
-    hostname = url.split("/")[0];
-  }
-  // Find and remove port number
-  hostname = hostname.split(":")[0];
-  // Find and remove "?"
-  hostname = hostname.split("?")[0];
-  return hostname;
-}
-
-function extractRootDomain(url) {
-  var domain = extractHostname(url),
-    splitArr = domain.split("."),
-    arrLen = splitArr.length;
-  // Extracting the root domain here
-  // If there is a subdomain
-  if (arrLen > 2) {
-    domain = splitArr[arrLen - 2] + "." + splitArr[arrLen - 1];
-    // Check to see if it's using a CCTLD, i.e. ".me.uk"
-    if (splitArr[arrLen - 1].length == 2 && splitArr[arrLen - 1].length == 2) {
-      // This is using a CCTLD
-      domain = splitArr[arrLen - 3] + "." + domain;
-    }
-  }
-  return domain;
-}
-
 // Generate userId
 function getUserId() {
   // E.g. 8 * 32 = 256 bits token
@@ -236,27 +201,6 @@ function minutes(i) {
   } else {
     // console.log("minute function didn't work");
   }
-}
-
-// Helper time generator
-function timeNow() {
-  var time = new Date();
-  time = time.getTime();
-  return time;
-}
-
-// Take URL, extract core domain, check against array, and return domain it matches if true. Return false otherwise
-function domainChecker(url, array) {
-  url = extractDomain(url);
-  if (url === "business.facebook.com") {
-    return false;
-  }
-  for (var i = 0; i < array.length; i++) {
-    if (url.match(array[i])) {
-      return array[i];
-    }
-  }
-  return false;
 }
 
 // Checks if object is empty
@@ -380,8 +324,8 @@ function eventLogSender(domain, eventType, detailsObj) {
     domain,
     eventType,
     detailsObj,
-    date: todayDate(),
-    time: timeNow()
+    date: moment().format("YYYY-MM-DD"),
+    time: moment()
   }); // needs receiver
 }
 
@@ -392,84 +336,6 @@ function keyDefined(object, key) {
   } else {
     return false;
   }
-}
-
-// Returns today's date
-function todayDate(yesterday) {
-  var d = new Date();
-  if (yesterday) {
-    d.setDate(d.getDate() - 1);
-  }
-  var day = d.getDate();
-  var monthIndex = d.getMonth();
-  var year = d.getFullYear();
-  return lastTwo(day) + "-" + monthNames[monthIndex] + "-" + lastTwo(year);
-}
-
-// Turn time to date
-function epochToDate(time) {
-  if (time > 9999999999) {
-    time = time / 1000;
-  }
-  var d = new Date(0);
-  d.setUTCSeconds(time);
-  var day = d.getDate();
-  var monthIndex = d.getMonth();
-  var hours = d.getHours();
-  var minutes = d.getMinutes();
-  var seconds = d.getSeconds();
-  var year = d.getFullYear();
-  return (
-    hours +
-    ":" +
-    lastTwo(minutes) +
-    ":" +
-    lastTwo(
-      seconds
-    ) /* + ' ' + lastTwo(day) + '-' + monthNames[monthIndex] + '-' + lastTwo(year)*/
-  );
-}
-
-// Turn time to minute and second past hour
-function epochToMinSec(time) {
-  if (time > 9999999999) {
-    time = time / 1000;
-  }
-  var d = new Date(0);
-  d.setUTCSeconds(time);
-  var day = d.getDate();
-  var monthIndex = d.getMonth();
-  var hours = d.getHours();
-  var minutes = d.getMinutes();
-  var seconds = d.getSeconds();
-  var year = d.getFullYear();
-  return (
-    lastTwo(minutes) +
-    "m" +
-    lastTwo(seconds) +
-    "s" /* + ' ' + lastTwo(day) + '-' + monthNames[monthIndex] + '-' + lastTwo(year)*/
-  );
-}
-
-var monthNames = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec"
-];
-
-function initOff() {
-  chrome.runtime.sendMessage({
-    type: "off"
-  });
 }
 
 function toggleClass(el, className) {
@@ -516,4 +382,93 @@ function classList(element) {
       return this;
     }
   };
+}
+
+function storeForUse(url, response) {
+  url = url.split("/").pop();
+  if (notUndefined(tempStorage)) {
+    tempStorage[url] = response;
+  } else {
+    console.log("tempStorage is not defined in this script");
+  }
+}
+
+function appendHtml(parent, childString, callback) {
+  if (parent) {
+    parent.insertAdjacentHTML("afterbegin", childString);
+  }
+  if (callback) {
+    callback();
+  }
+}
+
+// Create a random delay between XMLHttpRequests
+function randomTime(floor, variance) {
+  var ms = 1000;
+  return Math.floor(ms * (floor + Math.random() * variance));
+}
+
+// optimise mutationObserver https://stackoverflow.com/questions/31659567/performance-of-mutationobserver-to-detect-nodes-in-entire-dom
+// especially the point about using getElementById
+
+function fbTokenReady(name, callback) {
+  var found = false;
+
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      for (var i = 0; i < mutation.addedNodes.length; i++) {
+        var node = document.getElementsByName(name);
+        node = node[0];
+        if (!found && notUndefined(node)) {
+          found = true;
+          observer.disconnect();
+          if (callback) {
+            callback(node);
+          }
+        }
+      }
+    });
+  });
+
+  observer.observe(document, {
+    childList: true,
+    subtree: true,
+    attributes: false,
+    characterData: false
+  });
+}
+
+function click(x, y) {
+  var ev = new MouseEvent("click", {
+    view: window,
+    bubbles: true,
+    cancelable: true,
+    screenX: x,
+    screenY: y
+  });
+
+  var el = document.elementFromPoint(x, y);
+
+  el.dispatchEvent(ev);
+}
+
+function getSettings(callback) {
+  chrome.runtime.sendMessage({ type: "settings" }, function(response) {
+    callback(response.settings);
+  });
+}
+
+function changeSettingRequest(newVal, setting, domain, domainSetting) {
+  if (!domain) {
+    domain = false;
+  }
+  if (!domainSetting) {
+    domainSetting = false;
+  }
+  sendMessage("change_setting", {
+    newVal,
+    setting,
+    domain,
+    domainSetting
+  });
 }

@@ -1,8 +1,7 @@
 var button = document.querySelector(".button");
 var centre = document.querySelector(".button-centre");
 var domainText = document.querySelector("#domain-text");
-var domainLastVisited = document.querySelector("#domain-last-visited");
-var domainTimeToday = document.querySelector("#domain-time-today");
+var tagline = document.getElementById("tagline");
 
 var QueryString = (function() {
   // This function is anonymous, is executed immediately and
@@ -27,6 +26,32 @@ var QueryString = (function() {
   return query_string;
 })();
 
+var domain = false;
+if ("domain" in QueryString) {
+  domain = QueryString.domain;
+  console.log(domain);
+  domainText.innerHTML = domain;
+}
+
+function getLocalStorage() {
+  chrome.runtime.sendMessage({ type: "get_localStorage" }, function(response) {
+    var date = moment().format("YYYY-MM-DD");
+    localStorage = response.localStorage;
+
+    var domainToday = JSON.parse(localStorage[date])[domain];
+    var status = JSON.parse(localStorage.status);
+    console.log(status);
+    var lastShutdown = status[domain].lastShutdown;
+    console.log(lastShutdown);
+    var timeToday = domainToday.time / 60;
+    console.log(domainToday);
+
+    tagline.innerHTML = `You last visited ${domain} less than ${lastVisited} minutes ago, are you sure you want to go back?`;
+  });
+}
+
+getLocalStorage();
+
 var url = false;
 
 if ("url" in QueryString) {
@@ -35,36 +60,11 @@ if ("url" in QueryString) {
 
 console.log(document.body);
 
-var domain = false;
-if ("domain" in QueryString) {
-  domain = QueryString.domain;
-  console.log(domain);
-  domainText.innerHTML = domain;
-}
-
-if ("lastShutdown" in QueryString) {
-  lastShutdown = QueryString.lastShutdown;
-  if (lastShutdown === 0) {
-    // cancel everything. not quite everything but you get the point
-  }
-  function updateLastVisited() {
-    var lastVisited = logMinutes(timeNow() / 1000 - lastShutdown / 1000);
-    domainLastVisited.innerHTML = lastVisited;
-  }
-  updateLastVisited();
-  setInterval(updateLastVisited, 1000);
-}
-
-if ("timeToday" in QueryString) {
-  timeToday = QueryString.timeToday / 1000;
-  domainTimeToday.innerHTML = logMinutes(timeToday);
-}
-
 function initOn() {
   chrome.runtime.sendMessage({
     type: "on",
-    url: url,
-    domain: domain
+    url,
+    domain
   });
 }
 
@@ -95,6 +95,7 @@ function sliderup(e) {
   if (position > button.parentElement.offsetWidth - button.offsetWidth) {
     button.style.left =
       button.parentElement.offsetWidth - button.offsetWidth + "px";
+    console.log("hey");
     initOn();
   } else {
     button.style.left = 0 + "px";

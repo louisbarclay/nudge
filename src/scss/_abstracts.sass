@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans')
+
 @mixin openSans
   font:
     family: 'Open Sans'
@@ -41,9 +43,10 @@
   *
     border: 0
     bottom: initial
-    box-sizing: initial
+    box-sizing: content-box
     font: inherit
     font-size: 100%
+    font-family: inherit
     left: initial
     margin: 0
     padding: 0
@@ -51,37 +54,19 @@
     right: initial
     top: initial
     vertical-align: baseline
-
+    display: initial
 
 %typography
   *
-    color: $primary
     font-family: 'Open Sans'
     -webkit-font-smoothing: antialiased
-
+    text-rendering: optimizeLegibility
+    line-height: normal
   a
-    text-transform: none
-    pointer: cursor
-
-  .small
-    font-size: 12px
-
-  h1
-    font-size: (22/14) * 1rem
-    color: $secondary
-
-  .small-caps
-    text-transform: uppercase
-    font-size: (12/14) * 1rem
-    color: $secondary    
-
-  h2
-    font-weight: 400
-    font-size: (16/14) * 1rem
-    color: $secondary
-
-  p
-    font-size: 1rem
+    text-decoration: none
+    color: initial
+    &:hover
+      color: $nudge-pink
 
 @mixin border($width: $border-width-primary, $style: $border-style-primary, $color: $border-color-primary)
   border: $width $style $color
@@ -91,7 +76,6 @@
   padding: (2 / 6) * 1em (5 / 6) * 1em (2 / 6) * 1em $left
 
 @mixin left-icon($size: 1em, $z-index: 0)
-
   &::before
     content: ''
     margin: auto $size / 4 auto $size / 4
@@ -114,6 +98,18 @@
     display: flex
     justify-content: space-between
     margin-bottom: $spacing
+
+@mixin shadow
+  box-shadow: 0 3px 8px rgba(0,0,0,.25)
+
+@mixin shadow2
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.25)
+
+@mixin shadow3
+  box-shadow: 0px 0px 30px 10px rgba(0,0,0,0.15)
+
+@mixin shadow4
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.25)
 
 @mixin arrow($background-color: $white, $size: 1em)
   &:before
