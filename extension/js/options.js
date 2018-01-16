@@ -60,6 +60,14 @@ addDomain.addEventListener("keydown", function(event) {
     var domainCheck = new RegExp(
       "^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9])).([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}.[a-zA-Z]{2,3})(/(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,200}[a-zA-Z0-9]))?)?(/)?$"
     );
+    var passedCheck = true;
+    // Existing domain check
+    Object.keys(settingsLocal.domains).forEach(function(key) {
+      if (newDomain.includes(key)) {
+        console.log('already exists there');
+        passedCheck = false;
+      }
+    });
     // Regex check
     if (domainCheck.test(newDomain)) {
       addLi(newDomain);

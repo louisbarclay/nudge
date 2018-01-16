@@ -4,26 +4,29 @@ html
     link(rel="stylesheet", href="../css/main.css")
   body
     div.options-container
-      div.options-logo
-        h1 Options DO YOU MIND GIVING ME YOUR DATA?
-        span u can get back 2 this screen by clicking on Nudge icon and clicking thing thing
-      div.header
-      div.data-banner
-        h1 Welcome to Nudge
-        div.data-text Thanks for installing the beta version of Nudge. This is where you can find options for Nudge,   . You can always come back here by right-clicking on the Nudge icon in the top bar and choosing 'Options'.
-          p I really want your feedback to make Nudge better, so email me directly on feedback@nudgeware.io with any thoughts.
-          p First and foremost though, I want to tell you about Nudge's use of data
-        button.toggle
-          div.left.on I'm OK with Nudge seeing this data
-          div.right I'd rather not share my data with Nudge
-      span.small-caps Your Nudge domains
+      div
+        div.options-header
+          div.options-logo
+          div  
+            h1 Options
+      div.options-sub-header
+      div#welcome
+        div.data-banner
+          h1 Welcome to Nudge
+          div.data-text Thanks for installing the beta version of Nudge. This is where you can find options for Nudge,   . You can always come back here by right-clicking on the Nudge icon in the top bar and choosing 'Options'.
+            p I really want your feedback to make Nudge better, so email me directly on feedback@nudgeware.io with any thoughts.
+            p First and foremost though, I want to tell you about Nudge's use of data
+          button.toggle
+            div.left.on I'm OK with Nudge seeing this data
+            div.right I'd rather not share my data with Nudge
+      span.options-sub-header Your Nudge domains
       div
         div Add a domain
         ul.text-input
           li
             input#addDomain(type='text' placeholder='likethis.com') 
       ul.tags#domainList
-      span.small-caps Other options
+      span.options-sub-header Other options
       mixin optionBoolean(name, divId)
         div.boolean(id=divId)
           div=name
@@ -34,8 +37,6 @@ html
       +optionBoolean('Take notification numbers out of page titles', 'constantise')
       +optionBoolean('Auto-unfollow new friends, pages and groups', 'fb_auto_unfollow')
       +optionBoolean('Show Facebook unfollow', 'fb_show_unfollow')
-      +optionBoolean('Switch off Nudge domains by default')
-      +optionBoolean('Keep page favicons from showing red icons')
       span.small-caps Nudge ID
       p your Nudge ID is
       div#id

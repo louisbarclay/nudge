@@ -3,8 +3,25 @@
 .options-container
   +container($left: 200px, $width: 800px)
 
+.options-logo
+  +size(80px)
+  background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo-color.svg') center center/80px no-repeat      
+
+.options-header
+  width: 100%
+  display: flex
+  flex-direction: row
+  margin-top: 1em
+  justify-content: flex-start
+  align-items: baseline
+
+.options-sub-header
+  text-transform: uppercase
+  font-size: 0.8em
+
 .data-banner
-  background: $nudge-pink
+  background: lighten($nudge-pink, 20%)
+  +border($style: none)
   flex-direction: column
   ::before
     +pseudo
