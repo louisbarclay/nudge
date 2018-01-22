@@ -4,14 +4,24 @@ var id_button = document.getElementById("id");
 var domains = {};
 var facebookNotif = document.getElementById("facebookNotif");
 
-getSettings(setSettings);
+sendHTMLRequest(getUrl("html/welcome.html"), storeForUse);
+
+getSettings(execSettings);
 
 var settingsLocal = {};
 
-function setSettings(settings) {
+function execSettings(settings) {
   settingsLocal = settings;
   populateDomains(settings.domains);
   populateBooleans(settings);
+  // Reset
+  changeSettingRequest(0, "show_intro");
+  if (settingsLocal.show_intro < 4) {
+    // el("welcome").innerHTML = tempStorage["welcome.html"];
+    console.log("yeah");
+    var increaseCounter = settingsLocal.show_intro++;
+    // changeSettingRequest(increaseCounter, "show_intro");
+  }
   id_button.innerHTML = settings.userId;
 }
 
@@ -64,12 +74,21 @@ addDomain.addEventListener("keydown", function(event) {
     // Existing domain check
     Object.keys(settingsLocal.domains).forEach(function(key) {
       if (newDomain.includes(key)) {
-        console.log('already exists there');
+        console.log("already exists there");
         passedCheck = false;
+        var listElements = document.getElementsByTagName('li');
+        for (var i = 0; i < listElements.length; i++) {
+          console.log(listElements[i].innerHTML, key);
+          if (listElements[i].innerHTML === key) {
+            console.log(listElements[i]);
+            toggleClass(listElements[i], 'options-flash');
+            break;
+          }
+        }
       }
     });
     // Regex check
-    if (domainCheck.test(newDomain)) {
+    if (domainCheck.test(newDomain) && passedCheck) {
       addLi(newDomain);
       changeSettingRequest(true, "domains", newDomain, "add");
       addDomain.value = "";

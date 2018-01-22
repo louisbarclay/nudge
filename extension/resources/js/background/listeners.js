@@ -2,6 +2,9 @@ eventLog("background.js loaded", "startup");
 
 function everySecond() {
   // Run the counter on the current domain
+  if (t) {
+    return;
+  }
   domainTimeNudger();
   // Don't do anything else if currently idle
   var currentState = checkCurrentState();
@@ -80,6 +83,7 @@ function timelineObject(domain, source) {
 chrome.runtime.onInstalled.addListener(function(details) {
   if (details.reason == "install") {
     eventLog("install", "install"); // seems weird
+    chrome.runtime.openOptionsPage();
   } else if (details.reason == "update") {
     var thisVersion = chrome.runtime.getManifest().version;
     eventLog(details.reason, details.reason, {
@@ -152,7 +156,6 @@ chrome.idle.onStateChanged.addListener(function(newState) {
 
 // Add to timeline onActivated
 chrome.tabs.onActivated.addListener(function(activatedTab) {
-  console.log(activatedTab);
   if (typeof activatedTab == "undefined") {
     return;
   }
@@ -234,4 +237,5 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   }
 });
 
-// chrome.runtime.setUninstallURL("http://userstyles.org/uninstall/chrome");
+
+// chrome.runtime.setUninstallURL("");

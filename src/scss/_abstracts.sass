@@ -24,9 +24,9 @@
   left: 50%
   transform: translate(-50%, 0%)
 
-@mixin background-gradient
+@mixin background-gradient($first: $nudge-blue, $second: $nudge-pink)
   animation: background-move 15s ease infinite
-  background: linear-gradient(145deg, $nudge-blue, $nudge-pink)
+  background: linear-gradient(145deg, $first, $second)
   background-size: 400% 400%
 
 @keyframes background-move
@@ -55,6 +55,21 @@
     top: initial
     vertical-align: baseline
     display: initial
+    ::before, ::after
+      border: 0
+      bottom: initial
+      box-sizing: content-box
+      font: inherit
+      font-size: 100%
+      font-family: inherit
+      left: initial
+      margin: 0
+      padding: 0
+      position: initial
+      right: initial
+      top: initial
+      vertical-align: baseline
+      display: initial
 
 %typography
   *
@@ -106,7 +121,7 @@
   box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.25)
 
 @mixin shadow3
-  box-shadow: 0px 0px 30px 10px rgba(0,0,0,0.15)
+  box-shadow: 0px 0px 30px 10px rgba(0,0,0,0.05)
 
 @mixin shadow4
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.25)
@@ -155,13 +170,11 @@
   background: none
   cursor: pointer
   margin: 0
-  padding: 0
   outline: none
   box-shadow: none
   color: $primary
   +border($color: $primary)
   +padding
-  transition: all 0.2s
   &:hover
     box-shadow: none
     color: $light

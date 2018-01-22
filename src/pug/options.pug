@@ -7,24 +7,14 @@ html
       div
         div.options-header
           div.options-logo
-          div  
-            h1 Options
-      div.options-sub-header
       div#welcome
-        div.data-banner
-          h1 Welcome to Nudge
-          div.data-text Thanks for installing the beta version of Nudge. This is where you can find options for Nudge,   . You can always come back here by right-clicking on the Nudge icon in the top bar and choosing 'Options'.
-            p I really want your feedback to make Nudge better, so email me directly on feedback@nudgeware.io with any thoughts.
-            p First and foremost though, I want to tell you about Nudge's use of data
-          button.toggle
-            div.left.on I'm OK with Nudge seeing this data
-            div.right I'd rather not share my data with Nudge
-      span.options-sub-header Your Nudge domains
+      span.options-sub-header Your Nudge sites
       div
-        div Add a domain
         ul.text-input
           li
-            input#addDomain(type='text' placeholder='likethis.com') 
+            input#addDomain(type='text' placeholder='Add a site here, or remove a site by clicking on it below') 
+      div
+        span.options-guidance-text  (In the format website.com, section.website.com or website.com/page.)
       ul.tags#domainList
       span.options-sub-header Other options
       mixin optionBoolean(name, divId)
@@ -37,11 +27,13 @@ html
       +optionBoolean('Take notification numbers out of page titles', 'constantise')
       +optionBoolean('Auto-unfollow new friends, pages and groups', 'fb_auto_unfollow')
       +optionBoolean('Show Facebook unfollow', 'fb_show_unfollow')
-      span.small-caps Nudge ID
-      p your Nudge ID is
-      div#id
-      p Keep it safe if you are participating in a Nudge study.
+      span.options-sub-header Nudge ID
+      p Your Nudge ID is
+      div.id-banner
+        div.id-text#id
+      p Pretty catchy, right? Keep it safe if you are participating in a Nudge study.
   script(src="../config.js")
   script(src="../resources/js/background/storage.js")
   script(src="../resources/js/helpers.js")
+  script(src="../resources/js/vars/vars.js")
   script(src="../js/options.js")

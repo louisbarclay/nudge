@@ -53,9 +53,9 @@
       "resources/js/background/logger.js",
       "resources/js/background/listeners.js",
       "resources/js/background/messager.js",
-      "resources/js/background/nudger-recorder.js",
+      "resources/js/background/recorder.js",
       "resources/js/background/settings.js",
-      "resources/js/background/switch-on-off.js",
+      "resources/js/background/switch.js",
       "resources/js/vars/vars.js",
       "resources/js/background/background.js",
       "resources/js/background/tests.js"

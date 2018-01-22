@@ -11,10 +11,12 @@ function messageSender(object) {
       tabs
     ) {
       // Send message to the tab here
+      // Ask if the tab is ready to nudge
       if (tabs[0] && tabs[0].id) {
         chrome.tabs.sendMessage(tabs[0].id, { type: "ready_check" }, function(
           response
         ) {
+          console.log(response);
           if (response && response.type) {
             chrome.tabs.sendMessage(tabs[0].id, object, function(response) {
               if (response) {

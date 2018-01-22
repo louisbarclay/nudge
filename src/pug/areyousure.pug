@@ -6,16 +6,21 @@ html
     link(href="../resources/images/nudgeoff16.png", rel="icon", type="image/png", sizes="16x16")
     link(rel="stylesheet", href="../css/main.css")
   body.off-background.off-typography
-    div.off-container#somethng
+    div.off-container
       div.off-logo
-      h1#tagline 
-      p 
-        | Drag slider across to switch
-        span#domain-text.off-highlight this site
-        | back on. I want to change my settings
+      h1.off-headline
+        | You left
+        span.off-highlight facebook.com
+        | 5 minutes ago
+      p.off-text (
+        span.off-underline Turn this feature off
+        |  or 
+        span.off-underline don't nudge this site at all
+        | .)
       div.slider
         div.button
           div.button-centre
+        div.slider-text Drag slider to continue
     script(src="../resources/js/vendor/moment.min.js")      
     script(src="../resources/js/helpers.js")      
     script(src="../js/off.js")

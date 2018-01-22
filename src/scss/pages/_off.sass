@@ -1,24 +1,26 @@
 .off-background
   background-size: cover
-  height: 100%
+  height: auto
   background-color: $nudge-grey-lightest
 
 .off-typography
   *
-    color: $nudge-grey-light
+    color: darken($nudge-grey-off,10%)
 
 .off-logo
-  margin-top: 8em
+  margin-top: 20%
   +size($width: 8em)
   &::before
     +pseudo
     +logo-grey($size: 8em)
-    opacity: 0.05
-  &::after
-    +pseudo
-    +logo-color($size: 8em)
-    opacity: 0.1
-    filter: grayscale(100%)
+    opacity: 1
+
+.off-text
+  margin-top: 1em
+  color: darken($nudge-grey-off, 5%)
+
+.off-headline
+  font-size: 22px
 
 .off-module
   margin-top: 1em
@@ -26,6 +28,10 @@
   flex-direction: column
   >*
     margin-bottom: 1em
+
+.off-small-text
+  font-size: 12px
+  color: $nudge-grey-light
 
 .off-row
   display: flex
@@ -42,8 +48,8 @@
     height: 40px
 
 .off-highlight
-  background: $nudge-blue
-  color: $white
+  background: darken($nudge-grey-off, 3%)
+  color: $nudge-grey-lightest
   +border($style: none)
   padding: 0em .3em .1em .3em
   margin-left: 0.3em
@@ -55,4 +61,11 @@
   line-height: 1.8em
 
 .off-container
-  +container
+  +container($min-width: 450px)
+
+.off-underline
+  color: darken($nudge-grey-off, 5%)
+  cursor: pointer
+  transition: all 0.2s
+  &:hover
+    color: darken($nudge-grey-off, 10%)

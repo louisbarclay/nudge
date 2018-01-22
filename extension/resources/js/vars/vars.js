@@ -9,7 +9,7 @@ var settingsLocal = {};
 // Default domain info
 var defaultDomainInfo = {
   nudge: true,
-  off: true,
+  off: false,
   offByDefault: false
 };
 
@@ -20,12 +20,10 @@ var defaultDomains = [
   "twitter.com",
   "linkedin.com",
   "reddit.com",
-  "diply.com",
   "buzzfeed.com",
   "youtube.com",
   "mail.google.com",
   "gmail.com",
-  "theladbible.com",
   "ladbible.com",
   "news.ycombinator.com",
   "instagram.com",
@@ -36,19 +34,25 @@ var defaultDomains = [
   "theguardian.co.uk",
   "dailymail.co.uk",
   "iwastesomuchtime.com",
+  "nytimes.com",
+  "breitbart.com",
+  "wsj.com",
+  "usatoday.com",
+  "vox.com",
+  "foxnews.com",
+  "cnn.com",
+  "huffingtonpost.com",
   "mailonline.com",
   "imgur.com",
-  "netflix.com",
   "tumblr.com",
   "thesportbible.com",
-  "telegraph.co.uk",
-  "worldsmostboringwebsite.com"
+  "telegraph.co.uk"
 ];
 
 // Default non-domain settings
 var defaultSettings = {
   scroll: 5,
-  time: 1,
+  time: 5,
   compulsive: 5,
   fb_profile_ratio: false,
   fb_show_unfollow: true,
@@ -58,10 +62,11 @@ var defaultSettings = {
   show_off_switch: true,
   div_hider: false,
   constantise: true,
+  share_data: true,
+  compulsive_off: true,
   reshow_time: false,
-  hidden_unfollow_time: 5134134,
   has_unfollowed: false,
-  has_seen_data_disclosure: false,
+  show_intro: 0,
   share_data: true
 };
 

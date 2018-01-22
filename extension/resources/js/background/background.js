@@ -37,10 +37,11 @@ function checkCurrentState() {
     lastEverySecond: moment()
   };
   var statusObj = open("status");
+  // FIXME: sometimes lastEverySecond is not defined. This is a problem!
   if (!keyDefined(statusObj, "currentState")) {
     dataAdder(statusObj, "currentState", initialState);
   } else {
-    // Only if any tabs exist
+    // Only if any tabs exist - because then we are still 'in' Chrome
     if (statusObj.currentState.domain !== notInChrome) {
       statusObj.currentState.lastEverySecond = moment();
     }
@@ -50,26 +51,13 @@ function checkCurrentState() {
 }
 
 // Add to timeline on window in and window out
-
-var testState = {
-  domain: "facebook.com",
-  source: "initial",
-  lastEverySecond: moment(),
-  time: moment()
-    .add(-1, "days")
-    .toString()
-};
-
-var testCounter = 0;
-
 function timeline(domain, source, timeOverride, callback) {
+  if (t) {
+    return;
+  }
   // Open status to look at currentState
   var s = open("status");
   // Test counter at 2. currentState constant for first call, then for second, after which it can be changed
-  // if (testCounter < 2) {
-  //   s.currentState = testState;
-  //   testCounter++;
-  // }
   var newS = timelineObject(domain, source);
   // Override time if needed
   if (notUndefined(timeOverride)) {
@@ -110,15 +98,34 @@ function timeline(domain, source, timeOverride, callback) {
     // Safety feature to stop recursion
     !source.includes("dateSplit")
   ) {
-    timeline(
-      domain,
-      "dateSplit_previousDay",
-      moment(s.currentState.time).endOf("day"),
-      function() {
-        timeline(domain, "dateSplit_currentDay");
-      }
-    );
-    return;
+    if (
+      moment(s.currentState.time).format("YYYY-MM-DD") ===
+      moment(newS.time)
+        .add(-1, "days")
+        .format("YYYY-MM-DD")
+    ) {
+      console.log('yeah boi');
+      // Last date is literally yesterday
+      timeline(
+        s.currentState.domain,
+        "dateSplit_previousDay",
+        moment(s.currentState.time).endOf("day"),
+        function() {
+          timeline(domain, "dateSplit_currentDay");
+        }
+      );
+      return;
+    } else {
+      timeline(
+        domain,
+        "dateSplit_previousDay",
+        moment(s.currentState.time).endOf("day"),
+        function() {
+          timeline(domain, "dateSplit_currentDay");
+        }
+      );
+      return;
+    }
   }
 
   // If previous domain is same as current domain, don't do anything - unless day has changed

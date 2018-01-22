@@ -114,31 +114,36 @@ function localStorageClear() {
 // "idle", // don't put here? create for first time when running domain stuff?
 // 'notDomain' + random hash? eventually?
 
-function sendData(userId, data) {
-  var dataToBeSent = {
-    "userId": userId,
-    "data": data
+function sendData(userId, date, data) {
+  var sendData = {
+    userId,
+    date,
+    data
   };
-  dataToBeSent = JSON.stringify(dataToBeSent);
+  sendData = JSON.stringify(sendData);
+  console.log(sendData);
   var request = new XMLHttpRequest();
-  console.log(config.apiEndpoint);
   request.open("POST", config.apiEndpoint + "user", true);
-  console.log(request);
-  request.setRequestHeader(
-    "Content-Type",
-    "application/json"
-  );
-  request.send(dataToBeSent);
-  console.log(dataToBeSent);
-  request.onreadystatechange = function() {
-    console.log(this.readyState, this.status);
-  };
+  request.setRequestHeader("Content-Type", "application/json");
+  request.send(sendData);
 }
 
-var obj1 = {
-  this: "is",
-  fucking: "sick"
-};
+function updateDayToServer(date) {
+  var userId = settingsLocal.userId;
+  if (notUndefined(localStorage[date])) {
+    var data = JSON.parse(localStorage[date]);
+    // Get status
+    var status = JSON.parse(localStorage.status);
+    // Add status snapshot to data
+    data.status_snapshot = status;
+    // Add settings snapshot to data
+    data.settings_snapshot = settingsLocal;
+    // Add time of upload
+    data.upload_time = moment();
+    // Send data
+    sendData(userId, date, data);
+  }
+}
 
 // sendData('db18458e2782b2b77e36769c569e263a53885a9944dd0a861e5064eac16f1a', obj1);
 

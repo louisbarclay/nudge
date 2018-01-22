@@ -13,93 +13,6 @@
   transform: rotate(-135deg)
   width: 4em
 
-.toggle
-  @extend %button
-  color: $primary
-  display: flex
-  padding: 0
-
-  .left
-    +padding
-    color: inherit
-
-  .right
-    +padding
-    color: inherit
-
-  .on
-    background: $primary
-    background-clip: border-box
-    color: $light
-
-  &:hover
-    background: inherit
-    border-color: $secondary
-    color: $secondary
-
-    .on
-      background: $secondary
-      color: $light
-
-.tags
-  li
-    +border($style: none)
-    +left-icon($size: ((16 / 12) * 1em))
-    display: flex
-    padding-right: 1em
-    float: left
-    height: 2em
-    line-height: 2em
-    position: relative
-    color: $light
-    font-size: (6 / 7) * 1em
-    background-color: $primary
-    margin-right: .5em
-    margin-bottom: .5em
-    
-    &::before
-      filter: grayscale(100%)
-      opacity: 0.5
-      border-radius: 2px
-      background:
-        repeat: no-repeat
-        position: center center
-
-    &:hover
-      background: none
-      cursor: pointer
-
-      &::after
-        +pseudo
-        +background-gradient
-        border-color: transparent
-        border-radius: inherit
-        color: $light
-        content: 'Remove'
-        height: 100%
-        left: 0
-        text-align: center
-        top: 0
-        width: 100%
-        z-index: 1
-
-.text-input
-  input
-    border-bottom: $border-primary
-    border-bottom-color: $primary
-    left: 0
-    list-style: none
-    margin: 0
-    padding: 0 0 (2 / 6) * 1em 0
-    position: relative
-    width: 20em
-
-    &::placeholder
-      color: $primary
-
-    &:focus
-      border-bottom: $border-primary
-
 .call-out
   @extend %reset
   +border($color: $nudge-grey-light)
@@ -110,8 +23,9 @@
 
 .slider 
   width: 100%
+  position: relative
   height: $slider-height
-  margin-top: 10em
+  margin-top: 30%
   border-radius: 6em
   text-align: center
   background: lighten($nudge-grey-lightest, 4%)
@@ -130,31 +44,36 @@
 
 .slider-text 
   position: absolute
+  color: darken($nudge-grey-lightest, 5%)
   margin: auto
+  width: 100%
   top: 0
-  left: 0
-  right: 0
   bottom: 0
+  left: 0
+  right: 0 
+  height: 100%
+  text-align: center
   height: 1.4em
 
-.button-centre 
+.button-centre
   position: relative
+  z-index: 1
   margin: auto
   top: 50%
   transform: translateY(-50%)
   height: $slider-height - (9/14) * 1em
   width: $slider-height - (9/14) * 1em
   background:
-    color: $nudge-grey-lightest
+    color: $nudge-grey-off
   border-radius: $slider-height / 2
   transition: background-color 0.2s ease
   +hardware
 
   &:hover
-    background: darken($nudge-grey-lightest, 3%)
+    background: darken($nudge-grey-off, 3%)
 
   &:active
-    background: $nudge-grey-light
+    background: darken($nudge-grey-off, 6%)
  
 .returning
   transition: all 0.2s ease

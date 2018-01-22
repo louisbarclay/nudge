@@ -1,5 +1,4 @@
 // Insert all tests here
-
 function showMeStuff(date) {
   var object = JSON.parse(localStorage[date]);
   var totalLoggedTimeToday = 0;
@@ -16,5 +15,28 @@ function showMeStuff(date) {
     }
     console.log(key, logMinutes(totalTime + runningCounter));
   });
-  console.log('*Total today: ' + logMinutes(totalLoggedTimeToday));
+  console.log("*Total today: " + logMinutes(totalLoggedTimeToday));
+}
+
+// Test day change
+var testState = {
+  domain: "facebook.com",
+  source: "initial",
+  lastEverySecond: moment(),
+  time: moment()
+    .add(-2, "days")
+    .toString()
+};
+
+function x() {
+  var s = open("status");
+  s.currentState = testState;
+  close("status", s);
+}
+
+var t = false;
+
+function runTest() {
+  x();
+  t = true;
 }

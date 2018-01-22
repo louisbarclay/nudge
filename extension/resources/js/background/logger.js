@@ -10,9 +10,11 @@ function consoleLogger(domain, eventType, detailsObj, date, time) {
   switch (eventType) {
     case "visit":
       logWithColor(
-        `${detailsObj.startTime} ${detailsObj.endTime} ${domain} ${
-          detailsObj.duration
-        } (${detailsObj.totalTimeToday} today). Source: ${detailsObj.source}`,
+        `${date} ${detailsObj.startTime} ${
+          detailsObj.endTime
+        } ${domain} ${detailsObj.duration} (${
+          detailsObj.totalTimeToday
+        } today). Source: ${detailsObj.source}`,
         "green"
       );
       break;
@@ -33,14 +35,14 @@ function consoleLogger(domain, eventType, detailsObj, date, time) {
         "yellow"
       );
       break;
-    case "visitStart":
-      logWithColor(
-        `${time} new Visit ${domain} no.${detailsObj.totalVisits}. Source: ${
-          detailsObj.source
-        }`,
-        "brown"
-      );
-      break;
+    // case "visitStart":
+    //   logWithColor(
+    //     `${time} new Visit ${domain} no.${detailsObj.totalVisits}. Source: ${
+    //       detailsObj.source
+    //     }`,
+    //     "brown"
+    //   );
+    //   break;
     default:
   }
 }

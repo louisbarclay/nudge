@@ -94,6 +94,44 @@ function notUndefined(x) {
   }
 }
 
+function popupCenter(url, title, w, h) {
+  var dualScreenLeft =
+    window.screenLeft != undefined ? window.screenLeft : screen.left;
+  var dualScreenTop =
+    window.screenTop != undefined ? window.screenTop : screen.top;
+
+  var width = window.innerWidth
+    ? window.innerWidth
+    : document.documentElement.clientWidth
+      ? document.documentElement.clientWidth
+      : screen.width;
+  var height = window.innerHeight
+    ? window.innerHeight
+    : document.documentElement.clientHeight
+      ? document.documentElement.clientHeight
+      : screen.height;
+
+  var left = width / 2 - w / 2 + dualScreenLeft;
+  var top = height / 2 - h / 2 + dualScreenTop;
+  var newWindow = window.open(
+    url,
+    title,
+    "scrollbars=no, width=" +
+      w +
+      ", height=" +
+      h +
+      ", top=" +
+      top +
+      ", left=" +
+      left
+  );
+
+  // Puts focus on the newWindow
+  if (window.focus) {
+    newWindow.focus();
+  }
+}
+
 function getUrl(path) {
   return chrome.extension.getURL(path);
 }
@@ -184,23 +222,6 @@ function ordinal(i) {
     return i + "rd";
   }
   return i + "th";
-}
-
-// Helper second to minute parser
-function minutes(i) {
-  if (i >= 105) {
-    return Math.round(i / 60) + " minutes";
-  } else if (i === 1) {
-    return "one second";
-  } else if (i < 45) {
-    return Math.round(i) + " seconds";
-  } else if (i < 60) {
-    return "a minute";
-  } else if (i < 105) {
-    return "2 minutes";
-  } else {
-    // console.log("minute function didn't work");
-  }
 }
 
 // Checks if object is empty
@@ -363,6 +384,11 @@ function doAtEarliest(callback) {
 function sendMessage(type, object) {
   object.type = type;
   chrome.runtime.sendMessage(object);
+}
+
+function el(id) {
+  var element = document.getElementById(id);
+  return element;
 }
 
 // Helper function for chaining

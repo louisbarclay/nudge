@@ -11,13 +11,14 @@ function constantiser(newTitle) {
       writable: false,
       value: document.title
     });
-    var iconArray = ["link[rel*='shortcut icon']", "link[rel*='icon']"];
-    for (var i = 0; i < iconArray.length; i++) {
-      var element = document.querySelector(iconArray[i]);
-      if (element) {
-        element.remove();
-      }
-    }
+    // var iconArray = ["link[rel*='shortcut icon']", "link[rel*='icon']"];
+    // for (var i = 0; i < iconArray.length; i++) {
+    //   var element = document.querySelector(iconArray[i]);
+    //   if (element) {
+    //     console.log(element);
+    //     element.remove();
+    //   }
+    // }
   }
 }
 

@@ -1,11 +1,13 @@
 // Options
 
+$primary: $nudge-blue
+
 .options-container
-  +container($left: 200px, $width: 800px)
+  +container($min-width: 450px)
 
 .options-logo
   +size(80px)
-  background: url('chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/resources/images/logo-color.svg') center center/80px no-repeat      
+  background: url('chrome-extension://__MSG_@@extension_id__/resources/images/logo-color.svg') center center/80px no-repeat      
 
 .options-header
   width: 100%
@@ -15,18 +17,157 @@
   justify-content: flex-start
   align-items: baseline
 
+.options-flash
+  background-color: $nudge-pink !important
+
 .options-sub-header
   text-transform: uppercase
-  font-size: 0.8em
+  font-size: 0.9em
+  color: $primary
+  margin-bottom: 0.5em
 
 .data-banner
-  background: lighten($nudge-pink, 20%)
-  +border($style: none)
+  +border
+  padding: 1em
   flex-direction: column
   ::before
     +pseudo
     width: 100%
     background: blue
+  
+  h1
+    margin-top: 0
+    color: $primary
+    font-size: 22px
+    margin-bottom: 0.5em
+  
+  .toggle
+    margin-top: 1em
+    margin-bottom: 1em
 
 .data-text
-  margin-bottom: 2em
+  line-height: 1.5em
+  font-size: 13px
+  color: $primary
+  p
+    margin-top: 1em
+  a
+    color: $primary
+
+.options-guidance-text
+  font-size: 11px
+  color: $primary
+
+.id-banner
+  @extend .data-banner
+  padding: 0.5em
+  text-align: center
+
+.id-text
+  @extend .data-text
+  align-self: center
+  font-size: 12px
+  font-family: 'Courier New'
+  text-align: center
+
+.tags
+  ul
+    margin-bottom: 5em
+  li
+    +border($style: none)
+    +left-icon($size: ((16 / 12) * 1em))
+    display: flex
+    padding-right: 1em
+    float: left
+    height: 2em
+    line-height: 2em
+    position: relative
+    color: $light
+    font-size: (12 / 13) * 1em
+    background-color: $primary
+    margin-right: .5em
+    margin-bottom: .5em
+    
+    &::before
+      filter: grayscale(80%)
+      opacity: 0.5
+      border-radius: 2px
+      background:
+        repeat: no-repeat
+        position: center center
+
+    &:hover
+      background: none
+      cursor: pointer
+
+      &::after
+        +pseudo
+        background-color: $nudge-blue
+        border-color: transparent
+        border-radius: inherit
+        color: $light
+        content: 'Remove'
+        height: 100%
+        left: 0
+        text-align: center
+        top: 0
+        width: 100%
+        z-index: 1
+
+.toggle
+  background: none
+  cursor: pointer
+  margin: 0
+  outline: none
+  box-shadow: none
+  color: $primary
+  +border($color: $primary)
+  color: $primary
+  display: flex
+  padding: 0 !important
+  font-size: 13px
+
+  .left
+    +padding
+    color: inherit
+
+  .right
+    +padding
+    color: inherit
+
+  .on
+    background: $primary
+    background-clip: border-box
+    color: $light
+
+  &:hover
+    background: inherit
+    border-color: $secondary
+    box-shadow: none
+    color: $secondary
+    background: $white
+    box-shadow: none    
+
+    .on
+      background: $secondary
+      color: $light
+
+
+.text-input
+  input
+    border-bottom: $border-primary
+    border-bottom-color: $primary
+    left: 0
+    list-style: none
+    margin: 0
+    padding-bottom: 0.4em
+    padding-top: 0.2em
+    position: relative
+    width: 40em
+
+    &::placeholder
+      color: $primary
+
+    &:focus
+      border-bottom: $border-primary
+      border-bottom-color: $primary

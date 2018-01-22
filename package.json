@@ -10,11 +10,9 @@
   "scripts": {
     "build:pug": "pug -w src/pug -o extension/html",
     "build:sass": "sass --watch src/scss:extension/css --sourcemap=none",
-    "build:circle": "postcss --use postcss-safe-important -r extension/css/pages/circle.css --w --no-map",
-    "build:facebook": "postcss --use postcss-safe-important -r extension/css/pages/facebook.css --w --no-map",
-    "build:grey": "postcss --use postcss-safe-important -r extension/css/pages/grey.css --w --no-map",
-    "build:notifications": "postcss --use postcss-safe-important -r extension/css/pages/notifications.css --w --no-map",
-    "dev": "npm-run-all -p build:*"
+    "importanter:pages": "postcss --use postcss-safe-important -r extension/css/pages/* --w",
+    "importanter:nudges": "postcss --use postcss-safe-important -r extension/css/nudges.css --w",
+    "dev": "npm-run-all -p build:* importanter:*"
   },
   "repository": {
     "type": "git",

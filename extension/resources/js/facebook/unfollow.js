@@ -7,24 +7,24 @@
 
 var executeUnfollow = false;
 var autoUnfollow = false;
+var haveRequestedRefollowData = false;
 var cancelOperation = false;
 var profilesLoaded = false;
 var fb_dtsg = "";
 var user_id = "";
 var currentlyUnfollowing = false;
 var domain = "facebook.com";
+var retryCount = 0;
 
 // Get settings
 getSettings(execSettings);
 
 function getFacebookCreds(callback) {
-  console.log("here");
   // Get the fb_dtsg token that must be passed to get a successful response to an XMLHttpRequest from Facebook
   try {
     // Get fb_dtsg
     fbTokenReady("fb_dtsg", function(node) {
       fb_dtsg = node.value;
-      console.log(fb_dtsg);
       // Get user_id
       if (document.cookie.match(/c_user=(\d+)/)) {
         if (document.cookie.match(/c_user=(\d+)/)[1]) {
@@ -32,7 +32,6 @@ function getFacebookCreds(callback) {
             document.cookie.match(/c_user=(\d+)/)[1]
           );
           user_id = user_id[0];
-          console.log(user_id);
           callback();
         }
       }
@@ -43,26 +42,11 @@ function getFacebookCreds(callback) {
   }
 }
 
-function getRatio() {
-  console.log("hey");
-  friendAndPageListGenerator(unfollow, true, function() {
-    friendAndPageListGenerator(refollow, true, function() {
-      var profilesFollowed =
-        unfollow.totalProfiles /
-        (unfollow.totalProfiles + refollow.totalProfiles);
-      console.log(profilesFollowed);
-      changeSettingRequest(profilesFollowed, "fb_profile_ratio");
-    });
-  });
-}
-
 // Execute after getting settings
 function execSettings(settings) {
-  console.log(settings);
   // Set ratio
   var ratio = settings.fb_profile_ratio;
   // Test different ratio values
-  // ratio = 0;
   if (settings.fb_grey) {
     addCSS("nudge-facebook-grey", "css/pages/grey.css");
   }
@@ -72,12 +56,12 @@ function execSettings(settings) {
   if (settings.fb_auto_unfollow) {
     executeUnfollow = true;
     autoUnfollow = true;
-    // set checkbox value
   }
   if (ratio === false) {
-    console.log("yes");
     docReady(function() {
-      getFacebookCreds(getRatio);
+      getFacebookCreds(function() {
+        friendAndPageListGenerator(unfollow, true);
+      });
     });
     return;
   }
@@ -91,6 +75,7 @@ function execSettings(settings) {
     sendHTMLRequest(getUrl("html/facebook/confirm_content.html"), storeForUse);
     sendHTMLRequest(getUrl("html/facebook/run_content.html"), storeForUse);
     sendHTMLRequest(getUrl("html/facebook/share_content.html"), storeForUse);
+    sendHTMLRequest(getUrl("html/facebook/share_bottom.html"), storeForUse);
     sendHTMLRequest(getUrl("html/facebook/share.html"), storeForUse);
     sendHTMLRequest(getUrl("html/facebook/more_content.html"), storeForUse);
     // Function to run for various scenarios
@@ -113,22 +98,24 @@ function execSettings(settings) {
         });
       });
     }
-    console.log(ratio);
-    if (ratio === 0) {
+    if (ratio <= 0.1) {
       loadUx("share.html", shareUx);
-    }
-    if (ratio > 0) {
-      loadUx("intro.html", introUx);
-      console.log("read");
       docReady(function() {
         getFacebookCreds(function() {
-          console.log("next next step");
-          friendAndPageListGenerator(unfollow, false, function() {
-            executeUnfollow = false;
-            if (executeUnfollow) {
-              friendAndPageToggler(unfollow);
-            }
-          });
+          if (executeUnfollow) {
+            friendAndPageListGenerator(unfollow, false, function() {
+              executeUnfollow = false;
+            });
+          } else {
+            friendAndPageListGenerator(unfollow, true);
+          }
+        });
+      });
+    } else {
+      loadUx("intro.html", introUx);
+      docReady(function() {
+        getFacebookCreds(function() {
+          friendAndPageListGenerator(unfollow, true);
         });
       });
     }
@@ -139,8 +126,88 @@ function execSettings(settings) {
 // every time you go back to fb after, keep running if enough time has elapsed
 // randomise number of profiles to unfollow every day. max 100
 
+// UX helpers
+function hideLink() {
+  var container = document.querySelector(".facebook-container");
+  var close = document.querySelector(".facebook-close");
+  var hide = document.getElementById("fb_show_unfollow");
+  hide.onclick = function() {
+    changeSettingRequest("toggle", hide.id);
+    deleteEl(container);
+    deleteEl(close);
+    styleAdder("#pagelet_composer::before", "{ content: none !important; }");
+  };
+}
+
+function autoUnfollowLogger(firstMsg, secondMsg, secondOnclick) {
+  var fb_auto_unfollow = document.getElementById("fb_auto_unfollow");
+  var fb_unfollow_extra = document.getElementById("fb_unfollow_extra");
+  if (fb_auto_unfollow && firstMsg !== false) {
+    fb_auto_unfollow.innerHTML = firstMsg;
+  }
+  if (fb_unfollow_extra) {
+    if (secondMsg !== false) {
+      fb_unfollow_extra.innerHTML = secondMsg;
+    }
+    if (secondOnclick) {
+      fb_unfollow_extra.onclick = function() {
+        secondOnclick();
+      };
+    }
+  }
+}
+
+function unfollowLink() {
+  function stopAutounfollowing() {
+    changeSettingRequest(false, "fb_auto_unfollow");
+    autoUnfollow = false;
+    stopAuto();
+    autoUnfollowLogger(``, `Auto-unfollow`, startAutounfollowing);
+  }
+  function startAutounfollowing() {
+    changeSettingRequest(true, "fb_auto_unfollow");
+    autoUnfollow = true;
+    startAuto();
+    autoUnfollowLogger(`Auto-unfollowing `, `(don't)`, stopAutounfollowing);
+  }
+  if (autoUnfollow) {
+    autoUnfollowLogger(`Auto-unfollowing `, `(don't)`, stopAutounfollowing);
+  } else {
+    autoUnfollowLogger(``, `Auto-unfollow`, startAutounfollowing);
+  }
+}
+
+function startAuto() {
+  cancelOperation = false;
+  friendAndPageToggler(unfollow);
+}
+
+function stopAuto() {
+  cancelOperation = true;
+}
+
+function moreLink() {
+  var container = document.querySelector(".facebook-container");
+  var link_to_more = document.getElementById("link_to_more");
+  link_to_more.onclick = function() {
+    container.innerHTML = tempStorage["more_content.html"];
+    var back_to_share = document.getElementById("back_to_share");
+    back_to_share.onclick = function() {
+      container.innerHTML = tempStorage["share_content.html"];
+      shareUx();
+    };
+  };
+}
+
+function shareBottomLinks() {
+  hideLink();
+  unfollowLink();
+  moreLink();
+}
+
+// UX loaders
 function introUx(element) {
-  var hide = document.querySelector(".fb_show_unfollow");
+  var close = document.querySelector(".facebook-close");
   var container = document.querySelector(".facebook-container");
   if (!container) {
     deleteEl(container);
@@ -152,13 +219,7 @@ function introUx(element) {
     container.innerHTML = tempStorage["confirm_content.html"];
     confirmUx();
   };
-  hide.onclick = function() {
-    changeSettingRequest("toggle", hide.id);
-    deleteEl(container);
-    deleteEl(close);
-    styleAdder("#pagelet_composer::before", "{ content: none !important; }");
-  };
-  var close = document.querySelector(".facebook-close");
+  hideLink();
   close.onclick = function() {
     deleteEl(container);
     deleteEl(close);
@@ -172,6 +233,7 @@ function confirmUx() {
   var button = document.querySelector(".facebook-button-blue");
   var container = document.querySelector(".facebook-container");
   button.onclick = function() {
+    cancelOperation = false;
     container.innerHTML = tempStorage["run_content.html"];
     if (profilesLoaded && !currentlyUnfollowing) {
       friendAndPageToggler(unfollow);
@@ -183,54 +245,51 @@ function confirmUx() {
 }
 
 function runUx() {
-  var button = document.querySelector(".facebook-button-blue");
   var container = document.querySelector(".facebook-container");
   var text = document.querySelector(".facebook-text");
+  buttonInit();
+}
+
+function buttonInit() {
+  var button = document.querySelector(".facebook-button-blue");
   button.onclick = function() {
-    cancelOperation = true;
-    text.innerHTML = "Unfollowing stopped, with X people unfollowed.";
-    button.innerHTML = "Resume unfollowing";
-    // want to make clear how much time it's going to take
-    // feel free to move to another tab. this process will continue
-    // container.innerHTML = tempStorage["share_content.html"];
-    // shareUx();
+    progressLogger(`Stopped unfollowing`);
+    stopInit();
+    // TODO: add feel free to move to another tab. this process will continue
+  };
+}
+
+function stopInit() {
+  var button = document.querySelector(".facebook-button-blue");
+  button.innerHTML = "Resume unfollowing";
+  cancelOperation = true;
+  button.onclick = function() {
+    cancelOperation = false;
+    friendAndPageToggler(unfollow);
+    button.innerHTML = "Stop unfollowing";
+    progressLogger(`Resuming...`);
+    buttonInit();
   };
 }
 
 function shareUx() {
   var container = document.querySelector(".facebook-container");
   var button = document.querySelector(".facebook-button-blue");
+  button.onclick = function() {
+    popupCenter(
+      "https://www.facebook.com/sharer/sharer.php?u=http%3A//nudgeware.io",
+      "Share Nudge on Facebook",
+      555,
+      626
+    );
+  };
   var close = document.querySelector(".facebook-close");
   close.onclick = function() {
     deleteEl(container);
     deleteEl(close);
     styleAdder("#pagelet_composer::before", "{ content: none !important; }");
   };
-  var fb_auto_unfollow = document.getElementById("fb_auto_unfollow");
-  if (autoUnfollow) {
-    fb_auto_unfollow.innerHTML = `Don't auto-unfollow`;
-  } else {
-  }
-  fb_auto_unfollow.onclick = function() {
-    if (autoUnfollow) {
-      changeSettingRequest(false, "fb_auto_unfollow");
-      autoUnfollow = false;
-      fb_auto_unfollow.innerHTML = `Auto-unfollow new profiles`;
-    } else {
-      changeSettingRequest(true, "fb_auto_unfollow");
-      autoUnfollow = true;
-      fb_auto_unfollow.innerHTML = `Don't auto-unfollow`;
-    }
-  };
-  var link_to_more = document.getElementById("link_to_more");
-  link_to_more.onclick = function() {
-    container.innerHTML = tempStorage["more_content.html"];
-    var back_to_share = document.getElementById("back_to_share");
-    back_to_share.onclick = function() {
-      container.innerHTML = tempStorage["share_content.html"];
-      shareUx();
-    };
-  };
+  shareBottomLinks();
   // to refollow, go to // want to make clear where you go to refollow
 }
 
@@ -239,26 +298,37 @@ function shareUx() {
 
 function progressLogger(message) {
   function getEl() {
-    return document.querySelector("#facebook-specific-progress");
+    return document.getElementById("facebook-specific-progress");
   }
   if (getEl()) {
     getEl().innerHTML = message;
   }
-  console.log(message);
 }
 
 function headlineLogger(message) {
   function getEl() {
-    return document.querySelector("#facebook-text");
+    return document.getElementById("headline-progress");
   }
   if (getEl()) {
     getEl().innerHTML = message;
   }
-  console.log(message);
 }
 
 // Get friend and page IDs
 function friendAndPageListGenerator(option, oneOff, callback) {
+  // Always update ratio before getting the rest of data
+  if (!haveRequestedRefollowData) {
+    haveRequestedRefollowData = true;
+    friendAndPageListGenerator(refollow, true, function() {
+      friendAndPageListGenerator(option, oneOff, function() {
+        var profilesFollowed =
+          unfollow.totalProfiles /
+          (unfollow.totalProfiles + refollow.totalProfiles);
+        changeSettingRequest(profilesFollowed, "fb_profile_ratio");
+      });
+    });
+    return;
+  }
   // Empty out profile storage if you're on the first loop
   if (option.profileRequestCounter === 0) {
     option.continueRequest = true;
@@ -295,7 +365,8 @@ function friendAndPageListGenerator(option, oneOff, callback) {
         option.profiles.push({
           id: data[j].id,
           name: data[j].name,
-          type: data[j].type
+          type: data[j].type,
+          attempted: false
         });
       }
 
@@ -356,7 +427,12 @@ function friendAndPageListGenerator(option, oneOff, callback) {
 function friendAndPageToggler(option) {
   // Check if just starting
   if (option.profileCounter === 0) {
-    progressLogger(`Preparing to unfollow`);
+    headlineLogger(
+      `${option.profileCounter} of ${
+        option.totalProfiles
+      } friends, pages, and groups unfollowed`
+    );
+    progressLogger(`Preparing to unfollow: 100% of profiles loaded`);
     currentlyUnfollowing = true;
   }
   // Check if there are profiles to toggle
@@ -365,7 +441,11 @@ function friendAndPageToggler(option) {
     return;
   }
   // Pick the first profile in the array, since if successful, we'll move it from array
+  if (option.profiles[0].attempted) {
+    moveOnToNextProfile(option);
+  }
   var profile = option.profiles[0];
+  // Prevent attempting to unfollow if no profile
   if (typeof profile === "undefined") {
     progressLogger(`You have no profiles to unfollow`);
     return;
@@ -389,22 +469,35 @@ function friendAndPageToggler(option) {
   params += "&profile_id=" + id;
   params += "&nctr[_mod]=pagelet_timeline_profile_actions";
   params += "&__req=65";
-  // Set a 10-second time out
-  friendandpage_toggle.timeout = 10000;
-  // Set the timeout function - keep going
-  friendandpage_toggle.ontimeout = function(e) {
-    eventLogSender(domain, "unfollow_timeout", { errorMessage: e });
+  // Retry function
+  function retry() {
+    retryCount++;
+    if (retryCount > 4) {
+      headlineLogger(`Something went wrong. Please check your connection`);
+      stopInit();
+      retryCount = 0;
+      return;
+    }
+    var detailsObj = { errorMessage: "retry" };
+    eventLogSender(domain, "retry", detailsObj);
     friendAndPageToggler(option);
-  };
+  }
   // Run on successful response to the request
   friendandpage_toggle.onreadystatechange = function() {
     if (friendandpage_toggle.readyState == 4) {
+      if (friendandpage_toggle.status === 0) {
+        if (retryCount === 0) {
+          option.profiles[0].attempted = true;
+        }
+        setTimeout(retry, 5000);
+        return;
+      }
       var data = friendandpage_toggle.responseText;
       data = data.substr(data.indexOf("{"));
       data = JSON.parse(data);
       if (typeof data != "undefined") {
         if (typeof data.error != "undefined") {
-          progressLogger(`Something went wrong. Please try again in 24 hours`);
+          headlineLogger(`Something went wrong. Please try again in 24 hours`);
           return;
         }
         // Success happens here
@@ -412,34 +505,72 @@ function friendAndPageToggler(option) {
           typeof data.onload != "undefined" &&
           data.onload[0] === option.verifText.start + id + option.verifText.end
         ) {
+          // Reset the retry count
+          retryCount = 0;
           // Increase the count of profiles successfully unfollowed
-          option.profileCounter++;
-          progressLogger(`Unfollowed ${name}`);
-          headlineLogger(
-            `${option.profileCounter} of ${
-              option.totalProfiles
-            } friends, pages, and groups unfollowed`
-          );
-          var itemToMove = option.profiles.shift();
-          option.executedProfiles.push(itemToMove);
-          if (
-            option.profileCounter < option.profiles.length &&
-            !cancelOperation
-          ) {
+          moveOnToNextProfile(option);
+          // Stop operation if cancelled
+          if (cancelOperation) {
+            eventLogSender("fb_unfollow", "cancelled", {
+              executedProfilesLength: option.executedProfiles.length,
+              profilesLength: option.profiles.length
+            });
+            headlineLogger(
+              `${option.profileCounter} of ${
+                option.totalProfiles
+              } friends, pages, and groups unfollowed`
+            );
+          } else {
+            progressLogger(`Unfollowed ${name}`);
+            headlineLogger(
+              `${option.profileCounter} of ${
+                option.totalProfiles
+              } friends, pages, and groups unfollowed`
+            );
+            var pct =
+              (option.profileCounter / option.totalProfiles * 100).toFixed(0) +
+              "%";
+            autoUnfollowLogger(`${pct} auto-unfollowed `, false, false);
             // Run another iteration after a c.1s delay
-            setTimeout(function() {
-              friendAndPageToggler(option);
-            }, randomTime(1, 0.1));
-          }
-          if (option.profileCounter === option.profiles.length) {
-            setTimeout(function() {
-              // All done - send message about it
-            }, 2000);
+            if (option.profiles.length !== 0) {
+              setTimeout(function() {
+                friendAndPageToggler(option);
+              }, randomTime(1, 0.1));
+            } else {
+              // Stop working
+              setTimeout(function() {
+                headlineLogger(
+                  `Congratulations! Finished unfollowing ${
+                    option.profileCounter
+                  } friends, pages and groups.`
+                );
+                autoUnfollowLogger(`100% auto-unfollowed `, false, false);
+                var button = document.getElementById("facebook-button");
+                if (button) {
+                  button.innerHTML = "Nudge your friends";
+                  button.onclick = function() {
+                    popupCenter(
+                      "https://www.facebook.com/sharer/sharer.php?u=http%3A//nudgeware.io",
+                      "Share Nudge on Facebook",
+                      555,
+                      626
+                    );
+                  };
+                }
+                var bottom = document.querySelector(".facebook-bottom-text");
+                if (bottom) {
+                  bottom.innerHTML = tempStorage["share_bottom.html"];
+                  shareBottomLinks();
+                }
+              }, 2000);
+              // Change button
+            }
           }
         } else {
           // Major fail - should log it
-          console.log(option.messages.fail + name);
-          console.log(friendandpage_toggle);
+          eventLogSender("fb_unfollow", "major_fail", {
+            responseText: friendandpage_toggle.responseText
+          });
         }
       }
     }
@@ -448,11 +579,10 @@ function friendAndPageToggler(option) {
   friendandpage_toggle.send(params);
 }
 
-function checkIfPageletExists(callback) {
-  if (observer) {
-    observer.disconnect();
-  }
-  return;
+function moveOnToNextProfile(option) {
+  option.profileCounter++;
+  var itemToMove = option.profiles.shift();
+  option.executedProfiles.push(itemToMove);
 }
 
 function pageletInit(callback) {
@@ -500,36 +630,30 @@ function protectFeatures(settings) {
 }
 
 function checkOnMutation(settings) {
+  // Make sure if grey that always stays grey
   if (settings.fb_grey) {
     var grey = document.getElementById("nudge-facebook-grey");
     if (!grey) {
       addCSS("nudge-facebook-grey", "css/pages/grey.css");
-      console.log("regreyed");
     }
   }
+
+  // Make sure if hide notifs that they always stay hidden
   if (settings.fb_hide_notifications) {
     var notifications = document.getElementById("nudge-facebook-notifications");
     if (!notifications) {
       addCSS("nudge-facebook-notifications", "css/pages/notifications.css");
-      console.log("reantinotifed");
     }
   }
-  // var nudge = document.getElementById()
-  // if (settings.fb_hide_notifications) {
-  //   var notifications = document.getElementById("nudge-facebook-notifications");
-  //   if (!notifications) {
-  //     addCSS("nudge-facebook-notifications", "css/pages/notifications.css");
-  //   }
-  // }
+
+  // Make sure pagelet never covered in white without dialog
   var pagelet = document.getElementById("pagelet_composer");
   if (pagelet) {
     var dialog = document.getElementById("nudge-dialog");
     var facebookCss = document.getElementById("nudge-facebook-dialog");
     if (dialog && !facebookCss) {
       addCSS("nudge-facebook-dialog", "css/pages/facebook.css");
-      console.log("added it");
     } else if (!dialog && facebookCss) {
-      console.log("deleted it");
       deleteEl(facebookCss);
     }
   }

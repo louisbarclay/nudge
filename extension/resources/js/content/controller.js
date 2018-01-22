@@ -4,6 +4,33 @@ getSettings(execSettings);
 // Prep in case doing div hiding
 sendHTMLRequest(getUrl("html/components/circle.html"), storeForUse);
 
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  if (request.type === "favicon") {
+    imageLoader("favicon", request.favicon);
+    updateFavicon(request.favicon, request.domain);
+  }
+});
+
+function updateFavicon(favicon, domain) {
+  if (!keyDefined(tempStorage, "faviconUrl")) {
+    tempStorage.faviconUrl = favicon;
+    imageLoader("favicon", favicon);
+  } else if (
+    tempStorage.faviconUrl.includes(`${domain}/favicon`) &&
+    favicon.includes(".ico")
+  ) {
+    // Always upgrade to a non-'domain.com/favicon' string if possible, since likely to be better quality
+    // Also only if the file is .ico
+    tempStorage.faviconUrl = favicon;
+    imageLoader("favicon", favicon);
+  }
+}
+
+function imageLoader(imageName, url) {
+  imageName = new Image();
+  imageName.src = url;
+}
+
 function execSettings(settings) {
   var domain = false;
   var url = extractDomain(window.location.href);
@@ -30,6 +57,14 @@ function execSettings(settings) {
           domain
         }
       );
+      var iconArray = ["link[rel*='shortcut icon']", "link[rel*='icon']"];
+      for (var i = 0; i < iconArray.length; i++) {
+        var element = document.querySelector(iconArray[i]);
+        if (element) {
+          updateFavicon(element.href, domain);
+          element.remove();
+        }
+      }
     });
   }
   // Init div_hider

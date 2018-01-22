@@ -1,7 +1,4 @@
-function imageLoader(imageName, url) {
-  imageName = new Image();
-  imageName.src = url;
-}
+
 
 // // Try to get favicon again, if not set by message
 // function backupFaviconGenerator() {
