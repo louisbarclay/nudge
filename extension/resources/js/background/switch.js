@@ -20,3 +20,15 @@ function switchOn(domain, url, tabId) {
   // missing any part about changing the settings
   chrome.tabs.update(tabId, { url }, function() {});
 }
+
+function closeAll(domain) {
+  chrome.tabs.query({}, function(tabs) {
+    for (var i = 0; i < tabs.length; i++) {
+      if (inDomainsSetting(tabs[i].url) === domain) {
+        chrome.tabs.remove(tabs[i].id);
+      }
+    }
+  });
+}
+
+

@@ -45,8 +45,8 @@ function syncSettingsGet(callback) {
   });
 }
 
-function changeSetting(newVal, setting, domain, domainSetting) {
-  console.log(newVal, setting, domain, domainSetting);
+function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
+  console.log(newVal, setting, domain, domainSetting, senderTabId);
   try {
     if (domain && domainSetting) {
       if (domainSetting === "add") {
@@ -64,15 +64,19 @@ function changeSetting(newVal, setting, domain, domainSetting) {
       if (newVal === "toggle") {
         settingsLocal[setting] = !settingsLocal[setting];
       } else {
+        console.log('this one');
         settingsLocal[setting] = newVal;
       }
     }
     // Whatever has happened, sync settingsLocal and show new sync settings in log
-    storageSet({ settings: settingsLocal }, s);
+    storageSet({ settings: settingsLocal });
   } catch (e) {
     console.log(e);
   }
-  // send out settingsLocal? yes. and every single js has a receiver waiting for it
+  if (senderTabId) {
+    console.log('sentmsg');
+    chrome.tabs.sendMessage(senderTabId, { type: 'send_settingsLocal', settingsLocal });
+  }
 }
 
 function syncSettingsPeriodically(settingsLocal) {

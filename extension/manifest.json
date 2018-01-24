@@ -34,7 +34,6 @@
     "48": "resources/images/48.png"
   },
   "browser_action": {
-    "default_popup": "html/popup.html"
   },
   "options_ui": {
     "page": "html/options.html",

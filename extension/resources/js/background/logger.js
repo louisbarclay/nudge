@@ -10,12 +10,16 @@ function consoleLogger(domain, eventType, detailsObj, date, time) {
   switch (eventType) {
     case "visit":
       logWithColor(
-        `${date} ${detailsObj.startTime} ${
-          detailsObj.endTime
-        } ${domain} ${detailsObj.duration} (${
-          detailsObj.totalTimeToday
-        } today). Source: ${detailsObj.source}`,
+        `${date} ${detailsObj.startTime} ${detailsObj.endTime} ${domain} ${
+          detailsObj.duration
+        } (${detailsObj.totalTimeToday} today). Source: ${detailsObj.source}`,
         "green"
+      );
+      break;
+    case "leftChrome":
+      logWithColor(
+        `${date} ${time} Left Chrome ${domain} Source: ${detailsObj.source}`,
+        "darkmagenta"
       );
       break;
     case "shutdown":
@@ -52,12 +56,14 @@ function nudgeLogger(nudgeObject) {
   // Nudges get recorded in the 'nudges' object within each date
   // Also, 'lastNudged' gets recorded in the status object
   var date = moment().format("YYYY-MM-DD");
-  var time = moment().format("HH:mm:ss");
+  var time = moment();
   var statusObj = open("status");
+  console.log("opened it here", statusObj[nudgeObject.domain]);
   var dateObj = open(date);
   dateObj = dataAdder(dateObj, "nudges", nudgeObject, time);
   statusObj = dataAdder(statusObj, nudgeObject.domain, time, "lastNudged");
   close("status", statusObj);
+  // console.log(JSON.parse(localStorage["status"]));
   close(date, dateObj);
 }
 
@@ -90,8 +96,8 @@ function eventLog(domain, eventType, detailsObj, date, time) {
   consoleLogger(domain, eventType, detailsObj, date, time);
   // should match up perfectly
   if (eventType != "visitStart") {
-    open(date, function(dateObj) {
-      dataAdder(dateObj, "events", event, time);
-    });
+    var dateObj = open(date);
+    dataAdder(dateObj, "events", event, time);
+    close(date, dateObj);
   }
 }

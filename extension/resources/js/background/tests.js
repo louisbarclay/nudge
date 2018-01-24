@@ -31,10 +31,12 @@ var testState = {
 function x() {
   var s = open("status");
   s.currentState = testState;
+  console.log(testState);
   close("status", s);
 }
 
-var t = false;
+t = false;
+// Make t true, then run x(), then make t false
 
 function runTest() {
   x();

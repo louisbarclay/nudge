@@ -15,6 +15,8 @@ function nudgeObject(domain, amount, type, status) {
 }
 
 function domainTimeUpdater(domain, startTime, endTime, source) {
+  startTime = moment(startTime);
+  endTime = moment(endTime);
   // Last shutdown if domain is true, and not an odd domain, and if there are not any tabs of that kind when visit is closed off
   if (domain && domain !== notInChrome && domain !== chromeOrTabIdle) {
     chrome.tabs.query({}, function(tabs) {
@@ -48,7 +50,7 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
   }
   // Actual time adding stuff
   // Get addTime in seconds
-  var addTime = endTime.diff(startTime, "seconds");
+  var addTime = moment(endTime).diff(startTime, "seconds");
   // Open date
   var date = moment(endTime).format("YYYY-MM-DD");
   var dateObj = open(date);
@@ -95,7 +97,17 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
 
 // Runs within timeline adder if the new timeline event does not match the old one
 function domainVisitUpdater(domain, time, source) {
+  time = moment(time);
   var date = moment().format("YYYY-MM-DD");
+  if (domain === notInChrome) {
+    eventLog(
+      notInChrome,
+      "leftChrome",
+      { source },
+      date,
+      time.format("HH:mm:ss")
+    );
+  }
   var dateObj = open(date);
   dataAdder(dateObj, domain, 1, "visits", addTogether);
   close(date, dateObj);
@@ -115,7 +127,9 @@ function domainVisitUpdater(domain, time, source) {
   var lastCompulsive = false;
   if (keyDefined(domainStatusObj, "lastCompulsive")) {
     // Unless there has been one
-    lastCompulsive = moment(domainStatusObj.compulsiveSearch);
+    console.log(domainStatusObj.lastCompulsive);
+    lastCompulsive = moment(domainStatusObj.lastCompulsive);
+    console.log(lastCompulsive);
   }
   // Assume no last shutdown
   var lastShutdown = false;
@@ -124,6 +138,16 @@ function domainVisitUpdater(domain, time, source) {
     lastShutdown = moment(domainStatusObj.lastShutdown);
   }
   // Find out if we should trigger a shutdown
+  console.log(domainStatusObj);
+  console.log(lastShutdown);
+  if (lastShutdown) {
+    console.log(lastShutdown.isAfter(compulsiveSearch));
+  }
+  console.log(compulsiveSearch);
+  console.log(lastCompulsive); // FIXME: STILL a fucking problem for fuck's sake
+  if (lastCompulsive) {
+    console.log(lastCompulsive.isBefore(lastShutdown));
+  }
   var compulsive =
     // Has there ever been a shutdown? If no, don't evaluate true
     lastShutdown &&
@@ -134,20 +158,21 @@ function domainVisitUpdater(domain, time, source) {
       // Is last compulsive before last shutdown? Avoiding repetition
       lastCompulsive.isBefore(lastShutdown));
   if (compulsive) {
-    if (settingsLocal.compulsive_off) {
-      console.log('run switch off here');
+    if (settingsLocal.compulsive) {
+      // console.log("run switch off here");
       // switchOff(domain, url, tabId);
     }
     dataAdder(dateObj, domain, 1, "compulsives", addTogether);
-    console.log("Sent compulsive");
+    console.log("Sent compulsive", domain);
     dataAdder(statusObj, domain, moment(), "lastCompulsive");
+    close("status", statusObj);
+    console.log('closed it here', JSON.parse(localStorage['status']));
     messageSender(
       nudgeObject(domain, domainStatusObj.lastShutdown, "compulsive")
     );
-  }
-  close("status", statusObj);
-  if (compulsive) {
-    console.log(JSON.parse(localStorage['status'].domain));
+  } else {
+    // Only close status off
+    close("status", statusObj);
   }
   eventLog(domain, "visitStart", { totalVisits, source });
 }

@@ -371,6 +371,35 @@ function toggleClass(el, className) {
   }
 }
 
+// Fade out
+
+function fadeOut(el) {
+  el.style.opacity = 1;
+
+  (function fade() {
+    if ((el.style.opacity -= 0.1) < 0) {
+      el.style.display = "none";
+    } else {
+      requestAnimationFrame(fade);
+    }
+  })();
+}
+
+// Fade in
+
+function fadeIn(el, display) {
+  el.style.opacity = 0;
+  el.style.display = display || "block";
+
+  (function fade() {
+    var val = parseFloat(el.style.opacity);
+    if (!((val += 0.1) > 1)) {
+      el.style.opacity = val;
+      requestAnimationFrame(fade);
+    }
+  })();
+}
+
 function doAtEarliest(callback) {
   document.addEventListener("DOMSubtreeModified", runCallback, false);
   function runCallback() {
@@ -497,4 +526,25 @@ function changeSettingRequest(newVal, setting, domain, domainSetting) {
     domain,
     domainSetting
   });
+}
+
+function imgSrcToDataURL(src, callback, outputFormat) {
+  var img = new Image();
+  img.crossOrigin = "Anonymous";
+  img.onload = function() {
+    var canvas = document.createElement("CANVAS");
+    var ctx = canvas.getContext("2d");
+    var dataURL;
+    canvas.height = this.naturalHeight;
+    canvas.width = this.naturalWidth;
+    ctx.drawImage(this, 0, 0);
+    dataURL = canvas.toDataURL(outputFormat);
+    callback(dataURL);
+  };
+  img.src = src;
+  if (img.complete || img.complete === undefined) {
+    img.src =
+      "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+    img.src = src;
+  }
 }

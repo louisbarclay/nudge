@@ -3,10 +3,26 @@ var tags = document.getElementById("domainList");
 var id_button = document.getElementById("id");
 var domains = {};
 var facebookNotif = document.getElementById("facebookNotif");
+var blankFaviconString = "";
+
+imgSrcToDataURL(chrome.runtime.getURL("img/favicon/blankfavicon.png"), function(
+  dataUrl
+) {
+  blankFaviconString = dataUrl;
+  console.log(blankFaviconString);
+});
 
 sendHTMLRequest(getUrl("html/welcome.html"), storeForUse);
 
 getSettings(execSettings);
+
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  console.log(request);
+  if (request.type === "send_settingsLocal") {
+    settingsLocal = request.settingsLocal;
+    console.log(settingsLocal);
+  }
+});
 
 var settingsLocal = {};
 
@@ -15,14 +31,22 @@ function execSettings(settings) {
   populateDomains(settings.domains);
   populateBooleans(settings);
   // Reset
-  changeSettingRequest(0, "show_intro");
-  if (settingsLocal.show_intro < 4) {
-    // el("welcome").innerHTML = tempStorage["welcome.html"];
+  // changeSettingRequest(0, "show_intro");
+  console.log(settingsLocal.show_intro);
+  if (true) {
+    // if (settingsLocal.show_intro < 4) {
+    el("welcome").innerHTML = tempStorage["welcome.html"];
+    handleWelcomeBoolean(settings);
     console.log("yeah");
-    var increaseCounter = settingsLocal.show_intro++;
-    // changeSettingRequest(increaseCounter, "show_intro");
+    var increaseCounter = settingsLocal.show_intro + 1;
+    console.log(increaseCounter);
+    changeSettingRequest(increaseCounter, "show_intro");
   }
   id_button.innerHTML = settings.userId;
+}
+
+function updateLocalSettings(settings) {
+  settingsLocal = settings;
 }
 
 function populateDomains(domains) {
@@ -55,6 +79,20 @@ function handleBoolean(id) {
   };
 }
 
+function handleWelcomeBoolean(settings) {
+  if (!settings["share_data"]) {
+    toggleBoolean("share_data2");
+  }
+  var welcomeBoolean = el("share_data2");
+  console.log(welcomeBoolean);
+  var button = welcomeBoolean.childNodes[1];
+  button.onclick = function() {
+    toggleBoolean("share_data2");
+    toggleBoolean("share_data");
+    changeSettingRequest("toggle", "share_data");
+  };
+}
+
 function toggleBoolean(id) {
   var div = document.getElementById(id);
   var button = div.childNodes[1];
@@ -70,30 +108,37 @@ addDomain.addEventListener("keydown", function(event) {
     var domainCheck = new RegExp(
       "^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9])).([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}.[a-zA-Z]{2,3})(/(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,200}[a-zA-Z0-9]))?)?(/)?$"
     );
-    var passedCheck = true;
-    // Existing domain check
-    Object.keys(settingsLocal.domains).forEach(function(key) {
-      if (newDomain.includes(key)) {
-        console.log("already exists there");
-        passedCheck = false;
-        var listElements = document.getElementsByTagName('li');
+    var isInDomainList = false;
+    var nudge = true;
+    if (domainCheck.test(newDomain)) {
+      Object.keys(settingsLocal.domains).forEach(function(key) {
+        if (newDomain.includes(key)) {
+          isInDomainList = true;
+          nudge = settingsLocal.domains[key].nudge;
+          newDomain = key;
+        }
+      });
+      if (isInDomainList && nudge) {
+        console.log("in domain list and is nudge");
+        var listElements = document.getElementsByTagName("li");
         for (var i = 0; i < listElements.length; i++) {
-          console.log(listElements[i].innerHTML, key);
-          if (listElements[i].innerHTML === key) {
-            console.log(listElements[i]);
-            toggleClass(listElements[i], 'options-flash');
+          if (listElements[i].innerHTML === newDomain) {
+            toggleClass(listElements[i], "options-flash");
             break;
           }
         }
+        addDomain.value = "";
+      } else if (isInDomainList && !nudge) {
+        console.log("in domain list and is not nudge");
+        addLi(newDomain);
+        changeSettingRequest(true, "domains", newDomain, "nudge");
+        addDomain.value = "";
+      } else if (!isInDomainList) {
+        console.log("not in domain list");
+        addLi(newDomain);
+        changeSettingRequest(true, "domains", newDomain, "add");
+        addDomain.value = "";
       }
-    });
-    // Regex check
-    if (domainCheck.test(newDomain) && passedCheck) {
-      addLi(newDomain);
-      changeSettingRequest(true, "domains", newDomain, "add");
-      addDomain.value = "";
-    } else {
-      console.log("wrong format");
     }
   }
 });
@@ -101,7 +146,7 @@ addDomain.addEventListener("keydown", function(event) {
 function addLi(domain) {
   var li = document.createElement("li");
   li.innerHTML = domain;
-  li.id = "li" + getRandomInt(1000, 10000);
+  li.id = "li" + getRandomInt(1000, 10000000000000);
   tags.appendChild(li);
   loadFavicon(li.id, domain);
   removeDomainOnClick(li, domain);
@@ -130,9 +175,15 @@ function styleAdder(id, style) {
 }
 
 function loadFavicon(elementId, domain) {
-  var bgStyle =
-    '{ color: red; border: 3px; background: url("http://www.google.com/s2/favicons?domain=www.' +
-    domain +
-    '") 16px 16px; }';
-  styleAdder("#" + elementId + ":before", bgStyle);
+  var faviconUrl = `http://www.google.com/s2/favicons?domain=${domain}`;
+  imgSrcToDataURL(faviconUrl, function(dataUrl) {
+    if (dataUrl === blankFaviconString) {
+      console.log(domain);
+    }
+  });
+  function updateFavicon() {
+    var bgStyle = `{ color: red; border: 3px; background: url("http://www.google.com/s2/favicons?domain=${domain}") 16px 16px; }`;
+    styleAdder("#" + elementId + ":before", bgStyle);
+  }
+  updateFavicon();
 }

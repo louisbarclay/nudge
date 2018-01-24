@@ -10,12 +10,6 @@ debugMode = config.debug;
 if (debugMode) {
   console.log("Nudge is in debug mode - switch off before moving to production");
 } else {
-  console.log("Nudge is in production - all logging is off");
+  // console.log("Nudge is in production - all logging is off");
   console.log = function() {};
-}
-
-function log(data) {
-  if (debugMode) {
-    console.log(data);
-  }
 }

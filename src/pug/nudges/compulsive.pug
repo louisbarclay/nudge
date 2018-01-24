@@ -1,5 +1,5 @@
 div.nudge-wrapper
-  div.nudge-container
+  div.nudge-container#nudge-container
     div.nudge-main
       p Last on
       div.nudge-favicon#nudge-favicon
@@ -8,8 +8,10 @@ div.nudge-wrapper
       p ago
       div.nudge-close#close-button
     div.nudge-menu
-      div Don't nudge this site
-      div Close all 
-        span.nudge-highlight#nudge-domain of this site's 
+      div#dont-nudge
+        span#first-part Don't nudge 
+        span.nudge-small-highlight#nudge-domain2 this site
+      div#close-all Nuke all 
+        span.nudge-small-highlight#nudge-domain of this site's 
         | tabs
       div#nudge-options Options

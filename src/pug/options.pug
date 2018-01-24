@@ -8,30 +8,40 @@ html
         div.options-header
           div.options-logo
       div#welcome
-      span.options-sub-header Your Nudge sites
+      span.options-sub-header Sites Nudge works on
       div
         ul.text-input
           li
             input#addDomain(type='text' placeholder='Add a site here, or remove a site by clicking on it below') 
       div
-        span.options-guidance-text  (In the format website.com, section.website.com or website.com/page.)
+        span.options-guidance-text  (In format 
+          span.options-guidance-text-highlight website.com
+          | , 
+          span.options-guidance-text-highlight  section.website.com
+          |  or 
+          span.options-guidance-text-highlight website.com/page
+          | )
       ul.tags#domainList
-      span.options-sub-header Other options
+      span.options-sub-header Stuff Nudge does
       mixin optionBoolean(name, divId)
         div.boolean(id=divId)
           div=name
           button.toggle
             div.left.on Yes
             div.right No
-      +optionBoolean('Get rid of Facebook notifications', 'facebookNotif')
-      +optionBoolean('Take notification numbers out of page titles', 'constantise')
-      +optionBoolean('Auto-unfollow new friends, pages and groups', 'fb_auto_unfollow')
-      +optionBoolean('Show Facebook unfollow', 'fb_show_unfollow')
-      span.options-sub-header Nudge ID
-      p Your Nudge ID is
+      +optionBoolean("Nudges you when you're spending a long time on a site", 'time_nudge')
+      +optionBoolean("Nudges you when you go back to a site you've just been on", 'compulsive_nudge')
+      +optionBoolean('Stops tab titles from showing (1) or flashing their icons', 'constantise')
+      +optionBoolean('Gets rid of Facebook notifications', 'fb_hide_notifications')
+      +optionBoolean('Makes the Facebook top bar grey', 'fb_grey')
+      +optionBoolean('Auto-unfollows new Facebook friends, pages and groups', 'fb_auto_unfollow')
+      +optionBoolean('Shows Facebook unfollow dialog', 'fb_show_unfollow')
+      +optionBoolean('Shares anonymised data to help make Nudge better', 'share_data')
+      span.options-sub-header Your Nudge ID
+      p Here is your unique Nudge ID  &mdash; please memorise it (just joking):
       div.id-banner
         div.id-text#id
-      p Pretty catchy, right? Keep it safe if you are participating in a Nudge study.
+      p You might need it sometime if you participate in a study that uses Nudge.
   script(src="../config.js")
   script(src="../resources/js/background/storage.js")
   script(src="../resources/js/helpers.js")

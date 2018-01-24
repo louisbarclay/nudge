@@ -65,7 +65,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       request.newVal,
       request.setting,
       request.domain,
-      request.domainSetting
+      request.domainSetting,
+      sender.tab.id
     );
   }
   if (request.type === "event") {
@@ -95,6 +96,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   }
   if (request.type === "options") {
     chrome.runtime.openOptionsPage();
+  }
+  if (request.type === "close_all") {
+    closeAll(request.domain);
   }
   if (request.type === "inject_tabidler" && !chromeTab) {
     chrome.tabs.executeScript(sender.tab.id, {

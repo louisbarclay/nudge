@@ -1,9 +1,19 @@
 // Options
+$primary: lighten($nudge-grey-medium, 7%)
+$light-fill: lighten($nudge-grey-lightest, 4%)
+$secondary-text: $nudge-grey-light
+$toggle-fill: darken($light-fill, 3%)
+$toggle-secondary: $nudge-blue
+$toggle-fill-text: $primary
+$toggle-light-text: $primary
+$toggle-white: $light-fill
 
-$primary: $nudge-blue
+body
+  font-size: 13px
+  color: $primary
 
 .options-container
-  +container($min-width: 450px)
+  +container($min-width: 500px)
 
 .options-logo
   +size(80px)
@@ -14,20 +24,28 @@ $primary: $nudge-blue
   display: flex
   flex-direction: row
   margin-top: 1em
-  justify-content: flex-start
+  justify-content: center
   align-items: baseline
 
 .options-flash
   background-color: $nudge-pink !important
 
 .options-sub-header
-  text-transform: uppercase
-  font-size: 0.9em
   color: $primary
+  font-size: 22px
   margin-bottom: 0.5em
+  // text-transform: uppercase
+  // font-size: 0.9em
+  // color: $primary
+  margin-bottom: 0.6em
+  margin-top: 1em
+
+#share_data
+  margin-bottom: 0
 
 .data-banner
   +border
+  margin-top: 1em
   padding: 1em
   flex-direction: column
   ::before
@@ -47,20 +65,27 @@ $primary: $nudge-blue
 
 .data-text
   line-height: 1.5em
-  font-size: 13px
+  font-size: 12px
   color: $primary
   p
     margin-top: 1em
   a
     color: $primary
 
+  .toggle
+    font-size: 1em
+
 .options-guidance-text
   font-size: 11px
-  color: $primary
+  color: $secondary-text
+
+.options-guidance-text-highlight
+  color: $primary  
 
 .id-banner
   @extend .data-banner
   padding: 0.5em
+  padding-top: 0.6em
   text-align: center
 
 .id-text
@@ -70,9 +95,10 @@ $primary: $nudge-blue
   font-family: 'Courier New'
   text-align: center
 
+#domainList
+  transition: height 1s
+
 .tags
-  ul
-    margin-bottom: 5em
   li
     +border($style: none)
     +left-icon($size: ((16 / 12) * 1em))
@@ -82,9 +108,9 @@ $primary: $nudge-blue
     height: 2em
     line-height: 2em
     position: relative
-    color: $light
+    color: $primary
     font-size: (12 / 13) * 1em
-    background-color: $primary
+    background-color: $light-fill
     margin-right: .5em
     margin-bottom: .5em
     
@@ -120,12 +146,13 @@ $primary: $nudge-blue
   margin: 0
   outline: none
   box-shadow: none
-  color: $primary
-  +border($color: $primary)
-  color: $primary
+  color: $toggle-fill-text
+  // +border($color: $toggle-fill)
+  +border($style: none)
   display: flex
+  background: $toggle-white
   padding: 0 !important
-  font-size: 13px
+  font-size: (12 / 13) * 1em
 
   .left
     +padding
@@ -136,38 +163,41 @@ $primary: $nudge-blue
     color: inherit
 
   .on
-    background: $primary
+    +border($style: none)
+    background: $toggle-fill
     background-clip: border-box
-    color: $light
+    color: $toggle-light-text
 
   &:hover
     background: inherit
-    border-color: $secondary
+    border-color: $toggle-secondary
     box-shadow: none
-    color: $secondary
-    background: $white
+    background: $toggle-white
     box-shadow: none    
 
     .on
-      background: $secondary
-      color: $light
-
+      background: $toggle-secondary
+      color: $white
 
 .text-input
   input
+    caret-color: $primary
     border-bottom: $border-primary
-    border-bottom-color: $primary
+    border-bottom-color: $secondary-text
+    border-bottom-width: 1px
     left: 0
     list-style: none
     margin: 0
     padding-bottom: 0.4em
     padding-top: 0.2em
     position: relative
-    width: 40em
+    width: 400px
 
     &::placeholder
-      color: $primary
+      color: $secondary-text
 
     &:focus
       border-bottom: $border-primary
       border-bottom-color: $primary
+      border-bottom-width: 1px
+      color: $primary

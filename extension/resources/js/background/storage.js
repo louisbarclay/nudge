@@ -57,7 +57,7 @@ function flushToTabIdStorage() {
 // Show local storage
 function s() {
   chrome.storage.sync.get(null, function(object) {
-    log(object);
+    console.log(object);
   });
 }
 
@@ -89,7 +89,9 @@ function syncSettingsLocal() {
 // Set storage
 function storageSet(item, callback) {
   chrome.storage.sync.set(item, function() {
-    callback();
+    if(callback) {
+      callback();
+    }
   });
 }
 
@@ -121,7 +123,6 @@ function sendData(userId, date, data) {
     data
   };
   sendData = JSON.stringify(sendData);
-  console.log(sendData);
   var request = new XMLHttpRequest();
   request.open("POST", config.apiEndpoint + "user", true);
   request.setRequestHeader("Content-Type", "application/json");

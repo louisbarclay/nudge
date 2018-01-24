@@ -12,12 +12,14 @@
     &container
       @extend %typography
       +container($left: -5px, $top: -5px, $width: auto, $spacing: 0.4em)
+      +hardware
       position: fixed
       height: auto
       font-size: 16px
-      animation: fade-in 0.3s
       z-index: $max-z
-
+      opacity: 0
+      will-change: opacity
+      
       >div
         align-self: flex-start
 
@@ -26,6 +28,12 @@
           >div
             display: flex
     
+    &intro
+      animation: fade-in 0.5s forwards
+    
+    &outro
+      animation: fade-out 0.5s forwards
+
     &main
       display: flex
       // +border($width: 5px, $color: $nudge-blue)
@@ -67,22 +75,22 @@
       flex-direction: column
       >div
         +border($style: none)
-        padding: 0.3em 0.6em 0.4em 0.6em
+        background: rgba(255, 255, 255, 0.75)
+        color: $nudge-grey-medium
+        padding: 0.2em 0.6em 0.3em 0.6em
         animation: none
-        background: rgba(255, 255, 255, 0.95)
         cursor: pointer
         font-size: (12 / 14) * $default-font-size
-        color: $nudge-grey-dark
         display: none
         z-index: 1
         margin-bottom: 0.5em
         margin-left: 1em
         align-items: center
         box-shadow: 0px 0px 16px 0.5px rgba(0, 0, 0, 0.14)
-
         &:hover
-          background: rgba(160, 202, 255, 0.95)
-          color: $white
+          background: rgba(239, 246, 255, 0.85)
+          .nudge-small-highlight
+            background: rgba(207, 228, 255, 1)
 
     &close
       +size(0.8em)
@@ -116,6 +124,15 @@
       padding: 0em .3em .1em .3em
       margin-left: 0.3em
       margin-right: 0.3em
+      align-self: center
+
+    &small-highlight
+      background: $nudge-grey-lightest
+      +border($style: none)
+      padding: 0em .3em .1em .3em
+      margin-left: 0.3em
+      margin-right: 0.3em
+      margin-top: 0.1em
       align-self: center
     
     &pink
@@ -161,3 +178,29 @@
           padding: (3 / 4) * 1em 0 0 0
           width: 0.25em
           border-bottom: $border-primary
+
+// Individual menu divs in case needed
+// #dont-nudge
+//   background: rgba(255, 255, 255, 0.85)
+//   color: $nudge-grey-medium
+//   &:hover
+//     background: rgba(239, 246, 255, 0.85)
+//     .nudge-small-highlight
+//       background: rgba(207, 228, 255, 1)
+// #close-all
+//   background: rgba(255, 255, 255, 0.85)
+//   color: $nudge-grey-medium
+//   &:hover
+//     background: rgba(239, 246, 255, 0.85)
+//     .nudge-small-highlight
+//       background: rgba(207, 228, 255, 1)
+// #nudge-options
+//   background: rgba(255, 255, 255, 0.85)
+//   color: $nudge-grey-medium
+//   &:hover
+//     background: rgba(239, 246, 255, 0.85)
+//   // // background: rgba(210, 210, 210, 0.95)          
+//   // background: rgba(176, 211, 255, 0.95)     
+//   // color: $white
+//   // &:hover
+//   //   background: rgba(160, 202, 255, 0.95)   

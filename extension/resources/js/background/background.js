@@ -42,7 +42,16 @@ function checkCurrentState() {
     dataAdder(statusObj, "currentState", initialState);
   } else {
     // Only if any tabs exist - because then we are still 'in' Chrome
-    if (statusObj.currentState.domain !== notInChrome) {
+    // If there is already a gap, don't update lastEverySecond
+    // console.log(
+    //   moment().diff(moment(statusObj.currentState.lastEverySecond), "seconds")
+    // );
+    if (
+      moment().diff(moment(statusObj.currentState.lastEverySecond), "seconds") >
+      2
+    ) {
+      // Do nothing
+    } else {
       statusObj.currentState.lastEverySecond = moment();
     }
   }
@@ -52,13 +61,16 @@ function checkCurrentState() {
 
 // Add to timeline on window in and window out
 function timeline(domain, source, timeOverride, callback) {
+  // console.log(domain, source, moment(timeOverride).calendar());
   if (t) {
     return;
   }
   // Open status to look at currentState
   var s = open("status");
+  // console.log(s.currentState);
   // Test counter at 2. currentState constant for first call, then for second, after which it can be changed
   var newS = timelineObject(domain, source);
+  // console.log(newS);
   // Override time if needed
   if (notUndefined(timeOverride)) {
     newS.time = timeOverride;
@@ -68,23 +80,31 @@ function timeline(domain, source, timeOverride, callback) {
   if (source === "dateSplit_currentDay") {
     s.currentState.time = moment(newS.time).startOf("day");
   }
-
   // If there is a gap, do a gap
   if (
     moment(newS.time).diff(moment(s.currentState.lastEverySecond), "seconds") >
-      2 &&
+    2 &&
     // Prevent gap recursion
     !source.includes("gap")
   ) {
+    console.log(
+      `newS time is ${moment(newS.time).format(
+        "HH:mm:ss"
+      )} and currentState.lastEverySecond is ${moment(
+        s.currentState.lastEverySecond
+      ).format("HH:mm:ss")}, and the diff is calculated at ${moment(
+        newS.time
+      ).diff(moment(s.currentState.lastEverySecond), "seconds")}`
+    );
     // Check whether there is a gap where everySecond didn't ping
     // New retro-active event
     timeline(
       notInChrome,
-      source + " gap",
+      source + " gapStart",
       s.currentState.lastEverySecond,
       function() {
         // Original event
-        timeline(domain, source + " gap");
+        timeline(domain, source + " gapEnd");
       }
     );
     return;
@@ -104,8 +124,8 @@ function timeline(domain, source, timeOverride, callback) {
         .add(-1, "days")
         .format("YYYY-MM-DD")
     ) {
-      console.log('yeah boi');
       // Last date is literally yesterday
+      // Ask here if source includes gap?
       timeline(
         s.currentState.domain,
         "dateSplit_previousDay",
@@ -132,13 +152,16 @@ function timeline(domain, source, timeOverride, callback) {
   if (
     s.currentState.domain === domain &&
     source !== "dateSplit_previousDay" &&
-    source !== "dateSplit_currentDay"
+    source !== "dateSplit_currentDay" &&
+    !source.includes("gap")
   ) {
     // Do nothing
   } else {
     // First, create new variable lastState, which is what we had before the changes we're about to make
     var lastState = s.currentState;
     s.currentState = newS;
+    // Close before running other functions
+    close("status", s);
     // Update time (close off visit)
     domainTimeUpdater(
       lastState.domain,
@@ -149,7 +172,6 @@ function timeline(domain, source, timeOverride, callback) {
     // Update visit
     domainVisitUpdater(domain, newS.time, source);
   }
-  close("status", s);
   if (callback) {
     callback();
   }
