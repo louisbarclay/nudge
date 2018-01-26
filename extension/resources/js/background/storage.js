@@ -79,17 +79,21 @@ function storageUsed() {
   });
 }
 
-// Should be shared function
-function syncSettingsLocal() {
+// Get settings from sync to settingsLocal, and run options page if asked for
+function syncSettingsLocalInit() {
   chrome.storage.sync.get("settings", function(item) {
     settingsLocal = item.settings;
+    if (showOptionsPage && settingsLocal.show_intro < 2) {
+      chrome.runtime.openOptionsPage();
+      showOptionsPage = false;
+    }
   });
 }
 
 // Set storage
 function storageSet(item, callback) {
   chrome.storage.sync.set(item, function() {
-    if(callback) {
+    if (callback) {
       callback();
     }
   });

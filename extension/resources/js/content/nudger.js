@@ -4,7 +4,6 @@ sendHTMLRequest(getUrl("html/nudges/compulsive.html"), storeForUse);
 doAtEarliest(function() {
   addCSS("nudges", "css/nudges.css");
   // FIXME: weird case here with messenger.com. See Nudge text before whole page load. Affects compulsives
-  console.log("added css");
 });
 
 // Wait for favicon to co me from message
@@ -29,7 +28,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 });
 
 function setFavicon(callback) {
-  // console.log("set favicon");
   var favicon = document.getElementById("nudge-favicon");
   if (favicon)
     favicon.style.background = `url(${
@@ -38,6 +36,21 @@ function setFavicon(callback) {
   if (callback) {
     callback();
   }
+  if (!el("nudge")) {
+    cancelRepeatSetFavicon();
+  }
+}
+
+var repeatSetFavicon;
+
+function keepUpdatingFavicon() {
+  repeatSetFavicon = setInterval(function() {
+    setFavicon();
+  }, 200);
+}
+
+function cancelRepeatSetFavicon() {
+  clearInterval(repeatSetFavicon);
 }
 
 function createTimeNudge(time, domain) {
@@ -105,7 +118,7 @@ function genericSetup(domain) {
   // Set up autoclose TODO: could be better
   autoClose();
   // FIXME: Shitty favicon updater
-  setInterval(setFavicon, 1000);
+  keepUpdatingFavicon();
   // Set up domain text
   var domainText = el("nudge-domain");
   var domainText2 = el("nudge-domain2");
@@ -178,7 +191,7 @@ function closeAll(domain) {
 }
 
 function dontNudge(element, domain) {
-  var fp = el('first-part');
+  var fp = el("first-part");
   console.log("prepped");
   function domainOff() {
     changeSettingRequest(false, "domains", domain, "nudge");

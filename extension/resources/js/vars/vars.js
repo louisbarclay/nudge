@@ -3,6 +3,9 @@ var notInChrome = "$notInChrome";
 var chromeOrTabIdle = "$chromeOrTabIdle";
 var allDomains = "$allDomains";
 
+// Do we show the options page on init?
+var showOptionsPage = false;
+
 // Quick access to settings
 var settingsLocal = {};
 
@@ -10,7 +13,8 @@ var settingsLocal = {};
 var defaultDomainInfo = {
   nudge: true,
   off: false,
-  offByDefault: false
+  offByDefault: false,
+  faviconUrl: false
 };
 
 // Default domains
@@ -52,21 +56,19 @@ var defaultDomains = [
 // Default non-domain settings
 var defaultSettings = {
   scroll: 5,
-  time: 5,
-  compulsive: 5,
+  time: 15,
+  compulsive: 10,
   fb_profile_ratio: false,
   fb_show_unfollow: true,
   fb_auto_unfollow: false,
   fb_grey: true,
   fb_hide_notifications: true,
-  show_off_switch: true,
-  div_hider: false,
+  // show_off_switch: true,
+  div_hider: true,
   constantise: true,
   share_data: true,
   time_nudge: true,
   compulsive_nudge: true,
-  reshow_time: false,
-  has_unfollowed: false,
   show_intro: 0,
   share_data: true
 };
@@ -127,3 +129,7 @@ var refollow = {
 
 // Store info in localStorage status
 var tempStorage = {};
+
+// Element hide style for hiding divs
+var elementHideStyle =
+  "{ visibility: hidden; pointer-events: none; cursor: default }";

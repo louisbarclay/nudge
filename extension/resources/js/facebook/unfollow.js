@@ -547,7 +547,7 @@ function friendAndPageToggler(option) {
                 autoUnfollowLogger(`100% auto-unfollowed `, false, false);
                 var button = document.getElementById("facebook-button");
                 if (button) {
-                  button.innerHTML = "Nudge your friends";
+                  button.innerHTML = "Now Nudge your friends";
                   button.onclick = function() {
                     popupCenter(
                       "https://www.facebook.com/sharer/sharer.php?u=http%3A//nudgeware.io",

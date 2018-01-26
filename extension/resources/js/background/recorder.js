@@ -166,8 +166,8 @@ function domainVisitUpdater(domain, time, source) {
     console.log("Sent compulsive", domain);
     dataAdder(statusObj, domain, moment(), "lastCompulsive");
     close("status", statusObj);
-    console.log('closed it here', JSON.parse(localStorage['status']));
-    messageSender(
+    console.log("closed it here", JSON.parse(localStorage["status"]));
+    nudgeSender(
       nudgeObject(domain, domainStatusObj.lastShutdown, "compulsive")
     );
   } else {
@@ -207,16 +207,32 @@ function domainTimeNudger() {
       !nonDomain
     ) {
       console.log(domain, logMinutes(totalTimeTemp), "Sent time Nudge");
-      messageSender(nudgeObject(domain, totalTimeTemp, "time"));
+      nudgeSender(nudgeObject(domain, totalTimeTemp, "time"));
     }
-    // Live updater
-    chrome.runtime.sendMessage({
-      type: "live_update",
-      domain,
-      before: time,
-      runningCounter: runningCounter,
-      total: totalTimeTemp,
-      visits: dateObj[domain].visits
-    });
+    if (!nonDomain) {
+      chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(
+        tabs
+      ) {
+        if (typeof tabs[0] != "undefined") {
+          chrome.browserAction.setBadgeBackgroundColor({
+            color: "#6d6d6d",
+            tabId: tabs[0].id
+          });
+          chrome.browserAction.setBadgeText({
+            text: badgeTime(totalTimeTemp),
+            tabId: tabs[0].id
+          });
+        }
+      });
+    }
+    // Live updater for popup
+    // chrome.runtime.sendMessage({
+    //   type: "live_update",
+    //   domain,
+    //   before: time,
+    //   runningCounter: runningCounter,
+    //   total: totalTimeTemp,
+    //   visits: dateObj[domain].visits
+    // });
   }
 }

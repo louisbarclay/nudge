@@ -1,6 +1,10 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans");
-@import url("https://fonts.googleapis.com/css?family=Open+Sans");
-@import url("https://fonts.googleapis.com/css?family=Open+Sans");
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Open Sans Regular"), local("OpenSans-Regular"), url("chrome-extension://__MSG_@@extension_id__/resources/fonts/OpenSans.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215; }
 @keyframes background-move {
   0% {
     background-position: 17% 0%; }
@@ -350,7 +354,10 @@ h6 {
 
 body {
   font-size: 13px;
-  color: #7f7f7f; }
+  color: #7f7f7f;
+  opacity: 0;
+  animation-delay: 0.5s;
+  animation: fade-in 0.3s forwards; }
 
 .options-container {
   position: absolute;
@@ -398,7 +405,7 @@ body {
   border: 1px solid #bdbdbd;
   border-radius: 4px;
   margin-top: 1em;
-  padding: 1em;
+  padding: 0.8em 1em 1em 1em;
   flex-direction: column; }
   .data-banner ::before, .id-banner ::before {
     content: "";
@@ -407,7 +414,7 @@ body {
     width: 100%;
     background: blue; }
   .data-banner h1, .id-banner h1 {
-    margin-top: 0;
+    margin-top: 0em;
     color: #7f7f7f;
     font-size: 22px;
     margin-bottom: 0.5em; }
@@ -416,8 +423,8 @@ body {
     margin-bottom: 1em; }
 
 .data-text, .id-text {
-  line-height: 1.5em;
-  font-size: 12px;
+  line-height: 1.5em !important;
+  font-size: 13px;
   color: #7f7f7f; }
   .data-text p, .id-text p {
     margin-top: 1em; }
@@ -443,6 +450,9 @@ body {
   font-size: 12px;
   font-family: "Courier New";
   text-align: center; }
+
+.options-lastpara {
+  margin-bottom: 6em; }
 
 #domainList {
   transition: height 1s; }
@@ -514,7 +524,7 @@ body {
   .toggle .on {
     border: 1px none #bdbdbd;
     border-radius: 4px;
-    background: #f0f0f0;
+    background: #eaeaea;
     background-clip: border-box;
     color: #7f7f7f; }
   .toggle:hover {
@@ -547,6 +557,12 @@ body {
     border-bottom-width: 1px;
     color: #7f7f7f; }
 
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Open Sans Regular"), local("OpenSans-Regular"), url("chrome-extension://__MSG_@@extension_id__/resources/fonts/OpenSans.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215; }
 @keyframes background-move {
   0% {
     background-position: 17% 0%; }

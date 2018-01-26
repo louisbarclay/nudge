@@ -18,11 +18,11 @@ function initialise() {
         {
           settings: initSettings()
         },
-        syncSettingsLocal
+        syncSettingsLocalInit
       );
     } else {
       // If items.settings does exist, there is stuff there we need to grab
-      syncSettingsLocal();
+      syncSettingsLocalInit();
       // Where do you sync the domain list from? Surely you must keep in settings?
     }
   });
@@ -67,7 +67,10 @@ function timeline(domain, source, timeOverride, callback) {
   }
   // Open status to look at currentState
   var s = open("status");
-  // console.log(s.currentState);
+  if (typeof s.currentState == 'undefined') {
+    console.log('Current state is not yet defined so no point continuing');
+    return;
+  }
   // Test counter at 2. currentState constant for first call, then for second, after which it can be changed
   var newS = timelineObject(domain, source);
   // console.log(newS);

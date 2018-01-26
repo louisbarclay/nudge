@@ -44,10 +44,10 @@ function everySecond() {
                 var nudge = tabIdStorage[window.tabs[i].id].nudge;
                 if (nudge.type === "compulsive") {
                   tabIdStorage[window.tabs[i].id].nudge = false;
-                  messageSender(nudge);
+                  nudgeSender(nudge);
                 } else {
                   tabIdStorage[window.tabs[i].id].nudge = false;
-                  messageSender(nudge);
+                  nudgeSender(nudge);
                 }
               }
             }
@@ -83,13 +83,16 @@ function timelineObject(domain, source) {
 chrome.runtime.onInstalled.addListener(function(details) {
   if (details.reason == "install") {
     eventLog("install", "install"); // seems weird
-    chrome.runtime.openOptionsPage();
+    // Show options page on install
+    showOptionsPage = true;
   } else if (details.reason == "update") {
     var thisVersion = chrome.runtime.getManifest().version;
     eventLog(details.reason, details.reason, {
       previousVersion: details.previousVersion,
       thisVersion
     });
+    // Show options page on install
+    showOptionsPage = true;
   }
 });
 
@@ -159,9 +162,15 @@ chrome.tabs.onActivated.addListener(function(activatedTab) {
   if (typeof activatedTab == "undefined") {
     return;
   }
+  console.log(activatedTab);
   chrome.tabs.get(activatedTab.tabId, function(tabDetails) {
     // Don't need check of whether tab is active, because it is by default
-    var domain = inDomainsSetting(tabDetails.url);
+    try {
+      var domain = inDomainsSetting(tabDetails.url);
+    } catch (e) {
+      console.log(e);
+      console.log("Couldn't evaluate inDomainsSetting");
+    }
     timeline(domain, "tabs.onActivated");
   });
 });
@@ -171,7 +180,12 @@ chrome.windows.onFocusChanged.addListener(function(windowId) {
   chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(tabs) {
     var domain = false;
     if (typeof tabs[0] != "undefined") {
-      domain = inDomainsSetting(tabs[0].url);
+      try {
+        domain = inDomainsSetting(tabs[0].url);
+      } catch (e) {
+        console.log(e);
+        console.log("Couldn't evaluate inDomainsSetting");
+      }
       timeline(domain, "windows.onFocusedChanged");
     }
   });
@@ -189,9 +203,19 @@ chrome.tabs.onCreated.addListener(function(tab) {
 // Add to timeline onUpdated
 // Update URL in tabIdStorage
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-  var domain = inDomainsSetting(tab.url);
+  try {
+    var domain = inDomainsSetting(tab.url);
+  } catch (e) {
+    console.log(e);
+    console.log("Couldn't evaluate inDomainsSetting");
+    return;
+  }
   var switchedOff = false;
-  if (domain in settingsLocal.domains && settingsLocal.domains[domain]["off"]) {
+  if (
+    domain &&
+    domain in settingsLocal.domains &&
+    settingsLocal.domains[domain]["off"]
+  ) {
     var date = moment().format("YYYY-MM-DD");
     switchOff(domain, tab.url, tabId);
     domain = false;
@@ -236,6 +260,5 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     });
   }
 });
-
 
 // chrome.runtime.setUninstallURL("");

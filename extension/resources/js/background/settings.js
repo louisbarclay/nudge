@@ -15,6 +15,7 @@ function initSettings() {
   // Add dynamic stuff
   settings.userId = getUserId();
   settings.domains = defaultDomainPopulate(defaultDomains);
+  settings.divs = divs;
   return settings;
 }
 
@@ -30,6 +31,10 @@ function defaultDomainPopulate(domainsArray) {
 function inDomainsSetting(url) {
   url = extractDomain(url);
   var domain = false;
+  if (typeof settingsLocal.domains == 'undefined') {
+    console.log('Settings not yet defined so no point continuing');
+    return false;
+  }
   Object.keys(settingsLocal.domains).forEach(function(key) {
     if (url.includes(key)) {
       domain = key;

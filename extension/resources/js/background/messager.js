@@ -1,5 +1,16 @@
 // Send message to player.js
-function messageSender(object) {
+function nudgeSender(object) {
+  // See if nudges are switched off
+  if (object.type === "compulsive" && !settingsLocal.compulsive_nudge) {
+    console.log("blocked compulsive nudge");
+    return;
+  }
+  if (object.type === "time" && !settingsLocal.time_nudge) {
+    console.log("blocked time nudge");
+    return;
+  }
+  // TODO: insert scroll nudge here
+  // See if you are not in Chrome or tab idle, in which case don't send nudge
   var currentState = checkCurrentState();
   if (
     currentState.domain === notInChrome ||
@@ -26,7 +37,7 @@ function messageSender(object) {
                 nudgeLogger(object);
               } else if (object.send_fails < sendFailLimit) {
                 object.send_fails++;
-                messageSender(object);
+                nudgeSender(object);
               } else {
                 object.status = "failed";
                 nudgeLogger(object);
@@ -38,7 +49,7 @@ function messageSender(object) {
             object.send_fails++;
             if (object.send_fails > 3) {
               tabIdStorage[tabs[0].id].nudge = false;
-              console.log("abort");
+              console.log("Abort");
             }
             // so...... load the tab ID with the nudge to come (the whole object!)
             // then the every-seconder asks the current selected tab if there is a nudge waiting, in which case it messageSends
@@ -92,7 +103,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     request.type === "compulsive" ||
     request.type === "time"
   ) {
-    messageSender(request);
+    nudgeSender(request);
   }
   if (request.type === "options") {
     chrome.runtime.openOptionsPage();

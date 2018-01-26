@@ -208,44 +208,12 @@ function getUserId() {
   return hex;
 }
 
-// Helper function ordinal number parser
-function ordinal(i) {
-  var j = i % 10,
-    k = i % 100;
-  if (j == 1 && k != 11) {
-    return i + "st";
-  }
-  if (j == 2 && k != 12) {
-    return i + "nd";
-  }
-  if (j == 3 && k != 13) {
-    return i + "rd";
-  }
-  return i + "th";
-}
-
 // Checks if object is empty
 function isEmpty(obj) {
   for (var key in obj) {
     if (obj.hasOwnProperty(key)) return false;
   }
   return true;
-}
-
-// Helper - gets random from array
-function randomGetter(init, current) {
-  var index = Math.floor(Math.random() * current.length);
-  if (current.length === 0) {
-    for (var i = 0; i < init.length; i++) {
-      current.push(init[i]);
-    }
-    console.log(current);
-  }
-  var name = current[index];
-  if (index > -1) {
-    current.splice(index, 1);
-  }
-  return name;
 }
 
 function createEl(parent, type, name) {
@@ -257,12 +225,6 @@ function createEl(parent, type, name) {
   return element;
 }
 
-function parseHtml(htmlText) {
-  parser = new DOMParser();
-  doc = parser.parseFromString(htmlText, "text/html").body.childNodes;
-  return doc;
-}
-
 function deleteEl(element) {
   if (!element || !element.parentNode) {
     return;
@@ -270,25 +232,6 @@ function deleteEl(element) {
   element.parentNode.removeChild(element);
 }
 
-var nudgeLink = "http://bit.ly/2gFsVrf";
-
-function ifDoesntExistMakeZero(a, b) {
-  if (!a || a == "undefined" || a == null) {
-    return b;
-  } else {
-    return a;
-  }
-}
-
-function copyText() {
-  var copyText = createEl(document.body, "textArea", "copyText");
-  var selection = $("#copyText")
-    .val(nudgeLink)
-    .select();
-  document.execCommand("copy");
-  selection.val("");
-  deleteEl(copyText);
-}
 
 // 2 digit slicer
 function lastTwo(number) {
@@ -324,14 +267,14 @@ function addTogether(a, b) {
 }
 
 // Add style to document
-function styleAdder(name, style, log) {
+function styleAdder(name, style, id) {
   var styleText = name + style;
   style = document.createElement("style");
   style.innerHTML = styleText;
-  document.head.appendChild(style);
-  if (log) {
-    console.log(styleText);
+  if (id) {
+    style.id = id;
   }
+  document.head.appendChild(style);
 }
 
 // Send event from content script

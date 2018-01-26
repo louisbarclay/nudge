@@ -33,13 +33,10 @@ function execSettings(settings) {
   // Reset
   // changeSettingRequest(0, "show_intro");
   console.log(settingsLocal.show_intro);
-  if (true) {
-    // if (settingsLocal.show_intro < 4) {
+  if (settingsLocal.show_intro < 2) {
     el("welcome").innerHTML = tempStorage["welcome.html"];
     handleWelcomeBoolean(settings);
-    console.log("yeah");
     var increaseCounter = settingsLocal.show_intro + 1;
-    console.log(increaseCounter);
     changeSettingRequest(increaseCounter, "show_intro");
   }
   id_button.innerHTML = settings.userId;

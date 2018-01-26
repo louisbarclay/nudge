@@ -2,7 +2,7 @@
 $primary: lighten($nudge-grey-medium, 7%)
 $light-fill: lighten($nudge-grey-lightest, 4%)
 $secondary-text: $nudge-grey-light
-$toggle-fill: darken($light-fill, 3%)
+$toggle-fill: darken($light-fill, 5%)
 $toggle-secondary: $nudge-blue
 $toggle-fill-text: $primary
 $toggle-light-text: $primary
@@ -11,6 +11,9 @@ $toggle-white: $light-fill
 body
   font-size: 13px
   color: $primary
+  opacity: 0
+  animation-delay: 0.5s
+  animation: fade-in 0.3s forwards
 
 .options-container
   +container($min-width: 500px)
@@ -46,7 +49,7 @@ body
 .data-banner
   +border
   margin-top: 1em
-  padding: 1em
+  padding: 0.8em 1em 1em 1em
   flex-direction: column
   ::before
     +pseudo
@@ -54,7 +57,7 @@ body
     background: blue
   
   h1
-    margin-top: 0
+    margin-top: 0em
     color: $primary
     font-size: 22px
     margin-bottom: 0.5em
@@ -64,8 +67,8 @@ body
     margin-bottom: 1em
 
 .data-text
-  line-height: 1.5em
-  font-size: 12px
+  line-height: 1.5em !important
+  font-size: 13px
   color: $primary
   p
     margin-top: 1em
@@ -94,6 +97,9 @@ body
   font-size: 12px
   font-family: 'Courier New'
   text-align: center
+
+.options-lastpara
+  margin-bottom: 6em
 
 #domainList
   transition: height 1s
