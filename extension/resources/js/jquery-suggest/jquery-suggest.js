@@ -21,8 +21,6 @@
           'width'           : $this.width(),
           'top'             : $this.css('borderTopWidth'),
           'left'            : $this.css('borderLeftWidth'),
-          'padding'         : $this.cssShortForAllSides('padding'),
-          'margin'          : $this.cssShortForAllSides('margin'),
           'fontFamily'      : $this.css('fontFamily'),
           'fontSize'        : $this.css('fontSize'),
           'fontStyle'       : $this.css('fontStyle'),
@@ -63,8 +61,7 @@
         })
         .wrap($('<div/>', {
           'css': {
-            'position'      : 'relative',
-            'paddingBottom' : '1em'
+            'position'      : 'relative'
           }
         }))
 
