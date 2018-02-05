@@ -1,10 +1,4 @@
-// SHOW:  automatically unfollow any new friends or pages detected. with the slider button
-// doespagelet exist?
-// if not, do you offer some other way to unfollow?. and notify the app
-// does the request for frienddata work? if not, notify
-
 // Variables
-
 var executeUnfollow = false;
 var autoUnfollow = false;
 var haveRequestedRefollowData = false;
@@ -19,6 +13,7 @@ var retryCount = 0;
 // Get settings
 getSettings(execSettings);
 
+// Get Facebook user_id and fb_dtsg token needed to send Xhr requests
 function getFacebookCreds(callback) {
   // Get the fb_dtsg token that must be passed to get a successful response to an XMLHttpRequest from Facebook
   try {
@@ -42,35 +37,41 @@ function getFacebookCreds(callback) {
   }
 }
 
-// Execute after getting settings
+// Execute after receiving settings from Chrome sync storage
 function execSettings(settings) {
-  // Set ratio
+  // Set ratio, which is 0 if all friends, groups and pages unfollowed, 1 if none unfollowed, 0.5 if half unfollowed etc.
   var ratio = settings.fb_profile_ratio;
-  // Test different ratio values
+  // If user wants Facebook bar grey, set grey FIXME: shouldn't really be here
   if (settings.fb_grey) {
     addCSS("nudge-facebook-grey", "css/pages/grey.css");
   }
+  // If user wants Facebook notifications hidden, hide them FIXME: shouldn't really be here
   if (settings.fb_hide_notifications) {
     addCSS("nudge-facebook-notifications", "css/pages/notifications.css");
   }
+  // If user has auto-unfollow on, set 2 variables to true to make it happen
   if (settings.fb_auto_unfollow) {
     executeUnfollow = true;
     autoUnfollow = true;
   }
+  // If the ratio has never been set, send through Xhr requests to find out what it is
   if (ratio === false) {
     docReady(function() {
       getFacebookCreds(function() {
+        // Running one instance of friendAndPageListGenerator with second parameter at 'true' will
+        // find no. of unfollowable profiles and no. of refollowable profiles
         friendAndPageListGenerator(unfollow, true);
       });
     });
     return;
   }
+  // Only show the Nudge dialog box if user has this setting true
   if (settings.fb_show_unfollow) {
-    // Hide the pagelet composer
+    // Cover the pagelet_composer element with a white pseudo-element
     doAtEarliest(function() {
       addCSS("nudge-facebook-dialog", "css/pages/facebook.css");
     });
-    // Load all the assets you'll need
+    // Load all the assets you'll need to show the Nudge dialog box on top of pagelet_composer
     sendHTMLRequest(getUrl("html/facebook/intro.html"), storeForUse);
     sendHTMLRequest(getUrl("html/facebook/confirm_content.html"), storeForUse);
     sendHTMLRequest(getUrl("html/facebook/run_content.html"), storeForUse);
@@ -78,7 +79,7 @@ function execSettings(settings) {
     sendHTMLRequest(getUrl("html/facebook/share_bottom.html"), storeForUse);
     sendHTMLRequest(getUrl("html/facebook/share.html"), storeForUse);
     sendHTMLRequest(getUrl("html/facebook/more_content.html"), storeForUse);
-    // Function to run for various scenarios
+    // Function to load HTML and configure UX into Nudge dialog box
     function loadUx(uxUrl, uxFunc) {
       doAtEarliest(function() {
         pageletInit(function(element) {
@@ -98,20 +99,25 @@ function execSettings(settings) {
         });
       });
     }
+    // If the user has unfollowed nearly all of their friends, show 'Share' dialog box, not
+    // 'Delete your News Feed' dialog box
     if (ratio <= 0.1) {
       loadUx("share.html", shareUx);
       docReady(function() {
         getFacebookCreds(function() {
+          // If we should be executing an unfollow, e.g. in case of autoUnfollow being on, go ahead and do it
           if (executeUnfollow) {
             friendAndPageListGenerator(unfollow, false, function() {
               executeUnfollow = false;
             });
           } else {
+            // Otherwise, simply update the ratio using this function with 'true' as second parameter
             friendAndPageListGenerator(unfollow, true);
           }
         });
       });
     } else {
+      // If user has unfollowed very few friends, show 'Delete your News Feed' dialog
       loadUx("intro.html", introUx);
       docReady(function() {
         getFacebookCreds(function() {
@@ -121,10 +127,6 @@ function execSettings(settings) {
     }
   }
 }
-
-// when running for first time, store time in chrome storage
-// every time you go back to fb after, keep running if enough time has elapsed
-// randomise number of profiles to unfollow every day. max 100
 
 // UX helpers
 function hideLink() {
@@ -139,6 +141,7 @@ function hideLink() {
   };
 }
 
+// Log messages if auto-unfollowing
 function autoUnfollowLogger(firstMsg, secondMsg, secondOnclick) {
   var fb_auto_unfollow = document.getElementById("fb_auto_unfollow");
   var fb_unfollow_extra = document.getElementById("fb_unfollow_extra");
@@ -157,6 +160,7 @@ function autoUnfollowLogger(firstMsg, secondMsg, secondOnclick) {
   }
 }
 
+// Make the 'auto-unfollow' link work
 function unfollowLink() {
   function stopAutounfollowing() {
     changeSettingRequest(false, "fb_auto_unfollow");
@@ -177,15 +181,18 @@ function unfollowLink() {
   }
 }
 
+// Start auto-unfollowing
 function startAuto() {
   cancelOperation = false;
   friendAndPageToggler(unfollow);
 }
 
+// Stop auto-unfollowing
 function stopAuto() {
   cancelOperation = true;
 }
 
+// Make 'FAQ' link work
 function moreLink() {
   var container = document.querySelector(".facebook-container");
   var link_to_more = document.getElementById("link_to_more");
@@ -199,6 +206,7 @@ function moreLink() {
   };
 }
 
+// Make bottom links work
 function shareBottomLinks() {
   hideLink();
   unfollowLink();
@@ -206,6 +214,8 @@ function shareBottomLinks() {
 }
 
 // UX loaders
+
+// UX for intro.html
 function introUx(element) {
   var close = document.querySelector(".facebook-close");
   var container = document.querySelector(".facebook-container");
@@ -229,6 +239,7 @@ function introUx(element) {
   };
 }
 
+// UX for confirm.html
 function confirmUx() {
   var button = document.querySelector(".facebook-button-blue");
   var container = document.querySelector(".facebook-container");
@@ -244,12 +255,14 @@ function confirmUx() {
   };
 }
 
+// UX for run.html
 function runUx() {
   var container = document.querySelector(".facebook-container");
   var text = document.querySelector(".facebook-text");
   buttonInit();
 }
 
+// UX for stopping unfollowing
 function buttonInit() {
   var button = document.querySelector(".facebook-button-blue");
   button.onclick = function() {
@@ -259,6 +272,7 @@ function buttonInit() {
   };
 }
 
+// UX for having hit stop
 function stopInit() {
   var button = document.querySelector(".facebook-button-blue");
   button.innerHTML = "Resume unfollowing";
@@ -272,6 +286,7 @@ function stopInit() {
   };
 }
 
+// UX for share.html
 function shareUx() {
   var container = document.querySelector(".facebook-container");
   var button = document.querySelector(".facebook-button-blue");
@@ -293,9 +308,7 @@ function shareUx() {
   // to refollow, go to // want to make clear where you go to refollow
 }
 
-// https://developers.facebook.com/docs/plugins/share-button
-// https://developers.facebook.com/docs/sharing/reference/share-dialog
-
+// Function for logging progress from inside unfollowing function (friendAndPageListToggle)
 function progressLogger(message) {
   function getEl() {
     return document.getElementById("facebook-specific-progress");
@@ -305,6 +318,7 @@ function progressLogger(message) {
   }
 }
 
+// Secondary function for logging progress
 function headlineLogger(message) {
   function getEl() {
     return document.getElementById("headline-progress");
@@ -314,22 +328,30 @@ function headlineLogger(message) {
   }
 }
 
-// Get friend and page IDs
+// Send Xhr requests to get friend and page IDs
+// 'option' means 'unfollow' or 'refollow', because this function can get information either on
+// users who can be refollowed or on users to be unfollowed
 function friendAndPageListGenerator(option, oneOff, callback) {
-  // Always update ratio before getting the rest of data
+  // Always update ratio - i.e. ask for refollow data, setting 'option' to refollow - before getting the rest of data
   if (!haveRequestedRefollowData) {
+    // Make sure you don't repeat this step
     haveRequestedRefollowData = true;
+    // Run the function except for refollow, so you get no. of refollowable (i.e. currently unfollowed) profiles
     friendAndPageListGenerator(refollow, true, function() {
+      // Callback to run original option, which usually will be unfollow
       friendAndPageListGenerator(option, oneOff, function() {
+        // Calculate ratio
         var profilesFollowed =
           unfollow.totalProfiles /
           (unfollow.totalProfiles + refollow.totalProfiles);
+          // Set ratio in settings
         changeSettingRequest(profilesFollowed, "fb_profile_ratio");
       });
     });
     return;
   }
-  // Empty out profile storage if you're on the first loop
+
+  // Ensure 'continueRequest' is set to true before starting
   if (option.profileRequestCounter === 0) {
     option.continueRequest = true;
     progressLogger(`Started getting profile info to unfollow`);
@@ -337,6 +359,7 @@ function friendAndPageListGenerator(option, oneOff, callback) {
 
   // Create new XMLHttpRequest
   friendandpagelist_get = new XMLHttpRequest();
+  // Put in custom URL, including profileRequestCounter, to get a bunch of info back
   friendandpagelist_get.open(
     "POST",
     option.listUrl + option.profileRequestCounter + "&dpr=1",
@@ -350,15 +373,16 @@ function friendAndPageListGenerator(option, oneOff, callback) {
   // Run on successful get of info
   friendandpagelist_get.onreadystatechange = function() {
     if (friendandpagelist_get.readyState == 4) {
-      // Get data in the right format
+      // Get data on batch of profiles in the right format
       var data = friendandpagelist_get.responseText;
+      // Delete awkward character from string so it can be made into an object via JSON.parse
       data = data.substr(data.indexOf("{"));
       data = JSON.parse(data);
-      // Store totalProfiles (if you don't have it already)
+      // Store totalProfiles (if you don't have it already), which is the total number of profiles that can be [refollowed/unfollowed]
       if (!option.totalProfiles) {
         option.totalProfiles = data.payload.totalProfilesCount;
       }
-      // Limit data to profiles only
+      // Limit data to profiles only for easier manipulation
       data = data.payload.profiles;
       // Iterate over the profiles and store them in array
       for (var j = 0; j < data.length; j++) {
@@ -380,7 +404,8 @@ function friendAndPageListGenerator(option, oneOff, callback) {
         }`
       );
 
-      // If loadedAll or oneOff, execute callback
+      // If loadedAll - i.e. no more profile data to get - or oneOff - i.e. we only ran this as a one off to get ratio - execute callback
+
       if (loadedAll) {
         profilesLoaded = true;
         if (callback) {
@@ -420,19 +445,20 @@ function friendAndPageListGenerator(option, oneOff, callback) {
   friendandpagelist_get.send(params);
 }
 
-// add up from unfollow and refollow . see if matches that figure you got earlier. if that makes sense.
-
 // FIXME: some safety features to make sure this can't be abused (i.e. somehow set off friendtoggler multiple times within short space of time leading to acct getting blocked by fb)
 
+// This is the function that actually *does* unfollowing
 function friendAndPageToggler(option) {
   // Check if just starting
   if (option.profileCounter === 0) {
+    // Log that you are starting
     headlineLogger(
       `${option.profileCounter} of ${
         option.totalProfiles
       } friends, pages, and groups unfollowed`
     );
     progressLogger(`Preparing to unfollow: 100% of profiles loaded`);
+    // Make clear that you are currently unfollowing
     currentlyUnfollowing = true;
   }
   // Check if there are profiles to toggle
@@ -442,14 +468,17 @@ function friendAndPageToggler(option) {
   }
   // Pick the first profile in the array, since if successful, we'll move it from array
   if (option.profiles[0].attempted) {
+    // If profile has been attempted, maybe it was successfully unfollowed/refollowed but the connection died before we got a confirm - so let's skip it for now
     moveOnToNextProfile(option);
   }
+  // Define that profile
   var profile = option.profiles[0];
   // Prevent attempting to unfollow if no profile
   if (typeof profile === "undefined") {
     progressLogger(`You have no profiles to unfollow`);
     return;
   } else {
+    // Define name and id
     var name = profile.name;
     var id = profile.id;
   }
@@ -460,8 +489,8 @@ function friendAndPageToggler(option) {
     "Content-type",
     "application/x-www-form-urlencoded"
   );
-  var params = "";
   // Parameters to make this work!
+  var params = "";
   params += "&__a=1"; // Need this
   params += "&location=1"; // Need this
   params += "&fb_dtsg=" + fb_dtsg;
@@ -469,7 +498,7 @@ function friendAndPageToggler(option) {
   params += "&profile_id=" + id;
   params += "&nctr[_mod]=pagelet_timeline_profile_actions";
   params += "&__req=65";
-  // Retry function
+  // Function to run if the process fails
   function retry() {
     retryCount++;
     if (retryCount > 4) {
@@ -485,6 +514,7 @@ function friendAndPageToggler(option) {
   // Run on successful response to the request
   friendandpage_toggle.onreadystatechange = function() {
     if (friendandpage_toggle.readyState == 4) {
+      // If the request didn't work, try again after 5 seconds - and retry 4 times
       if (friendandpage_toggle.status === 0) {
         if (retryCount === 0) {
           option.profiles[0].attempted = true;
@@ -492,15 +522,19 @@ function friendAndPageToggler(option) {
         setTimeout(retry, 5000);
         return;
       }
+      // Get data into the right format
       var data = friendandpage_toggle.responseText;
       data = data.substr(data.indexOf("{"));
       data = JSON.parse(data);
+      // If data came back OK, i.e. not undefined...
       if (typeof data != "undefined") {
+        // ...if there is an 'error' key on data, Facebook is blocking us, so we stop...
         if (typeof data.error != "undefined") {
           headlineLogger(`Something went wrong. Please try again in 24 hours`);
           return;
         }
-        // Success happens here
+        // ...but if no 'error' key on data, we probably succeeded
+        // Check if we received a message back from Facebook that confirms a successful unfollow/refollow
         if (
           typeof data.onload != "undefined" &&
           data.onload[0] === option.verifText.start + id + option.verifText.end
@@ -521,6 +555,7 @@ function friendAndPageToggler(option) {
               } friends, pages, and groups unfollowed`
             );
           } else {
+            // Logging stuff
             progressLogger(`Unfollowed ${name}`);
             headlineLogger(
               `${option.profileCounter} of ${
@@ -531,13 +566,14 @@ function friendAndPageToggler(option) {
               (option.profileCounter / option.totalProfiles * 100).toFixed(0) +
               "%";
             autoUnfollowLogger(`${pct} auto-unfollowed `, false, false);
+
             // Run another iteration after a c.1s delay
             if (option.profiles.length !== 0) {
               setTimeout(function() {
                 friendAndPageToggler(option);
               }, randomTime(1, 0.1));
             } else {
-              // Stop working
+              // Stop working because we have no more profiles to unfollow
               setTimeout(function() {
                 headlineLogger(
                   `Congratulations! Finished unfollowing ${
@@ -567,7 +603,7 @@ function friendAndPageToggler(option) {
             }
           }
         } else {
-          // Major fail - should log it
+          // We got data back but the unfollow request didn't work, so we log it
           eventLogSender("fb_unfollow", "major_fail", {
             responseText: friendandpage_toggle.responseText
           });
@@ -585,6 +621,7 @@ function moveOnToNextProfile(option) {
   option.executedProfiles.push(itemToMove);
 }
 
+// UX stuff
 function pageletInit(callback) {
   var pagelet = document.getElementById("pagelet_composer");
   if (pagelet) {
