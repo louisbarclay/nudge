@@ -5,6 +5,7 @@ var domains = {};
 var facebookNotif = document.getElementById("facebookNotif");
 var blankFaviconString = "";
 
+
 imgSrcToDataURL(chrome.runtime.getURL("img/favicon/blankfavicon.png"), function(
   dataUrl
 ) {
@@ -184,3 +185,12 @@ function loadFavicon(elementId, domain) {
   }
   updateFavicon();
 }
+
+$( function() {
+    $('#addDomain').suggest(suggestDomains, {
+      suggestionColor   : '#cccccc',
+      moreIndicatorClass: 'suggest-more',
+      moreIndicatorText : '&hellip;'
+    });
+
+} );
