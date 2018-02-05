@@ -9,7 +9,17 @@ function initialise() {
   chrome.storage.sync.get(null, function(items) {
     // If items.settings doesn't exist, the user is old school style
     // This must hardly ever trigger!
-    if (isEmpty(items.settings)) {
+    if (typeof items == "undefined") {
+      runInit();
+    } else if (typeof items.settings == "undefined") {
+      runInit();
+    } else if (typeof items.settings.userId == "undefined") {
+      runInit();
+    } else {
+      // If items.settings and userId does exist, there is stuff there we need to grab
+      syncSettingsLocalInit();
+    }
+    function runInit() {
       // Clear localStorage
       localStorageClear();
       // Clear syncStorage
@@ -20,10 +30,6 @@ function initialise() {
         },
         syncSettingsLocalInit
       );
-    } else {
-      // If items.settings does exist, there is stuff there we need to grab
-      syncSettingsLocalInit();
-      // Where do you sync the domain list from? Surely you must keep in settings?
     }
   });
 }
@@ -67,8 +73,8 @@ function timeline(domain, source, timeOverride, callback) {
   }
   // Open status to look at currentState
   var s = open("status");
-  if (typeof s.currentState == 'undefined') {
-    console.log('Current state is not yet defined so no point continuing');
+  if (typeof s.currentState == "undefined") {
+    console.log("Current state is not yet defined so no point continuing");
     return;
   }
   // Test counter at 2. currentState constant for first call, then for second, after which it can be changed
@@ -86,7 +92,7 @@ function timeline(domain, source, timeOverride, callback) {
   // If there is a gap, do a gap
   if (
     moment(newS.time).diff(moment(s.currentState.lastEverySecond), "seconds") >
-    2 &&
+      2 &&
     // Prevent gap recursion
     !source.includes("gap")
   ) {

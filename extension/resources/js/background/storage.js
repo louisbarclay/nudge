@@ -83,7 +83,7 @@ function storageUsed() {
 function syncSettingsLocalInit() {
   chrome.storage.sync.get("settings", function(item) {
     settingsLocal = item.settings;
-    if (showOptionsPage && settingsLocal.show_intro < 2) {
+    if (showOptionsPage && settingsLocal.show_intro < 1) {
       chrome.runtime.openOptionsPage();
       showOptionsPage = false;
     }
