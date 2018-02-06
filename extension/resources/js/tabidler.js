@@ -25,7 +25,7 @@ function inactivityTime() {
       idle = true;
       chrome.runtime.sendMessage({ type: "tabIdle", status: true }, function(response) {
       });      
-      console.log('gone tab idle');
+      // console.log('gone tab idle');
     }
   }
 
@@ -34,7 +34,7 @@ function inactivityTime() {
         idle = false;
         chrome.runtime.sendMessage({ type: "tabIdle", status: false }, function(response) {
         });
-        console.log('back from tab idle');
+        // console.log('back from tab idle');
       }
       clearTimeout(t);
       t = setTimeout(idleStart, 60000);

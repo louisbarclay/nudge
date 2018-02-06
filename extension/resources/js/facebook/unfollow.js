@@ -101,6 +101,7 @@ function execSettings(settings) {
     }
     // If the user has unfollowed nearly all of their friends, show 'Share' dialog box, not
     // 'Delete your News Feed' dialog box
+    // if (ratio < 0) {
     if (ratio <= 0.1) {
       loadUx("share.html", shareUx);
       docReady(function() {
@@ -111,8 +112,8 @@ function execSettings(settings) {
               executeUnfollow = false;
             });
           } else {
-            // Otherwise, simply update the ratio using this function with 'true' as second parameter
-            friendAndPageListGenerator(unfollow, true);
+            // Otherwise, load all profiles
+            friendAndPageListGenerator(unfollow, false);
           }
         });
       });
@@ -121,7 +122,8 @@ function execSettings(settings) {
       loadUx("intro.html", introUx);
       docReady(function() {
         getFacebookCreds(function() {
-          friendAndPageListGenerator(unfollow, true);
+          // And load all profiles
+          friendAndPageListGenerator(unfollow, false);
         });
       });
     }
@@ -337,6 +339,7 @@ function friendAndPageListGenerator(option, oneOff, callback) {
     // Make sure you don't repeat this step
     haveRequestedRefollowData = true;
     // Run the function except for refollow, so you get no. of refollowable (i.e. currently unfollowed) profiles
+    console.log('Getting refollow count');
     friendAndPageListGenerator(refollow, true, function() {
       // Callback to run original option, which usually will be unfollow
       friendAndPageListGenerator(option, oneOff, function() {
@@ -380,10 +383,12 @@ function friendAndPageListGenerator(option, oneOff, callback) {
       data = JSON.parse(data);
       // Store totalProfiles (if you don't have it already), which is the total number of profiles that can be [refollowed/unfollowed]
       if (!option.totalProfiles) {
+        console.log(data.payload.totalProfilesCount);
         option.totalProfiles = data.payload.totalProfilesCount;
       }
       // Limit data to profiles only for easier manipulation
       data = data.payload.profiles;
+      console.log(`${data.length} including ${data[0].name}`);
       // Iterate over the profiles and store them in array
       for (var j = 0; j < data.length; j++) {
         option.profiles.push({
@@ -407,6 +412,7 @@ function friendAndPageListGenerator(option, oneOff, callback) {
       // If loadedAll - i.e. no more profile data to get - or oneOff - i.e. we only ran this as a one off to get ratio - execute callback
 
       if (loadedAll) {
+        console.log('Loaded all');
         profilesLoaded = true;
         if (callback) {
           callback();
@@ -421,6 +427,7 @@ function friendAndPageListGenerator(option, oneOff, callback) {
       }
 
       if (oneOff) {
+        console.log('One off');
         if (callback) {
           callback();
         }
@@ -432,6 +439,7 @@ function friendAndPageListGenerator(option, oneOff, callback) {
 
       // Iterate again
       if (option.continueRequest && !cancelOperation) {
+        console.log('Go again');
         option.profileRequestCounter++;
         friendAndPageListGenerator(option);
       }
