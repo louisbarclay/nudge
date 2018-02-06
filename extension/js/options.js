@@ -5,7 +5,6 @@ var domains = {};
 var facebookNotif = document.getElementById("facebookNotif");
 var blankFaviconString = "";
 
-
 imgSrcToDataURL(chrome.runtime.getURL("img/favicon/blankfavicon.png"), function(
   dataUrl
 ) {
@@ -13,9 +12,10 @@ imgSrcToDataURL(chrome.runtime.getURL("img/favicon/blankfavicon.png"), function(
   console.log(blankFaviconString);
 });
 
-sendHTMLRequest(getUrl("html/welcome.html"), storeForUse);
-
-getSettings(execSettings);
+sendHTMLRequest(getUrl("html/welcome.html"), function(url, response) {
+  storeForUse(url, response);
+  getSettings(execSettings);
+});
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   console.log(request);
@@ -186,11 +186,12 @@ function loadFavicon(elementId, domain) {
   updateFavicon();
 }
 
-$( function() {
-    $('#addDomain').suggest(suggestDomains, {
-      suggestionColor   : '#cccccc',
-      moreIndicatorClass: 'suggest-more',
-      moreIndicatorText : '&hellip;'
-    });
-
-} );
+// Disabling auto-complete for now because pressing 'Enter' shows strange behaviour
+// because the field is already waiting for an 'Enter' hit
+// $(function() {
+//   $("#addDomain").suggest(suggestDomains, {
+//     suggestionColor: "#cccccc",
+//     moreIndicatorClass: "suggest-more",
+//     moreIndicatorText: "&hellip;"
+//   });
+// });
