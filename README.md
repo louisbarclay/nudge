@@ -1,16 +1,25 @@
 # Overview
 
-##### Escape addictive sites with nudges that tell you when you're getting sucked in.
+##### Make the internet less addictive with nudges that help you avoid getting sucked in
 
-Get a nudge whenever you:
-- spend too much time on Facebook
-- visit Buzzfeed for the zillionth time
-- get stuck scrolling down Twitter's infinite feed
-- quit Pinterest but compulsively go back straight away
+Nudge tweaks website designs to make them less persuasive, turns off notifications, alerts you to addictive browsing patterns, and gives you tools to manage some of the most addictive parts of the internet — e.g. to delete your Facebook News Feed.
 
-# Installation
+- Get nudged every 15 minutes on an addictive site, or when you quit the site but compulsively return straight away
+
+- Avoid annoying notifications in tab titles ('(1)' and red dots designed to bring you back)
+
+- Save hundreds of hours of your life by deleting your Facebook News Feed forever, across all devices, with Nudge's auto-unfollowing tool
+
+- Enjoy websites with some of their most distracting features hidden unless you choose to show them (nominations welcome for features to hide by default - email feedback@nudgeware.io)
+
+- Be part of a science-driven experiment to make the internet a healthier, less addictive place
+
+- Choose the sites Nudge works on and more in Options
+
+# Set up for development
 
 1. Pull the project onto your local machine
 2. Inside Chrome navigate to chrome://extensions/
 3. Set Chrome to Developer Mode
-4. Hit load unpacked extension and navigate to your local nudge project
+4. Hit load unpacked extension and add '/extension'
+5. CSS and HTML files compile from .sass and .pug files - run 'yarn dev' to compile after making changes

@@ -9,9 +9,17 @@ var user_id = "";
 var currentlyUnfollowing = false;
 var domain = "facebook.com";
 var retryCount = 0;
+var debugLog = [];
 
 // Get settings
 getSettings(execSettings);
+
+function debugLogger(message) {
+  if (false) {
+    console.log(message);
+  }
+  debugLog.push(message);
+}
 
 // Get Facebook user_id and fb_dtsg token needed to send Xhr requests
 function getFacebookCreds(callback) {
@@ -20,6 +28,7 @@ function getFacebookCreds(callback) {
     // Get fb_dtsg
     fbTokenReady("fb_dtsg", function(node) {
       fb_dtsg = node.value;
+      debugLogger("fb_dtsg is" + fb_dtsg);
       // Get user_id
       if (document.cookie.match(/c_user=(\d+)/)) {
         if (document.cookie.match(/c_user=(\d+)/)[1]) {
@@ -27,12 +36,13 @@ function getFacebookCreds(callback) {
             document.cookie.match(/c_user=(\d+)/)[1]
           );
           user_id = user_id[0];
+          debugLogger("user_id is" + user_id);
           callback();
         }
       }
     });
   } catch (e) {
-    console.log(e);
+    debugLogger(e);
     // Error catching
   }
 }
@@ -101,7 +111,6 @@ function execSettings(settings) {
     }
     // If the user has unfollowed nearly all of their friends, show 'Share' dialog box, not
     // 'Delete your News Feed' dialog box
-    // if (ratio < 0) {
     if (ratio <= 0.1) {
       loadUx("share.html", shareUx);
       docReady(function() {
@@ -339,7 +348,7 @@ function friendAndPageListGenerator(option, oneOff, callback) {
     // Make sure you don't repeat this step
     haveRequestedRefollowData = true;
     // Run the function except for refollow, so you get no. of refollowable (i.e. currently unfollowed) profiles
-    console.log('Getting refollow count');
+    debugLogger("Getting refollow count");
     friendAndPageListGenerator(refollow, true, function() {
       // Callback to run original option, which usually will be unfollow
       friendAndPageListGenerator(option, oneOff, function() {
@@ -347,7 +356,7 @@ function friendAndPageListGenerator(option, oneOff, callback) {
         var profilesFollowed =
           unfollow.totalProfiles /
           (unfollow.totalProfiles + refollow.totalProfiles);
-          // Set ratio in settings
+        // Set ratio in settings
         changeSettingRequest(profilesFollowed, "fb_profile_ratio");
       });
     });
@@ -378,25 +387,30 @@ function friendAndPageListGenerator(option, oneOff, callback) {
     if (friendandpagelist_get.readyState == 4) {
       // Get data on batch of profiles in the right format
       var data = friendandpagelist_get.responseText;
+      debugLogger(data);
       // Delete awkward character from string so it can be made into an object via JSON.parse
       data = data.substr(data.indexOf("{"));
       data = JSON.parse(data);
       // Store totalProfiles (if you don't have it already), which is the total number of profiles that can be [refollowed/unfollowed]
       if (!option.totalProfiles) {
-        console.log(data.payload.totalProfilesCount);
+        debugLogger(data.payload.totalProfilesCount);
         option.totalProfiles = data.payload.totalProfilesCount;
       }
       // Limit data to profiles only for easier manipulation
       data = data.payload.profiles;
-      console.log(`${data.length} including ${data[0].name}`);
-      // Iterate over the profiles and store them in array
-      for (var j = 0; j < data.length; j++) {
-        option.profiles.push({
-          id: data[j].id,
-          name: data[j].name,
-          type: data[j].type,
-          attempted: false
-        });
+
+      // If there are any profiles, add them
+      if (data.length > 0) {
+        debugLogger(`${data.length} including ${data[0].name}`);
+        // Iterate over the profiles and store them in array
+        for (var j = 0; j < data.length; j++) {
+          option.profiles.push({
+            id: data[j].id,
+            name: data[j].name,
+            type: data[j].type,
+            attempted: false
+          });
+        }
       }
 
       // Find out if all profile data stored
@@ -412,7 +426,7 @@ function friendAndPageListGenerator(option, oneOff, callback) {
       // If loadedAll - i.e. no more profile data to get - or oneOff - i.e. we only ran this as a one off to get ratio - execute callback
 
       if (loadedAll) {
-        console.log('Loaded all');
+        debugLogger("Loaded all");
         profilesLoaded = true;
         if (callback) {
           callback();
@@ -427,7 +441,7 @@ function friendAndPageListGenerator(option, oneOff, callback) {
       }
 
       if (oneOff) {
-        console.log('One off');
+        debugLogger("One off");
         if (callback) {
           callback();
         }
@@ -439,7 +453,7 @@ function friendAndPageListGenerator(option, oneOff, callback) {
 
       // Iterate again
       if (option.continueRequest && !cancelOperation) {
-        console.log('Go again');
+        debugLogger("Go again");
         option.profileRequestCounter++;
         friendAndPageListGenerator(option);
       }
@@ -508,6 +522,7 @@ function friendAndPageToggler(option) {
   params += "&__req=65";
   // Function to run if the process fails
   function retry() {
+    debugLogger("retry count is " + retryCount);
     retryCount++;
     if (retryCount > 4) {
       headlineLogger(`Something went wrong. Please check your connection`);
@@ -532,6 +547,8 @@ function friendAndPageToggler(option) {
       }
       // Get data into the right format
       var data = friendandpage_toggle.responseText;
+      debugLogger(name);
+      debugLogger(data);
       data = data.substr(data.indexOf("{"));
       data = JSON.parse(data);
       // If data came back OK, i.e. not undefined...
@@ -569,6 +586,9 @@ function friendAndPageToggler(option) {
               `${option.profileCounter} of ${
                 option.totalProfiles
               } friends, pages, and groups unfollowed`
+            );
+            debugLogger(
+              `${option.profileCounter} of ${option.totalProfiles}`
             );
             var pct =
               (option.profileCounter / option.totalProfiles * 100).toFixed(0) +
