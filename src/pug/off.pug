@@ -6,39 +6,21 @@ html
     link(href="../resources/images/nudgeoff16.png", rel="icon", type="image/png", sizes="16x16")
     link(rel="stylesheet", href="../css/main.css")
   body.off-background.off-typography
-    div.off-container#somethng
+    div.off-container
       div.off-logo
-      h1 Site off
-      p 
-        | Drag slider across to switch
-        span#domain-text.off-highlight this site
-        | back on. You were last on this site 
-        span#domain-last-visited.off-highlight [not sure]
-        | ago. You've spent 
-        span#domain-time-today.off-highlight
-        | there today. and X this week. 5 reopens. (what is a reopen)
+      h1.off-headline
+        | You switched
+        span.off-highlight facebook.com
+        | off
+      //- p.off-text (
+      //-   span.off-underline Turn this feature off
+      //-   |  or 
+      //-   span.off-underline don't nudge this site at all
+      //-   | .)
       div.slider
         div.button
           div.button-centre
-      div.off-module
-        h2 What's happening? 20 mintues on this site today
-        h2 HEY - THIS SCREEN FOR COMPULSIVES instead of an actual compulsive
-        h2 You were on facebook.com less than [5] minutes ago - are you sure you want to go back?
-        p 
-          | Nudge switches off 
-          a addictive sites
-          |  by default, so you have to drag the slider across to visit them.
-        p Switching off happens automatically when you close all tabs of a site.
-        div.off-row
-          div Don't sw off F.com by def
-          div Nev Nudge Facebook.com
-          div Dot sw off any by def
-          div Snooze
-        div
-          button.toggle
-            div.left.on Works for me
-            div.right No thanks, turn this feature off completely
-          p You can always switch it back on in settings
-        a I'd like to change the sites Nudge works on
+        div.slider-text Drag slider to switch back on
+    script(src="../resources/js/vendor/moment.min.js")      
     script(src="../resources/js/helpers.js")      
     script(src="../js/off.js")

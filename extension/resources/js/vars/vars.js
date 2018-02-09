@@ -99,14 +99,15 @@ var defaultSettings = {
   fb_auto_unfollow: false,
   fb_grey: true,
   fb_hide_notifications: true,
-  // show_off_switch: true,
   div_hider: true,
   constantise: true,
   share_data: true,
   time_nudge: true,
   compulsive_nudge: true,
   show_intro: 0,
-  share_data: true
+  share_data: true,
+  // New settings
+  show_switch: false,
 };
 
 // Other constants

@@ -6,6 +6,7 @@ getSettings(execSettings);
 
 // Prep in case doing div hiding
 sendHTMLRequest(getUrl("html/components/circle.html"), storeForUse);
+sendHTMLRequest(getUrl("html/components/switch.html"), storeForUse);
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.type === "favicon") {
@@ -69,6 +70,16 @@ function execSettings(settings) {
         }
       }
     });
+  }
+  // Init switch
+  if (settings.show_switch && domain) {
+    doAtEarliest(function() {
+      addCSS("nudge-circle", "css/pages/switch.css");
+      docReady(function() {
+        insertSwitch(domain);
+      });
+    });
+    console.log("settings are cool");
   }
   // Init div_hider
   if (settings.div_hider) {
@@ -194,7 +205,7 @@ function keepAddingCircles(callback) {
       for (var i = 0; i < mutation.addedNodes.length; i++) {
         callback();
         if (turnOffObserver) {
-          console.log('Disconnected observer');
+          console.log("Disconnected observer");
           observer.disconnect();
         }
       }
@@ -213,4 +224,14 @@ function tabIdler() {
   chrome.runtime.sendMessage({ type: "inject_tabidler" }, function(
     response
   ) {});
+}
+
+function insertSwitch(domain) {
+  var nudgeSwitch = createEl(document.body, "div", "nudge-switch");
+  console.log(nudgeSwitch);
+  appendHtml(nudgeSwitch, tempStorage["switch.html"]);
+  el("nudge-switch").onclick = function() {
+    // Needs work here
+    switchOffRequest(domain);
+  };
 }

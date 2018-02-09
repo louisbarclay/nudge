@@ -195,7 +195,7 @@ h6 {
 
 .slider-text {
   position: absolute;
-  color: #e0e0e0;
+  color: #c9c9c9;
   margin: auto;
   width: 100%;
   top: 0;
@@ -214,15 +214,15 @@ h6 {
   transform: translateY(-50%);
   height: 4.3571428571em;
   width: 4.3571428571em;
-  background-color: #d6d6d6;
+  background-color: #c9c9c9;
   border-radius: 2.5em;
   transition: background-color 0.2s ease;
   backface-visibility: hidden;
   perspective: 1000; }
   .button-centre:hover {
-    background: #cecece; }
+    background: #c4c4c4; }
   .button-centre:active {
-    background: #c7c7c7; }
+    background: #bfbfbf; }
 
 .returning {
   transition: all 0.2s ease; }
@@ -316,7 +316,7 @@ h6 {
     height: 40px; }
 
 .off-highlight {
-  background: #cecece;
+  background: #c9c9c9;
   color: #ededed;
   border: 1px none #bdbdbd;
   border-radius: 4px;
@@ -689,7 +689,7 @@ body a {
 
 .slider-text {
   position: absolute;
-  color: #e0e0e0;
+  color: #c9c9c9;
   margin: auto;
   width: 100%;
   top: 0;
@@ -708,15 +708,15 @@ body a {
   transform: translateY(-50%);
   height: 4.3571428571em;
   width: 4.3571428571em;
-  background-color: #d6d6d6;
+  background-color: #c9c9c9;
   border-radius: 2.5em;
   transition: background-color 0.2s ease;
   backface-visibility: hidden;
   perspective: 1000; }
   .button-centre:hover {
-    background: #cecece; }
+    background: #c4c4c4; }
   .button-centre:active {
-    background: #c7c7c7; }
+    background: #bfbfbf; }
 
 .returning {
   transition: all 0.2s ease; }

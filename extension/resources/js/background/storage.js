@@ -83,6 +83,16 @@ function storageUsed() {
 function syncSettingsLocalInit() {
   chrome.storage.sync.get("settings", function(item) {
     settingsLocal = item.settings;
+    Object.keys(defaultSettings).forEach(function(key) {
+      if (isUndefined(item.settings[key])) {
+        console.log(key);
+        changeSetting(defaultSettings[key], key);
+      }
+    });
+    // Check if there are any newly made settings that don't exist in user's storage
+    // For every var setting key, check if exists in item.settings
+    console.log(settingsLocal);
+    console.log(settingsLocal.show_intro);
     if (showOptionsPage && settingsLocal.show_intro < 1) {
       chrome.runtime.openOptionsPage();
       showOptionsPage = false;

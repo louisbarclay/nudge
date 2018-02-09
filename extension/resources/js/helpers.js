@@ -94,6 +94,18 @@ function notUndefined(x) {
   }
 }
 
+function isUndefined(x) {
+  try {
+    if (typeof x === "undefined") {
+      return true;
+    } else {
+      return false;
+    }
+  } catch(e) {
+    return true;
+  }
+}
+
 function popupCenter(url, title, w, h) {
   var dualScreenLeft =
     window.screenLeft != undefined ? window.screenLeft : screen.left;
@@ -356,6 +368,10 @@ function doAtEarliest(callback) {
 function sendMessage(type, object) {
   object.type = type;
   chrome.runtime.sendMessage(object);
+}
+
+function switchOffRequest(domain) {
+  sendMessage('off', { domain });
 }
 
 function el(id) {

@@ -69,7 +69,6 @@ function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
       if (newVal === "toggle") {
         settingsLocal[setting] = !settingsLocal[setting];
       } else {
-        console.log('this one');
         settingsLocal[setting] = newVal;
       }
     }

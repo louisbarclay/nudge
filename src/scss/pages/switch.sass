@@ -1,0 +1,55 @@
+@import 'variables'
+@import 'abstracts'
+@import 'animations'
+
+.switch-container
+  @extend %reset
+  @extend %typography
+  position: fixed
+  bottom: 25px
+  left: 25px
+  background-color: $black
+  overflow: hidden
+  display: inline-block
+  width: auto
+  min-width: 27px
+  height: 27px
+  opacity: .2
+  z-index: $max-z
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1)
+  transition: all 0.3s
+  cursor: pointer
+  border-radius: 40px
+  font-family: 'Open Sans', Arial, sans-serif
+  font-style: normal
+  &:hover
+    opacity: .6
+    .switch-message
+      max-width: 200px // FIXME: use transform property
+
+.switch-switch
+  margin: 3px 3px 3px 4px
+  float: left
+  opacity: 1
+  width: 21px
+  height: 20px
+  background: url('chrome-extension://__MSG_@@extension_id__/resources/images/offswitch.svg') 0/20px no-repeat
+
+.switch-message
+  font-size: 13px
+  -webkit-font-smoothing: antialiased
+  color: #F0F8FF
+  width: 200px
+  transform: scaleX(-100%)
+  margin: 0
+  height: 100%
+  float: left
+  text-align: center
+  line-height: 24px
+  white-space: nowrap
+  overflow: hidden
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1)
+  transition: all 0.3s
+
+.switch-message-contents
+  margin: 1px 25px 0 13px

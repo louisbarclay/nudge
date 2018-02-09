@@ -44,7 +44,7 @@
 
 .slider-text 
   position: absolute
-  color: darken($nudge-grey-lightest, 5%)
+  color: darken($nudge-grey-off, 5%)
   margin: auto
   width: 100%
   top: 0
@@ -64,16 +64,16 @@
   height: $slider-height - (9/14) * 1em
   width: $slider-height - (9/14) * 1em
   background:
-    color: $nudge-grey-off
+    color: darken($nudge-grey-off, 5%)
   border-radius: $slider-height / 2
   transition: background-color 0.2s ease
   +hardware
 
   &:hover
-    background: darken($nudge-grey-off, 3%)
+    background: darken($nudge-grey-off, 7%)
 
   &:active
-    background: darken($nudge-grey-off, 6%)
+    background: darken($nudge-grey-off, 9%)
  
 .returning
   transition: all 0.2s ease
