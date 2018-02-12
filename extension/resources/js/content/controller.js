@@ -73,13 +73,15 @@ function execSettings(settings) {
   }
   // Init switch
   if (settings.show_switch && domain) {
+    // Init off keyboard shortcut
+    offKeyboardShortcut(domain);
+    // Init switch HTML
     doAtEarliest(function() {
       addCSS("nudge-circle", "css/pages/switch.css");
       docReady(function() {
         insertSwitch(domain);
       });
     });
-    console.log("settings are cool");
   }
   // Init div_hider
   if (settings.div_hider) {
@@ -231,7 +233,22 @@ function insertSwitch(domain) {
   console.log(nudgeSwitch);
   appendHtml(nudgeSwitch, tempStorage["switch.html"]);
   el("nudge-switch").onclick = function() {
+    console.log("received clickclickckckc");
     // Needs work here
+    console.log(domain);
     switchOffRequest(domain);
+  };
+}
+
+function offKeyboardShortcut(domain) {
+  var keyArray = [];
+  document.onkeyup = function(key) {
+    keyArray.push(key.keyCode);
+    if (keyArray[0] == 40 && keyArray[1] == 18) {
+      switchOffRequest(domain);
+    }
+    if (keyArray.length > 1) {
+      keyArray = keyArray.slice(-1);
+    }
   };
 }

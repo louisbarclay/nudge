@@ -84,7 +84,7 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
       var dateCheck = new RegExp("[0-9]{4}-[0-9]{2}-[0-9]{2}");
       if (dateCheck.test(key) && key !== moment().format("YYYY-MM-DD")) {
         // Closes off any previous days and sends them to cloud storage
-        if (settingsLocal.share_data) {
+        if (false) { // Turn off data sharing until more thought has gone in
           // Adds snapshot of settings and status as it stands
           updateDayToServer(key);
           // TODO: Keeps what it needs from it, e.g. last 7 days history by domain (too much?)

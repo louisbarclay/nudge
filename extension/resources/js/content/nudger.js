@@ -107,13 +107,6 @@ function createCompulsiveNudge(time, domain) {
   });
 }
 
-// document.onkeyup = function(key) {
-//   if (key.keyCode === 27) {
-//     console.log('deleted because of key up');
-//     deleteNudge();
-//   }
-// };
-
 function genericSetup(domain) {
   // Set up autoclose TODO: could be better
   autoClose();

@@ -86,7 +86,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.type === "off") {
     if (inDomainsSetting(sender.url)) {
       changeSetting(true, "domains", request.domain, "off");
-      switchOff(domain, sender.url, sender.tabId);
+      switchOff(request.domain, sender.url, sender.tabId);
     }
   }
   if (request.type === "on") {

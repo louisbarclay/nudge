@@ -46,7 +46,7 @@ function getLocalStorage() {
     var timeToday = domainToday.time / 60;
     console.log(domainToday);
 
-    tagline.innerHTML = `You last visited ${domain} less than ${lastVisited} minutes ago, are you sure you want to go back?`;
+    // tagline.innerHTML = `You last visited ${domain} less than ${lastVisited} minutes ago, are you sure you want to go back?`;
   });
 }
 
