@@ -58,7 +58,6 @@ function nudgeLogger(nudgeObject) {
   var date = moment().format("YYYY-MM-DD");
   var time = moment();
   var statusObj = open("status");
-  console.log("opened it here", statusObj[nudgeObject.domain]);
   var dateObj = open(date);
   dateObj = dataAdder(dateObj, "nudges", nudgeObject, time);
   statusObj = dataAdder(statusObj, nudgeObject.domain, time, "lastNudged");

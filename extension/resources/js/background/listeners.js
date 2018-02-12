@@ -162,7 +162,6 @@ chrome.tabs.onActivated.addListener(function(activatedTab) {
   if (typeof activatedTab == "undefined") {
     return;
   }
-  console.log(activatedTab);
   chrome.tabs.get(activatedTab.tabId, function(tabDetails) {
     // Don't need check of whether tab is active, because it is by default
     try {

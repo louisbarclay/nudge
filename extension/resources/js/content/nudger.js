@@ -11,18 +11,18 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   var alreadyNudged = document.getElementById("nudge");
   if (!alreadyNudged) {
     if (request.type === "time") {
-      console.log("TIME NUDGE", request);
+      // console.log("TIME NUDGE", request);
       createTimeNudge(request.amount, request.domain);
       sendResponse({ time_executed: moment(), status: "succeeded" });
     }
     if (request.type === "compulsive") {
-      console.log("COMPULSIVE NUDGE", request);
+      // console.log("COMPULSIVE NUDGE", request);
       createCompulsiveNudge(request.amount, request.domain);
       sendResponse({ time_executed: moment(), status: "succeeded" });
     }
   }
   if (request.type === "ready_check") {
-    console.log(request.type);
+    // console.log(request.type);
     sendResponse({ type: "ready" });
   }
 });
@@ -85,7 +85,7 @@ function createTimeNudge(time, domain) {
 
 function createCompulsiveNudge(time, domain) {
   docReady(function() {
-    console.log("created nudge");
+    // console.log("created nudge");
     // addCSS("nudge-compulsive", "css/pages/compulsive.css");
     var n = createEl(document.body, "div", "nudge");
     n.innerHTML = tempStorage["compulsive.html"];
@@ -185,7 +185,7 @@ function closeAll(domain) {
 
 function dontNudge(element, domain) {
   var fp = el("first-part");
-  console.log("prepped");
+  // console.log("prepped");
   function domainOff() {
     changeSettingRequest(false, "domains", domain, "nudge");
     fp.innerHTML = "Won't nudge ";
@@ -201,7 +201,7 @@ function dontNudge(element, domain) {
     };
   }
   element.onclick = function() {
-    console.log("clicked");
+    // console.log("clicked");
     domainOff();
   };
 }

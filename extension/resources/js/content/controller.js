@@ -49,7 +49,7 @@ function execSettings(settings) {
       }
     });
   } catch (e) {
-    console.log(e);
+    // console.log(e);
   }
   // Init constantise
   if (settings.constantise && domain) {
@@ -77,7 +77,7 @@ function execSettings(settings) {
     offKeyboardShortcut(domain);
     // Init switch HTML
     doAtEarliest(function() {
-      addCSS("nudge-circle", "css/pages/switch.css");
+      addCSS("nudge-switch", "css/pages/switch.css");
       docReady(function() {
         insertSwitch(domain);
       });
@@ -121,7 +121,7 @@ function execSettings(settings) {
             // Try to add a circle
             addCircle(cleanId);
           } catch (e) {
-            console.log(e);
+            // console.log(e);
           }
         }
       });
@@ -153,7 +153,7 @@ function execSettings(settings) {
             clickHandler(hiddenEl.id, domain);
             // console.log(`Added circle in ${elementId}`);
           } catch (e) {
-            console.log(e);
+            // console.log(e);
           }
         } else {
           // console.log("El doesn't exist");
@@ -207,7 +207,7 @@ function keepAddingCircles(callback) {
       for (var i = 0; i < mutation.addedNodes.length; i++) {
         callback();
         if (turnOffObserver) {
-          console.log("Disconnected observer");
+          // console.log("Disconnected observer");
           observer.disconnect();
         }
       }
@@ -229,26 +229,17 @@ function tabIdler() {
 }
 
 function insertSwitch(domain) {
-  var nudgeSwitch = createEl(document.body, "div", "nudge-switch");
-  console.log(nudgeSwitch);
+  var nudgeSwitch = createEl(document.body, "div", "nudge-switch-container");
   appendHtml(nudgeSwitch, tempStorage["switch.html"]);
-  el("nudge-switch").onclick = function() {
-    console.log("received clickclickckckc");
-    // Needs work here
-    console.log(domain);
+  el("nudge-switch-container").onclick = function() {
     switchOffRequest(domain);
   };
 }
 
 function offKeyboardShortcut(domain) {
-  var keyArray = [];
   document.onkeyup = function(key) {
-    keyArray.push(key.keyCode);
-    if (keyArray[0] == 40 && keyArray[1] == 18) {
+    if (key.altKey && key.keyCode == 40) {
       switchOffRequest(domain);
-    }
-    if (keyArray.length > 1) {
-      keyArray = keyArray.slice(-1);
     }
   };
 }

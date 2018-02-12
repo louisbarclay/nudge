@@ -27,7 +27,7 @@ function nudgeSender(object) {
         chrome.tabs.sendMessage(tabs[0].id, { type: "ready_check" }, function(
           response
         ) {
-          console.log(response);
+          // console.log(response);
           if (response && response.type) {
             chrome.tabs.sendMessage(tabs[0].id, object, function(response) {
               if (response) {

@@ -163,7 +163,7 @@ function sendHTMLRequest(url, callback, errorFunction) {
   };
 
   request.onerror = function() {
-    console.log("Error in HTML request");
+    // console.log("Error in HTML request");
     if (errorFunction) {
       errorFunction;
     }
@@ -173,8 +173,6 @@ function sendHTMLRequest(url, callback, errorFunction) {
 }
 
 function append(parent, newChild) {
-  console.log(parent);
-  console.log(newChild);
   parent.appendChild(newChild);
 }
 
@@ -403,7 +401,7 @@ function storeForUse(url, response) {
   if (notUndefined(tempStorage)) {
     tempStorage[url] = response;
   } else {
-    console.log("tempStorage is not defined in this script");
+    // console.log("tempStorage is not defined in this script");
   }
 }
 

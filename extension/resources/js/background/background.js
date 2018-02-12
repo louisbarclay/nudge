@@ -9,18 +9,17 @@ function initialise() {
   chrome.storage.sync.get(null, function(items) {
     // If items.settings doesn't exist, the user is old school style
     // This must hardly ever trigger!
-    console.log(items);
     if (typeof items == "undefined") {
-      console.log("a");
+      console.log("Startup A");
       runInit();
     } else if (typeof items.settings == "undefined") {
-      console.log("b");
+      console.log("Startup B");
       runInit();
     } else if (typeof items.settings.userId == "undefined") {
-      console.log("c");
+      console.log("Startup C");
       runInit();
     } else {
-      console.log("d");
+      console.log("Startup D");
       // If items.settings and userId does exist, there is stuff there we need to grab
       syncSettingsLocalInit();
     }

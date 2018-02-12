@@ -6,10 +6,3 @@ var config = {
 
 // Global debug option for logger
 debugMode = config.debug;
-
-if (debugMode) {
-  console.log("Nudge is in debug mode - switch off before moving to production");
-} else {
-  // console.log("Nudge is in production - all logging is off");
-  console.log = function() {};
-}

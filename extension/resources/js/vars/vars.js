@@ -107,7 +107,7 @@ var defaultSettings = {
   show_intro: 0,
   share_data: true,
   // New settings
-  show_switch: false,
+  show_switch: true
 };
 
 // Other constants

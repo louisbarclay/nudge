@@ -29,7 +29,6 @@ var QueryString = (function() {
 var domain = false;
 if ("domain" in QueryString) {
   domain = QueryString.domain;
-  console.log(domain);
   domainText.innerHTML = domain;
 }
 
@@ -40,11 +39,8 @@ function getLocalStorage() {
 
     var domainToday = JSON.parse(localStorage[date])[domain];
     var status = JSON.parse(localStorage.status);
-    console.log(status);
     var lastShutdown = status[domain].lastShutdown;
-    console.log(lastShutdown);
     var timeToday = domainToday.time / 60;
-    console.log(domainToday);
 
     // tagline.innerHTML = `You last visited ${domain} less than ${lastVisited} minutes ago, are you sure you want to go back?`;
   });
@@ -57,8 +53,6 @@ var url = false;
 if ("url" in QueryString) {
   url = QueryString.url;
 }
-
-console.log(document.body);
 
 function initOn() {
   chrome.runtime.sendMessage({

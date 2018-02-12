@@ -175,7 +175,7 @@ h6 {
   width: 100%;
   position: relative;
   height: 5em;
-  margin-top: 30%;
+  margin-top: 20%;
   border-radius: 6em;
   text-align: center;
   background: #f7f7f7; }
@@ -221,9 +221,9 @@ h6 {
   backface-visibility: hidden;
   perspective: 1000; }
   .button-centre:hover {
-    background: #c4c4c4; }
+    background: #dbdbdb; }
   .button-centre:active {
-    background: #bfbfbf; }
+    background: #d6d6d6; }
 
 .returning {
   transition: all 0.2s ease; }
@@ -290,6 +290,7 @@ h6 {
   color: #c9c9c9; }
 
 .off-headline {
+  margin-top: 10%;
   font-size: 22px; }
 
 .off-module {
@@ -318,7 +319,8 @@ h6 {
     height: 40px; }
 
 .off-highlight {
-  background: #c9c9c9;
+  background-color: #d6d6d6;
+  opacity: 1;
   color: #ededed;
   border: 1px none #bdbdbd;
   border-radius: 4px;
@@ -678,7 +680,7 @@ body a {
   width: 100%;
   position: relative;
   height: 5em;
-  margin-top: 30%;
+  margin-top: 20%;
   border-radius: 6em;
   text-align: center;
   background: #f7f7f7; }
@@ -724,9 +726,9 @@ body a {
   backface-visibility: hidden;
   perspective: 1000; }
   .button-centre:hover {
-    background: #c4c4c4; }
+    background: #dbdbdb; }
   .button-centre:active {
-    background: #bfbfbf; }
+    background: #d6d6d6; }
 
 .returning {
   transition: all 0.2s ease; }

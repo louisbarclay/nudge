@@ -16,7 +16,7 @@ getSettings(execSettings);
 
 function debugLogger(message) {
   if (false) {
-    console.log(message);
+    // console.log(message);
   }
   debugLog.push(message);
 }

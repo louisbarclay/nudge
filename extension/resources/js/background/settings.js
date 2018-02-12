@@ -78,7 +78,6 @@ function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
     console.log(e);
   }
   if (senderTabId) {
-    console.log('sentmsg');
     chrome.tabs.sendMessage(senderTabId, { type: 'send_settingsLocal', settingsLocal });
   }
 }

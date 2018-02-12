@@ -171,6 +171,11 @@
   background:
     image: url('chrome-extension://__MSG_@@extension_id__/resources/images/logo-color.svg')
 
+@mixin logo-white($size: 1em)
+  +logo-grey($size: $size)
+  background:
+    image: url('chrome-extension://__MSG_@@extension_id__/resources/images/logo-white.svg')
+
 %button
   background: none
   cursor: pointer

@@ -84,7 +84,8 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
       var dateCheck = new RegExp("[0-9]{4}-[0-9]{2}-[0-9]{2}");
       if (dateCheck.test(key) && key !== moment().format("YYYY-MM-DD")) {
         // Closes off any previous days and sends them to cloud storage
-        if (false) { // Turn off data sharing until more thought has gone in
+        if (false) {
+          // Turn off data sharing until more thought has gone in
           // Adds snapshot of settings and status as it stands
           updateDayToServer(key);
           // TODO: Keeps what it needs from it, e.g. last 7 days history by domain (too much?)
@@ -127,9 +128,7 @@ function domainVisitUpdater(domain, time, source) {
   var lastCompulsive = false;
   if (keyDefined(domainStatusObj, "lastCompulsive")) {
     // Unless there has been one
-    console.log(domainStatusObj.lastCompulsive);
     lastCompulsive = moment(domainStatusObj.lastCompulsive);
-    console.log(lastCompulsive);
   }
   // Assume no last shutdown
   var lastShutdown = false;
@@ -138,16 +137,15 @@ function domainVisitUpdater(domain, time, source) {
     lastShutdown = moment(domainStatusObj.lastShutdown);
   }
   // Find out if we should trigger a shutdown
-  console.log(domainStatusObj);
-  console.log(lastShutdown);
-  if (lastShutdown) {
-    console.log(lastShutdown.isAfter(compulsiveSearch));
-  }
-  console.log(compulsiveSearch);
-  console.log(lastCompulsive); // FIXME: STILL a fucking problem for fuck's sake
-  if (lastCompulsive) {
-    console.log(lastCompulsive.isBefore(lastShutdown));
-  }
+  // console.log(lastShutdown);
+  // if (lastShutdown) {
+  //   console.log(lastShutdown.isAfter(compulsiveSearch));
+  // }
+  // console.log(compulsiveSearch);
+  // console.log(lastCompulsive); // FIXME: STILL a fucking problem for fuck's sake
+  // if (lastCompulsive) {
+  //   console.log(lastCompulsive.isBefore(lastShutdown));
+  // }
   var compulsive =
     // Has there ever been a shutdown? If no, don't evaluate true
     lastShutdown &&
@@ -163,10 +161,9 @@ function domainVisitUpdater(domain, time, source) {
       // switchOff(domain, url, tabId);
     }
     dataAdder(dateObj, domain, 1, "compulsives", addTogether);
-    console.log("Sent compulsive", domain);
+    console.log("Sent compulsive nudge to", domain);
     dataAdder(statusObj, domain, moment(), "lastCompulsive");
     close("status", statusObj);
-    console.log("closed it here", JSON.parse(localStorage["status"]));
     nudgeSender(
       nudgeObject(domain, domainStatusObj.lastShutdown, "compulsive")
     );
@@ -206,7 +203,9 @@ function domainTimeNudger() {
       (totalTimeTemp + arriveEarly) % (settingsLocal.time * minSec) === 0 &&
       !nonDomain
     ) {
-      console.log(domain, logMinutes(totalTimeTemp), "Sent time Nudge");
+      console.log(
+        `Sent time nudge to ${domain} with value ${logMinutes(totalTimeTemp)}`
+      );
       nudgeSender(nudgeObject(domain, totalTimeTemp, "time"));
     }
     if (!nonDomain) {
