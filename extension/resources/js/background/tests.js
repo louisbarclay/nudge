@@ -24,7 +24,7 @@ var testState = {
   source: "initial",
   lastEverySecond: moment(),
   time: moment()
-    .add(-2, "days")
+    .add(-1, "days")
     .toString()
 };
 
