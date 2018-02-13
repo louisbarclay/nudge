@@ -112,9 +112,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     closeAll(request.domain);
   }
   if (request.type === "inject_tabidler" && !chromeTab) {
-    chrome.tabs.executeScript(sender.tab.id, {
-      file: "resources/js/tabidler.js"
-    });
+    try {
+      chrome.tabs.executeScript(sender.tab.id, {
+        file: "resources/js/tabidler.js"
+      });
+    } catch(e) {
+      console.log(e)
+    }
   }
   if (request.type === "tabIdle") {
     chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(
