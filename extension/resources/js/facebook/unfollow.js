@@ -47,6 +47,12 @@ function getFacebookCreds(callback) {
   }
 }
 
+// eventlogRquest('bananas', {}
+
+// object = {
+//   bananas: that means this is happening
+// }
+
 // Execute after receiving settings from Chrome sync storage
 function execSettings(settings) {
   // Set ratio, which is 0 if all friends, groups and pages unfollowed, 1 if none unfollowed, 0.5 if half unfollowed etc.
