@@ -505,3 +505,15 @@ function imgSrcToDataURL(src, callback, outputFormat) {
     img.src = src;
   }
 }
+
+function sendData(userId, data, url) {
+  var sendData = {
+    userId,
+    data
+  };
+  sendData = JSON.stringify(sendData);
+  var request = new XMLHttpRequest();
+  request.open("POST", config.apiEndpoint + url, true);
+  request.setRequestHeader("Content-Type", "application/json");
+  request.send(sendData);
+}

@@ -128,20 +128,7 @@ function localStorageClear() {
 // "idle", // don't put here? create for first time when running domain stuff?
 // 'notDomain' + random hash? eventually?
 
-function sendData(userId, date, data) {
-  var sendData = {
-    userId,
-    date,
-    data
-  };
-  sendData = JSON.stringify(sendData);
-  var request = new XMLHttpRequest();
-  request.open("POST", config.apiEndpoint + "user", true);
-  request.setRequestHeader("Content-Type", "application/json");
-  request.send(sendData);
-}
-
-function updateDayToServer(date) {
+function updateDayToServer(date, url) {
   var userId = settingsLocal.userId;
   if (notUndefined(localStorage[date])) {
     var data = JSON.parse(localStorage[date]);
@@ -158,6 +145,9 @@ function updateDayToServer(date) {
   }
 }
 
-// sendData('db18458e2782b2b77e36769c569e263a53885a9944dd0a861e5064eac16f1a', obj1);
+// send: userId, eventId (random hash?), time, details 
+// check that eventType exists. or rather, have central log of all eventTypes. with descriptions
+
+// sendData('zb18458e2782b2b77e36769c569e263a53885a9944dd0a861e5064eac16f1a', settingsLocal, 'settings');
 
 // settings stuff should all just go through one message thing
