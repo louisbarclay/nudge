@@ -35,9 +35,9 @@ function domainTranslate(domain) {
   if (domain === "mail.google.com") {
     return "Gmail";
   }
-  if (domain === "linkedin.com") {
-    return "LinkedIn";
-  }
+  // if (domain === "linkedin.com") { // This is making LinkedIn mess up
+  //   return "LinkedIn";
+  // }
   return false;
 }
 
