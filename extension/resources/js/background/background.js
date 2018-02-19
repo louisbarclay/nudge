@@ -166,6 +166,7 @@ function timeline(domain, source, timeOverride, callback) {
   }
 
   // If previous domain is same as current domain, don't do anything - unless day has changed
+  // FIXME: this seems like it needs to be tested well
   if (
     s.currentState.domain === domain &&
     source !== "dateSplit_previousDay" &&
