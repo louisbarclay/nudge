@@ -170,7 +170,7 @@ function timeline(domain, source, timeOverride, callback) {
     s.currentState.domain === domain &&
     source !== "dateSplit_previousDay" &&
     source !== "dateSplit_currentDay" &&
-    !source.includes("gap")
+    !source.includes("gapStart") // Also don't update timeline if gapStart, but DO if gapEnd
   ) {
     // Do nothing
   } else {
