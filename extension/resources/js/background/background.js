@@ -50,6 +50,8 @@ function checkCurrentState() {
   // FIXME: sometimes lastEverySecond is not defined. This is a problem!
   if (!keyDefined(statusObj, "currentState")) {
     dataAdder(statusObj, "currentState", initialState);
+    // Also define startOfDay here!
+    dataAdder(statusObj, "startOfDay", initialState.time);
   } else {
     // Only if any tabs exist - because then we are still 'in' Chrome
     // If there is already a gap, don't update lastEverySecond
@@ -92,6 +94,8 @@ function timeline(domain, source, timeOverride, callback) {
   // If it's a current day splitter, take currentState time as start of newS day
   if (source === "dateSplit_currentDay") {
     s.currentState.time = moment(newS.time).startOf("day");
+    // Also, log start of day for comparison purposes
+    s.startOfDay = moment(newS.time).startOf("day");
   }
   // If there is a gap, do a gap
   if (

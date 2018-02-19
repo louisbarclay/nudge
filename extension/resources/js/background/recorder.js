@@ -17,6 +17,7 @@ function nudgeObject(domain, amount, type, status) {
 function domainTimeUpdater(domain, startTime, endTime, source) {
   startTime = moment(startTime);
   endTime = moment(endTime);
+  var statusObj = open("status");
   // Last shutdown if domain is true, and not an odd domain, and if there are not any tabs of that kind when visit is closed off
   if (domain && domain !== notInChrome && domain !== chromeOrTabIdle) {
     chrome.tabs.query({}, function(tabs) {
@@ -24,7 +25,6 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
         // Check if domain is off - if it is, the visit will have ended in an 'off' redirect so let's not call that a shutdown
         // FIXME: believe that domains are getting made 'off' before this function runs. This should be the place for turning off
         if (!settingsLocal.domains[domain].off) {
-          var statusObj = open("status");
           dataAdder(statusObj, domain, endTime, "lastShutdown");
           close("status", statusObj);
           if (settingsLocal.domains[domain].offByDefault) {
@@ -38,10 +38,10 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
             keyDefined(statusObj[domain], "lastNudged")
           ) {
             // TODO: untested
-            var timeSinceLastNudged = endTime - statusObj[domain].lastNudged;
-            if (timeSinceLastNudged < 60000) {
-              nudged = true;
-            }
+            // var timeSinceLastNudged = endTime - statusObj[domain].lastNudged;
+            // if (timeSinceLastNudged < 60000) {
+            //   nudged = true;
+            // }
           }
           eventLog(domain, "shutdown", { nudged });
         }
@@ -50,13 +50,21 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
   }
   // Actual time adding stuff
   // Get addTime in seconds
-  var addTime = moment(endTime).diff(startTime, "seconds");
+  var addTime = moment(endTime).diff(startTime);
   // Open date
   var date = moment(endTime).format("YYYY-MM-DD");
   var dateObj = open(date);
   // Add to existing time in date object
   dataAdder(dateObj, domain, addTime, "time", addTogether);
   dataAdder(dateObj, allDomains, addTime, "time", addTogether);
+  // See what allDomains is from beginning
+  var allDomainsReal = moment(endTime).diff(statusObj.startOfDay);
+  // allDomains time check
+  if (allDomainsReal !== dateObj.$allDomains.time) {
+    console.log(allDomainsReal);
+    console.log(dateObj.$allDomains.time);
+    console.log(domain, startTime, endTime, source);
+  }
   dataAdder(dateObj, domain, 0, "runningCounter");
   close(date, dateObj);
   // Define previous and now, in
@@ -189,7 +197,7 @@ function domainTimeNudger() {
     close(date, dateObj);
     // Brings out these items as variables in the function for easier manipulation
     var runningCounter = dateObj[domain].runningCounter;
-    var time = dateObj[domain].time;
+    var time = Math.round(dateObj[domain].time / 1000); // Adjustment back to seconds
     // Set a temporary 0 value on time if undefined
     if (!notUndefined(time)) {
       time = 0;
