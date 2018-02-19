@@ -72,8 +72,8 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
   var previousTime = totalTime - addTime;
   // Need to reset the runningCounter after updating time
   // Convert time to readable format
-  var duration = logMinutes(addTime);
-  var totalTimeToday = logMinutes(totalTime);
+  var duration = logMinutes(addTime / 1000);
+  var totalTimeToday = logMinutes(totalTime / 1000);
   eventLog(
     domain,
     "visit",
