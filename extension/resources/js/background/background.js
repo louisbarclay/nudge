@@ -74,6 +74,7 @@ function checkCurrentState() {
 // Add to timeline on window in and window out
 function timeline(domain, source, timeOverride, callback) {
   // console.log(domain, source, moment(timeOverride).calendar());
+  // t variable is for testing only
   if (t) {
     return;
   }

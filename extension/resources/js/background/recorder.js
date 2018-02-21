@@ -197,10 +197,10 @@ function domainTimeNudger() {
     close(date, dateObj);
     // Brings out these items as variables in the function for easier manipulation
     var runningCounter = dateObj[domain].runningCounter;
-    var time = Math.round(dateObj[domain].time / 1000); // Adjustment back to seconds
     // Set a temporary 0 value on time if undefined
-    if (!notUndefined(time)) {
-      time = 0;
+    var time = 0;
+    if (!isUndefined(dateObj[domain].time)) {
+      time = Math.round(dateObj[domain].time / 1000); // Adjustment back to seconds 
     }
     // Sets a temporary total time value and evaluates it against our time nudge levels
     var totalTimeTemp = runningCounter + time;
