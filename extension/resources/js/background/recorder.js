@@ -64,6 +64,11 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
     console.log(allDomainsReal);
     console.log(dateObj.$allDomains.time);
     console.log(domain, startTime, endTime, source);
+    eventLog(domain, "allDomainsGoneWrong", {
+      startTime,
+      endTime,
+      source
+    });
   }
   dataAdder(dateObj, domain, 0, "runningCounter");
   close(date, dateObj);
