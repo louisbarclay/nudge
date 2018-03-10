@@ -112,12 +112,27 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     closeAll(request.domain);
   }
   if (request.type === "inject_tabidler" && !chromeTab) {
-    try {
-      chrome.tabs.executeScript(sender.tab.id, {
-        file: "resources/js/tabidler.js"
-      });
-    } catch(e) {
-      console.log(e)
+    chrome.tabs.get(sender.tab.id, checkIfExists);
+    function checkIfExists() {
+      try {
+        if (chrome.runtime.lastError) {
+          // Tab doesn't exist
+          console.log(chrome.runtime.lastError.message);
+        } else {
+          console.log(`Tab with id ${sender.tab.id} exists`);
+          // Tab exists
+            try {
+              chrome.tabs.executeScript(sender.tab.id, {
+                file: "resources/js/tabidler.js"
+              });
+              sendResponse({ message: "tab idler injected" });
+            } catch (e) {
+              console.log(e);
+            }
+        }
+      } catch(e) {
+        console.log(e);
+      }
     }
   }
   if (request.type === "tabIdle") {

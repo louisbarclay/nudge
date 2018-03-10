@@ -145,9 +145,13 @@ function updateDayToServer(date, url) {
   }
 }
 
-// send: userId, eventId (random hash?), time, details 
+// send: userId, eventId (random hash?), time, details
 // check that eventType exists. or rather, have central log of all eventTypes. with descriptions
 
+// Test sending settings
 // sendData('zb18458e2782b2b77e36769c569e263a53885a9944dd0a861e5064eac16f1a', settingsLocal, 'settings');
+
+// Test sending events
+// sendData('zb18458e2782b2b77e36769c569e263a53885a9944dd0a861e5064eac16f1a', , 'settings');
 
 // settings stuff should all just go through one message thing

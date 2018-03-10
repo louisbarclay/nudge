@@ -506,9 +506,10 @@ function imgSrcToDataURL(src, callback, outputFormat) {
   }
 }
 
-function sendData(userId, data, url) {
+function sendData(userId, data, date, url) {
   var sendData = {
     userId,
+    date,
     data
   };
   sendData = JSON.stringify(sendData);
@@ -516,4 +517,12 @@ function sendData(userId, data, url) {
   request.open("POST", config.apiEndpoint + url, true);
   request.setRequestHeader("Content-Type", "application/json");
   request.send(sendData);
+}
+
+function printAllTabs() {
+  chrome.tabs.query({}, function(tabs) {
+    for (var i = 0; i < tabs.length; i++) {
+      console.log(tabs[i]);
+    }
+  });
 }

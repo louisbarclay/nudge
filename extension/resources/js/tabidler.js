@@ -1,5 +1,3 @@
-// Copyright 2016, Nudge, All rights reserved.
-
 function checkVideo() {
   return !!Array.prototype.find.call(document.querySelectorAll('video'),function(elem) {
     return elem.duration > 0 && !elem.paused;

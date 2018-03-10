@@ -61,10 +61,8 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
   var allDomainsReal = moment(endTime).diff(statusObj.startOfDay);
   // allDomains time check
   if (allDomainsReal !== dateObj.$allDomains.time) {
-    console.log(allDomainsReal);
-    console.log(dateObj.$allDomains.time);
-    console.log(domain, startTime, endTime, source);
-    eventLog(domain, "allDomainsGoneWrong", {
+    eventLog(domain, "allDomainsCheckFail", {
+      diff: dateObj.$allDomains.time - allDomainsReal,
       startTime,
       endTime,
       source
@@ -97,10 +95,24 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
       var dateCheck = new RegExp("[0-9]{4}-[0-9]{2}-[0-9]{2}");
       if (dateCheck.test(key) && key !== moment().format("YYYY-MM-DD")) {
         // Closes off any previous days and sends them to cloud storage
-        if (false) {
-          // Turn off data sharing until more thought has gone in
-          // Adds snapshot of settings and status as it stands
-          updateDayToServer(key);
+        // if (settingsLocal.share_data) {
+        if (settingsLocal.share_data) {
+          // Send all events over
+          sendData(
+            settingsLocal.userId,
+            JSON.parse(localStorage[key]).events,
+            key,
+            "events"
+          );
+          // Send day info over
+          var dayInfo = JSON.parse(localStorage[key]);
+          delete dayInfo.events;
+          sendData(
+            settingsLocal.userId,
+            dayInfo,
+            key,
+            "user" // Must be something different
+          );
           // TODO: Keeps what it needs from it, e.g. last 7 days history by domain (too much?)
         }
         localStorage.removeItem(key);
@@ -205,7 +217,7 @@ function domainTimeNudger() {
     // Set a temporary 0 value on time if undefined
     var time = 0;
     if (!isUndefined(dateObj[domain].time)) {
-      time = Math.round(dateObj[domain].time / 1000); // Adjustment back to seconds 
+      time = Math.round(dateObj[domain].time / 1000); // Adjustment back to seconds
     }
     // Sets a temporary total time value and evaluates it against our time nudge levels
     var totalTimeTemp = runningCounter + time;

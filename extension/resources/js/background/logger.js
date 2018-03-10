@@ -92,11 +92,12 @@ function eventLog(domain, eventType, detailsObj, date, time) {
     date = moment().format("YYYY-MM-DD");
     time = moment().format("HH:mm:ss");
   }
+  var timeStamp = moment().toString();
   consoleLogger(domain, eventType, detailsObj, date, time);
   // should match up perfectly
   if (eventType != "visitStart") {
     var dateObj = open(date);
-    dataAdder(dateObj, "events", event, time);
+    dataAdder(dateObj, "events", event, timeStamp);
     close(date, dateObj);
   }
 }

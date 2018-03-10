@@ -23,18 +23,18 @@ function constantiser(newTitle) {
 }
 
 function domainTranslate(domain) {
-  if (domain === "facebook.com") {
-    return "Facebook";
-  }
-  if (domain === "twitter.com") {
-    return "Twitter";
-  }
+  // if (domain === "facebook.com") {
+  //   return "Facebook";
+  // }
+  // if (domain === "twitter.com") {
+  //   return "Twitter";
+  // }
   if (domain === "messenger.com") {
     return "Messenger";
   }
-  if (domain === "mail.google.com") {
-    return "Gmail";
-  }
+  // if (domain === "mail.google.com") {
+  //   return "Gmail";
+  // }
   // if (domain === "linkedin.com") { // This is making LinkedIn mess up
   //   return "LinkedIn";
   // }

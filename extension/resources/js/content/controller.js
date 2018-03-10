@@ -52,7 +52,8 @@ function execSettings(settings) {
     // console.log(e);
   }
   // Init constantise
-  if (settings.constantise && domain) {
+  if (false) { // FIXME: turn off constantiser until it works again
+  // if (settings.constantise && domain) {
     docReady(function() {
       addScript(
         "nudge-constantise-script",
@@ -225,7 +226,11 @@ function keepAddingCircles(callback) {
 function tabIdler() {
   chrome.runtime.sendMessage({ type: "inject_tabidler" }, function(
     response
-  ) {});
+  ) {
+    if (response) {
+      console.log(response.message);
+    }
+  });
 }
 
 function insertSwitch(domain) {

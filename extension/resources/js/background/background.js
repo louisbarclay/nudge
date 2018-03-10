@@ -166,13 +166,14 @@ function timeline(domain, source, timeOverride, callback) {
     }
   }
 
-  // If previous domain is same as current domain, don't do anything - unless day has changed
-  // FIXME: this seems like it needs to be tested well
+  // If previous domain is same as current domain, don't do anything
+  // Unless there was a dateSplit or gap
+  // FIXME: still needs testing
+  // put in logs here
   if (
-    s.currentState.domain === domain &&
-    source !== "dateSplit_previousDay" &&
-    source !== "dateSplit_currentDay" &&
-    !source.includes("gapStart") // Also don't update timeline if gapStart, but DO if gapEnd
+    (s.currentState.domain === domain
+      && !(source.includes("dateSplit"))
+    )
   ) {
     // Do nothing
   } else {
