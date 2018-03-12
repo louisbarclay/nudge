@@ -123,18 +123,15 @@ function execSettings(settings) {
     // If the user has unfollowed nearly all of their friends, show 'Share' dialog box, not
     // 'Delete your News Feed' dialog box
     if (ratio <= 0.1) {
-      console.log("here");
       loadUx("share.html", shareUx);
       docReady(function() {
         getFacebookCreds(function() {
           // If we should be executing an unfollow, e.g. in case of autoUnfollow being on, go ahead and do it
           if (executeUnfollow) {
-            console.log("execute unfollow on");
             friendAndPageListGenerator(unfollow, false, function() {
               executeUnfollow = false;
             });
           } else {
-            console.log("execute unfollow off");
             // Otherwise, load all profiles
             friendAndPageListGenerator(unfollow, false);
           }
@@ -400,7 +397,6 @@ function friendAndPageToggler(option) {
     if (friendandpage_toggle.readyState == 4) {
       // If the request didn't work, try again after 5 seconds - and retry 4 times
       if (friendandpage_toggle.status === 0) {
-        console.log(friendandpage_toggle);
         debugLogger("failedRequest_willRetry", {
           errorMessage: friendandpage_toggle
         });

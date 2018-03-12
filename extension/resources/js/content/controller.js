@@ -228,7 +228,6 @@ function tabIdler() {
     response
   ) {
     if (response) {
-      console.log(response.message);
     }
   });
 }
