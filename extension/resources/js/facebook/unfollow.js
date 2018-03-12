@@ -15,7 +15,7 @@ var retryUnfollowCount = 0;
 getSettings(execSettings);
 
 function debugLogger(eventType, detailsObj) {
-  if (true) {
+  if (config.debug) {
     console.log(eventType, detailsObj);
   }
   if (detailsObj) {
