@@ -172,7 +172,7 @@ function timeline(domain, source, timeOverride, callback) {
   // put in logs here
   if (
     (s.currentState.domain === domain
-      && !(source.includes("dateSplit"))
+      && !(source.includes("dateSplit_previousDay"))
     )
   ) {
     // Do nothing

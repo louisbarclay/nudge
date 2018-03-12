@@ -97,7 +97,7 @@ function eventLog(domain, eventType, detailsObj, date, time) {
   // should match up perfectly
   if (eventType != "visitStart") {
     var dateObj = open(date);
-    dataAdder(dateObj, "events", event, timeStamp);
+    dataAdder(dateObj, "events", event, `${timeStamp} ${eventType}`);
     close(date, dateObj);
   }
 }

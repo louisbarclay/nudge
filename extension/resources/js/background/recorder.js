@@ -95,7 +95,6 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
       var dateCheck = new RegExp("[0-9]{4}-[0-9]{2}-[0-9]{2}");
       if (dateCheck.test(key) && key !== moment().format("YYYY-MM-DD")) {
         // Closes off any previous days and sends them to cloud storage
-        // if (settingsLocal.share_data) {
         if (settingsLocal.share_data) {
           // Send all events over
           sendData(
@@ -104,18 +103,17 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
             key,
             "events"
           );
-          // Send day info over
+          // Send summary over
           var dayInfo = JSON.parse(localStorage[key]);
+          // Take events out
           delete dayInfo.events;
-          sendData(
-            settingsLocal.userId,
-            dayInfo,
-            key,
-            "user" // Must be something different
-          );
-          // TODO: Keeps what it needs from it, e.g. last 7 days history by domain (too much?)
+          sendData(settingsLocal.userId, dayInfo, key, "summary");
+          // Remove previous day to free up space
+          localStorage.removeItem(key);
+        } else {
+          // Remove previous day to free up space
+          localStorage.removeItem(key);
         }
-        localStorage.removeItem(key);
       }
     }
   }

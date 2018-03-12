@@ -6,10 +6,6 @@ function open(key) {
   return localStorageObject;
 }
 
-function read(key) {
-  return JSON.parse(localStorage[key]);
-}
-
 function close(key, object) {
   object = JSON.stringify(object);
   localStorage.setItem(key, object);
@@ -72,6 +68,10 @@ function syncStorageClear() {
   chrome.storage.sync.clear();
 }
 
+function localStorageClear() {
+  localStorage.clear();
+}
+
 // Check storage bytes used
 function storageUsed() {
   chrome.storage.sync.getBytesInUse(null, function(bytesInUse) {
@@ -108,12 +108,6 @@ function storageSet(item, callback) {
 }
 
 flushToTabIdStorage();
-
-function localStorageCheckSize() {}
-
-function localStorageClear() {
-  localStorage.clear();
-}
 
 // every day, look at old localStorage info. delete it. and send it to the server if that is allowed.
 

@@ -1,13 +1,3 @@
-function sendOutSettingsLocal() {
-  // chrome runtime sendmessage. to standard receiver everywhere. receiver is the one that only takes the info it cares about.
-  // is that clumsy, because it takes the whole object? maybe but it's fine, can improve later
-  // Send settings out
-  chrome.runtime.sendMessage({
-    type: "settings",
-    settings: settingsLocal
-  });
-}
-
 // Init options
 function initSettings() {
   // Add static stuff
@@ -31,8 +21,8 @@ function defaultDomainPopulate(domainsArray) {
 function inDomainsSetting(url) {
   url = extractDomain(url);
   var domain = false;
-  if (typeof settingsLocal.domains == 'undefined') {
-    console.log('Settings not yet defined so no point continuing');
+  if (typeof settingsLocal.domains == "undefined") {
+    console.log("Settings not yet defined so no point continuing");
     return false;
   }
   Object.keys(settingsLocal.domains).forEach(function(key) {
@@ -43,15 +33,8 @@ function inDomainsSetting(url) {
   return domain;
 }
 
-// Download storage item
-function syncSettingsGet(callback) {
-  chrome.storage.sync.get("settings", function(item) {
-    callback(item);
-  });
-}
-
 function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
-  console.log(newVal, setting, domain, domainSetting, senderTabId);
+  eventLog(domain, "changeSetting", { newVal, setting, domain, domainSetting });
   try {
     if (domain && domainSetting) {
       if (domainSetting === "add") {
@@ -74,14 +57,17 @@ function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
     }
     // Whatever has happened, sync settingsLocal and show new sync settings in log
     storageSet({ settings: settingsLocal });
+    // Update settings in the cloud
+    if (settingsLocal.share_data) {
+      sendData(settingsLocal.userId, settingsLocal, false, "settings");
+    }
   } catch (e) {
     console.log(e);
   }
   if (senderTabId) {
-    chrome.tabs.sendMessage(senderTabId, { type: 'send_settingsLocal', settingsLocal });
+    chrome.tabs.sendMessage(senderTabId, {
+      type: "send_settingsLocal",
+      settingsLocal
+    });
   }
-}
-
-function syncSettingsPeriodically(settingsLocal) {
-  // just run this every whenever to make sure you're syncing up?
 }
