@@ -2,6 +2,7 @@ var button = document.querySelector(".button");
 var centre = document.querySelector(".button-centre");
 var domainText = document.querySelector("#domain-text");
 var tagline = document.getElementById("tagline");
+var switch_ons = false;
 
 var QueryString = (function() {
   // This function is anonymous, is executed immediately and
@@ -41,6 +42,8 @@ function getLocalStorage() {
     var status = JSON.parse(localStorage.status);
     var lastShutdown = status[domain].lastShutdown;
     var timeToday = domainToday.time / 60;
+    switch_ons = JSON.parse(localStorage[date]).switch_ons;
+    console.log(switch_ons);
 
     // tagline.innerHTML = `You last visited ${domain} less than ${lastVisited} minutes ago, are you sure you want to go back?`;
   });
@@ -92,6 +95,7 @@ function sliderup(e) {
     console.log("hey");
     initOn();
   } else {
+    // initPosition = position;
     button.style.left = 0 + "px";
     button.classList.add("returning");
   }

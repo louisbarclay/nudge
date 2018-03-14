@@ -96,6 +96,15 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       changeSetting(false, "domains", request.domain, "off");
       switchOn(request.domain, request.url, sender.tabId);
     }
+    // Register a new switch on
+    var date = moment().format("YYYY-MM-DD");
+    var dateObj = open(date);
+    if (isUndefined(dateObj.switch_ons)) {
+      dateObj.switch_ons = 1;
+    } else {
+      dateObj.switch_ons++;
+    }
+    close(date, dateObj);
   }
   if (
     request.type === "scroll" ||
@@ -121,16 +130,16 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         } else {
           console.log(`Tab with id ${sender.tab.id} exists`);
           // Tab exists
-            try {
-              chrome.tabs.executeScript(sender.tab.id, {
-                file: "resources/js/tabidler.js"
-              });
-              sendResponse({ message: "tab idler injected" });
-            } catch (e) {
-              console.log(e);
-            }
+          try {
+            chrome.tabs.executeScript(sender.tab.id, {
+              file: "resources/js/tabidler.js"
+            });
+            sendResponse({ message: "tab idler injected" });
+          } catch (e) {
+            console.log(e);
+          }
         }
-      } catch(e) {
+      } catch (e) {
         console.log(e);
       }
     }
