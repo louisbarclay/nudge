@@ -8,6 +8,16 @@ function consoleLogger(domain, eventType, detailsObj, date, time) {
     }
   }
   switch (eventType) {
+    case "allDomainsCheckFail":
+      logWithColor(
+        `${date} ${detailsObj.startTime} ${
+          detailsObj.endTime
+        } ${domain}. Diff is ${detailsObj.diff} Source: ${
+          detailsObj.source
+        }`,
+        "magenta"
+      );
+      break;
     case "visit":
       logWithColor(
         `${date} ${detailsObj.startTime} ${detailsObj.endTime} ${domain} ${
