@@ -1,8 +1,10 @@
+var slider = document.querySelector(".slider");
 var button = document.querySelector(".button");
 var centre = document.querySelector(".button-centre");
 var domainText = document.querySelector("#domain-text");
 var tagline = document.getElementById("tagline");
 var switch_ons = false;
+var getStickier = true;
 
 var QueryString = (function() {
   // This function is anonymous, is executed immediately and
@@ -37,13 +39,27 @@ function getLocalStorage() {
   chrome.runtime.sendMessage({ type: "get_localStorage" }, function(response) {
     var date = moment().format("YYYY-MM-DD");
     localStorage = response.localStorage;
-
     var domainToday = JSON.parse(localStorage[date])[domain];
     var status = JSON.parse(localStorage.status);
     var lastShutdown = status[domain].lastShutdown;
     var timeToday = domainToday.time / 60;
     switch_ons = JSON.parse(localStorage[date]).switch_ons;
     console.log(switch_ons);
+    if (getStickier) {
+      var stickyChange = switch_ons / 2;
+      console.log(stickyChange);
+      if (isNaN(stickyChange) || stickyChange < 1) {
+        stickyMultiplier = 1;
+      } else if (stickyChange > 10) {
+        stickyMultiplier = 10;
+      } else {
+        stickyMultiplier = stickyChange;
+      }
+    }
+    if (stickyMultiplier > 1) {
+      document.querySelector(".slider-text").innerHTML =
+        "Slider gets harder to drag across after each switch on";
+    }
 
     // tagline.innerHTML = `You last visited ${domain} less than ${lastVisited} minutes ago, are you sure you want to go back?`;
   });
@@ -67,12 +83,10 @@ function initOn() {
 
 button.addEventListener("mousedown", sliderdown, true);
 
-function sliderdown(e) {
-  button.classList.remove("returning");
-  // bind late
-  document.addEventListener("mouseup", sliderup, true);
-  document.addEventListener("mousemove", slidermove, true);
-}
+// Vars for the slider
+var buttonPosition = 0;
+var mousePosition = false;
+var stickyMultiplier = 1;
 
 function getPageLeft(el) {
   var rect = el.getBoundingClientRect();
@@ -80,43 +94,62 @@ function getPageLeft(el) {
   return rect.left + (window.pageXOffset || docEl.scrollLeft || 0);
 }
 
+function sliderdown(e) {
+  // Find where the button is
+  var buttonDiff = getPageLeft(button) - getPageLeft(slider);
+  // Set button position as where button is relative to slider
+  // Set to zero if you have a negative value (should never happen)
+  if (buttonDiff > 0) {
+    buttonPosition = Math.round(buttonDiff);
+  } else {
+    buttonPosition = 0;
+  }
+  // Set mouse position as wherever mouse is
+  mousePosition = e.clientX;
+  button.classList.remove("returning");
+  // bind late
+  document.addEventListener("mouseup", sliderup, true);
+  document.addEventListener("mousemove", slidermove, true);
+}
+
 function sliderup(e) {
-  initPosition = false;
-  var position =
-    e.clientX - getPageLeft(button.parentElement) - button.offsetWidth / 2;
+  // Position for testing whether to initOn, or return
+  var position = getPageLeft(button) - getPageLeft(slider);
   button.classList.remove("active");
   centre.classList.remove("active");
   // unbind
   document.removeEventListener("mousemove", slidermove, true);
   document.removeEventListener("mouseup", sliderup, true);
-  if (position > button.parentElement.offsetWidth - button.offsetWidth) {
-    button.style.left =
-      button.parentElement.offsetWidth - button.offsetWidth + "px";
-    console.log("hey");
+  // Initiate on
+  if (position >= slider.offsetWidth - button.offsetWidth) {
     initOn();
   } else {
-    // initPosition = position;
-    button.style.left = 0 + "px";
-    button.classList.add("returning");
+    if (stickyMultiplier === 1) {
+      button.style.left = 0 + "px";
+      button.classList.add("returning");
+    }
   }
 }
 
-var initPosition = false;
-
 function slidermove(e) {
-  if (!initPosition) {
-    initPosition = e.clientX;
+  // Difference between where mouse was on click, and where mouse is now
+  var difference = 0;
+  if (e.clientX - mousePosition > 0) {
+    difference = Math.round((e.clientX - mousePosition) / stickyMultiplier);
+  } else {
+    difference = Math.round((e.clientX - mousePosition));
   }
-  var position = e.clientX - initPosition;
-  if (position < 0) {
-    position = 0;
+
+  // If you go negative, set to 0px
+  if (difference + buttonPosition < 0) {
+    button.style.left = "0px";
+    // If you go further than end of slider,
   } else if (
-    position >=
-    button.parentElement.offsetWidth - button.offsetWidth
+    difference + buttonPosition + button.offsetWidth >=
+    slider.offsetWidth
   ) {
-    position = button.parentElement.offsetWidth - button.offsetWidth;
-  } else if (position < button.parentElement.offsetWidth - button.offsetWidth) {
-    // Limits movement to the end
+    button.style.left = slider.offsetWidth - button.offsetWidth;
+  } else {
+    button.style.left = difference + buttonPosition + "px";
   }
-  button.style.left = position + "px";
 }

@@ -33,7 +33,7 @@
   },
   "options_page": "html/options.html",
   "web_accessible_resources": ["resources/*", "html/*", "css/*"],
-  "version": "1.0.17",
+  "version": "1.0.18",
   "background": {
     "scripts": [
       "resources/js/vendor/moment.min.js",

@@ -96,13 +96,13 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
       if (dateCheck.test(key) && key !== moment().format("YYYY-MM-DD")) {
         // Closes off any previous days and sends them to cloud storage
         if (settingsLocal.share_data) {
-          // Send all events over
-          sendData(
-            settingsLocal.userId,
-            JSON.parse(localStorage[key]).events,
-            key,
-            "events"
-          );
+          // Send all events over FIXME: switched off for now because I don't know what to do with the data
+          // sendData(
+          //   settingsLocal.userId,
+          //   JSON.parse(localStorage[key]).events,
+          //   key,
+          //   "events"
+          // );
           // Send summary over
           var dayInfo = JSON.parse(localStorage[key]);
           // Take events out
