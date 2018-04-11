@@ -46,12 +46,12 @@ function getLocalStorage() {
     switch_ons = JSON.parse(localStorage[date]).switch_ons;
     console.log(switch_ons);
     if (getStickier) {
-      var stickyChange = switch_ons / 2;
+      var stickyChange = (switch_ons + 2) / 2;
       console.log(stickyChange);
       if (isNaN(stickyChange) || stickyChange < 1) {
         stickyMultiplier = 1;
-      } else if (stickyChange > 10) {
-        stickyMultiplier = 10;
+      } else if (stickyChange > 16) {
+        stickyMultiplier = 16;
       } else {
         stickyMultiplier = stickyChange;
       }

@@ -16,10 +16,6 @@ var divs = {
     }
   ],
   "linkedin.com": [
-    {
-      name: "#ember1484",
-      hidden: true
-    }
   ],
   "facebook.com": [
     {
