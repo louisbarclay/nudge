@@ -134,6 +134,7 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
           // );
           // Send summary over
           var dayInfo = JSON.parse(localStorage[key]);
+          dayInfo.settings = settingsLocal;
           // Take events out
           delete dayInfo.events;
           sendData(settingsLocal.userId, dayInfo, key, "summary");
