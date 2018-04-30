@@ -67,141 +67,208 @@ function checkCurrentState() {
       statusObj.currentState.lastEverySecond = moment();
     }
   }
-  close("status", statusObj);
+  close("status", statusObj, "checkCurrentState");
   return statusObj.currentState;
 }
 
-// Add to timeline on window in and window out
-function timeline(domain, source, timeOverride, callback) {
-  // console.log(domain, source, moment(timeOverride).calendar());
-  // t variable is for testing only
-  if (t) {
-    return;
-  }
-  // Open status to look at currentState
-  var s = open("status");
-  if (typeof s.currentState == "undefined") {
-    console.log("Current state is not yet defined so no point continuing");
-    return;
-  }
-  // Test counter at 2. currentState constant for first call, then for second, after which it can be changed
-  var newS = timelineObject(domain, source);
-  // console.log(newS);
-  // Override time if needed
-  if (notUndefined(timeOverride)) {
-    newS.time = timeOverride;
-  }
-
-  // If it's a current day splitter, take currentState time as start of newS day
-  if (source === "dateSplit_currentDay") {
-    s.currentState.time = moment(newS.time).startOf("day");
-    // Also, log start of day for comparison purposes
-    s.startOfDay = moment(newS.time).startOf("day");
-  }
-  // If there is a gap, do a gap
-  if (
-    moment(newS.time).diff(moment(s.currentState.lastEverySecond), "seconds") >
-      2 &&
-    // Prevent gap recursion
-    !source.includes("gap")
-  ) {
-    console.log(
-      `newS time is ${moment(newS.time).format(
-        "HH:mm:ss"
-      )} and currentState.lastEverySecond is ${moment(
-        s.currentState.lastEverySecond
-      ).format("HH:mm:ss")}, and the diff is calculated at ${moment(
-        newS.time
-      ).diff(moment(s.currentState.lastEverySecond), "seconds")}`
-    );
-    // Check whether there is a gap where everySecond didn't ping
-    // New retro-active event
-    timeline(
-      notInChrome,
-      source + " gapStart",
-      s.currentState.lastEverySecond,
-      function() {
-        // Original event
-        timeline(domain, source + " gapEnd");
-      }
-    );
+function timeline(domain, source, timeOverride) {
+  if (testMode && !timeOverride) {
     return;
   }
 
-  // Check whether dates match
-  // If they don't, we close off the previous date (and send it to the cloud, taking what we need!)
-  if (
-    moment(s.currentState.time).format("YYYY-MM-DD") !==
-      moment(newS.time).format("YYYY-MM-DD") &&
-    // Safety feature to stop recursion
-    !source.includes("dateSplit")
-  ) {
-    if (
-      moment(s.currentState.time).format("YYYY-MM-DD") ===
-      moment(newS.time)
-        .add(-1, "days")
-        .format("YYYY-MM-DD")
-    ) {
-      // Last date is literally yesterday
-      // Ask here if source includes gap?
-      timeline(
-        s.currentState.domain,
-        "dateSplit_previousDay",
-        moment(s.currentState.time).endOf("day"),
-        function() {
-          timeline(domain, "dateSplit_currentDay");
-        }
-      );
-      return;
-    } else {
-      timeline(
-        domain,
-        "dateSplit_previousDay",
-        moment(s.currentState.time).endOf("day"),
-        function() {
-          timeline(domain, "dateSplit_currentDay");
-        }
-      );
-      return;
-    }
-  }
+  // Log
+  // console.log(domain, source);
 
-  // If previous domain is same as current domain, don't do anything
-  // Unless there was a dateSplit or gap
-  // FIXME: still needs testing
-  // put in logs here
-  if (
-    (s.currentState.domain === domain
-      && !(source.includes("dateSplit_previousDay"))
-      && !(source.includes("gapEnd"))
-    )
-  ) {
-    // Do nothing
+  // Open status
+  var status = open("status");
+  // Create previous state
+  var previousState = false;
+  // Set previous state if exists
+  if (typeof status.currentState == "undefined") {
+    console.log("Current state not yet defined - exit timeline");
+    return;
   } else {
-    // First, create new variable lastState, which is what we had before the changes we're about to make
-    var lastState = s.currentState;
-    s.currentState = newS;
-    // Close before running other functions
-    close("status", s);
-    // Update time (close off visit)
-    domainTimeUpdater(
-      lastState.domain,
-      moment(lastState.time),
-      s.currentState.time,
-      source
-    );
-    // Update visit
-    domainVisitUpdater(domain, newS.time, source);
+    previousState = status.currentState;
   }
-  if (callback) {
-    callback();
-  }
-}
 
-// timelineAdder test
-function timelineAdderTest() {
-  function runAfter(initial, callback) {
-    initial();
-    setTimeout(callback, 1000);
+  // Set prevDomain
+  var prevDomain = previousState.domain;
+  var prevTime = previousState.time;
+
+  // Define currentState
+  status.currentState = timelineObject(
+    domain,
+    source,
+    timeOverride ? timeOverride : false
+  );
+
+  // Only actually close current state if needed
+  // FIXME: implications of this for the gap and day events? Must test
+  // console.log(prevDomain);
+  // console.log(domain);
+  // console.log(`Closed ${source} ${status.currentState.time.toISOString()}`);
+
+  // Set other variables
+  var currDomain = status.currentState.domain;
+  var currTime = status.currentState.time;
+  var gapTime = previousState.lastEverySecond;
+
+  // Logs
+  // if (moment(prevTime).valueOf() === moment(currTime).valueOf()) {
+  //   console.log("This can happen and it's OK");
+  // }
+  // console.log(moment(prevTime).format("hh:mm:ss"));
+  // console.log(moment(currTime).format("hh:mm:ss"));
+
+  // console.log(`Curr time: ${moment(currTime).toISOString()}`);
+  // console.log(`Last e s : ${gapTime}`);
+  // console.log(`Prev time: ${prevTime}`);
+
+  // Define gap diff
+  var gapDiff = moment(currTime).diff(moment(gapTime), "seconds");
+  // Define date diff
+  var dateDiff = moment(currTime)
+    .startOf("day")
+    .diff(moment(prevTime).startOf("day"), "days");
+
+  // Record data
+  if (isNaN(gapDiff) || isNaN(dateDiff)) {
+    // Serious problem
+    console.log(gapDiff);
+    console.log(dateDiff);
+  } else if (gapDiff < 2 && dateDiff === 0) {
+    // Normal
+    if (prevDomain !== domain) {
+      // Close the status
+      close("status", status, "normal");
+      // Do normal
+      domainTimeUpdater(prevDomain, prevTime, currTime, source);
+      domainVisitUpdater(currDomain, currTime, source);
+    } else {
+      // Do nothing
+    }
+  } else {
+    // Close the status
+    close("status", status, "other");
+    // Process other cases
+    if (gapDiff >= 2 && dateDiff === 0) {
+      // Gap only
+      // From previousTime to previousEverySecond
+      domainTimeUpdater(prevDomain, prevTime, gapTime, `${source}-to-gap`);
+      // Visit starting at previousEverySecond
+      domainVisitUpdater(notInChrome, gapTime, `${source}-gap-notInChrome`);
+      // From previousEverySecond to currentTime
+      domainTimeUpdater(
+        prevDomain,
+        gapTime,
+        currTime,
+        `${source}-gap-to-currentTime`
+      );
+      // Visit starting at currentTime
+      domainVisitUpdater(currDomain, currTime, `${source}-post-gap`);
+    } else if (gapDiff < 2 && dateDiff > 0) {
+      // Date diff only
+      // From previousTime to endOfDay
+      domainTimeUpdater(
+        prevDomain,
+        prevTime,
+        moment(prevTime).endOf("day"),
+        `${source}-to-endOfDay`
+      );
+      // Visit starting at startOfDay
+      domainVisitUpdater(
+        prevDomain,
+        moment(currTime).startOf("day"),
+        `${source}-startOfDay`
+      );
+      // From startOfDay to currentTime
+      domainTimeUpdater(
+        prevDomain,
+        moment(currTime).startOf("day"),
+        currTime,
+        `${source}-startOfDay-to-currentTime-newDay`
+      );
+      // Visit starting at currentTime
+      domainVisitUpdater(currDomain, currTime, `${source}-post-startOfDay`);
+    } else {
+      // Both date diff and gap diff
+      if (moment(gapTime).isBefore(moment(currTime).startOf("day"))) {
+        // Gap then day change stuff
+        // From previousTime to previousEverySecond
+        domainTimeUpdater(
+          prevDomain,
+          prevTime,
+          gapTime,
+          `${source}-to-gap-COMBO1`
+        );
+        // Visit starting at previousEverySecond
+        domainVisitUpdater(
+          notInChrome,
+          gapTime,
+          `${source}-gap-notInChrome-COMBO1`
+        );
+        // From previousEverySecond to endOfDay
+        domainTimeUpdater(
+          notInChrome,
+          gapTime,
+          moment(gapTime).endOf("day"),
+          `${source}-gap-to-endOfDay-COMBO1`
+        );
+        // Visit starting at startOfDay
+        domainVisitUpdater(
+          notInChrome,
+          moment(currTime).startOf("day"),
+          `${source}-post-gap-COMBO1`
+        );
+        // From startOfDay to currentTime
+        domainTimeUpdater(
+          notInChrome,
+          moment(currTime).startOf("day"),
+          currTime,
+          `${source}-startOfDay-to-currentTime-COMBO1-newDay`
+        );
+        // Visit starting at currentTime
+        domainVisitUpdater(
+          currDomain,
+          currTime,
+          `${source}-post-startOfDay-COMBO1`
+        );
+      } else if (moment(gapTime).isAfter(moment(currTime).startOf("day"))) {
+        // Day change then gap stuff
+        // From previousTime to endOfDay
+        domainTimeUpdater(
+          prevDomain,
+          prevTime,
+          moment(prevTime).endOf("day"),
+          `${source}-to-endOfDay-COMBO2`
+        );
+        // Visit starting at startOfDay
+        domainVisitUpdater(
+          prevDomain,
+          moment(currTime).startOf("day"),
+          `${source}-startOfDay-COMBO2`
+        );
+        // From startOfDay to gap
+        domainTimeUpdater(
+          prevDomain,
+          moment(currTime).startOf("day"),
+          gapTime,
+          `${source}-startOfDay-to-gap-COMBO2-newDay`
+        );
+        // Visit starting at gap
+        domainVisitUpdater(notInChrome, gapTime, `${source}-gap-COMBO2`);
+        // From gap to currentTime
+        domainTimeUpdater(
+          notInChrome,
+          gapTime,
+          currTime,
+          `${source}-gap-to-currentTime-COMBO2`
+        );
+        // Visit starting at currentTime
+        domainVisitUpdater(currDomain, currTime, `${source}-post-gap-COMBO2`);
+      } else {
+        console.log("Serious error, must fix");
+      }
+    }
   }
 }

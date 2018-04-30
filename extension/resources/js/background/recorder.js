@@ -17,6 +17,7 @@ function nudgeObject(domain, amount, type, status) {
 function domainTimeUpdater(domain, startTime, endTime, source) {
   startTime = moment(startTime);
   endTime = moment(endTime);
+
   var statusObj = open("status");
   // Last shutdown if domain is true, and not an odd domain, and if there are not any tabs of that kind when visit is closed off
   if (domain && domain !== notInChrome && domain !== chromeOrTabIdle) {
@@ -26,7 +27,7 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
         // FIXME: believe that domains are getting made 'off' before this function runs. This should be the place for turning off
         if (!settingsLocal.domains[domain].off) {
           dataAdder(statusObj, domain, endTime, "lastShutdown");
-          close("status", statusObj);
+          close("status", statusObj, "status close in check off");
           if (settingsLocal.domains[domain].offByDefault) {
             changeSetting(true, "domains", domain, "off");
           }
@@ -49,27 +50,42 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
     });
   }
   // Actual time adding stuff
-  // Get addTime in seconds
+  // Get addTime in milliseconds
   var addTime = moment(endTime).diff(startTime);
   // Open date
   var date = moment(endTime).format("YYYY-MM-DD");
   var dateObj = open(date);
+  var prevAllDomainsTime = false;
+  if (
+    typeof dateObj.$allDomains !== "undefined" &&
+    "time" in dateObj.$allDomains
+  ) {
+    prevAllDomainsTime = dateObj.$allDomains.time;
+  }
+
+  // If startOfDay exists already, check it's for the right day
+  if ("startOfDay" in statusObj) {
+    if (
+      moment(statusObj.startOfDay).format("YYYY-MM-DD") !==
+      moment(endTime).format("YYYY-MM-DD")
+    ) {
+      statusObj.startOfDay = moment(endTime).startOf("day");
+    }
+    // If not, set it
+  } else {
+    statusObj.startOfDay = moment(endTime).startOf("day");
+  }
+
+  // console.log(prevAllDomainsTime);
   // Add to existing time in date object
   dataAdder(dateObj, domain, addTime, "time", addTogether);
   dataAdder(dateObj, allDomains, addTime, "time", addTogether);
   // See what allDomains is from beginning
   var allDomainsReal = moment(endTime).diff(statusObj.startOfDay);
-  // allDomains time check
-  if (allDomainsReal !== dateObj.$allDomains.time) {
-    eventLog(domain, "allDomainsCheckFail", {
-      diff: dateObj.$allDomains.time - allDomainsReal,
-      startTime,
-      endTime,
-      source
-    });
-  }
+  // console.log(moment(endTime).format("hh:mm:ss"));
+  // console.log(moment(statusObj.startOfDay).format("hh:mm:ss"));
   dataAdder(dateObj, domain, 0, "runningCounter");
-  close(date, dateObj);
+  close(date, dateObj, "date close in time updater");
   // Define previous and now, in
   var totalTime = dateObj[domain].time;
   var previousTime = totalTime - addTime;
@@ -77,6 +93,16 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
   // Convert time to readable format
   var duration = logMinutes(addTime / 1000);
   var totalTimeToday = logMinutes(totalTime / 1000);
+  // console.log(dateObj.$allDomains.time);
+  // console.log(allDomainsReal);
+  console.log(
+    `${tF(startTime)} to ${tF(
+      endTime
+    )}. Add time: ${addTime}. Prev $allDomains time: ${prevAllDomainsTime}. Start of day: ${tF(
+      statusObj.startOfDay
+    )}. ${allDomainsReal} ${dateObj.$allDomains.time} ${allDomainsReal -
+      dateObj.$allDomains.time}. ${domain}, ${source}`
+  );
   eventLog(
     domain,
     "visit",
@@ -85,15 +111,18 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
       endTime: endTime.format("HH:mm:ss"),
       duration,
       totalTimeToday,
-      source
+      source,
+      allDomainsDiff: [dateObj.$allDomains.time, allDomainsReal]
     },
     date,
-    moment().format("HH:mm:ss")
+    moment(endTime).format("HH:mm:ss")
   );
-  if ((source = "dateSplit_previousDay")) {
+  // FIXME: data sharing!
+  if (source.includes('newDay')) {
+    console.log('New day so closing off keys that we dont need');
     for (var key in localStorage) {
       var dateCheck = new RegExp("[0-9]{4}-[0-9]{2}-[0-9]{2}");
-      if (dateCheck.test(key) && key !== moment().format("YYYY-MM-DD")) {
+      if (dateCheck.test(key) && key !== moment(endTime).format("YYYY-MM-DD")) {
         // Closes off any previous days and sends them to cloud storage
         if (settingsLocal.share_data) {
           // Send all events over FIXME: switched off for now because I don't know what to do with the data
@@ -119,10 +148,16 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
   }
 }
 
+function tF(time) {
+  return moment(time)
+    .format()
+    .substr(8);
+}
+
 // Runs within timeline adder if the new timeline event does not match the old one
 function domainVisitUpdater(domain, time, source) {
   time = moment(time);
-  var date = moment().format("YYYY-MM-DD");
+  var date = moment(time).format("YYYY-MM-DD");
   if (domain === notInChrome) {
     eventLog(
       notInChrome,
@@ -134,7 +169,7 @@ function domainVisitUpdater(domain, time, source) {
   }
   var dateObj = open(date);
   dataAdder(dateObj, domain, 1, "visits", addTogether);
-  close(date, dateObj);
+  close(date, dateObj, "date close in visit updater");
   var totalVisits = dateObj[domain].visits;
   var totalTime = dateObj[domain].time;
   // Set until which point back in time to look for a shutdown FIXME: shouldn't get a compulsive or a visit in certain situations...pointless
@@ -186,13 +221,13 @@ function domainVisitUpdater(domain, time, source) {
     dataAdder(dateObj, domain, 1, "compulsives", addTogether);
     console.log("Sent compulsive nudge to", domain);
     dataAdder(statusObj, domain, moment(), "lastCompulsive");
-    close("status", statusObj);
+    close("status", statusObj, "status close in visit updater1");
     nudgeSender(
       nudgeObject(domain, domainStatusObj.lastShutdown, "compulsive")
     );
   } else {
     // Only close status off
-    close("status", statusObj);
+    close("status", statusObj, "status close in visit updater2");
   }
   eventLog(domain, "visitStart", { totalVisits, source });
 }
@@ -209,7 +244,7 @@ function domainTimeNudger() {
     var dateObj = open(date);
     // Increments running counter by 1 second, since this function runs every second
     dataAdder(dateObj, domain, 1, "runningCounter", addTogether);
-    close(date, dateObj);
+    close(date, dateObj, "date close in time nudger");
     // Brings out these items as variables in the function for easier manipulation
     var runningCounter = dateObj[domain].runningCounter;
     // Set a temporary 0 value on time if undefined

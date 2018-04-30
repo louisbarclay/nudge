@@ -2,7 +2,7 @@ eventLog("background.js loaded", "startup");
 
 function everySecond() {
   // Run the counter on the current domain
-  if (t) {
+  if (testMode) {
     return;
   }
   domainTimeNudger();
@@ -70,9 +70,9 @@ function onTabIdle(status, domain) {
 }
 
 // Creates a timeline event (or object, same thing)
-function timelineObject(domain, source) {
+function timelineObject(domain, source, timeOverride) {
   return {
-    time: moment(),
+    time: timeOverride ? moment(timeOverride) : moment(),
     domain: domain,
     source: source,
     lastEverySecond: moment()
@@ -141,6 +141,7 @@ chrome.idle.onStateChanged.addListener(function(newState) {
     timeline(false, "Gone idle zZZzZzZZ");
   }
   if (newState === "active") {
+    // FIXME: is triggering error when only chrome window is the background one
     chrome.windows.getLastFocused(function(window) {
       if (typeof window == "undefined" || window.focused === false) {
         // This may be the problem

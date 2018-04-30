@@ -104,7 +104,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     } else {
       dateObj.switch_ons++;
     }
-    close(date, dateObj);
+    close(date, dateObj, 'close date in messager');
   }
   if (
     request.type === "scroll" ||
@@ -128,7 +128,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
           // Tab doesn't exist
           console.log(chrome.runtime.lastError.message);
         } else {
-          console.log(`Tab with id ${sender.tab.id} exists`);
           // Tab exists
           try {
             chrome.tabs.executeScript(sender.tab.id, {

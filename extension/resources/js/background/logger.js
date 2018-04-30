@@ -8,30 +8,20 @@ function consoleLogger(domain, eventType, detailsObj, date, time) {
     }
   }
   switch (eventType) {
-    case "allDomainsCheckFail":
-      logWithColor(
-        `${date} ${detailsObj.startTime} ${
-          detailsObj.endTime
-        } ${domain}. Diff is ${detailsObj.diff} Source: ${
-          detailsObj.source
-        }`,
-        "magenta"
-      );
-      break;
-    case "visit":
-      logWithColor(
-        `${date} ${detailsObj.startTime} ${detailsObj.endTime} ${domain} ${
-          detailsObj.duration
-        } (${detailsObj.totalTimeToday} today). Source: ${detailsObj.source}`,
-        "green"
-      );
-      break;
-    case "leftChrome":
-      logWithColor(
-        `${date} ${time} Left Chrome ${domain} Source: ${detailsObj.source}`,
-        "darkmagenta"
-      );
-      break;
+    // case "visit":
+    //   logWithColor(
+    //     `${date} ${detailsObj.startTime} ${detailsObj.endTime} ${domain} ${
+    //       detailsObj.duration
+    //     } (${detailsObj.totalTimeToday} today). Source: ${detailsObj.source}`,
+    //     "green"
+    //   );
+    //   break;
+    // case "leftChrome":
+    //   logWithColor(
+    //     `${date} ${time} Left Chrome ${domain} Source: ${detailsObj.source}`,
+    //     "darkmagenta"
+    //   );
+    //   break;
     case "shutdown":
       logWithColor(`${time} ${domain} shutdown`, "red");
       break;
@@ -71,9 +61,9 @@ function nudgeLogger(nudgeObject) {
   var dateObj = open(date);
   dateObj = dataAdder(dateObj, "nudges", nudgeObject, time);
   statusObj = dataAdder(statusObj, nudgeObject.domain, time, "lastNudged");
-  close("status", statusObj);
+  close("status", statusObj, "close status in nudge logger");
   // console.log(JSON.parse(localStorage["status"]));
-  close(date, dateObj);
+  close(date, dateObj, "close date in nudge logger");
 }
 
 function eventLogReceiver(request) {
@@ -106,8 +96,17 @@ function eventLog(domain, eventType, detailsObj, date, time) {
   consoleLogger(domain, eventType, detailsObj, date, time);
   // should match up perfectly
   if (eventType != "visitStart") {
-    var dateObj = open(date);
-    dataAdder(dateObj, "events", event, `${timeStamp} ${eventType}`);
-    close(date, dateObj);
+    if (
+      eventType === "visit" &&
+      detailsObj.allDomainsDiff[0] - detailsObj.allDomainsDiff[1] != 0
+    ) {
+      var dateObj = open(date);
+      dataAdder(dateObj, "events", event, `${timeStamp} ${eventType}CHECKFAIL`);
+      close(date, dateObj, "close date in logger1");
+    } else {
+      var dateObj = open(date);
+      dataAdder(dateObj, "events", event, `${timeStamp} ${eventType}`);
+      close(date, dateObj, "close date in logger2");
+    }
   }
 }

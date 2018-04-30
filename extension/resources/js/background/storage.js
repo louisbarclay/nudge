@@ -6,7 +6,8 @@ function open(key) {
   return localStorageObject;
 }
 
-function close(key, object) {
+function close(key, object, source) {
+  // console.log('Close:', source, key, object);
   object = JSON.stringify(object);
   localStorage.setItem(key, object);
 }
@@ -121,23 +122,6 @@ flushToTabIdStorage();
 // "outOfWindow", // don't put here? create for first time when running domain stuff?
 // "idle", // don't put here? create for first time when running domain stuff?
 // 'notDomain' + random hash? eventually?
-
-function updateDayToServer(date, url) {
-  var userId = settingsLocal.userId;
-  if (notUndefined(localStorage[date])) {
-    var data = JSON.parse(localStorage[date]);
-    // Get status
-    var status = JSON.parse(localStorage.status);
-    // Add status snapshot to data
-    data.status_snapshot = status;
-    // Add settings snapshot to data
-    data.settings_snapshot = settingsLocal;
-    // Add time of upload
-    data.upload_time = moment();
-    // Send data
-    sendData(userId, date, data);
-  }
-}
 
 // send: userId, eventId (random hash?), time, details
 // check that eventType exists. or rather, have central log of all eventTypes. with descriptions

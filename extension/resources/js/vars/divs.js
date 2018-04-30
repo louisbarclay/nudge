@@ -15,8 +15,7 @@ var divs = {
       hidden: true
     }
   ],
-  "linkedin.com": [
-  ],
+  "linkedin.com": [],
   "facebook.com": [
     {
       name: "#pagelet_navigation",
