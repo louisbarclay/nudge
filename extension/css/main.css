@@ -535,14 +535,14 @@ body {
   .toggle .on {
     border: 1px none #bdbdbd;
     border-radius: 4px;
-    background: #eaeaea;
+    background: #61a7ff;
     background-clip: border-box;
-    color: #7f7f7f; }
+    color: #ffffff; }
   .toggle:hover {
     background: inherit;
     border-color: #61a7ff;
     box-shadow: none;
-    background: #f7f7f7;
+    background: #ededed;
     box-shadow: none; }
     .toggle:hover .on {
       background: #61a7ff;
