@@ -1,32 +1,107 @@
+@import '../variables.json'
 @import 'variables'
-
 @import 'animations'
-
 @import 'abstracts'
 
-#nudge
+##{$nudge}
   @extend %reset
   display: block
 
-  .nudge-
-    &container
-      @extend %typography
-      +container($left: -5px, $top: -5px, $width: auto, $spacing: 0.4em)
-      +hardware
-      position: fixed
-      height: auto
-      font-size: 16px
-      z-index: $max-z
-      opacity: 0
-      will-change: opacity
-      
-      >div
-        align-self: flex-start
+  .#{$nudge}-
+    &rounded
+      +border($style: solid, $color: rgba(0,0,0,0.05))
 
+    &translucent
+      +hardware
+      background: rgba(255, 255, 255, 0.95)
+      opacity: 1
+      box-shadow: 0px 0px 16px 0.5px rgba(0, 0, 0, 0.14)
+
+    &text_align
+      p
+        padding: 0 0 .1em 0
+        align-self: center
+
+    &container
+      // Typography
+      @extend %typography
+      // Existence
+      display: flex
+      position: fixed
+      // Flex
+      flex-direction: row
+      align-items: baseline
+      justify-content: center
+
+    &banner
+      // Font size
+      font-size: (17/14) * $default-font-size
+      // Display and position
+      bottom: 0
+      left: 0
+      width: 100%
+      height: 40px
+      // Z-index
+      z-index: $max-z - 1
+
+    &top
+      width: 100px
+      height: 100px
+      position: relative
+
+    &quarter
+      width: 100px
+      display: block
+      height: 100px
+      background: $nudge-pink
+      opacity: 0.5
+      border-radius: 0 100px 0 0
       &:hover
-        >div
-          >div
-            display: flex
+        opacity: 1
+
+    &corner
+      // Display and position
+      width: auto
+      height: auto
+      // Padding
+      +padding($left: 0)
+      // Z-index override
+
+    &control_position
+      z-index: $max-z
+      bottom: 20px
+      left: 0
+
+    &control_flex_direction
+      flex-direction: column
+
+    &control_font_size
+      // Font size
+      font-size: (15/14) * $default-font-size
+
+    &scroll
+      margin: 0
+      padding: 0
+      border-radius: 0
+
+    // &container
+    //   @extend %typography
+    //   +container($left: -5px, $top: -5px, $width: auto, $spacing: 0.4em)
+    //   +hardware
+    //   position: fixed
+    //   height: auto
+    //   font-size: 16px
+    //   z-index: $max-z
+    //   opacity: 0
+    //   will-change: opacity
+      
+    //   >div
+    //     align-self: flex-start
+
+    //   &:hover
+    //     >div
+    //       >div
+    //         display: flex
     
     &intro
       animation: fade-in 0.5s forwards
@@ -36,16 +111,13 @@
 
     &main
       display: flex
-      // +border($width: 5px, $color: $nudge-blue)
       +border($style: solid, $color: rgba(0,0,0,0.05))
       +padding($left: 0)
       padding-bottom: 0.15em
       padding-right: 0.5em
-      +left-icon($size: 1.2em)
       +hardware
       background: rgba(255, 255, 255, 0.95)
       color: $nudge-grey-medium
-      font-size: (17/14) * $default-font-size
       flex-direction: row
       margin-bottom: 0.5em
       opacity: 1
@@ -60,16 +132,18 @@
         cursor: default
         user-select: none
 
-      &::before
-        background: url('chrome-extension://__MSG_@@extension_id__/resources/images/logo-color.svg') center center/1.2em no-repeat
-        border-right: $border-primary
-        border-color: $nudge-grey-lightest
-        margin-left: 0
-        padding-right: 1em
-
       &::hover
         .nudge-menu
           display: block
+
+    &icon
+      +size(1.2em)
+      background: url('chrome-extension://__MSG_@@extension_id__/resources/images/logo-color.svg') center center/1.2em no-repeat
+      border-right: $border-primary
+      border-color: $nudge-grey-lightest
+      margin-left: 0
+      padding-right: 1em
+      margin-top: 0.1em
 
     &menu
       flex-direction: column
@@ -102,14 +176,19 @@
       &:hover
         opacity: 1
 
-    &switch
-      opacity: 0
-      +size(3.2em)
-      background: url('chrome-extension://__MSG_@@extension_id__/resources/images/offswitch.svg') center 0.35em /2.2em no-repeat $nudge-grey-medium
-      border-radius: 1.8em
+    &floating
       position: absolute
-      bottom: 0
-      right: 0
+      bottom: 5px
+      left: 5px
+
+    &switch
+      opacity: 1
+      +size(2.25em)
+      background: url('chrome-extension://__MSG_@@extension_id__/resources/images/offswitch.svg') center 0.25em / 1.5em no-repeat $nudge-pink
+      border-radius: 3em
+      position: absolute
+      bottom: 30px
+      left: 5px
 
       &:hover
         background-color: $nudge-grey-lightest
@@ -118,7 +197,7 @@
           border-color: $nudge-grey-light
 
     &highlight
-      background: $nudge-blue
+      background: $nudge-grey-light
       color: $white
       +border($style: none)
       padding: 0em .3em .1em .3em
@@ -138,6 +217,9 @@
     &pink
       background: $nudge-pink
 
+    &blue
+      background: $nudge-blue
+
     &favicon
       animation: none
       width: 32px
@@ -147,10 +229,6 @@
       +border($style: none)
       margin-left: 0.3em
       margin-right: 0.3em
-
-    &banner
-      +center
-      bottom: 0
 
     &scale
       padding-left: 1em
@@ -178,29 +256,3 @@
           padding: (3 / 4) * 1em 0 0 0
           width: 0.25em
           border-bottom: $border-primary
-
-// Individual menu divs in case needed
-// #dont-nudge
-//   background: rgba(255, 255, 255, 0.85)
-//   color: $nudge-grey-medium
-//   &:hover
-//     background: rgba(239, 246, 255, 0.85)
-//     .nudge-small-highlight
-//       background: rgba(207, 228, 255, 1)
-// #close-all
-//   background: rgba(255, 255, 255, 0.85)
-//   color: $nudge-grey-medium
-//   &:hover
-//     background: rgba(239, 246, 255, 0.85)
-//     .nudge-small-highlight
-//       background: rgba(207, 228, 255, 1)
-// #nudge-options
-//   background: rgba(255, 255, 255, 0.85)
-//   color: $nudge-grey-medium
-//   &:hover
-//     background: rgba(239, 246, 255, 0.85)
-//   // // background: rgba(210, 210, 210, 0.95)          
-//   // background: rgba(176, 211, 255, 0.95)     
-//   // color: $white
-//   // &:hover
-//   //   background: rgba(160, 202, 255, 0.95)   

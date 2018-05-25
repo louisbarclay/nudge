@@ -23,3 +23,10 @@ Nudge tweaks website designs to make them less persuasive, turns off notificatio
 3. Set Chrome to Developer Mode
 4. Hit load unpacked extension and add '/extension'
 5. CSS and HTML files compile from .sass and .pug files - run 'yarn dev' to compile after making changes
+
+Would like to hide:
+
+- role
+- lots of classes
+
+

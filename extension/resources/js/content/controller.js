@@ -1,5 +1,7 @@
 var divs = false;
 var turnOffObserver = false;
+var time = false;
+var domain = false;
 
 // Options set
 getSettings(execSettings);
@@ -7,11 +9,26 @@ getSettings(execSettings);
 // Prep in case doing div hiding
 sendHTMLRequest(getUrl("html/components/circle.html"), storeForUse);
 sendHTMLRequest(getUrl("html/components/switch.html"), storeForUse);
+sendHTMLRequest(getUrl("html/nudges/banner.html"), storeForUse);
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.type === "favicon") {
     imageLoader("favicon", request.favicon);
     updateFavicon(request.favicon, request.domain);
+  }
+  if (request.type === "live_update") {
+    time = document.getElementById("js-time");
+    domain = document.getElementById("js-domain");
+    visits = document.getElementById("js-visits");
+    if (time) {
+      time.innerHTML = logMinutes(request.total);
+    }
+    if (domain) {
+      domain.innerHTML = request.domain;
+    }
+    if (visits) {
+      visits.innerHTML = `${request.visits} visits`;
+    }
   }
 });
 
@@ -52,8 +69,9 @@ function execSettings(settings) {
     // console.log(e);
   }
   // Init constantise
-  if (false) { // FIXME: turn off constantiser until it works again
-  // if (settings.constantise && domain) {
+  if (false) {
+    // FIXME: turn off constantiser until it works again
+    // if (settings.constantise && domain) {
     docReady(function() {
       addScript(
         "nudge-constantise-script",
@@ -78,9 +96,9 @@ function execSettings(settings) {
     offKeyboardShortcut(domain);
     // Init switch HTML
     doAtEarliest(function() {
-      addCSS("nudge-switch", "css/pages/switch.css");
+      addCSS("nudges", "css/nudges.css");
       docReady(function() {
-        insertSwitch(domain);
+        insertCorner(domain);
       });
     });
   }
@@ -224,20 +242,15 @@ function keepAddingCircles(callback) {
 }
 
 function tabIdler() {
-  chrome.runtime.sendMessage({ type: "inject_tabidler" }, function(
-    response
-  ) {
+  chrome.runtime.sendMessage({ type: "inject_tabidler" }, function(response) {
     if (response) {
     }
   });
 }
 
-function insertSwitch(domain) {
-  var nudgeSwitch = createEl(document.body, "div", "nudge-switch-container");
-  appendHtml(nudgeSwitch, tempStorage["switch.html"]);
-  el("nudge-switch-container").onclick = function() {
-    switchOffRequest(domain);
-  };
+function insertCorner(domain) {
+  var cornerContainer = createEl(document.body, "div", "nudge");
+  appendHtml(cornerContainer, tempStorage["banner.html"]);
 }
 
 function offKeyboardShortcut(domain) {

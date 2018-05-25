@@ -9,10 +9,14 @@
   },
   "scripts": {
     "build:pug": "pug -w src/pug -o extension/html",
-    "build:sass": "sass --watch src/scss:extension/css --sourcemap=none",
-    "importanter:pages": "postcss --use postcss-safe-important -r extension/css/pages/* --w",
-    "importanter:nudges": "postcss --use postcss-safe-important -r extension/css/nudges.css --w",
-    "dev": "npm-run-all -p build:* importanter:*"
+    "build:sass":
+      "sass --watch src/scss:extension/css --sourcemap=none -r sass-json-vars",
+    "importanter:pages":
+      "postcss --use postcss-safe-important -r extension/css/pages/* --w",
+    "importanter:nudges":
+      "postcss --use postcss-safe-important -r extension/css/nudges.css --w",
+    "dev": "npm-run-all -p build:*",
+    "imp": "npm-run-all -p importanter:*"
   },
   "repository": {
     "type": "git",
@@ -29,6 +33,7 @@
     "cpx": "^1.5.0",
     "moment": "^2.20.1",
     "npm-run-all": "^4.1.2",
-    "postcss-safe-important": "^1.1.0"
+    "postcss-safe-important": "^1.1.0",
+    "sharp": "^0.20.2"
   }
 }

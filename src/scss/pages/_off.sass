@@ -1,80 +1,177 @@
-.off-background
-  background-size: cover
-  height: auto
-  background-color: $nudge-grey-lightest
+$opacity-global: 0.7
 
-.off-typography
-  *
-    color: darken($nudge-grey-off,10%)
 
-.off-logo
-  margin-top: 20%
-  +size($width: 8em)
-  &::before
-    +pseudo
-    +logo-grey($size: 8em)
+@keyframes fade_out
+  from
     opacity: 1
+  to 
+    opacity: 0
 
-.off-text
-  margin-top: 1em
-  font-size: 13px
-  color: darken($nudge-grey-off, 5%)
+.off-
+  &body
+    margin: 0
+    padding: 0
 
-.off-headline
-  margin-top: 10%
-  font-size: 22px
+  &background
+    +hardware
+    position: fixed
+    height: 100%
+    width: 100%
+    // background-color: $nudge-grey-lightest
+    filter: blur(10px)
+    transform: translateZ(0) scale(1.05)
 
-.off-module
-  margin-top: 1em
-  +padding
-  flex-direction: column
-  >*
-    margin-bottom: 1em
+  &background-enhanced
+    +hardware
+    z-index: -1
+    position: fixed
+    height: 100%
+    width: 100%
+    transform: translateZ(0) scale(1.05)
 
-.off-small-text
-  font-size: 13px
-  color: $nudge-grey-light
+  &background_animation
+    // transition: filter 2s
+    animation: fade_out 0.8s both
 
-.off-row
-  display: flex
-  justify-content: space-between
-  height: auto
-  width: 100%
-  flex-wrap: wrap
+  &text_globals
+    *
+      color: $white
 
-  >div
-    +border($style: none)
-    background: $light
+  &text_shadow
+    // text-shadow: 0 1px 5px rgba(0,0,0,.1)
+    // mix-blend-mode: difference
+    // filter: invert(1)
+    // text-shadow: 0 0 30px rgba(0,0,0,1)
+
+  &text_paragraph
+    margin-top: 1em
+    font-size: 13px
+
+  &logo
+    margin-top: 20%
+    +size($width: 8em)
+    &::before
+      +pseudo
+      +logo-white($size: 8em)
+      opacity: 0.7
+
+  &headline
+    margin-top: 10%
+    font-size: 22px
+
+  &module
+    margin-top: 1em
     +padding
-    width: auto
-    height: 40px
+    flex-direction: column
+    >*
+      margin-bottom: 1em
 
-.off-highlight
-  background-color: $nudge-grey-off
-  opacity: 1
-  color: $nudge-grey-lightest
-  +border($style: none)
-  padding: 0em .3em .1em .3em
-  margin-left: 0.3em
-  margin-right: 0.3em
+  &small-text
+    font-size: 13px
+    color: $nudge-grey-light
 
-.off-key
-  +border($color: darken($nudge-grey-off, 5%))
-  padding: 0em .3em .1em .3em
-  margin-left: 0.3em
-  margin-right: 0.3em
+  &row
+    display: flex
+    justify-content: space-between
+    height: auto
+    width: 100%
+    flex-wrap: wrap
 
-.off-para 
-  margin: 0
-  font-size: 0.8em
-  line-height: 1.8em
+    >div
+      +border($style: none)
+      background: $light
+      +padding
+      width: auto
+      height: 40px
 
-.off-container
-  +container($min-width: 450px)
+  &highlight
+    opacity: 1
+    text-shadow: none
+    background-color: rgba(255, 255, 255, 0.2)
+    color: $white
+    +border($style: none)
+    padding: 0em .3em .1em .3em
+    margin-left: 0.3em
+    margin-right: 0.3em
 
-.off-underline
-  color: darken($nudge-grey-off, 5%)
-  cursor: pointer
-  transition: all 0.2s
-  &:hover
-    color: darken($nudge-grey-off, 10%)
+  &key
+    +border($color: $white)
+    padding: 0em .3em .1em .3em
+    margin-left: 0.3em
+    margin-right: 0.3em
+
+  &para 
+    margin: 0
+    font-size: 0.8em
+    line-height: 1.8em
+
+  &container
+    +container($min-width: 600px)
+
+  &underline
+    text-decoration: underline
+    cursor: pointer
+    transition: all 0.2s
+
+  &slider
+    width: 100%
+    position: relative
+    height: $slider-height
+    margin-top: 20%
+    border-radius: 6em
+    text-align: center
+    background-color: rgba(255, 255, 255, 0.2)
+    opacity: 1
+    color: $white
+
+  &slider-text
+    position: absolute
+    color: $white
+    margin: auto
+    width: 100%
+    user-select: none
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
+    font-size: 13px
+    height: 100%
+    text-align: center
+    height: 1.4em
+    opacity: 0.8
+
+  &button
+    position: relative
+    height: $slider-height
+    width: $slider-height
+    box-sizing: border-box
+    top: 0
+    left: 0
+    border-radius: $slider-height / 2
+    cursor: pointer
+    user-select: none
+    +hardware
+
+  &button-centre
+    opacity: $opacity-global
+    position: relative
+    z-index: 1
+    margin: auto
+    top: 50%
+    transform: translateY(-50%)
+    height: $slider-height - 0.5em
+    width: $slider-height - 0.5em
+    background:
+      color: $white
+    border-radius: $slider-height / 2
+    transition: background-color 0.2s ease
+    +hardware
+
+    &:hover
+      opacity: 0.75
+
+    &:active
+      opacity: 0.8
+  
+  &returning
+    transition: all 0.2s ease

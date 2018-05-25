@@ -105,8 +105,27 @@ chrome.tabs.onRemoved.addListener(function(tabId) {
     var domain = inDomainsSetting(tabRecord.url);
     if (domain) {
       chrome.tabs.query({}, function(tabs) {
+        // If no tabs with that domain now exist
         if (tabsChecker(tabs, domain)) {
-          // TODO: If removed, if no tabs of domain left, if wasn't active at the time, last visit of domain should be shutdown time
+          var statusObj = open("status");
+          // Check lastVisitEnd
+          var endTime = statusObj[domain].lastVisitEnd;
+          // Check lastShutdown
+          var lastShutdown = statusObj[domain].lastShutdown;
+          // What does it mean if lastShutdown is undefined?
+          // Means you should go ahead and mark that as a shutdown
+          // What does it mean if lastVisitEnd is undefined? Should be impossible
+          if (lastShutdown !== endTime) {
+            dataAdder(statusObj, domain, endTime, "lastShutdown");
+            close("status", statusObj, "status close in check off");
+            eventLog(
+              domain,
+              "shutdown",
+              {},
+              moment().format("YYYY-MM-DD"),
+              moment(endTime).format("HH:mm:ss")
+            );
+          }
         }
       });
     }
@@ -115,6 +134,7 @@ chrome.tabs.onRemoved.addListener(function(tabId) {
 });
 
 // Helper function to check if any tabs match domain
+// Returns true if there were NO OTHER TABS with that domain
 function tabsChecker(tabs, domain) {
   // log(tabs);
   for (var i = 0; i < tabs.length; i++) {
@@ -210,16 +230,19 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     console.log("Couldn't evaluate inDomainsSetting");
     return;
   }
-  var switchedOff = false;
+  
+  // Switch off if off
   if (
     domain &&
+    // TODO: understand why this condition
     domain in settingsLocal.domains &&
     settingsLocal.domains[domain]["off"]
   ) {
     var date = moment().format("YYYY-MM-DD");
-    switchOff(domain, tab.url, tabId);
+    switchOff(domain, tab.url, tabId, 'normal');
     domain = false;
   }
+  
   // Update record in tabIdStorage
   if (typeof tabIdStorage[tabId] === "undefined") {
     tabIdStorage[tabId] = {

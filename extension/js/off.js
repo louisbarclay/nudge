@@ -1,11 +1,19 @@
-var slider = document.querySelector(".slider");
-var button = document.querySelector(".button");
-var centre = document.querySelector(".button-centre");
-var domainText = document.querySelector("#domain-text");
-var tagline = document.getElementById("tagline");
+// Off elements that we care about
+var off = "off-";
+var js = "js-";
+
+var slider = document.querySelector(`.${off}slider`);
+var sliderText = document.querySelector(`.${off}slider-text`);
+var button = document.querySelector(`.${off}button`);
+var centre = document.querySelector(`.${off}button-centre`);
+var domainText = document.querySelector(`.${js}domain`);
+var tagline = document.getElementById(`tagline`);
 var switch_ons = false;
 var getStickier = true;
 
+// Three possible off sites. Determine which one like this:
+
+// Move to pug
 var QueryString = (function() {
   // This function is anonymous, is executed immediately and
   // the return value is assigned to QueryString!
@@ -29,10 +37,15 @@ var QueryString = (function() {
   return query_string;
 })();
 
+// Set domain, url
 var domain = false;
+var url = false;
 if ("domain" in QueryString) {
   domain = QueryString.domain;
   domainText.innerHTML = domain;
+}
+if ("url" in QueryString) {
+  url = QueryString.url;
 }
 
 function getLocalStorage() {
@@ -57,7 +70,7 @@ function getLocalStorage() {
       }
     }
     if (stickyMultiplier > 1) {
-      document.querySelector(".slider-text").innerHTML =
+      sliderText.innerHTML =
         "Slider gets harder to drag across after each switch on";
     }
 
@@ -66,12 +79,6 @@ function getLocalStorage() {
 }
 
 getLocalStorage();
-
-var url = false;
-
-if ("url" in QueryString) {
-  url = QueryString.url;
-}
 
 function initOn() {
   chrome.runtime.sendMessage({
@@ -137,7 +144,7 @@ function slidermove(e) {
   if (e.clientX - mousePosition > 0) {
     difference = Math.round((e.clientX - mousePosition) / stickyMultiplier);
   } else {
-    difference = Math.round((e.clientX - mousePosition));
+    difference = Math.round(e.clientX - mousePosition);
   }
 
   // If you go negative, set to 0px

@@ -8,20 +8,20 @@ function consoleLogger(domain, eventType, detailsObj, date, time) {
     }
   }
   switch (eventType) {
-    // case "visit":
-    //   logWithColor(
-    //     `${date} ${detailsObj.startTime} ${detailsObj.endTime} ${domain} ${
-    //       detailsObj.duration
-    //     } (${detailsObj.totalTimeToday} today). Source: ${detailsObj.source}`,
-    //     "green"
-    //   );
-    //   break;
-    // case "leftChrome":
-    //   logWithColor(
-    //     `${date} ${time} Left Chrome ${domain} Source: ${detailsObj.source}`,
-    //     "darkmagenta"
-    //   );
-    //   break;
+    case "visit":
+      logWithColor(
+        `${date} ${detailsObj.startTime} ${detailsObj.endTime} ${domain} ${
+          detailsObj.duration
+        } (${detailsObj.totalTimeToday} today). Source: ${detailsObj.source}`,
+        "green"
+      );
+      break;
+    case "leftChrome":
+      logWithColor(
+        `${date} ${time} Left Chrome ${domain} Source: ${detailsObj.source}`,
+        "darkmagenta"
+      );
+      break;
     case "shutdown":
       logWithColor(`${time} ${domain} shutdown`, "red");
       break;

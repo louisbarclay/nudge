@@ -22,6 +22,10 @@ var divs = {
       hidden: true
     },
     {
+      name: "#fallback_feed",
+      hidden: true
+    },
+    {
       name: "#rightCol",
       hidden: true
     }

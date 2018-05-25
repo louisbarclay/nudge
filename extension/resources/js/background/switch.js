@@ -1,12 +1,15 @@
-function switchOff(domain, url, tabId) {
+function switchOff(domain, url, tabId, option) {
   url =
-    chrome.extension.getURL("html/off.html") +
+    chrome.extension.getURL(`html/off_${option}.html`) +
     "?" +
     "domain=" +
     domain +
     "&" +
     "url=" +
-    encodeURIComponent(url);
+    encodeURIComponent(url) +
+    "&" +
+    "option=" +
+    option;
   var nudged = false;
   // if ( domain last nudged was within 1 minute,,, ,, , , , )
   eventLog(domain, "off", { nudged, url });
@@ -30,5 +33,3 @@ function closeAll(domain) {
     }
   });
 }
-
-

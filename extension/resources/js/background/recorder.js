@@ -15,10 +15,14 @@ function nudgeObject(domain, amount, type, status) {
 }
 
 function domainTimeUpdater(domain, startTime, endTime, source) {
+  // This is after a visit has been completed, so will include lastVisitEnd (endTime)
   startTime = moment(startTime);
   endTime = moment(endTime);
 
   var statusObj = open("status");
+  dataAdder(statusObj, domain, endTime, "lastVisitEnd");
+  close("status", statusObj, "lastVisitEnd");
+
   // Last shutdown if domain is true, and not an odd domain, and if there are not any tabs of that kind when visit is closed off
   if (domain && domain !== notInChrome && domain !== chromeOrTabIdle) {
     chrome.tabs.query({}, function(tabs) {
@@ -49,6 +53,7 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
       }
     });
   }
+
   // Actual time adding stuff
   // Get addTime in milliseconds
   var addTime = moment(endTime).diff(startTime);
@@ -93,16 +98,21 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
   // Convert time to readable format
   var duration = logMinutes(addTime / 1000);
   var totalTimeToday = logMinutes(totalTime / 1000);
-  // console.log(dateObj.$allDomains.time);
-  // console.log(allDomainsReal);
-  console.log(
-    `${tF(startTime)} to ${tF(
-      endTime
-    )}. Add time: ${addTime}. Prev $allDomains time: ${prevAllDomainsTime}. Start of day: ${tF(
-      statusObj.startOfDay
-    )}. ${allDomainsReal} ${dateObj.$allDomains.time} ${allDomainsReal -
-      dateObj.$allDomains.time}. ${domain}, ${source}`
-  );
+
+  // Huge log for debugging
+  // console.log(
+  //   `${tF(startTime)} to ${tF(
+  //     endTime
+  //   )}. Add time: ${addTime}. Prev $allDomains time: ${prevAllDomainsTime}. Start of day: ${tF(
+  //     statusObj.startOfDay
+  //   )}. ${allDomainsReal} ${dateObj.$allDomains.time} ${allDomainsReal -
+  //     dateObj.$allDomains.time}. ${domain}, ${source}`
+  // );
+
+  if (allDomainsReal - dateObj.$allDomains.time !== 0) {
+    console.log("Big problem, again");
+  }
+
   eventLog(
     domain,
     "visit",
@@ -118,8 +128,8 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
     moment(endTime).format("HH:mm:ss")
   );
   // FIXME: data sharing!
-  if (source.includes('newDay')) {
-    console.log('New day so closing off keys that we dont need');
+  if (source.includes("newDay")) {
+    console.log("New day so closing off keys that we dont need");
     for (var key in localStorage) {
       var dateCheck = new RegExp("[0-9]{4}-[0-9]{2}-[0-9]{2}");
       if (dateCheck.test(key) && key !== moment(endTime).format("YYYY-MM-DD")) {
@@ -223,9 +233,9 @@ function domainVisitUpdater(domain, time, source) {
     console.log("Sent compulsive nudge to", domain);
     dataAdder(statusObj, domain, moment(), "lastCompulsive");
     close("status", statusObj, "status close in visit updater1");
-    nudgeSender(
-      nudgeObject(domain, domainStatusObj.lastShutdown, "compulsive")
-    );
+    // nudgeSender(
+    //   nudgeObject(domain, domainStatusObj.lastShutdown, "compulsive")
+    // );
   } else {
     // Only close status off
     close("status", statusObj, "status close in visit updater2");
@@ -267,30 +277,33 @@ function domainTimeNudger() {
       );
       nudgeSender(nudgeObject(domain, totalTimeTemp, "time"));
     }
+    // Send out live info
     if (!nonDomain) {
       chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(
         tabs
       ) {
         if (typeof tabs[0] != "undefined") {
-          chrome.browserAction.setBadgeBackgroundColor({
-            color: "#6d6d6d",
-            tabId: tabs[0].id
+          // Live updater for control center
+          chrome.tabs.sendMessage(tabs[0].id, {
+            type: "live_update",
+            domain,
+            before: time,
+            runningCounter: runningCounter,
+            total: totalTimeTemp,
+            visits: dateObj[domain].visits
           });
-          chrome.browserAction.setBadgeText({
-            text: badgeTime(totalTimeTemp),
-            tabId: tabs[0].id
-          });
+          // // Set badge number
+          // chrome.browserAction.setBadgeBackgroundColor({
+          //   color: "#6d6d6d",
+          //   tabId: tabs[0].id
+          // });
+          // chrome.browserAction.setBadgeText({
+          //   text: badgeTime(totalTimeTemp),
+          //   tabId: tabs[0].id
+          // });
         }
       });
     }
-    // Live updater for popup
-    // chrome.runtime.sendMessage({
-    //   type: "live_update",
-    //   domain,
-    //   before: time,
-    //   runningCounter: runningCounter,
-    //   total: totalTimeTemp,
-    //   visits: dateObj[domain].visits
-    // });
+    // Live updater for popup would need to be chrome.runtime.sendMessage
   }
 }

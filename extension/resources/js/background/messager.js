@@ -86,7 +86,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.type === "off") {
     if (inDomainsSetting(sender.url)) {
       changeSetting(true, "domains", request.domain, "off");
-      switchOff(request.domain, sender.url, sender.tabId);
+      switchOff(request.domain, sender.url, sender.tabId, 'normal');
     }
   }
   if (request.type === "on") {
@@ -121,7 +121,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     closeAll(request.domain);
   }
   if (request.type === "inject_tabidler" && !chromeTab) {
-    chrome.tabs.get(sender.tab.id, checkIfExists);
+    try {
+      chrome.tabs.get(sender.tab.id, checkIfExists);
+    } catch(e) {
+      console.log(e);
+    }
     function checkIfExists() {
       try {
         if (chrome.runtime.lastError) {
