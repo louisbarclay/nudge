@@ -1,9 +1,16 @@
-var faviconTest = "https://static.xx.fbcdn.net/rsrc.php/y7/r/O6n_HQxozp9.ico";
 
-document.getElementById(
-  "nudge-favicon"
-).style.background = `url(${faviconTest}) center center/32px no-repeat`;
+var numberOfSecs = 0;
+var quarterPx = Math.round(107 + numberOfSecs / 60 * 5);
+var quarterClass = ".nudge-quarter";
+var quarterStyle = `{ height: ${quarterPx}px !important; width: ${quarterPx}px !important; }`;
+var quarterSize = false;
+quarterSize = document.getElementById("quarter-size");
+if (!quarterSize) {
+  styleAdder(quarterClass, quarterStyle, "quarter-size");
+} else {
+  quarterSize.innerHTML = quarterClass + quarterStyle;
+}
 
-var c = el("nudge-container");
-
-toggleClass(c, "nudge-intro");
+// var cornerClass = ".nudge-corner";
+// var cornerStyle = `{ right: ${3}px !important; }`;
+// styleAdder(cornerClass, cornerStyle, "edge-size");

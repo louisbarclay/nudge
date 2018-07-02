@@ -21,48 +21,48 @@
   "description":
     "Make the internet less addictive with nudges that help you avoid getting sucked in",
   "icons": {
-    "128": "resources/images/128.png",
-    "16": "resources/images/16.png",
-    "48": "resources/images/48.png"
+    "128": "img/icon/128.png",
+    "16": "img/icon/16.png",
+    "48": "img/icon/48.png"
   },
   "browser_action": {},
   "options_ui": {
-    "page": "html/options.html",
+    "page": "html/pages/options.html",
     "chrome_style": false,
     "open_in_tab": true
   },
-  "options_page": "html/options.html",
-  "web_accessible_resources": ["resources/*", "html/*", "css/*"],
-  "version": "1.0.24",
+  "options_page": "html/pages/options.html",
+  "web_accessible_resources": ["img/*", "html/*", "css/*"],
+  "version": "1.0.27",
   "background": {
     "scripts": [
-      "resources/js/vendor/moment.min.js",
+      "js/vendor/moment.min.js",
       "config.js",
-      "resources/js/vars/vars.js",
-      "resources/js/vars/divs.js",
-      "resources/js/helpers.js",
-      "resources/js/background/settings.js",
-      "resources/js/background/storage.js",
-      "resources/js/background/logger.js",
-      "resources/js/background/listeners.js",
-      "resources/js/background/messager.js",
-      "resources/js/background/recorder.js",
-      "resources/js/background/switch.js",
-      "resources/js/background/background.js",
-      "resources/js/background/tests.js"
+      "js/vars/vars.js",
+      "js/vars/divs.js",
+      "js/helpers.js",
+      "js/background/settings.js",
+      "js/background/storage.js",
+      "js/background/logger.js",
+      "js/background/listeners.js",
+      "js/background/messager.js",
+      "js/background/recorder.js",
+      "js/background/switch.js",
+      "js/background/background.js",
+      "js/background/tests.js"
     ]
   },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
       "js": [
-        "resources/js/vendor/moment.min.js",
+        "js/vendor/moment.min.js",
         "config.js",
-        "resources/js/vars/vars.js",
-        "resources/js/helpers.js",
-        "resources/js/utils/images.js",
-        "resources/js/content/controller.js",
-        "resources/js/content/nudger.js"
+        "js/vars/vars.js",
+        "js/helpers.js",
+        "js/utils/images.js",
+        "js/content/controller.js",
+        "js/content/nudger.js"
       ],
       "css": [],
       "exclude_globs": ["*business.facebook.com*"],
@@ -70,7 +70,7 @@
     },
     {
       "matches": ["*://www.facebook.com/*", "*://facebook.com/*"],
-      "js": ["resources/js/facebook/unfollow.js"],
+      "js": ["js/facebook/unfollow.js"],
       "exclude_globs": ["*business.facebook.com*"],
       "run_at": "document_start"
     }

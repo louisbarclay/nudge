@@ -1,0 +1,179 @@
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Open Sans Regular"), local("OpenSans-Regular"), url("chrome-extension://__MSG_@@extension_id__/resources/fonts/OpenSans.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215; }
+@keyframes background-move {
+  0% {
+    background-position: 17% 0%; }
+  50% {
+    background-position: 84% 100%; }
+  100% {
+    background-position: 17% 0%; } }
+.circle-container * {
+  border: 0;
+  bottom: initial;
+  box-sizing: content-box;
+  font: inherit;
+  font-size: 100%;
+  font-family: inherit;
+  left: initial;
+  margin: 0;
+  padding: 0;
+  position: initial;
+  right: initial;
+  top: initial;
+  vertical-align: baseline;
+  display: initial; }
+  .circle-container * ::before, .circle-container * ::after {
+    border: 0;
+    bottom: initial;
+    box-sizing: content-box;
+    font: inherit;
+    font-size: 100%;
+    font-family: inherit;
+    left: initial;
+    margin: 0;
+    padding: 0;
+    position: initial;
+    right: initial;
+    top: initial;
+    vertical-align: baseline;
+    display: initial; }
+
+.circle-container * {
+  font-family: "Open Sans";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: normal; }
+.circle-container a {
+  text-decoration: none;
+  color: initial; }
+  .circle-container a:hover {
+    color: #ff61a7; }
+
+@keyframes pulse-shadow {
+  0% {
+    box-shadow: 0 0 0 0 #61a7ff; }
+  70% {
+    box-shadow: 0 0 5px 10px rgba(255, 255, 255, 0); }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+@keyframes pulse-shadow--collection {
+  0% {
+    box-shadow: 0 0; }
+  70% {
+    box-shadow: 0 0 5px 10px rgba(255, 255, 255, 0); }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+@keyframes pulse-shadow--onboarding {
+  0% {
+    box-shadow: 0 0 0 0 #61a7ff; }
+  30% {
+    box-shadow: 0 0 0 0 #61a7ff; }
+  80% {
+    box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0); }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+@keyframes fade-in-left {
+  from {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0); }
+  to {
+    opacity: 1;
+    transform: none; } }
+@keyframes fade-in {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+@keyframes fade-out {
+  from {
+    opacity: 1; }
+  to {
+    opacity: 0; } }
+.circle-container {
+  width: 100%;
+  position: static;
+  text-align: center;
+  top: 0;
+  display: flex;
+  font-family: initial; }
+
+.circle-dropdown {
+  margin: 0;
+  overflow: visible;
+  top: 0;
+  width: 100%;
+  height: 100px;
+  z-index: 3;
+  border: 1px none #bdbdbd;
+  border-radius: 4px;
+  opacity: 1;
+  visibility: visible;
+  font-size: 12px; }
+
+.circle-dropdown-content {
+  display: flex;
+  border: 1px none #bdbdbd;
+  border-radius: 4px;
+  width: 120px;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0;
+  background: rgba(255, 255, 255, 0.95);
+  height: 140px;
+  overflow: visible;
+  transition: opacity 0.3s;
+  padding-bottom: 1em;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between; }
+  .circle-dropdown-content > div {
+    margin-right: 0.8em;
+    margin-left: 0.8em; }
+
+.circle-content {
+  visibility: visible;
+  transition: all 1s;
+  z-index: 18;
+  top: 0;
+  margin: 0;
+  opacity: 0.8;
+  pointer-events: auto;
+  width: 100%;
+  height: 150px;
+  transition: top 0.3s;
+  background: url("chrome-extension://__MSG_@@extension_id__/img/icon/circleheavy.svg") center 0px/20px no-repeat; }
+  .circle-content:hover {
+    border: 3px #ffffff;
+    top: 5px; }
+    .circle-content:hover .circle-dropdown-content {
+      opacity: 1; }
+
+.circle-text {
+  color: #6d6d6d;
+  font-size: 13px;
+  line-height: 1.3em;
+  margin-top: 1em;
+  margin-bottom: 0.5em; }
+
+.circle-show-once {
+  cursor: pointer;
+  color: #bdbdbd; }
+  .circle-show-once:hover {
+    color: #ff61a7; }
+
+.circle-show-always {
+  cursor: pointer;
+  color: #bdbdbd; }
+  .circle-show-always:hover {
+    color: #ff61a7; }
+
+.circle-logo {
+  margin-top: 0.5em;
+  width: 25px;
+  height: 25px;
+  background-image: url("chrome-extension://__MSG_@@extension_id__/img/icon/logo-color.svg");
+  background-size: 25px; }

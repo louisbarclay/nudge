@@ -1,6 +1,5 @@
 $opacity-global: 0.7
 
-
 @keyframes fade_out
   from
     opacity: 1
@@ -38,7 +37,7 @@ $opacity-global: 0.7
       color: $white
 
   &text_shadow
-    // text-shadow: 0 1px 5px rgba(0,0,0,.1)
+    text-shadow: 0 1px 5px rgba(0,0,0,.1)
     // mix-blend-mode: difference
     // filter: invert(1)
     // text-shadow: 0 0 30px rgba(0,0,0,1)
@@ -57,7 +56,7 @@ $opacity-global: 0.7
 
   &headline
     margin-top: 10%
-    font-size: 22px
+    font-size: 3.4vh
 
   &module
     margin-top: 1em
@@ -93,6 +92,7 @@ $opacity-global: 0.7
     padding: 0em .3em .1em .3em
     margin-left: 0.3em
     margin-right: 0.3em
+    white-space: nowrap
 
   &key
     +border($color: $white)
@@ -106,7 +106,7 @@ $opacity-global: 0.7
     line-height: 1.8em
 
   &container
-    +container($min-width: 600px)
+    +container($min-width: 60em, $width: 60%, $left: 20%)
 
   &underline
     text-decoration: underline
@@ -134,7 +134,7 @@ $opacity-global: 0.7
     bottom: 0
     left: 0
     right: 0
-    font-size: 13px
+    font-size: 1em
     height: 100%
     text-align: center
     height: 1.4em

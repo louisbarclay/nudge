@@ -1,0 +1,322 @@
+@keyframes pulse-shadow {
+  0% {
+    box-shadow: 0 0 0 0 #61a7ff; }
+  70% {
+    box-shadow: 0 0 5px 10px rgba(255, 255, 255, 0); }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+@keyframes pulse-shadow--collection {
+  0% {
+    box-shadow: 0 0; }
+  70% {
+    box-shadow: 0 0 5px 10px rgba(255, 255, 255, 0); }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+@keyframes pulse-shadow--onboarding {
+  0% {
+    box-shadow: 0 0 0 0 #61a7ff; }
+  30% {
+    box-shadow: 0 0 0 0 #61a7ff; }
+  80% {
+    box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0); }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+@keyframes fade-in-left {
+  from {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0); }
+  to {
+    opacity: 1;
+    transform: none; } }
+@keyframes fade-in {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+@keyframes fade-out {
+  from {
+    opacity: 1; }
+  to {
+    opacity: 0; } }
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Open Sans Regular"), local("OpenSans-Regular"), url("chrome-extension://__MSG_@@extension_id__/resources/fonts/OpenSans.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215; }
+@keyframes background-move {
+  0% {
+    background-position: 17% 0%; }
+  50% {
+    background-position: 84% 100%; }
+  100% {
+    background-position: 17% 0%; } }
+#nudge * {
+  border: 0;
+  bottom: initial;
+  box-sizing: content-box;
+  font: inherit;
+  font-size: 100%;
+  font-family: inherit;
+  left: initial;
+  margin: 0;
+  padding: 0;
+  position: initial;
+  right: initial;
+  top: initial;
+  vertical-align: baseline;
+  display: initial; }
+  #nudge * ::before, #nudge * ::after {
+    border: 0;
+    bottom: initial;
+    box-sizing: content-box;
+    font: inherit;
+    font-size: 100%;
+    font-family: inherit;
+    left: initial;
+    margin: 0;
+    padding: 0;
+    position: initial;
+    right: initial;
+    top: initial;
+    vertical-align: baseline;
+    display: initial; }
+
+#nudge .nudge-container * {
+  font-family: "Open Sans";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: normal; }
+#nudge .nudge-container a {
+  text-decoration: none;
+  color: initial; }
+  #nudge .nudge-container a:hover {
+    color: #ff61a7; }
+
+.body-reset {
+  margin: 0; }
+
+#nudge {
+  display: block; }
+  #nudge .nudge-rounded {
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 4px; }
+  #nudge .nudge-translucent {
+    backface-visibility: hidden;
+    perspective: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    opacity: 1;
+    box-shadow: 0px 0px 16px 0.5px rgba(0, 0, 0, 0.14); }
+  #nudge .nudge-rounded_no_border {
+    border: 1px none #bdbdbd;
+    border-radius: 4px; }
+  #nudge .nudge-transparent_grey {
+    background: rgba(0, 0, 0, 0.1); }
+  #nudge .nudge-transparent_white {
+    background: rgba(255, 255, 255, 0.8); }
+  #nudge .nudge-text_align p {
+    padding: 0 0 0.1em 0;
+    align-self: center; }
+  #nudge .nudge-container {
+    display: none;
+    position: fixed;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: center;
+    transition: opacity 1s;
+    opacity: 0; }
+  #nudge .nudge-container-reveal {
+    opacity: 1;
+    display: flex; }
+  #nudge .nudge-banner {
+    font-size: 17px;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    z-index: 2147483646; }
+  #nudge .nudge-top {
+    width: auto;
+    size: auto;
+    position: relative; }
+  #nudge .nudge-quarter {
+    display: block;
+    background: rgba(200, 200, 200, 0.85);
+    opacity: 1;
+    border-radius: 100% 0 0 0;
+    background-clip: content-box;
+    border-right-style: none;
+    border-bottom-style: none;
+    transition: all 5s; }
+  #nudge .nudge-control_position {
+    z-index: 2147483647;
+    bottom: 0px;
+    right: 0;
+    pointer-events: none; }
+  #nudge .nudge-control_flex_direction {
+    flex-direction: column; }
+  #nudge .nudge-control_font_size {
+    font-size: 16px; }
+  #nudge .nudge-scroll {
+    margin: 0;
+    padding: 0;
+    border-radius: 0; }
+  #nudge .nudge-intro {
+    animation: fade-in 0.5s forwards; }
+  #nudge .nudge-outro {
+    animation: fade-out 0.5s forwards; }
+  #nudge .nudge-icon {
+    width: 1em;
+    height: 1em;
+    background: url("chrome-extension://__MSG_@@extension_id__/img/icon/logo-color.svg") center center/1em no-repeat;
+    bottom: 5px;
+    right: 72px;
+    margin: 0.25em; }
+  #nudge .nudge-menu_position {
+    bottom: 1.7em;
+    right: 0;
+    height: auto;
+    margin-right: 0.2em;
+    padding-top: 1em;
+    padding-left: 1em;
+    width: auto;
+    position: fixed; }
+  #nudge .nudge-menu {
+    flex-direction: column-reverse;
+    flex-wrap: nowrap;
+    display: none;
+    pointer-events: auto;
+    align-items: flex-end; }
+  #nudge .nudge-menu_item {
+    border: 1px none #bdbdbd;
+    border-radius: 4px;
+    background: white;
+    color: #6d6d6d;
+    padding: 0.2em 0.6em 0.3em 0.6em;
+    animation: none;
+    cursor: pointer;
+    font-size: 12px;
+    z-index: 1;
+    margin-bottom: 0.5em;
+    width: auto; }
+    #nudge .nudge-menu_item:hover {
+      background: #ff61a7;
+      color: #ffffff; }
+      #nudge .nudge-menu_item:hover .nudge-small-highlight {
+        background: #cfe4ff; }
+  #nudge .nudge-circle_close {
+    cursor: pointer;
+    margin-bottom: 0.5em;
+    width: 4em;
+    height: 4em;
+    background: #ff61a7 url("chrome-extension://__MSG_@@extension_id__/img/icon/closewhite.svg") center center/2em no-repeat;
+    border-radius: 100%; }
+    #nudge .nudge-circle_close:hover {
+      background: #ff4899 url("chrome-extension://__MSG_@@extension_id__/img/icon/closewhite.svg") center center/2em no-repeat; }
+  #nudge .nudge-corner {
+    display: flex;
+    position: absolute;
+    width: auto;
+    height: auto;
+    bottom: 0.2em;
+    right: 0.2em;
+    margin: 0;
+    align-items: center;
+    pointer-events: auto;
+    z-index: 2147483647;
+    user-select: none; }
+    #nudge .nudge-corner:hover .nudge-menu {
+      display: flex; }
+  #nudge .nudge-close {
+    width: 0.8em;
+    height: 0.8em;
+    background: url("chrome-extension://__MSG_@@extension_id__/img/icon/closegrey.svg") center center/0.8em no-repeat;
+    align-self: center;
+    opacity: 0.3;
+    cursor: pointer;
+    margin-left: 1em; }
+    #nudge .nudge-close:hover {
+      opacity: 1; }
+  #nudge .nudge-floating {
+    position: absolute;
+    bottom: 5px;
+    left: 5px; }
+  #nudge .nudge-highlight_margin {
+    margin-left: 0.3em;
+    margin-right: 0.3em; }
+  #nudge .nudge-switch {
+    opacity: 1;
+    width: 2.25em;
+    height: 2.25em;
+    background: url("chrome-extension://__MSG_@@extension_id__/img/icon/offswitch.svg") center 0.25em/1.5em no-repeat #ff61a7;
+    border-radius: 3em;
+    position: absolute;
+    bottom: 5px;
+    right: 5px; }
+    #nudge .nudge-switch:hover {
+      background-color: #ededed; }
+      #nudge .nudge-switch:hover::before {
+        border-color: #bdbdbd; }
+  #nudge .nudge-highlight {
+    background: #bdbdbd;
+    color: #ffffff;
+    border: 1px none #bdbdbd;
+    border-radius: 4px;
+    padding: 0em 0.3em 0.1em 0.3em;
+    align-self: center; }
+  #nudge .nudge-small-highlight {
+    background: #ededed;
+    border: 1px none #bdbdbd;
+    border-radius: 4px;
+    padding: 0em 0.3em 0.1em 0.3em;
+    margin-left: 0.3em;
+    margin-right: 0.3em;
+    margin-top: 0.1em;
+    align-self: center; }
+  #nudge .nudge-pink {
+    background: #ff61a7; }
+  #nudge .nudge-blue {
+    background: #61a7ff; }
+  #nudge .nudge-blue_transparent {
+    background: rgba(97, 167, 255, 0.7); }
+  #nudge .nudge-match_quarter {
+    background: rgba(255, 255, 255, 0.2); }
+  #nudge .nudge-transparent_icon {
+    opacity: 0.7; }
+  #nudge .nudge-favicon {
+    animation: none;
+    width: 32px;
+    height: 32px;
+    align-self: center;
+    padding: 0;
+    border: 1px none #bdbdbd;
+    border-radius: 4px;
+    margin-left: 0.3em;
+    margin-right: 0.3em; }
+  #nudge .nudge-scale {
+    padding-left: 1em;
+    text-indent: -1em; }
+    #nudge .nudge-scale li {
+      display: block;
+      padding: 0 0 0 2em;
+      font-size: 0.8571428571em;
+      width: 1em;
+      height: 1cm; }
+      #nudge .nudge-scale li::before {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 0;
+        background: blue;
+        padding: 0.75em 0 0 0;
+        width: 1em;
+        border-bottom: 1px solid #bdbdbd; }
+      #nudge .nudge-scale li::after {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 0;
+        background: red;
+        padding: 0.75em 0 0 0;
+        width: 0.25em;
+        border-bottom: 1px solid #bdbdbd; }

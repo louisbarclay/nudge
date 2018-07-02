@@ -48,14 +48,26 @@ if ("url" in QueryString) {
   url = QueryString.url;
 }
 
+// Only a headline. big headline
+// You've gone X minutes without visiting XXXXXX
+// That's a good start.
+// Keep it going by just leaving!
+//
+
 function getLocalStorage() {
   chrome.runtime.sendMessage({ type: "get_localStorage" }, function(response) {
     var date = moment().format("YYYY-MM-DD");
     localStorage = response.localStorage;
     var domainToday = JSON.parse(localStorage[date])[domain];
     var status = JSON.parse(localStorage.status);
-    var lastShutdown = status[domain].lastShutdown;
-    var timeToday = domainToday.time / 60;
+    console.log(status);
+    var lastVisitEnd = status[domain].lastVisitEnd;
+    console.log(lastVisitEnd);
+    var sinceLastVisitEnd = moment
+      .duration(moment().diff(moment(lastVisitEnd)))
+      .humanize();
+    document.getElementById("js-lastvisit").innerHTML = sinceLastVisitEnd;
+    console.log(sinceLastVisitEnd);
     switch_ons = JSON.parse(localStorage[date]).switch_ons;
     console.log(switch_ons);
     if (getStickier) {
@@ -147,6 +159,10 @@ function slidermove(e) {
     difference = Math.round(e.clientX - mousePosition);
   }
 
+  var blurExtent = Math.round(20 * (difference + buttonPosition) / slider.offsetWidth);
+
+  backgroundEnhanced.style.filter = `blur(${blurExtent}px)`;
+
   // If you go negative, set to 0px
   if (difference + buttonPosition < 0) {
     button.style.left = "0px";
@@ -155,8 +171,52 @@ function slidermove(e) {
     difference + buttonPosition + button.offsetWidth >=
     slider.offsetWidth
   ) {
-    button.style.left = slider.offsetWidth - button.offsetWidth;
+    button.style.left = slider.offsetWidth - button.offsetWidth + "px";
   } else {
     button.style.left = difference + buttonPosition + "px";
   }
 }
+
+// Off elements that we care about
+var off = "off-";
+var js = "js-";
+var dir = "img/bg/";
+var dir_small = "small/";
+
+var background = document.querySelector(`.${off}background`);
+var backgroundEnhanced = document.querySelector(`.${off}background-enhanced`);
+
+// Get the photos if exist in sync. Set them if not
+function initOn() {
+  chrome.runtime.sendMessage({
+    type: "on",
+    url,
+    domain
+  });
+}
+
+function randomiseBackground(array) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
+var randomBackground = randomiseBackground(bgImages);
+
+function setBackground(element, image) {
+  element.style.background = `url('${getUrl(
+    `${dir}${image}`
+  )}') center center/cover no-repeat`;
+}
+
+setBackground(background, `${dir_small}${randomBackground}`);
+
+window.onload = function loadStuff() {
+  img = new Image();
+  // Assign an onload handler to the dummy image *before* assigning the src
+  img.onload = function() {
+    setBackground(backgroundEnhanced, `${randomBackground}`);
+    toggleClass(background, `${off}background_animation`);
+  };
+
+  // Finally, trigger the whole preloading chain by giving source
+  img.src = getUrl(`${dir}${randomBackground}`);
+};

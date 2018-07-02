@@ -1,0 +1,47 @@
+include ../../../bemto/bemto.pug
+- 
+  set_bemto_settings({
+    prefix: {
+      '': 'nudge-',
+      'js-': true,
+    }
+  })
+
++b.container.control_position.control_flex_direction.control_font_size
+  +b.top
+    +b.edge#js-edge
+    +b.corner
+      +b.icon
+      +b.highlight.blue#js-time 21m05s
+      +b.menu.menu_position
+        +b.circle_close
+        +b.menu_item Switch off site
+        +b.menu_item Stop nudging this site today
+        +b.menu_item Settings
+        +b.menu_item#js-hide Hide circle (it will come back!)
+    +b.quarter#js-quarter
+
+//- Switch off site
+//- Switch off all sites
+//- Off by default
+//- Settings
+//- Hide
+//- Snooze
+
+//- Old stuff to use if useful:
+
+//- +b.container.banner.translucent.rounded.text_align
+//-   p You know that
+//-   +b.highlight this is a highlight
+//-   p right?
+//-   +b.close
+
+//- +b.container.control_position.control_flex_direction.control_font_size
+//-   +b.top
+//-     +b.quarter
+//-     +b.switch
+//-     +b.highlight.floating.pink Hide
+//-     +b.icon
+//-     +b.corner.translucent.rounded.text_align
+//-       +b.highlight.blue#js-time 21m05s
+//-   //- +b.switch

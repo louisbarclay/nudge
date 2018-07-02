@@ -12,7 +12,7 @@ imgSrcToDataURL(chrome.runtime.getURL("img/favicon/blankfavicon.png"), function(
   console.log(blankFaviconString);
 });
 
-sendHTMLRequest(getUrl("html/welcome.html"), function(url, response) {
+sendHTMLRequest(getUrl("html/pages/welcome.html"), function(url, response) {
   storeForUse(url, response);
   getSettings(execSettings);
 });
