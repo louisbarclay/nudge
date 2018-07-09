@@ -265,6 +265,12 @@ function logMinutes(time) {
   return minutes + "m" + lastTwo(seconds) + "s";
 }
 
+// Turn lots of seconds into e.g. 10m15s
+function logMinutesNoSeconds(time) {
+  var minutes = Math.floor(time / 60);
+  return minutes + "m";
+}
+
 // Text for button
 function badgeTime(time) {
   var minutes = Math.floor(time / 60);

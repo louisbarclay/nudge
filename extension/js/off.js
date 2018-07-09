@@ -10,6 +10,17 @@ var domainText = document.querySelector(`.${js}domain`);
 var tagline = document.getElementById(`tagline`);
 var switch_ons = false;
 var getStickier = true;
+var settings = document.querySelector(`.${off}settings`);
+var headline = document.getElementById(`js-headline`);
+
+settings.onclick = function() {
+  chrome.runtime.openOptionsPage();
+};
+
+// FIXME: this is a bit of a kludge
+function highlightify(text) {
+  return `<span class='off-highlight'>${text}</span>`;
+}
 
 // Three possible off sites. Determine which one like this:
 
@@ -58,16 +69,46 @@ function getLocalStorage() {
   chrome.runtime.sendMessage({ type: "get_localStorage" }, function(response) {
     var date = moment().format("YYYY-MM-DD");
     localStorage = response.localStorage;
-    var domainToday = JSON.parse(localStorage[date])[domain];
+    var settingsLocal = response.settingsLocal;
+    // Get domain today
+    // var domainToday = JSON.parse(localStorage[date])[domain];
+    // Pull the status out
     var status = JSON.parse(localStorage.status);
-    console.log(status);
+
+    // Check bg_image setting
+    console.log(settingsLocal.bg_image);
+    // Load a new image for the new day!
+    if (!settingsLocal.bg_image) {
+      setBackground(background, `${dir_small}${getBackgroundFile(0)}`);
+      backgroundLoader(0);
+      changeSettingRequest(moment(), "bg_image");
+    } else {
+      var diff = moment()
+        .startOf("day")
+        .diff(moment(settingsLocal.bg_image).startOf("day"), "days");
+      var index = diff % bgImages.length;
+      setBackground(background, `${dir_small}${getBackgroundFile(index)}`);
+      backgroundLoader(index);
+    }
+
+    // If false, use value 0 to grab image from array and set it
+    // If true, check what day you are on versus the first ever day, and use that value to get array
+    // Check if domain in status
+    if (!domain in status) {
+      headline.innerHTML = `Nudge switches off${highlightify(
+        domain
+      )}by default`;
+    }
+
+    // Grab lastVisitEnd for updating the headline
     var lastVisitEnd = status[domain].lastVisitEnd;
-    console.log(lastVisitEnd);
+    // Humanize it
     var sinceLastVisitEnd = moment
       .duration(moment().diff(moment(lastVisitEnd)))
       .humanize();
+    // Update it in headline
     document.getElementById("js-lastvisit").innerHTML = sinceLastVisitEnd;
-    console.log(sinceLastVisitEnd);
+
     switch_ons = JSON.parse(localStorage[date]).switch_ons;
     console.log(switch_ons);
     if (getStickier) {
@@ -159,9 +200,12 @@ function slidermove(e) {
     difference = Math.round(e.clientX - mousePosition);
   }
 
-  var blurExtent = Math.round(20 * (difference + buttonPosition) / slider.offsetWidth);
-
-  backgroundEnhanced.style.filter = `blur(${blurExtent}px)`;
+  // Filter set
+  var blurExtent = (difference + buttonPosition) / slider.offsetWidth;
+  // FIXME: blur max size should depend on scale of background photos.
+  // backgroundEnhanced.style.filter = `blur(${blurExtent}px)`;
+  background.style.opacity = blurExtent.toFixed(2);
+  // FIXME: maybe hide the enhanced background and then blur the other one more
 
   // If you go negative, set to 0px
   if (difference + buttonPosition < 0) {
@@ -195,28 +239,27 @@ function initOn() {
   });
 }
 
-function randomiseBackground(array) {
-  return array[Math.floor(Math.random() * array.length)];
+function getBackgroundFile(index) {
+  return bgImages[index];
 }
-
-var randomBackground = randomiseBackground(bgImages);
 
 function setBackground(element, image) {
-  element.style.background = `url('${getUrl(
-    `${dir}${image}`
-  )}') center center/cover no-repeat`;
+  element.src = `${getUrl(`${dir}${image}`)}`;
 }
 
-setBackground(background, `${dir_small}${randomBackground}`);
-
-window.onload = function loadStuff() {
+function backgroundLoader(index) {
+  // This was as follows, but changed to make it work: // window.onload = function loadStuff() {}
   img = new Image();
   // Assign an onload handler to the dummy image *before* assigning the src
   img.onload = function() {
-    setBackground(backgroundEnhanced, `${randomBackground}`);
+    setBackground(backgroundEnhanced, getBackgroundFile(index));
     toggleClass(background, `${off}background_animation`);
+    setTimeout(function() {
+      background.style.opacity = 0;
+      toggleClass(background, `${off}background_animation`);
+    }, 1000);
   };
 
   // Finally, trigger the whole preloading chain by giving source
-  img.src = getUrl(`${dir}${randomBackground}`);
-};
+  img.src = getUrl(`${dir}${getBackgroundFile(index)}`);
+}

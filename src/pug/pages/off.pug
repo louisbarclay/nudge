@@ -15,11 +15,13 @@ html
     link(href="../../img/icon/nudgeoff16.png", rel="icon", type="image/png", sizes="16x16")
     link(rel="stylesheet", href="../../css/pages/main.css")
   +b.BODY.text_globals.body
-    +b.background
-    +b.background-enhanced
+    +b.settings
+    +b.IMG.background
+    +b.IMG.background-enhanced#js-bg-image
+    +b.CANVAS.blur#js-blur
     +b.container
       +b.logo 
-      +b.H1.headline.text_shadow
+      +b.H1.headline.text_shadow#js-headline
         if normal
           | Nice one! You switched
           +b.SPAN.highlight.js-domain facebook.com
@@ -44,26 +46,27 @@ html
           | You haven't gone onto
           +b.SPAN.highlight.js-domain facebook.com
           | for
-          +b.SPAN.highlight#js-lastvisit 
-          +b.P.text_paragraph.text_shadow
-            | We do this to help you avoid getting sucked in. To continue to the Nudge site, please drag the slider below.
-          +b.P.text_paragraph.text_shadow
-            | You've gone 
-            | without visiting
-            span.js-domain
-            | That's pretty cool. To keep your record going, do this.
-          +b.P.text_paragraph.text_shadow
-            | If this is too much, you can either 
-            +b.SPAN.underline remove facebook.com from your Nudge sites
-            |  or 
-            +b.SPAN.underline stop Nudge switching sites off by default
-            | .
+          +b.SPAN.highlight#js-lastvisit
       +b.slider
         +b.button
           +b.button-centre
         +b.slider-text Drag slider to switch back on
-    script(src="../../js/vendor/moment.min.js")      
+    script(src="../../js/vendor/moment.min.js")
+    script(src="../../js/vendor/blur1.js")
     script(src="../../js/helpers.js")
     script(src="../../js/bgImages.js")
     script(src="../../js/off.js")
-    script(src="../../js/off_image.js")
+
+          //-     +b.P.text_paragraph.text_shadow
+          //-   | We do this to help you avoid getting sucked in. To continue to the Nudge site, please drag the slider below.
+          //- +b.P.text_paragraph.text_shadow
+          //-   | You've gone 
+          //-   | without visiting
+          //-   span.js-domain
+          //-   | That's pretty cool. To keep your record going, do this.
+          //- +b.P.text_paragraph.text_shadow
+          //-   | If this is too much, you can either 
+          //-   +b.SPAN.underline remove facebook.com from your Nudge sites
+          //-   |  or 
+          //-   +b.SPAN.underline stop Nudge switching sites off by default
+          //-   | .

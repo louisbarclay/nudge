@@ -1,13 +1,14 @@
 html
   head
     title
-    link(rel="stylesheet", href="../css/injected/nudges.css")
+    link(rel="stylesheet", href="../../css/injected/nudges.css")
   body.body-reset
     div#buttons
       button.one Hey
       button.two What's
       button.three Up
+      input#change
     div#nudge
       include ../injected/nudge/corner
   script(src="../../js/helpers.js")
-  script(src="../../js/nudges.js")
+  script(src="../../js/content/controller.js")

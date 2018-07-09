@@ -107,7 +107,8 @@ var defaultSettings = {
   share_data: true,
   // New settings
   show_switch: true,
-  off_by_default: true
+  off_by_default: true,
+  bg_image: false,
 };
 
 // Other constants

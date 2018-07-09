@@ -38,12 +38,6 @@
     opacity: 1; }
   to {
     opacity: 0; } }
-@font-face {
-  font-family: "Open Sans";
-  font-style: normal;
-  font-weight: 400;
-  src: local("Open Sans Regular"), local("OpenSans-Regular"), url("chrome-extension://__MSG_@@extension_id__/resources/fonts/OpenSans.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215; }
 @keyframes background-move {
   0% {
     background-position: 17% 0%; }
@@ -141,13 +135,52 @@
     position: relative; }
   #nudge .nudge-quarter {
     display: block;
-    background: rgba(200, 200, 200, 0.85);
+    position: fixed;
+    bottom: 0;
+    right: 0;
     opacity: 1;
     border-radius: 100% 0 0 0;
-    background-clip: content-box;
+    opacity: 0.8; }
+  #nudge .nudge-first-quarter {
+    background: #bae1ff;
+    width: 100px;
+    height: 100px; }
+  #nudge .nudge-second-quarter {
+    opacity: 0.8;
+    width: 100px;
+    height: 100px;
+    border-width: 100px;
+    border-style: solid;
+    border-color: #baffc9;
     border-right-style: none;
-    border-bottom-style: none;
-    transition: all 5s; }
+    border-bottom-style: none; }
+  #nudge .nudge-third-quarter {
+    border-color: #ffffba;
+    width: 200px;
+    height: 200px;
+    border-width: 100px;
+    opacity: 0.8;
+    border-style: solid;
+    border-right-style: none;
+    border-bottom-style: none; }
+  #nudge .nudge-fourth-quarter {
+    opacity: 0.8;
+    width: 300px;
+    height: 300px;
+    border-width: 100px;
+    border-style: solid;
+    border-color: #ffdfba;
+    border-right-style: none;
+    border-bottom-style: none; }
+  #nudge .nudge-fifth-quarter {
+    opacity: 0.8;
+    width: 400px;
+    height: 400px;
+    border-width: 500px;
+    border-style: solid;
+    border-color: #ffb3ba;
+    border-right-style: none;
+    border-bottom-style: none; }
   #nudge .nudge-control_position {
     z-index: 2147483647;
     bottom: 0px;
@@ -165,15 +198,8 @@
     animation: fade-in 0.5s forwards; }
   #nudge .nudge-outro {
     animation: fade-out 0.5s forwards; }
-  #nudge .nudge-icon {
-    width: 1em;
-    height: 1em;
-    background: url("chrome-extension://__MSG_@@extension_id__/img/icon/logo-color.svg") center center/1em no-repeat;
-    bottom: 5px;
-    right: 72px;
-    margin: 0.25em; }
   #nudge .nudge-menu_position {
-    bottom: 1.7em;
+    bottom: 4.7em;
     right: 0;
     height: auto;
     margin-right: 0.2em;
@@ -204,15 +230,39 @@
       color: #ffffff; }
       #nudge .nudge-menu_item:hover .nudge-small-highlight {
         background: #cfe4ff; }
-  #nudge .nudge-circle_close {
+  #nudge .nudge-time {
+    font-size: 1em;
+    display: none;
+    color: #6d6d6d;
+    position: absolute;
+    right: 100px;
+    align-self: flex-end; }
+  #nudge .nudge-main_circle_old {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    margin-bottom: 0.5em;
+    bottom: 2em;
+    padding: 3px;
+    border: 1px none #bdbdbd;
+    border-radius: 4px;
+    right: 2em;
+    background: #ffffff; }
+    #nudge .nudge-main_circle_old:hover {
+      background: #ff61a7 url("chrome-extension://__MSG_@@extension_id__/img/icon/closewhite.svg") center center/2em no-repeat; }
+  #nudge .nudge-main_circle {
     width: 4em;
     height: 4em;
-    background: #ff61a7 url("chrome-extension://__MSG_@@extension_id__/img/icon/closewhite.svg") center center/2em no-repeat;
-    border-radius: 100%; }
-    #nudge .nudge-circle_close:hover {
-      background: #ff4899 url("chrome-extension://__MSG_@@extension_id__/img/icon/closewhite.svg") center center/2em no-repeat; }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: url("chrome-extension://__MSG_@@extension_id__/img/icon/logo-color.svg") center center/2em no-repeat #ffffff;
+    bottom: 3em;
+    border-radius: 100%;
+    right: 3em; }
+    #nudge .nudge-main_circle:hover {
+      background: #ff61a7 url("chrome-extension://__MSG_@@extension_id__/img/icon/closewhite.svg") center center/2em no-repeat; }
   #nudge .nudge-corner {
     display: flex;
     position: absolute;
@@ -226,6 +276,8 @@
     z-index: 2147483647;
     user-select: none; }
     #nudge .nudge-corner:hover .nudge-menu {
+      display: flex; }
+    #nudge .nudge-corner:hover .nudge-time {
       display: flex; }
   #nudge .nudge-close {
     width: 0.8em;

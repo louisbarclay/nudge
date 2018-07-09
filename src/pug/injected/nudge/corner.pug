@@ -11,15 +11,20 @@ include ../../../bemto/bemto.pug
   +b.top
     +b.edge#js-edge
     +b.corner
-      +b.icon
-      +b.highlight.blue#js-time 21m05s
+      +b.menu_circle.menu_close#js-close-tab
+        +b.menu_item Close tab
       +b.menu.menu_position
-        +b.circle_close
-        +b.menu_item Switch off site
-        +b.menu_item Stop nudging this site today
-        +b.menu_item Settings
-        +b.menu_item#js-hide Hide circle (it will come back!)
-    +b.quarter#js-quarter
+        +b.menu_circle.menu_hide#js-hide
+          +b.menu_item Hide Nudge
+        +b.menu_circle.menu_settings#js-settings
+          +b.menu_item Settings
+        +b.menu_circle.menu_time
+          +b.visits_value.highlight#js-visits 5 visits
+          +b.minutes_value.highlight#js-time 21m05s
+    +b.quarters
+      - var n = 1;
+      while n <= 20
+        +b.quarter(id=`quarter-${n++}`)
 
 //- Switch off site
 //- Switch off all sites

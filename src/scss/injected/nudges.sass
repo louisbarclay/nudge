@@ -3,7 +3,21 @@
 @import '../pages/animations'
 @import '../pages/abstracts'
 
+@keyframes fadeInRight
+  from
+    opacity: 0
+    transform: translate3d(100%, 0, 0)
+  to
+    opacity: 1
+    transform: translate3d(0, 0, 0)
+
 $quarter-background: rgba(200, 200, 200, 0.85)
+
+$rainbow-blue: #bae1ff
+$rainbow-green: #baffc9
+$rainbow-yellow: #ffffba
+$rainbow-orange: #ffdfba
+$rainbow-red: #ffb3ba
 
 .body-reset
   margin: 0
@@ -47,7 +61,7 @@ $quarter-background: rgba(200, 200, 200, 0.85)
       align-items: baseline
       justify-content: center
       transition: opacity 1s
-      opacity: 0     
+      opacity: 0
 
     &container-reveal
       opacity: 1
@@ -68,6 +82,7 @@ $quarter-background: rgba(200, 200, 200, 0.85)
       width: auto
       size: auto
       position: relative
+      background: red
 
     &quarter
       display: block
@@ -75,20 +90,66 @@ $quarter-background: rgba(200, 200, 200, 0.85)
       // background: rgba(97, 167, 255, 0.4)
       // background: rgba(255, 97, 167, 0.2)
       // background: rgba(0, 0, 0, 0.5)
-      background: $quarter-background
+      // background: $quarter-background
+      position: fixed
+      +size(100px)
+      bottom: 0
+      right: 0
       opacity: 1
-      border-radius: 100% 0 0 0 
+      border-radius: 100% 0 0 0
       // border: solid 1px rgba(0, 0, 0, 0)
-      background-clip: content-box
-      border-right-style: none
-      border-bottom-style: none
-      transition: all 5s
       // &:hover
       //   border: solid 1px rgba(0, 0, 0, 0.1)
       //   background-clip: content-box
       //   border-right-style: none
       //   border-bottom-style: none
       // z-index: $max-z - 1
+
+    &first-quarter
+      background: $rainbow-blue
+      +size(100px)
+      z-index: 4
+
+    &second-quarter
+      // +size(100px)
+      border-width: 100px
+      border-style: solid
+      border-color: $rainbow-green
+      background: $rainbow-green
+      border-right-style: none
+      border-bottom-style: none
+      z-index: 3
+
+    &third-quarter
+      border-color: $rainbow-yellow
+      +size(100px)
+      border-width: 200px
+      border-style: solid
+      border-right-style: none
+      border-bottom-style: none
+      z-index: 2
+
+    &fourth-quarter
+      +size(100px)
+      border-width: 300px
+      border-style: solid
+      border-color: $rainbow-orange
+      border-right-style: none
+      border-bottom-style: none
+      z-index: 1
+
+    &fifth-quarter
+      +size(100px)
+      border-width: 400px
+      border-style: solid
+      border-color: $rainbow-red
+      border-right-style: none
+      border-bottom-style: none
+      z-index: 0
+
+    &quarters
+      opacity: 0.8
+      position: fixed
 
     &control_position
       z-index: $max-z
@@ -133,22 +194,13 @@ $quarter-background: rgba(200, 200, 200, 0.85)
     &outro
       animation: fade-out 0.5s forwards
 
-    &icon
-      +size(1em)
-      background: url('chrome-extension://__MSG_@@extension_id__/img/icon/logo-color.svg') center center/1em no-repeat
-      // border-right: $border-primary
-      // border-color: $nudge-grey-lightest
-      bottom: 5px
-      right: 72px
-      margin: 0.25em
-
     &menu_position
-      bottom: 1.7em
+      bottom: 4.6em
       right: 0
       height: auto
-      margin-right: 0.2em
+      margin-right: 5px
       padding-top: 1em
-      padding-left: 1em
+      padding-left: 4em
       width: auto
       position: fixed
 
@@ -162,30 +214,84 @@ $quarter-background: rgba(200, 200, 200, 0.85)
     &menu_item
       +border($style: none)
       // background: rgba(255, 255, 255, 0.75)
-      background: rgba(255, 255, 255, 1)
+      background: $white
+      opacity: 0.8
       color: $nudge-grey-medium
       padding: 0.2em 0.6em 0.3em 0.6em
       animation: none
+      position: fixed
+      right: 75px
+      width: auto
       cursor: pointer
       font-size: (12 / 14) * $default-font-size
       z-index: 1
-      margin-bottom: 0.5em
-      width: auto
+      display: none
       // box-shadow: 0px 0px 16px 0.5px rgba(0, 0, 0, 0.14)
-      &:hover
-        background: $nudge-pink
-        color: $white
-        .nudge-small-highlight
-          background: rgba(207, 228, 255, 1)
 
-    &circle_close
+    &visits_value
+      font-size: 13px
+    
+    &minutes_value
+      font-size: 13px
+
+    &time
+      font-size: 1em
+      display: none
+      color: $nudge-grey-medium
+      position: absolute
+      right: 80px
+      bottom: 0
+      z-index: -1
+
+    &main_circle_old
+      display: flex
+      align-items: center
+      justify-content: center
       cursor: pointer
-      margin-bottom: 0.5em
-      +size(4em)
-      background: $nudge-pink url('chrome-extension://__MSG_@@extension_id__/img/icon/closewhite.svg') center center/2em no-repeat
-      border-radius: 100%
+      bottom: 2em
+      padding: 3px
+      +border($style: none)
+      right: 2em
+      background: $white
+      // border-radius: 100%
       &:hover
-        background: darken($nudge-pink, 5%) url('chrome-extension://__MSG_@@extension_id__/img/icon/closewhite.svg') center center/2em no-repeat
+        background: $nudge-pink url('chrome-extension://__MSG_@@extension_id__/img/icon/closewhite.svg') center center/2em no-repeat
+
+    &menu_circle
+      +size(4em)
+      display: flex
+      align-items: center
+      margin-top: 0.3em
+      justify-content: center
+      cursor: pointer
+      border-radius: 100%
+      // border-radius: 100%
+      &:hover
+        .nudge-menu_item
+          display: block
+
+    &menu_close
+      background: url('chrome-extension://__MSG_@@extension_id__/img/icon/logo-color.svg') center center/2em no-repeat $white
+      &:hover
+        background: $nudge-pink url('chrome-extension://__MSG_@@extension_id__/img/icon/closewhite.svg') center center/2em no-repeat
+
+    &menu_hide
+      background: url('chrome-extension://__MSG_@@extension_id__/img/icon/hidegreynew.svg') center center/2em no-repeat $white
+      &:hover
+        background: $nudge-pink url('chrome-extension://__MSG_@@extension_id__/img/icon/hidewhitenew.svg') center center/2em no-repeat
+
+    &menu_settings
+      background: url('chrome-extension://__MSG_@@extension_id__/img/icon/newcoggrey.svg') center center/1.6em no-repeat $white
+      &:hover
+        background: $nudge-pink url('chrome-extension://__MSG_@@extension_id__/img/icon/newcogwhite.svg') center center/1.6em no-repeat
+
+    &menu_time
+      color: $white
+      justify-content: space-around
+      opacity: 0.8
+      border-radius: 18px
+      cursor: default
+      background: $nudge-blue
 
     &corner
       // Display and position
@@ -193,8 +299,8 @@ $quarter-background: rgba(200, 200, 200, 0.85)
       position: absolute
       width: auto
       height: auto
-      bottom: .2em
-      right: .2em
+      bottom: 5px
+      right: 5px
       margin: 0
       align-items: center
       pointer-events: auto
@@ -202,8 +308,13 @@ $quarter-background: rgba(200, 200, 200, 0.85)
       user-select: none
 
       &:hover
-        .nudge-menu
+        padding-left: 4em
+        >.nudge-menu
           display: flex
+        .nudge-time
+          display: flex
+          animation-name: fadeInRight
+          animation-duration: 0.5s
 
     &close
       +size(0.8em)

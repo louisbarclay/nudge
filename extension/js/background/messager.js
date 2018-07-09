@@ -69,7 +69,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     sendResponse({ settings: settingsLocal });
   }
   if (request.type === "get_localStorage") {
-    sendResponse({ localStorage });
+    sendResponse({ localStorage, settingsLocal });
   }
   if (request.type === "change_setting") {
     changeSetting(

@@ -1,66 +1,92 @@
 var divs = false;
 var turnOffObserver = false;
 var time = false;
-
-// Check if it exists
-// Check if you are over 5 mins
-// If over 5 mins, create it. Fade in
-// Every 5 minutes, increase it in size. With transition.
-// Flash up the time in red and sync with the new slice being in red?
-// User can hide it. Which will happen for ten minutes if requested.
-// Leaves message 'hidden until this page is visited again or refreshed'
-// User can 'Don't Nudge this site'
-// 'Settings'
+var test = false;
+var increment = 300;
+var minLevel = 1;
+var pxPerLevel = 100;
+var showingContainer = false;
+var currentLevel = false;
 
 // Options set
 getSettings(execSettings);
+if (!test) {
+  sendHTMLRequest(getUrl("html/injected/other/circle.html"), storeForUse);
+  sendHTMLRequest(getUrl("html/injected/nudge/corner.html"), storeForUse);
+}
 
 // Prep in case doing div hiding
-sendHTMLRequest(getUrl("html/injected/other/circle.html"), storeForUse);
-sendHTMLRequest(getUrl("html/injected/nudge/corner.html"), storeForUse);
+if (test) {
+  // Test stuff here
+  cornerInit(300, 16);
+  document.getElementById("change").oninput = function() {
+    // cornerInit(parseInt(document.getElementById("change").value));
+  };
+}
 
 // Add font to the thing. the head
-// <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+docReady(function() {
+  var link = document.createElement("link");
+  link.href = "https://fonts.googleapis.com/css?family=Open+Sans";
+  link.rel = "stylesheet";
+  document.head.appendChild(link);
+});
 
-var increment = 60;
-var pxPerIncrement = 10;
-var showingContainer = false;
-
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if (request.type === "live_update") {
-    // Define elements
-    time = document.getElementById("js-time");
-    var container = document.querySelector(".nudge-container");
-    // Update time
-    if (time) {
-      time.innerHTML = logMinutes(request.total);
-    }
-    // Only show if container exists and if above increment
-    if (request.total >= increment && container) {
-      // Find current level
-      var currentLevel = Math.round(request.total / increment);
-      // Show container if not showing
-      if (!showingContainer) {
-        toggleClass(container, "nudge-container-reveal");
-        showingContainer = true;
-      }
-      // Define quarter class and style
-      var quarterClass = ".nudge-quarter";
-      var quarterStyle = `{ height: ${currentLevel *
-        pxPerIncrement}px !important; width: ${currentLevel *
-        pxPerIncrement}px !important; }`;
-      // Give size to quarter if none
-      var quarter = document.getElementById("quarter-size");
-      // If quarter doesn't exist, make it
-      if (!quarter) {
-        styleAdder(quarterClass, quarterStyle, "quarter-size");
-        // If it does, check if it needs to be updated
-      } else if (request.total % increment === 0) {
-        quarter.innerHTML = quarterClass + quarterStyle;
-      }
-    }
+chrome.runtime.onMessage.addListener(function(request) {
+  if (request.type === "live_update" && !test) {
+    cornerInit(request.total, request.visits);
   }
 });
+
+function cornerInit(totalSeconds, totalVisits) {
+  // Define elements
+  var time = document.getElementById("js-time");
+  var visits = document.getElementById("js-visits");
+  var container = document.querySelector(".nudge-container");
+  // Round seconds just in case
+  totalSeconds = Math.round(totalSeconds);
+
+  // Update time
+  if (time) {
+    time.innerHTML = logMinutes(totalSeconds);
+  }
+
+  // Update visits
+  if (visits) {
+    visits.innerHTML = `${totalVisits} visits`;
+  }
+
+  // Only show if container exists and if above increment
+  if (totalSeconds >= increment * minLevel && container) {
+    // Find current level
+    var doNotUpdate = false;
+    if (currentLevel === Math.round(totalSeconds / increment)) {
+      console.log("Do not update");
+      doNotUpdate = true;
+    } else {
+      currentLevel = Math.round(totalSeconds / increment);
+    }
+    // Show container if not showing
+    if (!showingContainer) {
+      toggleClass(container, "nudge-container-reveal");
+      showingContainer = true;
+    }
+    // // Define quarter class and style
+    // var quarterClass = ".nudge-quarter";
+    // var quarterStyle = `{ height: ${currentLevel *
+    //   pxPerLevel}px !important; width: ${currentLevel *
+    //   pxPerLevel}px !important; }`;
+    // // Give size to quarter if none
+    // var quarter = document.getElementById("quarter-size");
+    // // If quarter doesn't exist, make it
+    // if (!quarter) {
+    //   styleAdder(quarterClass, quarterStyle, "quarter-size");
+    //   // If it does, check if it needs to be updated
+    // } else if (!doNotUpdate) {
+    //   quarter.innerHTML = quarterClass + quarterStyle;
+    // }
+  }
+}
 
 function imageLoader(imageName, url) {
   imageName = new Image();
@@ -109,7 +135,7 @@ function execSettings(settings) {
     doAtEarliest(function() {
       addCSS("nudges", "css/injected/nudges.css");
       docReady(function() {
-        insertBanner(domain);
+        insertCorner(domain);
       });
     });
   }
@@ -122,7 +148,7 @@ function execSettings(settings) {
     // Find divs to hide and hide them
     // Doesn't matter if it's a Nudge site
     // Matters if it's in the div list
-    Object.keys(settings.divs).forEach(function (key) {
+    Object.keys(settings.divs).forEach(function(key) {
       if (url.includes(key)) {
         // Do it a first time
         elHiderAndCircleAdder(settings.divs[key]);
@@ -262,12 +288,24 @@ function tabIdler() {
   });
 }
 
-function insertBanner(domain) {
+function insertCorner(domain) {
   var cornerContainer = createEl(document.body, "div", "nudge");
+  console.log(tempStorage);
   appendHtml(cornerContainer, tempStorage["corner.html"]);
+  // Remove
   var remove = document.getElementById("js-hide");
   remove.onclick = function hideBanner() {
     deleteEl(cornerContainer);
+  };
+  // Open settings
+  var settings = document.getElementById("js-settings");
+  settings.onclick = function openSettings() {
+    sendMessage("options", {});
+  };
+  // Close tab
+  var closeTab = document.getElementById("js-close-tab");
+  closeTab.onclick = function openSettings() {
+    // sendMessage('options', {});
   };
 }
 
