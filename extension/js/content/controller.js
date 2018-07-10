@@ -1,7 +1,6 @@
 var divs = false;
 var turnOffObserver = false;
 var time = false;
-var test = false;
 var increment = 300;
 var minLevel = 1;
 var pxPerLevel = 100;
@@ -10,17 +9,19 @@ var currentLevel = false;
 
 // Options set
 getSettings(execSettings);
-if (!test) {
-  sendHTMLRequest(getUrl("html/injected/other/circle.html"), storeForUse);
-  sendHTMLRequest(getUrl("html/injected/nudge/corner.html"), storeForUse);
-}
 
-// Prep in case doing div hiding
-if (test) {
-  // Test stuff here
-  cornerInit(300, 16);
-  document.getElementById("change").oninput = function() {
-    // cornerInit(parseInt(document.getElementById("change").value));
+sendHTMLRequest(getUrl("html/injected/other/circle.html"), storeForUse);
+sendHTMLRequest(getUrl("html/injected/nudge/corner.html"), storeForUse);
+
+// Test stuff
+if (document.getElementById("nudge-test-input")) {
+  cornerInit(300, 16, "facebook.com");
+  document.getElementById("nudge-test-input").oninput = function() {
+    cornerInit(
+      parseInt(document.getElementById("nudge-test-input").value),
+      19,
+      "guardian.co.uk"
+    );
   };
 }
 
@@ -33,18 +34,27 @@ docReady(function() {
 });
 
 chrome.runtime.onMessage.addListener(function(request) {
-  if (request.type === "live_update" && !test) {
-    cornerInit(request.total, request.visits);
+  // Prevent non-domains from changing this
+  if (
+    request.type === "live_update" &&
+    extractDomain(window.location.href).includes(request.domain)
+  ) {
+    cornerInit(request.total, request.visits, request.domain);
   }
 });
 
-function cornerInit(totalSeconds, totalVisits) {
+function cornerInit(totalSeconds, totalVisits, domain) {
   // Define elements
   var time = document.getElementById("js-time");
   var visits = document.getElementById("js-visits");
   var container = document.querySelector(".nudge-container");
   // Round seconds just in case
   totalSeconds = Math.round(totalSeconds);
+
+  // Set domain
+  if (document.getElementById("js-domain").innerHTML != domain) {
+    document.getElementById("js-domain").innerHTML = domain;
+  }
 
   // Update time
   if (time) {
@@ -61,30 +71,32 @@ function cornerInit(totalSeconds, totalVisits) {
     // Find current level
     var doNotUpdate = false;
     if (currentLevel === Math.round(totalSeconds / increment)) {
-      console.log("Do not update");
       doNotUpdate = true;
     } else {
       currentLevel = Math.round(totalSeconds / increment);
     }
+    console.log(logMinutes(totalSeconds));
+    console.log(currentLevel);
     // Show container if not showing
     if (!showingContainer) {
       toggleClass(container, "nudge-container-reveal");
       showingContainer = true;
     }
-    // // Define quarter class and style
-    // var quarterClass = ".nudge-quarter";
-    // var quarterStyle = `{ height: ${currentLevel *
-    //   pxPerLevel}px !important; width: ${currentLevel *
-    //   pxPerLevel}px !important; }`;
-    // // Give size to quarter if none
-    // var quarter = document.getElementById("quarter-size");
-    // // If quarter doesn't exist, make it
-    // if (!quarter) {
-    //   styleAdder(quarterClass, quarterStyle, "quarter-size");
-    //   // If it does, check if it needs to be updated
-    // } else if (!doNotUpdate) {
-    //   quarter.innerHTML = quarterClass + quarterStyle;
-    // }
+
+    // Define quarter style
+    var quarterStyle = `{ opacity: 1 !important; }`;
+    // Define quarter class and style
+    for (var i = 1; i <= currentLevel; i++) {
+      // Find out if that quarter style already exists
+      if (document.getElementById(`nudge-quarter-${i}-style`)) {
+      } else if (!doNotUpdate) {
+        styleAdder(
+          `#nudge-quarter-${i}`,
+          quarterStyle,
+          `nudge-quarter-${i}-style`
+        );
+      }
+    }
   }
 }
 
@@ -304,8 +316,8 @@ function insertCorner(domain) {
   };
   // Close tab
   var closeTab = document.getElementById("js-close-tab");
-  closeTab.onclick = function openSettings() {
-    // sendMessage('options', {});
+  closeTab.onclick = function closeTabWithNudge() {
+    sendMessage("close_all", { domain });
   };
 }
 

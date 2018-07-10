@@ -86,7 +86,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.type === "off") {
     if (inDomainsSetting(sender.url)) {
       changeSetting(true, "domains", request.domain, "off");
-      switchOff(request.domain, sender.url, sender.tabId, 'normal');
+      switchOff(request.domain, sender.url, sender.tabId, "normal");
     }
   }
   if (request.type === "on") {
@@ -104,7 +104,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     } else {
       dateObj.switch_ons++;
     }
-    close(date, dateObj, 'close date in messager');
+    close(date, dateObj, "close date in messager");
   }
   if (
     request.type === "scroll" ||
@@ -117,13 +117,16 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.type === "options") {
     chrome.runtime.openOptionsPage();
   }
+  if (request.type === "close_one") {
+    chrome.tabs.remove(sender.tab.id);
+  }
   if (request.type === "close_all") {
     closeAll(request.domain);
   }
   if (request.type === "inject_tabidler" && !chromeTab) {
     try {
       chrome.tabs.get(sender.tab.id, checkIfExists);
-    } catch(e) {
+    } catch (e) {
       console.log(e);
     }
     function checkIfExists() {

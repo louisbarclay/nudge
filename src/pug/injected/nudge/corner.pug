@@ -12,7 +12,8 @@ include ../../../bemto/bemto.pug
     +b.edge#js-edge
     +b.corner
       +b.menu_circle.menu_close#js-close-tab
-        +b.menu_item Close tab
+        +b.menu_item Close 
+          +b.SPAN#js-domain tab
       +b.menu.menu_position
         +b.menu_circle.menu_hide#js-hide
           +b.menu_item Hide Nudge
@@ -24,7 +25,7 @@ include ../../../bemto/bemto.pug
     +b.quarters
       - var n = 1;
       while n <= 20
-        +b.quarter(id=`quarter-${n++}`)
+        +b.quarter(id=`nudge-quarter-${n++}`)
 
 //- Switch off site
 //- Switch off all sites
