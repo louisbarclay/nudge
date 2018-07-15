@@ -19,10 +19,17 @@ bgDir.forEach(function(item) {
         fs.writeFile(`${dir}/small/${item}`, data, "binary", function(err) {})
       )
       .catch(err => console.log(err));
+    // var newImage = sharp(fs.readFileSync(`${dir}/${item}`))
+    //   .resize(1920)
+    //   .toBuffer()
+    //   .then(data =>
+    //     fs.writeFile(`${dir}/big/${item}`, data, "binary", function (err) { })
+    //   )
+    //   .catch(err => console.log(err));
   }
 });
 
-// Output a JSON of all bg files
+// Output a JS array of all bg files
 fs.writeFile(
   `extension/js/bgImages.js`,
   `var bgImages = ${JSON.stringify(bgImages)};`,

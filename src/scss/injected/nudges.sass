@@ -3,13 +3,19 @@
 @import '../pages/animations'
 @import '../pages/abstracts'
 
-@keyframes fadeInRight
+@keyframes fadeInUp
   from
     opacity: 0
-    transform: translate3d(100%, 0, 0)
+    transform: translate3d(0, 100%, 0)
   to
     opacity: 1
     transform: translate3d(0, 0, 0)
+
+@keyframes fadeIn
+  from
+    opacity: 0
+  to
+    opacity: 1
 
 $quarter-background: rgba(200, 200, 200, 0.85)
 
@@ -22,6 +28,13 @@ $rainbow-red: #ffb3ba
 $rainbow-violet: #d2b3ff
 
 $rainbow-colors: $rainbow-blue, $rainbow-green, $rainbow-yellow, $rainbow-orange, $rainbow-red, $rainbow-violet
+$gradient-colors: #61A7FF, #69A3FA, #719FF5, #799BF1, #8298EC, #8A94E7, #9290E3, #9B8DDE, #A389D9, #AB85D5, #B482D0, #BC7ECC, #C47AC7, #CD77C2, #D573BE, #DD6FB9, #E66CB4, #EE68B0, #F664AB, #FF61A7
+$gradient-colors-2: #61A7FF, #719FF5, #8298EC, #9290E3, #A389D9, #B482D0, #C47AC7, #D573BE, #E66CB4, #F664AB, #FF61A7
+$gradient-colors-3: $nudge-blue, $nudge-pink
+$gradient-colors-4: #61a7ff, #8099ed, #a08bdb, #bf7dca, #df6fb8, #ff61a7
+
+$nudge-colors: $gradient-colors-4
+$quarter-opacity: 0.4
 
 // For auto-generation
 $n: 20
@@ -34,19 +47,43 @@ $n-z-index: 20
   @extend %reset
   display: block
 
-  // Auto-generated quarter styles (IDs)
+    // Auto-generated quarter styles (IDs)
   @while $n >= 0
     ##{$nudge}-quarter-#{$n + 1}
       z-index: $n-z-index - $n
-      border-color: nth($rainbow-colors, ($n % length($rainbow-colors)) + 1)
-      background-color: nth($rainbow-colors, ($n % length($rainbow-colors)) + 1)
+      border-color: nth($nudge-colors, ($n % length($nudge-colors)) + 1)
+      background-color: nth($nudge-colors, ($n % length($nudge-colors)) + 1)
       border-width: unquote(($n * 100) + 'px')
       opacity: 0
+      visibility: hidden
       transition: opacity 5s
+
+    ##{$nudge}-quarter-label-#{$n + 1}
+      z-index: $n-z-index - $n
+      background-color: nth($nudge-colors, ($n % length($nudge-colors)) + 1)
+      right: unquote(($n * 100 + 104) + 'px')
+
     $n: $n - 1
 
   // All classes
-  .#{$nudge}-
+  .#{$nudge}-  
+    &quarters
+      opacity: 0
+      position: fixed
+      z-index: -1
+
+    &quarter
+      opacity: 0
+      display: block
+      position: fixed
+      +size(100px)
+      bottom: 0
+      right: 0
+      border-radius: 100% 0 0 0
+      border-style: solid
+      border-right-style: none
+      border-bottom-style: none
+
     &rounded
       +border($style: solid, $color: rgba(0,0,0,0.05))
 
@@ -80,12 +117,25 @@ $n-z-index: 20
       flex-direction: row
       align-items: baseline
       justify-content: center
-      transition: opacity 1s
-      opacity: 0
 
     &container-reveal
-      opacity: 1
-      display: flex 
+      display: flex
+
+    &quarter-label
+      bottom: -3px
+      position: absolute
+      width: auto
+      font-size: 12px
+      padding: 0em .3em .3em .3em
+      // color: $nudge-grey-medium
+      color: $white
+      opacity: 0
+      +border($style: none)
+      // background: $white
+      position: fixed
+      // // Little animation
+      // animation-name: fadeInUp
+      // animation-duration: 0.5s
 
     &banner
       // Font size
@@ -103,21 +153,9 @@ $n-z-index: 20
       size: auto
       position: relative
       background: red
-
-    &quarter
-      display: block
-      position: fixed
-      +size(100px)
-      bottom: 0
-      right: 0
-      border-radius: 100% 0 0 0
-      border-style: solid
-      border-right-style: none
-      border-bottom-style: none
-
-    &quarters
-      opacity: 0.8
-      position: fixed
+      transition: opacity 6s
+      opacity: 0
+      animation: fadeIn 4s forwards
 
     &control_position
       z-index: $max-z
@@ -136,25 +174,6 @@ $n-z-index: 20
       margin: 0
       padding: 0
       border-radius: 0
-
-    // &container
-    //   @extend %typography
-    //   +container($left: -5px, $top: -5px, $width: auto, $spacing: 0.4em)
-    //   +hardware
-    //   position: fixed
-    //   height: auto
-    //   font-size: 16px
-    //   z-index: $max-z
-    //   opacity: 0
-    //   will-change: opacity
-      
-    //   >div
-    //     align-self: flex-start
-
-    //   &:hover
-    //     >div
-    //       >div
-    //         display: flex
     
     &intro
       animation: fade-in 0.5s forwards
@@ -183,10 +202,14 @@ $n-z-index: 20
       +border($style: none)
       // background: rgba(255, 255, 255, 0.75)
       background: $white
-      opacity: 0.8
+      opacity: 0.9
       color: $nudge-grey-medium
       padding: 0.2em 0.6em 0.3em 0.6em
-      animation: none
+      // transform: rotate(30deg)
+      // transform-origin: 100% 50%
+      // Do a little animation
+      // animation-name: fadeInRight
+      // animation-duration: 0.5s
       position: fixed
       right: 75px
       width: auto
@@ -197,10 +220,14 @@ $n-z-index: 20
       // box-shadow: 0px 0px 16px 0.5px rgba(0, 0, 0, 0.14)
 
     &visits_value
-      font-size: 13px
+      font-size: 12px
+      color: $white
     
     &minutes_value
-      font-size: 13px
+      // margin-bottom: 8px
+      // font-size: 12px
+      font-size: 18px
+      color: $white
 
     &time
       font-size: 1em
@@ -210,20 +237,6 @@ $n-z-index: 20
       right: 80px
       bottom: 0
       z-index: -1
-
-    &main_circle_old
-      display: flex
-      align-items: center
-      justify-content: center
-      cursor: pointer
-      bottom: 2em
-      padding: 3px
-      +border($style: none)
-      right: 2em
-      background: $white
-      // border-radius: 100%
-      &:hover
-        background: $nudge-pink url('chrome-extension://__MSG_@@extension_id__/img/icon/closewhite.svg') center center/2em no-repeat
 
     &menu_circle
       +size(4em)
@@ -255,7 +268,6 @@ $n-z-index: 20
 
     &menu_time
       color: $white
-      justify-content: space-around
       opacity: 0.8
       border-radius: 18px
       cursor: default
@@ -274,6 +286,7 @@ $n-z-index: 20
       pointer-events: auto
       z-index: $max-z
       user-select: none
+      overflow: hidden
 
       &:hover
         padding-left: 4em
@@ -281,8 +294,12 @@ $n-z-index: 20
           display: flex
         .nudge-time
           display: flex
-          animation-name: fadeInRight
-          animation-duration: 0.5s
+        &~.nudge-quarters
+          // opacity: 0.6
+          // background: blue
+          .nudge-quarter
+            .nudge-quarter-label
+              opacity: 0.9
 
     &close
       +size(0.8em)
@@ -339,6 +356,10 @@ $n-z-index: 20
 
     &blue
       background: $nudge-blue
+
+    &white
+      background: rgba(255, 255, 255, 0.3)
+      color: $white
 
     &blue_transparent
       background: rgba(97, 167, 255, 0.7)

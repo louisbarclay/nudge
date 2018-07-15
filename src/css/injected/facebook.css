@@ -1,3 +1,9 @@
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Open Sans Regular"), local("OpenSans-Regular"), url("chrome-extension://__MSG_@@extension_id__/fonts/OpenSans.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215; }
 @keyframes background-move {
   0% {
     background-position: 17% 0%; }
@@ -47,7 +53,7 @@
   .facebook-container a:hover {
     color: #ff61a7; }
 
-.facebook-button, .facebook-button-blue {
+.facebook-button, .facebook-button-small, .facebook-button-blue {
   background: none;
   cursor: pointer;
   margin: 0;
@@ -57,7 +63,7 @@
   border: 1px solid #bdbdbd;
   border-radius: 4px;
   padding: 0.3333333333em 0.8333333333em 0.3333333333em 0.8333333333em; }
-  .facebook-button:hover, .facebook-button-blue:hover {
+  .facebook-button:hover, .facebook-button-small:hover, .facebook-button-blue:hover {
     box-shadow: none;
     color: #ffffff;
     border-color: transparent;
@@ -123,7 +129,7 @@
   position: absolute;
   opacity: 0;
   top: 0;
-  margin-top: 10px;
+  margin-top: 12px;
   z-index: 1;
   animation: fade-in 2s forwards;
   display: flex;
@@ -164,25 +170,36 @@
 .facebook-button {
   border: 1px none #bdbdbd;
   border-radius: 4px;
-  font-size: 15px;
+  font-size: 14px;
   color: #ffffff;
   background: #ff61a7; }
   .facebook-button:hover {
     background: #ff2e8b; }
-.facebook-button-blue {
-  border: 1px solid #61a7ff;
+.facebook-bottom-container {
+  display: flex;
+  justify-content: space-between; }
+.facebook-button-small {
+  border: 1px none #bdbdbd;
   border-radius: 4px;
-  font-size: 14px;
-  color: #61a7ff;
-  background: none; }
+  font-size: 12px;
+  background: #61a7ff;
+  color: #ffffff; }
+.facebook-button-blue {
+  border: 1px none #bdbdbd;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #ffffff;
+  background: #61a7ff; }
   .facebook-button-blue:hover {
     background: #2e8bff; }
 .facebook-button-large {
-  font-size: 20px;
+  font-size: 18px;
   border: 1px none #bdbdbd;
   border-radius: 4px;
   color: #ffffff;
-  background: #61a7ff; }
+  background: #ff61a7; }
+  .facebook-button-large:hover {
+    background: #ff2e8b; }
 .facebook-headline {
   font-size: 30px;
   font-weight: 400;

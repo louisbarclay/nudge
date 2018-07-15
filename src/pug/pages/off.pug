@@ -15,13 +15,13 @@ html
     link(href="../../img/icon/nudgeoff16.png", rel="icon", type="image/png", sizes="16x16")
     link(rel="stylesheet", href="../../css/pages/main.css")
   +b.BODY.text_globals.body
-    +b.settings
+    +b.settings#js-settings
     +b.IMG.background
     +b.IMG.background-enhanced#js-bg-image
     +b.CANVAS.blur#js-blur
     +b.container
       +b.logo 
-      +b.H1.headline.text_shadow#js-headline
+      +b.H1.headline.text_shadow
         if normal
           | Nice one! You switched
           +b.SPAN.highlight.js-domain facebook.com
@@ -43,10 +43,18 @@ html
           +b.SPAN.highlight.js-time 5 minutes
           |  ago
         else if bydefault
-          | You haven't gone onto
-          +b.SPAN.highlight.js-domain facebook.com
-          | for
-          +b.SPAN.highlight#js-lastvisit
+          +b.SPAN#js-headline
+            | You've been away from
+            +b.SPAN.highlight.js-domain facebook.com
+            | for
+            +b.SPAN.highlight#js-lastvisit a while
+          +b.P.text_paragraph.text_shadow#js-tip
+            | Go to Options 
+            |   (
+            +b.settings.cog-small#js-settings2
+            | ) to remove 
+            +b.SPAN.js-domain this site
+            |  from your Nudge sites or change off by default
       +b.slider
         +b.button
           +b.button-centre

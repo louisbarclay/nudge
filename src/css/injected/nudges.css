@@ -38,6 +38,12 @@
     opacity: 1; }
   to {
     opacity: 0; } }
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Open Sans Regular"), local("OpenSans-Regular"), url("chrome-extension://__MSG_@@extension_id__/fonts/OpenSans.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215; }
 @keyframes background-move {
   0% {
     background-position: 17% 0%; }
@@ -87,11 +93,291 @@
   #nudge .nudge-container a:hover {
     color: #ff61a7; }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0); }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0); } }
+@keyframes fadeIn {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
 .body-reset {
   margin: 0; }
 
 #nudge {
   display: block; }
+  #nudge #nudge-quarter-21 {
+    z-index: 0;
+    border-color: #a08bdb;
+    background-color: #a08bdb;
+    border-width: 2000px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 5s; }
+  #nudge #nudge-quarter-label-21 {
+    z-index: 0;
+    background-color: #a08bdb;
+    right: 2104px; }
+  #nudge #nudge-quarter-20 {
+    z-index: 1;
+    border-color: #8099ed;
+    background-color: #8099ed;
+    border-width: 1900px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 5s; }
+  #nudge #nudge-quarter-label-20 {
+    z-index: 1;
+    background-color: #8099ed;
+    right: 2004px; }
+  #nudge #nudge-quarter-19 {
+    z-index: 2;
+    border-color: #61a7ff;
+    background-color: #61a7ff;
+    border-width: 1800px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 5s; }
+  #nudge #nudge-quarter-label-19 {
+    z-index: 2;
+    background-color: #61a7ff;
+    right: 1904px; }
+  #nudge #nudge-quarter-18 {
+    z-index: 3;
+    border-color: #ff61a7;
+    background-color: #ff61a7;
+    border-width: 1700px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 5s; }
+  #nudge #nudge-quarter-label-18 {
+    z-index: 3;
+    background-color: #ff61a7;
+    right: 1804px; }
+  #nudge #nudge-quarter-17 {
+    z-index: 4;
+    border-color: #df6fb8;
+    background-color: #df6fb8;
+    border-width: 1600px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 5s; }
+  #nudge #nudge-quarter-label-17 {
+    z-index: 4;
+    background-color: #df6fb8;
+    right: 1704px; }
+  #nudge #nudge-quarter-16 {
+    z-index: 5;
+    border-color: #bf7dca;
+    background-color: #bf7dca;
+    border-width: 1500px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 5s; }
+  #nudge #nudge-quarter-label-16 {
+    z-index: 5;
+    background-color: #bf7dca;
+    right: 1604px; }
+  #nudge #nudge-quarter-15 {
+    z-index: 6;
+    border-color: #a08bdb;
+    background-color: #a08bdb;
+    border-width: 1400px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 5s; }
+  #nudge #nudge-quarter-label-15 {
+    z-index: 6;
+    background-color: #a08bdb;
+    right: 1504px; }
+  #nudge #nudge-quarter-14 {
+    z-index: 7;
+    border-color: #8099ed;
+    background-color: #8099ed;
+    border-width: 1300px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 5s; }
+  #nudge #nudge-quarter-label-14 {
+    z-index: 7;
+    background-color: #8099ed;
+    right: 1404px; }
+  #nudge #nudge-quarter-13 {
+    z-index: 8;
+    border-color: #61a7ff;
+    background-color: #61a7ff;
+    border-width: 1200px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 5s; }
+  #nudge #nudge-quarter-label-13 {
+    z-index: 8;
+    background-color: #61a7ff;
+    right: 1304px; }
+  #nudge #nudge-quarter-12 {
+    z-index: 9;
+    border-color: #ff61a7;
+    background-color: #ff61a7;
+    border-width: 1100px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 5s; }
+  #nudge #nudge-quarter-label-12 {
+    z-index: 9;
+    background-color: #ff61a7;
+    right: 1204px; }
+  #nudge #nudge-quarter-11 {
+    z-index: 10;
+    border-color: #df6fb8;
+    background-color: #df6fb8;
+    border-width: 1000px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 5s; }
+  #nudge #nudge-quarter-label-11 {
+    z-index: 10;
+    background-color: #df6fb8;
+    right: 1104px; }
+  #nudge #nudge-quarter-10 {
+    z-index: 11;
+    border-color: #bf7dca;
+    background-color: #bf7dca;
+    border-width: 900px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 5s; }
+  #nudge #nudge-quarter-label-10 {
+    z-index: 11;
+    background-color: #bf7dca;
+    right: 1004px; }
+  #nudge #nudge-quarter-9 {
+    z-index: 12;
+    border-color: #a08bdb;
+    background-color: #a08bdb;
+    border-width: 800px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 5s; }
+  #nudge #nudge-quarter-label-9 {
+    z-index: 12;
+    background-color: #a08bdb;
+    right: 904px; }
+  #nudge #nudge-quarter-8 {
+    z-index: 13;
+    border-color: #8099ed;
+    background-color: #8099ed;
+    border-width: 700px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 5s; }
+  #nudge #nudge-quarter-label-8 {
+    z-index: 13;
+    background-color: #8099ed;
+    right: 804px; }
+  #nudge #nudge-quarter-7 {
+    z-index: 14;
+    border-color: #61a7ff;
+    background-color: #61a7ff;
+    border-width: 600px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 5s; }
+  #nudge #nudge-quarter-label-7 {
+    z-index: 14;
+    background-color: #61a7ff;
+    right: 704px; }
+  #nudge #nudge-quarter-6 {
+    z-index: 15;
+    border-color: #ff61a7;
+    background-color: #ff61a7;
+    border-width: 500px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 5s; }
+  #nudge #nudge-quarter-label-6 {
+    z-index: 15;
+    background-color: #ff61a7;
+    right: 604px; }
+  #nudge #nudge-quarter-5 {
+    z-index: 16;
+    border-color: #df6fb8;
+    background-color: #df6fb8;
+    border-width: 400px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 5s; }
+  #nudge #nudge-quarter-label-5 {
+    z-index: 16;
+    background-color: #df6fb8;
+    right: 504px; }
+  #nudge #nudge-quarter-4 {
+    z-index: 17;
+    border-color: #bf7dca;
+    background-color: #bf7dca;
+    border-width: 300px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 5s; }
+  #nudge #nudge-quarter-label-4 {
+    z-index: 17;
+    background-color: #bf7dca;
+    right: 404px; }
+  #nudge #nudge-quarter-3 {
+    z-index: 18;
+    border-color: #a08bdb;
+    background-color: #a08bdb;
+    border-width: 200px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 5s; }
+  #nudge #nudge-quarter-label-3 {
+    z-index: 18;
+    background-color: #a08bdb;
+    right: 304px; }
+  #nudge #nudge-quarter-2 {
+    z-index: 19;
+    border-color: #8099ed;
+    background-color: #8099ed;
+    border-width: 100px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 5s; }
+  #nudge #nudge-quarter-label-2 {
+    z-index: 19;
+    background-color: #8099ed;
+    right: 204px; }
+  #nudge #nudge-quarter-1 {
+    z-index: 20;
+    border-color: #61a7ff;
+    background-color: #61a7ff;
+    border-width: 0px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 5s; }
+  #nudge #nudge-quarter-label-1 {
+    z-index: 20;
+    background-color: #61a7ff;
+    right: 104px; }
+  #nudge .nudge-quarters {
+    opacity: 0;
+    position: fixed;
+    z-index: -1; }
+  #nudge .nudge-quarter {
+    opacity: 0;
+    display: block;
+    position: fixed;
+    width: 100px;
+    height: 100px;
+    bottom: 0;
+    right: 0;
+    border-radius: 100% 0 0 0;
+    border-style: solid;
+    border-right-style: none;
+    border-bottom-style: none; }
   #nudge .nudge-rounded {
     border: 1px solid rgba(0, 0, 0, 0.05);
     border-radius: 4px; }
@@ -116,12 +402,20 @@
     position: fixed;
     flex-direction: row;
     align-items: baseline;
-    justify-content: center;
-    transition: opacity 1s;
-    opacity: 0; }
+    justify-content: center; }
   #nudge .nudge-container-reveal {
-    opacity: 1;
     display: flex; }
+  #nudge .nudge-quarter-label {
+    bottom: -3px;
+    position: absolute;
+    width: auto;
+    font-size: 12px;
+    padding: 0em 0.3em 0.3em 0.3em;
+    color: #ffffff;
+    opacity: 0;
+    border: 1px none #bdbdbd;
+    border-radius: 4px;
+    position: fixed; }
   #nudge .nudge-banner {
     font-size: 17px;
     bottom: 0;
@@ -132,55 +426,11 @@
   #nudge .nudge-top {
     width: auto;
     size: auto;
-    position: relative; }
-  #nudge .nudge-quarter {
-    display: block;
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    opacity: 1;
-    border-radius: 100% 0 0 0;
-    opacity: 0.8; }
-  #nudge .nudge-first-quarter {
-    background: #bae1ff;
-    width: 100px;
-    height: 100px; }
-  #nudge .nudge-second-quarter {
-    opacity: 0.8;
-    width: 100px;
-    height: 100px;
-    border-width: 100px;
-    border-style: solid;
-    border-color: #baffc9;
-    border-right-style: none;
-    border-bottom-style: none; }
-  #nudge .nudge-third-quarter {
-    border-color: #ffffba;
-    width: 200px;
-    height: 200px;
-    border-width: 100px;
-    opacity: 0.8;
-    border-style: solid;
-    border-right-style: none;
-    border-bottom-style: none; }
-  #nudge .nudge-fourth-quarter {
-    opacity: 0.8;
-    width: 300px;
-    height: 300px;
-    border-width: 100px;
-    border-style: solid;
-    border-color: #ffdfba;
-    border-right-style: none;
-    border-bottom-style: none; }
-  #nudge .nudge-fifth-quarter {
-    opacity: 0.8;
-    width: 400px;
-    height: 400px;
-    border-width: 500px;
-    border-style: solid;
-    border-color: #ffb3ba;
-    border-right-style: none;
-    border-bottom-style: none; }
+    position: relative;
+    background: red;
+    transition: opacity 6s;
+    opacity: 0;
+    animation: fadeIn 4s forwards; }
   #nudge .nudge-control_position {
     z-index: 2147483647;
     bottom: 0px;
@@ -199,12 +449,12 @@
   #nudge .nudge-outro {
     animation: fade-out 0.5s forwards; }
   #nudge .nudge-menu_position {
-    bottom: 4.7em;
+    bottom: 4.6em;
     right: 0;
     height: auto;
-    margin-right: 0.2em;
+    margin-right: 5px;
     padding-top: 1em;
-    padding-left: 1em;
+    padding-left: 4em;
     width: auto;
     position: fixed; }
   #nudge .nudge-menu {
@@ -216,69 +466,81 @@
   #nudge .nudge-menu_item {
     border: 1px none #bdbdbd;
     border-radius: 4px;
-    background: white;
+    background: #ffffff;
+    opacity: 0.9;
     color: #6d6d6d;
     padding: 0.2em 0.6em 0.3em 0.6em;
-    animation: none;
+    position: fixed;
+    right: 75px;
+    width: auto;
     cursor: pointer;
     font-size: 12px;
     z-index: 1;
-    margin-bottom: 0.5em;
-    width: auto; }
-    #nudge .nudge-menu_item:hover {
-      background: #ff61a7;
-      color: #ffffff; }
-      #nudge .nudge-menu_item:hover .nudge-small-highlight {
-        background: #cfe4ff; }
+    display: none; }
+  #nudge .nudge-visits_value {
+    font-size: 12px;
+    color: #ffffff; }
+  #nudge .nudge-minutes_value {
+    font-size: 18px;
+    color: #ffffff; }
   #nudge .nudge-time {
     font-size: 1em;
     display: none;
     color: #6d6d6d;
     position: absolute;
-    right: 100px;
-    align-self: flex-end; }
-  #nudge .nudge-main_circle_old {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    bottom: 2em;
-    padding: 3px;
-    border: 1px none #bdbdbd;
-    border-radius: 4px;
-    right: 2em;
-    background: #ffffff; }
-    #nudge .nudge-main_circle_old:hover {
-      background: #ff61a7 url("chrome-extension://__MSG_@@extension_id__/img/icon/closewhite.svg") center center/2em no-repeat; }
-  #nudge .nudge-main_circle {
+    right: 80px;
+    bottom: 0;
+    z-index: -1; }
+  #nudge .nudge-menu_circle {
     width: 4em;
     height: 4em;
     display: flex;
     align-items: center;
+    margin-top: 0.3em;
     justify-content: center;
     cursor: pointer;
-    background: url("chrome-extension://__MSG_@@extension_id__/img/icon/logo-color.svg") center center/2em no-repeat #ffffff;
-    bottom: 3em;
-    border-radius: 100%;
-    right: 3em; }
-    #nudge .nudge-main_circle:hover {
+    border-radius: 100%; }
+    #nudge .nudge-menu_circle:hover .nudge-menu_item {
+      display: block; }
+  #nudge .nudge-menu_close {
+    background: url("chrome-extension://__MSG_@@extension_id__/img/icon/logo-color.svg") center center/2em no-repeat #ffffff; }
+    #nudge .nudge-menu_close:hover {
       background: #ff61a7 url("chrome-extension://__MSG_@@extension_id__/img/icon/closewhite.svg") center center/2em no-repeat; }
+  #nudge .nudge-menu_hide {
+    background: url("chrome-extension://__MSG_@@extension_id__/img/icon/hidegreynew.svg") center center/2em no-repeat #ffffff; }
+    #nudge .nudge-menu_hide:hover {
+      background: #ff61a7 url("chrome-extension://__MSG_@@extension_id__/img/icon/hidewhitenew.svg") center center/2em no-repeat; }
+  #nudge .nudge-menu_settings {
+    background: url("chrome-extension://__MSG_@@extension_id__/img/icon/newcoggrey.svg") center center/1.6em no-repeat #ffffff; }
+    #nudge .nudge-menu_settings:hover {
+      background: #ff61a7 url("chrome-extension://__MSG_@@extension_id__/img/icon/newcogwhite.svg") center center/1.6em no-repeat; }
+  #nudge .nudge-menu_time {
+    color: #ffffff;
+    opacity: 0.8;
+    border-radius: 18px;
+    cursor: default;
+    background: #61a7ff; }
   #nudge .nudge-corner {
     display: flex;
     position: absolute;
     width: auto;
     height: auto;
-    bottom: 0.2em;
-    right: 0.2em;
+    bottom: 5px;
+    right: 5px;
     margin: 0;
     align-items: center;
     pointer-events: auto;
     z-index: 2147483647;
-    user-select: none; }
-    #nudge .nudge-corner:hover .nudge-menu {
-      display: flex; }
-    #nudge .nudge-corner:hover .nudge-time {
-      display: flex; }
+    user-select: none;
+    overflow: hidden; }
+    #nudge .nudge-corner:hover {
+      padding-left: 4em; }
+      #nudge .nudge-corner:hover > .nudge-menu {
+        display: flex; }
+      #nudge .nudge-corner:hover .nudge-time {
+        display: flex; }
+      #nudge .nudge-corner:hover ~ .nudge-quarters .nudge-quarter .nudge-quarter-label {
+        opacity: 0.9; }
   #nudge .nudge-close {
     width: 0.8em;
     height: 0.8em;
@@ -329,6 +591,9 @@
     background: #ff61a7; }
   #nudge .nudge-blue {
     background: #61a7ff; }
+  #nudge .nudge-white {
+    background: rgba(255, 255, 255, 0.3);
+    color: #ffffff; }
   #nudge .nudge-blue_transparent {
     background: rgba(97, 167, 255, 0.7); }
   #nudge .nudge-match_quarter {

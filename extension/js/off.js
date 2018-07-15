@@ -6,16 +6,20 @@ var slider = document.querySelector(`.${off}slider`);
 var sliderText = document.querySelector(`.${off}slider-text`);
 var button = document.querySelector(`.${off}button`);
 var centre = document.querySelector(`.${off}button-centre`);
-var domainText = document.querySelector(`.${js}domain`);
+var domainText = document.getElementsByClassName(`${js}domain`);
 var tagline = document.getElementById(`tagline`);
 var switch_ons = false;
 var getStickier = true;
-var settings = document.querySelector(`.${off}settings`);
+var settings = document.getElementsByClassName(`${off}settings`);
+var settings2 = document.getElementById(`js-settings2`);
 var headline = document.getElementById(`js-headline`);
 
-settings.onclick = function() {
-  chrome.runtime.openOptionsPage();
-};
+// Settings click handlers
+Array.from(settings).forEach(function(element) {
+  element.onclick = function() {
+    chrome.runtime.openOptionsPage();
+  };
+});
 
 // FIXME: this is a bit of a kludge
 function highlightify(text) {
@@ -53,7 +57,9 @@ var domain = false;
 var url = false;
 if ("domain" in QueryString) {
   domain = QueryString.domain;
-  domainText.innerHTML = domain;
+  Array.from(domainText).forEach(function(element) {
+    element.innerHTML = domain;
+  });
 }
 if ("url" in QueryString) {
   url = QueryString.url;
@@ -70,13 +76,12 @@ function getLocalStorage() {
     var date = moment().format("YYYY-MM-DD");
     localStorage = response.localStorage;
     var settingsLocal = response.settingsLocal;
+    getStickier = settingsLocal.get_stickier;
     // Get domain today
     // var domainToday = JSON.parse(localStorage[date])[domain];
     // Pull the status out
     var status = JSON.parse(localStorage.status);
 
-    // Check bg_image setting
-    console.log(settingsLocal.bg_image);
     // Load a new image for the new day!
     if (!settingsLocal.bg_image) {
       setBackground(background, `${dir_small}${getBackgroundFile(0)}`);
@@ -94,7 +99,7 @@ function getLocalStorage() {
     // If false, use value 0 to grab image from array and set it
     // If true, check what day you are on versus the first ever day, and use that value to get array
     // Check if domain in status
-    if (!domain in status) {
+    if (!(domain in status)) {
       headline.innerHTML = `Nudge switches off${highlightify(
         domain
       )}by default`;
@@ -110,10 +115,8 @@ function getLocalStorage() {
     document.getElementById("js-lastvisit").innerHTML = sinceLastVisitEnd;
 
     switch_ons = JSON.parse(localStorage[date]).switch_ons;
-    console.log(switch_ons);
     if (getStickier) {
       var stickyChange = (switch_ons + 2) / 2;
-      console.log(stickyChange);
       if (isNaN(stickyChange) || stickyChange < 1) {
         stickyMultiplier = 1;
       } else if (stickyChange > 16) {
@@ -158,7 +161,7 @@ function sliderdown(e) {
   // Find where the button is
   var buttonDiff = getPageLeft(button) - getPageLeft(slider);
   // Set button position as where button is relative to slider
-  // Set to zero if you have a negative value (should never happen)
+  // Set to zero if you have a negatcentre.classList.remove("active");ive value 0)
   if (buttonDiff > 0) {
     buttonPosition = Math.round(buttonDiff);
   } else {
@@ -187,6 +190,7 @@ function sliderup(e) {
     if (stickyMultiplier === 1) {
       button.style.left = 0 + "px";
       button.classList.add("returning");
+      background.style.opacity = 0;
     }
   }
 }
@@ -252,6 +256,7 @@ function backgroundLoader(index) {
   img = new Image();
   // Assign an onload handler to the dummy image *before* assigning the src
   img.onload = function() {
+    console.log(getBackgroundFile(index), index);
     setBackground(backgroundEnhanced, getBackgroundFile(index));
     toggleClass(background, `${off}background_animation`);
     setTimeout(function() {
@@ -263,3 +268,17 @@ function backgroundLoader(index) {
   // Finally, trigger the whole preloading chain by giving source
   img.src = getUrl(`${dir}${getBackgroundFile(index)}`);
 }
+
+var backgroundNumber = 0;
+
+// Keyboard shortcut to cycle through background images
+function cycleThroughBackgrounds() {
+  document.onkeyup = function(key) {
+    if (key.altKey && key.keyCode == 39) {
+      backgroundLoader(backgroundNumber);
+      backgroundNumber++;
+    }
+  };
+}
+
+// cycleThroughBackgrounds();

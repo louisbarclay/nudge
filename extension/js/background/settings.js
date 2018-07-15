@@ -45,9 +45,6 @@ function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
             setting
           ][domain][domainSetting];
           // Off by default is a special case - we must update the settings for all domains
-          if (setting === "off_by_default") {
-            toggleOffByDefault(!settingsLocal[setting][domain][domainSetting]);
-          }
         } else {
           settingsLocal[setting][domain][domainSetting] = newVal;
         }
@@ -64,6 +61,10 @@ function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
     // Update settings in the cloud
     if (settingsLocal.share_data) {
       sendData(settingsLocal.userId, settingsLocal, false, "settings");
+    }
+    // This is not the opposite toggle value because settingsLocal has just been set
+    if (setting === "off_by_default") {
+      toggleOffByDefault(settingsLocal.off_by_default);
     }
   } catch (e) {
     console.log(e);

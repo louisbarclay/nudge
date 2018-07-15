@@ -44,10 +44,10 @@ function everySecond() {
                 var nudge = tabIdStorage[window.tabs[i].id].nudge;
                 if (nudge.type === "compulsive") {
                   tabIdStorage[window.tabs[i].id].nudge = false;
-                  nudgeSender(nudge);
+                  // nudgeSender(nudge);
                 } else {
                   tabIdStorage[window.tabs[i].id].nudge = false;
-                  nudgeSender(nudge);
+                  // nudgeSender(nudge);
                 }
               }
             }
@@ -204,7 +204,7 @@ chrome.tabs.onActivated.addListener(function(activatedTab) {
 });
 
 // Add to timeline window onFocusedChange
-chrome.windows.onFocusChanged.addListener(function(windowId) {
+chrome.windows.onFocusChanged.addListener(function() {
   chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(tabs) {
     var domain = false;
     if (typeof tabs[0] != "undefined") {
@@ -268,29 +268,4 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
       }
     });
   }
-
-  // Send favicon URL
-  if (
-    domain &&
-    typeof changeInfo.favIconUrl !== "undefined" &&
-    changeInfo.favIconUrl !== ""
-  ) {
-    chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(
-      tabs
-    ) {
-      if (typeof tabs[0] !== undefined) {
-        chrome.tabs.sendMessage(
-          tabId,
-          {
-            type: "favicon",
-            favicon: tab.favIconUrl,
-            domain: domain
-          },
-          function(response) {}
-        );
-      }
-    });
-  }
 });
-
-// chrome.runtime.setUninstallURL("");

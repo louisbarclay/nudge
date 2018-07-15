@@ -426,10 +426,10 @@ function classList(element) {
 
 function storeForUse(url, response) {
   url = url.split("/").pop();
-  if (notUndefined(tempStorage)) {
-    tempStorage[url] = response;
+  if (typeof tempStorage === 'undefined') {
+    // console.log(`Can't find tempStorage`);
   } else {
-    // console.log("tempStorage is not defined in this script");
+    tempStorage[url] = response;
   }
 }
 

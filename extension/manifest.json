@@ -32,7 +32,7 @@
     "open_in_tab": true
   },
   "options_page": "html/pages/options.html",
-  "web_accessible_resources": ["img/*", "html/*", "css/*"],
+  "web_accessible_resources": ["img/*", "fonts/*", "html/*", "css/*"],
   "version": "1.0.27",
   "background": {
     "scripts": [

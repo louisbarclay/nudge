@@ -4,6 +4,12 @@
   font-weight: 400;
   src: local("Open Sans Regular"), local("OpenSans-Regular"), url("chrome-extension://__MSG_@@extension_id__/resources/fonts/OpenSans.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215; }
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Open Sans Regular"), local("OpenSans-Regular"), url("chrome-extension://__MSG_@@extension_id__/fonts/OpenSans.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215; }
 @keyframes background-move {
   0% {
     background-position: 17% 0%; }
@@ -258,11 +264,21 @@ h6 {
   background-repeat: no-repeat; }
   .off-settings::hover {
     opacity: 1; }
+.off-cog-small {
+  display: inline-block;
+  margin-left: 0.2em;
+  margin-right: 0.2em;
+  margin-bottom: -0.15em;
+  margin-top: 0;
+  position: relative;
+  width: 1em;
+  height: 1em;
+  opacity: 1; }
 .off-text_paragraph {
   margin-top: 1em;
-  font-size: 13px; }
+  font-size: 15px; }
 .off-logo {
-  margin-top: 20%;
+  margin-top: 25vh;
   width: 8em;
   height: 8em; }
   .off-logo::before {
@@ -345,8 +361,8 @@ h6 {
 .off-slider {
   width: 100%;
   position: relative;
-  height: 5em;
-  margin-top: 10vh;
+  height: 60px;
+  margin-top: 15vh;
   border-radius: 6em;
   text-align: center;
   background-color: rgba(255, 255, 255, 0.2);
@@ -362,19 +378,19 @@ h6 {
   bottom: 0;
   left: 0;
   right: 0;
-  font-size: 1em;
+  font-size: 15px;
   height: 100%;
   text-align: center;
   height: 1.4em;
   opacity: 0.8; }
 .off-button {
   position: relative;
-  height: 5em;
-  width: 5em;
+  height: 60px;
+  width: 60px;
   box-sizing: border-box;
   top: 0;
   left: 0;
-  border-radius: 2.5em;
+  border-radius: 30px;
   cursor: pointer;
   user-select: none;
   backface-visibility: hidden;
@@ -386,10 +402,10 @@ h6 {
   margin: auto;
   top: 50%;
   transform: translateY(-50%);
-  height: 4.5em;
-  width: 4.5em;
+  height: 54px;
+  width: 54px;
   background-color: #ffffff;
-  border-radius: 2.5em;
+  border-radius: 30px;
   transition: background-color 0.2s ease;
   backface-visibility: hidden;
   perspective: 1000; }
@@ -605,6 +621,12 @@ body {
     border-bottom-width: 1px;
     color: #7f7f7f; }
 
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Open Sans Regular"), local("OpenSans-Regular"), url("chrome-extension://__MSG_@@extension_id__/fonts/OpenSans.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215; }
 @keyframes background-move {
   0% {
     background-position: 17% 0%; }

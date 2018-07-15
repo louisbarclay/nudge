@@ -10,7 +10,8 @@
   "scripts": {
     "build:pug": "pug -w src/pug -o extension/html",
     "build:sass-pages": "sass --watch src/scss/pages:extension/css/pages --sourcemap=none -r sass-json-vars",
-    "build:sass-injected": "sass --watch src/scss/injected:extension/css/injected --sourcemap=none -r sass-json-vars",
+    "build:sass-injected": "sass --watch src/scss/injected:src/css/injected --sourcemap=none -r sass-json-vars",
+    "build:important-injected": "postcss --use postcss-safe-important -d extension/css/injected src/css/injected/*  --w",
     "dev": "npm-run-all -p build:*"
   },
   "repository": {

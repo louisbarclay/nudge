@@ -109,6 +109,8 @@ var defaultSettings = {
   show_switch: true,
   off_by_default: true,
   bg_image: false,
+  get_stickier: true,
+  show_update_article: true,
 };
 
 // Other constants

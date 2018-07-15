@@ -24,7 +24,7 @@
     position: absolute
     opacity: 0
     top: 0
-    margin-top: 10px
+    margin-top: 12px
     z-index: 1
     animation: fade-in 2s forwards
     display: flex
@@ -74,26 +74,39 @@
   &button
     @extend %button
     +border($style: none)
-    font-size: 15px
+    font-size: 14px
     color: $white
     background: $nudge-pink
     &:hover
       background: darken($nudge-pink, 10%)
 
+  &bottom-container
+    display: flex
+    justify-content: space-between
+
+  &button-small
+    @extend %button
+    +border($style: none)
+    font-size: 12px
+    background: $nudge-blue
+    color: $white
+
   &button-blue
     @extend %button
-    +border($color: $nudge-blue)
-    font-size: 14px
-    color: $nudge-blue
-    background: none
+    +border($style: none)
+    font-size: 13px
+    color: $white
+    background: $nudge-blue
     &:hover
       background: darken($nudge-blue, 10%)
 
   &button-large
-    font-size: 20px
+    font-size: 18px
     +border($style: none)
     color: $white
-    background: $nudge-blue
+    background: $nudge-pink
+    &:hover
+      background: darken($nudge-pink, 10%)
 
   &headline
     font-size: 30px  

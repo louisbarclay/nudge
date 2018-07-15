@@ -287,10 +287,10 @@ function domainTimeNudger() {
       (totalTimeTemp + arriveEarly) % (settingsLocal.time * minSec) === 0 &&
       notNonDomain(domain)
     ) {
-      console.log(
-        `Sent time nudge to ${domain} with value ${logMinutes(totalTimeTemp)}`
-      );
-      nudgeSender(nudgeObject(domain, totalTimeTemp, "time"));
+      // console.log(
+      //   `Sent time nudge to ${domain} with value ${logMinutes(totalTimeTemp)}`
+      // );
+      // nudgeSender(nudgeObject(domain, totalTimeTemp, "time"));
     }
     // Send out live info
     var liveUpdateObj = {

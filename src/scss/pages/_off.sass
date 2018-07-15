@@ -1,3 +1,5 @@
+// Specific to page or component
+$slider-height: 60px  
 $opacity-global: 0.7
 
 @keyframes fade_out
@@ -68,16 +70,25 @@ $opacity-global: 0.7
       position: 0
       size: 100% 100%
       repeat: no-repeat
-
     &::hover
       opacity: 1
 
+  &cog-small
+    display: inline-block
+    margin-left: 0.2em
+    margin-right: 0.2em
+    margin-bottom: -0.15em
+    margin-top: 0
+    position: relative
+    +size(1em)
+    opacity: 1
+
   &text_paragraph
     margin-top: 1em
-    font-size: 13px
+    font-size: 15px
 
   &logo
-    margin-top: 20%
+    margin-top: 25vh
     +size($width: 8em)
     &::before
       +pseudo
@@ -147,7 +158,7 @@ $opacity-global: 0.7
     width: 100%
     position: relative
     height: $slider-height
-    margin-top: 10vh
+    margin-top: 15vh
     border-radius: 6em
     text-align: center
     background-color: rgba(255, 255, 255, 0.2)
@@ -164,7 +175,7 @@ $opacity-global: 0.7
     bottom: 0
     left: 0
     right: 0
-    font-size: 1em
+    font-size: 15px
     height: 100%
     text-align: center
     height: 1.4em
@@ -189,8 +200,8 @@ $opacity-global: 0.7
     margin: auto
     top: 50%
     transform: translateY(-50%)
-    height: $slider-height - 0.5em
-    width: $slider-height - 0.5em
+    height: $slider-height - 6px
+    width: $slider-height - 6px
     background:
       color: $white
     border-radius: $slider-height / 2

@@ -29,16 +29,17 @@ html
           button.toggle
             div.left.on Yes
             div.right No
-      +optionBoolean("Nudges you every 15 minutes on a site", 'time_nudge')
-      +optionBoolean("Nudges you when you go back to a site you've just been on", 'compulsive_nudge')
+      +optionBoolean("Nudges you with colorful rings the longer you spend on a site", 'time_nudge')
+      //- +optionBoolean("Nudges you when you go back to a site you've just been on", 'compulsive_nudge')
       //- +optionBoolean('Stops some tab titles from showing (1) or flashing icons', 'constantise')
       +optionBoolean('Hides some sections of sites by default', 'div_hider')
       +optionBoolean('Switches off all Nudge sites by default', 'off_by_default')
+      +optionBoolean('Makes the off slider harder to drag the more you do it', 'get_stickier')
       +optionBoolean('Gets rid of top-right Facebook notifications', 'fb_hide_notifications')
       +optionBoolean('Makes the Facebook top bar grey', 'fb_grey')
       +optionBoolean('Auto-unfollows new Facebook friends, pages and groups', 'fb_auto_unfollow')
       +optionBoolean('Shows Facebook unfollow dialog', 'fb_show_unfollow')
-      +optionBoolean('Shows an off switch on Nudge sites', 'show_switch')
+      //- +optionBoolean('Shows an off switch on Nudge sites', 'show_switch')
       +optionBoolean('Shares anonymised data to help make Nudge better', 'share_data')
       span.options-sub-header Your Nudge ID
       p Here is your Nudge ID:

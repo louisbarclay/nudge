@@ -4,6 +4,8 @@ initialise();
 
 setInterval(everySecond, 1000);
 
+chrome.runtime.setUninstallURL("https://goo.gl/forms/YqSuCKMQhP3PcFz13");
+
 // TODO: need security around this!
 function initialise() {
   chrome.storage.sync.get(null, function(items) {
@@ -52,9 +54,9 @@ function getAndUpdateSettings() {
       }
     });
     // Open options page if it's not been shown
-    if (showOptionsPage && settingsLocal.show_intro < 1) {
-      chrome.runtime.openOptionsPage();
-      showOptionsPage = false;
+    if (settingsLocal.show_update_article) {
+      chrome.tabs.create({ url: 'https://medium.com/@louisbarclay/welcome-to-the-new-version-of-nudge-d65b2c0e56c8' });
+      changeSetting(false, 'show_update_article');
     }
     // Update off by default
     if (settingsLocal.off_by_default) {
@@ -135,18 +137,15 @@ function timeline(domain, source, timeOverride) {
     timeOverride ? timeOverride : false
   );
 
-  // Only actually close current state if needed
-  // FIXME: implications of this for the gap and day events? Must test
-  // console.log(prevDomain);
-  // console.log(domain);
-  // console.log(`Closed ${source} ${status.currentState.time.toISOString()}`);
-
   // Set other variables
   var currDomain = status.currentState.domain;
   var currTime = status.currentState.time;
   var gapTime = previousState.lastEverySecond;
 
   // Logs
+  // console.log(prevDomain);
+  // console.log(domain);
+  // console.log(`Closed ${source} ${status.currentState.time.toISOString()}`);
   // if (moment(prevTime).valueOf() === moment(currTime).valueOf()) {
   //   console.log("This can happen and it's OK");
   // }

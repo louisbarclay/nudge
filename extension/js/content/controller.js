@@ -1,9 +1,15 @@
 var divs = false;
 var turnOffObserver = false;
 var time = false;
-var increment = 300;
-var minLevel = 1;
+var increment = 300; // in seconds
+var minLevelMultiple = 1;
 var pxPerLevel = 100;
+
+// For testing FIXME: make the labels show the correct values off a shared JSON?
+increment = 30; // in seconds
+minLevelMultiple = 1;
+pxPerLevel = 100;
+
 var showingContainer = false;
 var currentLevel = false;
 
@@ -13,9 +19,28 @@ getSettings(execSettings);
 sendHTMLRequest(getUrl("html/injected/other/circle.html"), storeForUse);
 sendHTMLRequest(getUrl("html/injected/nudge/corner.html"), storeForUse);
 
+// The images that need caching
+var imagesToCache = [
+  "icon/logo-color.svg",
+  "icon/closewhite.svg",
+  "icon/hidegreynew.svg",
+  "icon/hidewhitenew.svg",
+  "icon/newcoggrey.svg",
+  "icon/newcogwhite.svg",
+  "icon/closegrey.svg",
+  "icon/offswitch.svg",
+  "icon/newcirclewhite.svg"
+];
+
+// Cache images
+imagesToCache.forEach(function(imageUrl) {
+  var image = new Image();
+  image.src = chrome.extension.getURL(`img/${imageUrl}`);
+});
+
 // Test stuff
 if (document.getElementById("nudge-test-input")) {
-  cornerInit(300, 16, "facebook.com");
+  cornerInit(200, 16, "facebook.com");
   document.getElementById("nudge-test-input").oninput = function() {
     cornerInit(
       parseInt(document.getElementById("nudge-test-input").value),
@@ -25,13 +50,18 @@ if (document.getElementById("nudge-test-input")) {
   };
 }
 
-// Add font to the thing. the head
-docReady(function() {
-  var link = document.createElement("link");
-  link.href = "https://fonts.googleapis.com/css?family=Open+Sans";
-  link.rel = "stylesheet";
-  document.head.appendChild(link);
-});
+// Add font that you need
+// var link = document.createElement("link");
+// link.href = "https://fonts.googleapis.com/css?family=Open+Sans";
+// link.rel = "stylesheet";
+
+// if (!document.head) {
+//   doAtEarliest(function() {
+//     document.head.appendChild(link);
+//   });
+// } else {
+//   document.head.appendChild(link);
+// }
 
 chrome.runtime.onMessage.addListener(function(request) {
   // Prevent non-domains from changing this
@@ -44,21 +74,29 @@ chrome.runtime.onMessage.addListener(function(request) {
 });
 
 function cornerInit(totalSeconds, totalVisits, domain) {
+  // First the container must exist. This is handled by insertCorner
+  // All this does is adds class 'nudge-container-reveal' to container,
+  // And adds some opacity to the quarters
+
+  // console.log(totalSeconds, domain);
   // Define elements
-  var time = document.getElementById("js-time");
+  var jsTime = document.getElementById("js-time");
   var visits = document.getElementById("js-visits");
-  var container = document.querySelector(".nudge-container");
+  var nudgeContainer = document.getElementsByClassName("nudge-container")[0];
   // Round seconds just in case
   totalSeconds = Math.round(totalSeconds);
+  var timeMins = logMinutesNoSeconds(totalSeconds);
 
-  // Set domain
-  if (document.getElementById("js-domain").innerHTML != domain) {
-    document.getElementById("js-domain").innerHTML = domain;
-  }
+  // Set domain in text
+  Array.from(document.getElementsByClassName("js-domain")).forEach(function(
+    element
+  ) {
+    element.innerHTML = domain;
+  });
 
   // Update time
-  if (time) {
-    time.innerHTML = logMinutes(totalSeconds);
+  if (jsTime) {
+    jsTime.innerHTML = timeMins;
   }
 
   // Update visits
@@ -67,42 +105,49 @@ function cornerInit(totalSeconds, totalVisits, domain) {
   }
 
   // Only show if container exists and if above increment
-  if (totalSeconds >= increment * minLevel && container) {
+  if (totalSeconds >= increment * minLevelMultiple && nudgeContainer) {
     // Find current level
     var doNotUpdate = false;
-    if (currentLevel === Math.round(totalSeconds / increment)) {
+    // Use Math.floor here instead!
+    if (currentLevel === Math.floor(totalSeconds / increment)) {
       doNotUpdate = true;
     } else {
-      currentLevel = Math.round(totalSeconds / increment);
+      currentLevel = Math.floor(totalSeconds / increment);
     }
-    console.log(logMinutes(totalSeconds));
-    console.log(currentLevel);
     // Show container if not showing
     if (!showingContainer) {
-      toggleClass(container, "nudge-container-reveal");
+      toggleClass(nudgeContainer, "nudge-container-reveal");
       showingContainer = true;
     }
 
     // Define quarter style
-    var quarterStyle = `{ opacity: 1 !important; }`;
+    var quarterStyle = `{ opacity: 1 !important; visibility: visible !important; }`;
+    var quartersStyle = `{ opacity: 0.4 !important; }`;
     // Define quarter class and style
+    // console.log(currentLevel);
     for (var i = 1; i <= currentLevel; i++) {
       // Find out if that quarter style already exists
       if (document.getElementById(`nudge-quarter-${i}-style`)) {
       } else if (!doNotUpdate) {
         styleAdder(
-          `#nudge-quarter-${i}`,
+          `#nudge #nudge-quarter-${i}`,
           quarterStyle,
           `nudge-quarter-${i}-style`
         );
       }
+      if (
+        i === currentLevel &&
+        !document.getElementById("nudge-quarters-style")
+      ) {
+        // Lastly, give overall quarters some opacity
+        styleAdder(
+          `#nudge .nudge-quarters`,
+          quartersStyle,
+          `nudge-quarters-style`
+        );
+      }
     }
   }
-}
-
-function imageLoader(imageName, url) {
-  imageName = new Image();
-  imageName.src = url;
 }
 
 function execSettings(settings) {
@@ -139,15 +184,16 @@ function execSettings(settings) {
       }
     });
   }
-  // Init switch TODO: show_switch is now setting for banner. And banner is actually not really a banner
-  if (settings.show_switch && domain) {
+  // Init Nudge
+  // Note: time_nudge is now setting for corner
+  if (settings.time_nudge && domain) {
     // Init off keyboard shortcut
-    offKeyboardShortcut(domain);
+    cycleThroughBackgrounds(domain);
     // Init switch HTML
     doAtEarliest(function() {
       addCSS("nudges", "css/injected/nudges.css");
       docReady(function() {
-        insertCorner(domain);
+        insertCorner(domain, settings.off_by_default);
       });
     });
   }
@@ -158,6 +204,7 @@ function execSettings(settings) {
       addCSS("nudge-circle", "css/injected/circle.css");
     });
     // Find divs to hide and hide them
+    divs = settings.divs;
     // Doesn't matter if it's a Nudge site
     // Matters if it's in the div list
     Object.keys(settings.divs).forEach(function(key) {
@@ -300,9 +347,8 @@ function tabIdler() {
   });
 }
 
-function insertCorner(domain) {
+function insertCorner(domain, off_by_default) {
   var cornerContainer = createEl(document.body, "div", "nudge");
-  console.log(tempStorage);
   appendHtml(cornerContainer, tempStorage["corner.html"]);
   // Remove
   var remove = document.getElementById("js-hide");
@@ -314,14 +360,21 @@ function insertCorner(domain) {
   settings.onclick = function openSettings() {
     sendMessage("options", {});
   };
+  if (!off_by_default) {
+    document.getElementById("js-off-by-default").innerHTML =
+      "Switch off and close ";
+  }
   // Close tab
   var closeTab = document.getElementById("js-close-tab");
   closeTab.onclick = function closeTabWithNudge() {
     sendMessage("close_all", { domain });
+    if (!off_by_default) {
+      switchOffRequest(domain);
+    }
   };
 }
 
-function offKeyboardShortcut(domain) {
+function cycleThroughBackgrounds(domain) {
   document.onkeyup = function(key) {
     if (key.altKey && key.keyCode == 40) {
       switchOffRequest(domain);
