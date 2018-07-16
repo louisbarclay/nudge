@@ -11,16 +11,6 @@ function extractDomain(url) {
   return domain;
 }
 
-function makeSelector(element) {
-  var selector = false;
-  if (element.id === "") {
-    selector = element.className.replace(/(^|\s+)/g, "$1.").replace(/\s/g, "");
-  } else {
-    selector = `#${element.id}`;
-  }
-  return selector;
-}
-
 (function(funcName, baseObj) {
   // The public function name defaults to window.docReady
   // but you can pass in your own object and own function name and those will be used

@@ -256,7 +256,7 @@ function backgroundLoader(index) {
   img = new Image();
   // Assign an onload handler to the dummy image *before* assigning the src
   img.onload = function() {
-    console.log(getBackgroundFile(index), index);
+    // console.log(getBackgroundFile(index), index);
     setBackground(backgroundEnhanced, getBackgroundFile(index));
     toggleClass(background, `${off}background_animation`);
     setTimeout(function() {

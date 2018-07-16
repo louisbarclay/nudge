@@ -53,10 +53,17 @@ function getAndUpdateSettings() {
         changeSetting(defaultSettings[key], key);
       }
     });
+    if (!settingsLocal.updated_divs) {
+      changeSetting(divs, "divs");
+      changeSetting(true, "updated_divs");
+    }
     // Open options page if it's not been shown
     if (settingsLocal.show_update_article) {
-      chrome.tabs.create({ url: 'https://medium.com/@louisbarclay/welcome-to-the-new-version-of-nudge-d65b2c0e56c8' });
-      changeSetting(false, 'show_update_article');
+      chrome.tabs.create({
+        url:
+          "https://medium.com/@louisbarclay/welcome-to-the-new-version-of-nudge-d65b2c0e56c8"
+      });
+      changeSetting(false, "show_update_article");
     }
     // Update off by default
     if (settingsLocal.off_by_default) {

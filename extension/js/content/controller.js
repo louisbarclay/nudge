@@ -6,9 +6,9 @@ var minLevelMultiple = 1;
 var pxPerLevel = 100;
 
 // For testing FIXME: make the labels show the correct values off a shared JSON?
-increment = 30; // in seconds
-minLevelMultiple = 1;
-pxPerLevel = 100;
+// increment = 30; // in seconds
+// minLevelMultiple = 1;
+// pxPerLevel = 100;
 
 var showingContainer = false;
 var currentLevel = false;
@@ -230,7 +230,7 @@ function execSettings(settings) {
               .querySelectorAll(`[${item.type}="${item.name}"]`)
               .forEach(element => {
                 // If no id, use classes
-                var selector = makeSelector(element);
+                var selector = makeUniqueSelector(element);
                 // Check that the element is hidden by seeing if the hide style ID is present
                 if (!el(`${selector}-hide-style`)) {
                   styleAdder(
@@ -278,6 +278,22 @@ function execSettings(settings) {
   }
 }
 
+function makeUniqueSelector(element) {
+  var selector = false;
+  if (element.id === "") {
+    if (element.parentNode.id === "") {
+      if (element.parentNode.parentNode.id === "") {
+        selector = `#${element.parentNode.parentNode.id}` + element.className.replace(/(^|\s+)/g, "$1.").replace(/\s/g, "");
+      }
+    } else {
+      selector = `#${element.parentNode.id}` + element.className.replace(/(^|\s+)/g, "$1.").replace(/\s/g, "");
+    }
+  } else {
+    selector = `#${element.id}`;
+  }
+  return selector;
+}
+
 function clickHandler(element, domain) {
   function findElementWithParent(className, clickCallback) {
     var elements = document.getElementsByClassName(className);
@@ -300,19 +316,29 @@ function clickHandler(element, domain) {
     unHide(container, element, true);
   });
   function unHide(container, element, showAlways) {
+    console.log(container, element);
     deleteEl(container);
-    var selector = makeSelector(element);
+    var selector = makeUniqueSelector(element);
+    console.log(element);
+    console.log(selector);
     var hideStyle = el(`${selector}-hide-style`);
+    console.log(hideStyle);
     deleteEl(hideStyle);
     for (var j = 0; j < divs[domain].length; j++) {
-      if (
-        divs[domain][j].name.includes(element.id) ||
-        divs[domain][j].name.includes(element.class)
-      ) {
-        divs[domain][j].hidden = false;
-        if (showAlways) {
-          changeSettingRequest(divs, "divs");
-        }
+      var found = false;
+      var item = divs[domain][j];
+      document
+        .querySelectorAll(`[${item.type}="${item.name}"]`)
+        .forEach(function(hideElement) {
+          if (hideElement === element) {
+            divs[domain][j].hidden = false;
+            if (showAlways) {
+              changeSettingRequest(divs, "divs");
+            }
+            found = true;
+          }
+        });
+      if (found) {
         break;
       }
     }

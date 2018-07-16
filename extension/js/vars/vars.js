@@ -111,6 +111,7 @@ var defaultSettings = {
   bg_image: false,
   get_stickier: true,
   show_update_article: true,
+  updated_divs: true
 };
 
 // Other constants

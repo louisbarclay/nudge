@@ -70,7 +70,7 @@ $opacity-global: 0.7
       position: 0
       size: 100% 100%
       repeat: no-repeat
-    &::hover
+    &:hover
       opacity: 1
 
   &cog-small
@@ -81,7 +81,9 @@ $opacity-global: 0.7
     margin-top: 0
     position: relative
     +size(1em)
-    opacity: 1
+    opacity: 0.8
+    &:hover
+      opacity: 1
 
   &text_paragraph
     margin-top: 1em
@@ -97,7 +99,8 @@ $opacity-global: 0.7
 
   &headline
     margin-top: 10vh
-    font-size: 29px
+    font-size: 30px
+    user-select: none
 
   &module
     margin-top: 1em
@@ -216,3 +219,15 @@ $opacity-global: 0.7
   
   &returning
     transition: all 0.2s ease
+
+@media (max-width: 1400px)
+  .off-headline
+    font-size: 26px
+  .off-container
+    left: 15%
+  .off-slider
+    margin-top: 10vh
+
+@media (min-width: 1800px)
+  .off-headline
+    font-size: 36px
