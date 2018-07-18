@@ -21,7 +21,8 @@ function switchOff(domain, url, tabId, option) {
 
 function switchOn(domain, url, tabId) {
   settingsLocal.domains[domain].off = false;
-  url = decodeURIComponent(url);
+  // url = decodeURIComponent(url); FIXME: test this. Don't think you need it
+  console.log(url);
   // missing any part about changing the settings
   chrome.tabs.update(tabId, { url }, function() {});
 }
