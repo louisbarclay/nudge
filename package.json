@@ -30,6 +30,10 @@
     "moment": "^2.20.1",
     "npm-run-all": "^4.1.2",
     "postcss-safe-important": "^1.1.0",
-    "sharp": "^0.20.2"
+    "sharp": "^0.20.2",
+    "zip-folder": "^1.0.0"
+  },
+  "devDependencies": {
+    "chrome-webstore-upload": "^0.2.2"
   }
 }
