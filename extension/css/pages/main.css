@@ -264,6 +264,21 @@ h6 {
   background-repeat: no-repeat; }
   .off-settings:hover {
     opacity: 1; }
+.off-donate {
+  bottom: 12px;
+  font-size: 15px;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  z-index: 50; }
+.off-italics {
+  font-style: italic; }
+.off-donate-link {
+  cursor: pointer;
+  opacity: 0.8; }
+  .off-donate-link:hover {
+    opacity: 1;
+    color: #ffffff; }
 .off-cog-small {
   display: inline-block;
   margin-left: 0.2em;
@@ -431,6 +446,9 @@ h6 {
 @media (min-width: 1800px) {
   .off-headline {
     font-size: 36px; } }
+@media (max-height: 670px) {
+  .off-donate {
+    display: none; } }
 body {
   font-size: 13px;
   color: #7f7f7f;
