@@ -13,7 +13,6 @@ var pxPerLevel = 100;
 var showingContainer = false;
 var currentLevel = false;
 
-
 // Options set
 getSettings(execSettings);
 
@@ -76,6 +75,7 @@ chrome.runtime.onMessage.addListener(function(request) {
   }
 });
 
+<<<<<<< HEAD
 // Delete prob.
 
 // function resetSettings() {
@@ -100,6 +100,8 @@ chrome.runtime.onMessage.addListener(function(request) {
 
 // resetSettings();
 
+=======
+>>>>>>> refs/remotes/origin/master
 function cornerInit(totalSeconds, totalVisits, domain) {
   // First the container must exist. This is handled by insertCorner
   // All this does is adds class 'nudge-container-reveal' to container,
@@ -239,9 +241,15 @@ function execSettings(settings) {
         // Do it a first time
         elHiderAndCircleAdder(settings.divs[key]);
         // Check the div is always covered
+<<<<<<< HEAD
         // keepAddingCircles(function() {
           setInterval(function() {console.log('asd'); elHiderAndCircleAdder(settings.divs[key])}, 1000);
         // });
+=======
+        keepAddingCircles(function() {
+          elHiderAndCircleAdder(settings.divs[key]);
+        });
+>>>>>>> refs/remotes/origin/master
       }
     });
     // Array circle adder - also checks if circle exists
@@ -321,6 +329,7 @@ function makeUniqueSelector(element) {
   return selector;
 }
 
+<<<<<<< HEAD
 function removeElement(elementId) {
   // Removes an element from the document.
   var element = document.getElementById(elementId);
@@ -332,6 +341,8 @@ function removeElement(elementId) {
 //   element.createElement(element);
 // }
 
+=======
+>>>>>>> refs/remotes/origin/master
 function clickHandler(element, domain) {
   function findElementWithParent(className, clickCallback) {
     var elements = document.getElementsByClassName(className);
@@ -348,6 +359,7 @@ function clickHandler(element, domain) {
     }
   }
   findElementWithParent("circle-show-once", function(container) {
+<<<<<<< HEAD
     appendHtml(element, tempStorage["reset.html"]);
     unHide(container, element, false);
   });
@@ -375,6 +387,21 @@ function clickHandler(element, domain) {
     // console.log(selector);
     var hideStyle = el(`${selector}-hide-style`);
     // console.log(hideStyle);
+=======
+    unHide(container, element, false);
+  });
+  findElementWithParent("circle-show-always", function(container) {
+    unHide(container, element, true);
+  });
+  function unHide(container, element, showAlways) {
+    console.log(container, element);
+    deleteEl(container);
+    var selector = makeUniqueSelector(element);
+    console.log(element);
+    console.log(selector);
+    var hideStyle = el(`${selector}-hide-style`);
+    console.log(hideStyle);
+>>>>>>> refs/remotes/origin/master
     deleteEl(hideStyle);
     for (var j = 0; j < divs[domain].length; j++) {
       var found = false;
@@ -395,6 +422,7 @@ function clickHandler(element, domain) {
       }
     }
   }
+<<<<<<< HEAD
 
   // 99% sure I should delete this
 
@@ -427,13 +455,18 @@ function clickHandler(element, domain) {
   //     }
   //   }
   // }
+=======
+>>>>>>> refs/remotes/origin/master
 }
 
 function keepAddingCircles(callback) {
   var observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
       for (var i = 0; i < mutation.addedNodes.length; i++) {
+<<<<<<< HEAD
         console.log('1');
+=======
+>>>>>>> refs/remotes/origin/master
         callback();
         if (turnOffObserver) {
           // console.log("Disconnected observer");
