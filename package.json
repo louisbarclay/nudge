@@ -1,0 +1,47 @@
+{
+  "name": "nudge",
+  "version": "1.0.0",
+  "sasslintConfig": ".vscode/.sass-lintrc",
+  "description": "Nudge app",
+  "main": "node.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build:pug": "pug -w src/pug -o extension/html",
+    "build:sass-pages": "node-sass --watch src/scss/pages extension/css/pages --sourcemap=none -r sass-json-vars",
+    "build:sass-injected": "node-sass --watch src/scss/injected src/css/injected --sourcemap=none -r sass-json-vars",
+    "build:important-injected": "postcss --use postcss-safe-important -d extension/css/injected src/css/injected/*  --w",
+    "dev": "npm-run-all -p build:*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lgwb89/nudge.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lgwb89/nudge/issues"
+  },
+  "homepage": "https://github.com/lgwb89/nudge#readme",
+  "dependencies": {
+    "clx": "^1.0.0",
+    "cpx": "^1.5.0",
+    "json-sass-vars": "^3.0.0",
+    "moment": "^2.20.1",
+    "node-sass": "^4.11.0",
+    "npm-run-all": "^4.1.2",
+    "postcss": "^7.0.7",
+    "postcss-cli": "^6.1.0",
+    "postcss-safe-important": "^1.1.0",
+    "pug": "^2.0.3",
+    "sass": "^1.15.2",
+    "save-dev": "^2.0.0",
+    "sharp": "^0.20.2",
+    "source-map": "^0.7.3",
+    "zip-folder": "^1.0.0"
+  },
+  "devDependencies": {
+    "chrome-webstore-upload": "^0.2.2"
+  }
+}

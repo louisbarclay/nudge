@@ -1,0 +1,22 @@
+.arrow
+  border-left: 1px solid #a9a9a9
+  border-top: 1px solid #a9a9a9
+  cursor: pointer
+  display: inline-block
+  font-size: 12px
+  height: 4em
+  left: 20px
+  margin-top: -2em
+  overflow: hidden
+  position: absolute
+  top: 50%
+  transform: rotate(-135deg)
+  width: 4em
+
+.call-out
+  @extend %reset
+  +border($color: $nudge-grey-light)
+  +center
+  +padding
+  +arrow
+  width: 500px

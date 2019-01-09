@@ -1,0 +1,408 @@
+@import '../../sass-variables.json'
+@import '../pages/variables'
+@import '../pages/animations'
+@import '../pages/abstracts'
+
+@keyframes fadeInUp
+  from
+    opacity: 0
+    transform: translate3d(0, 100%, 0)
+  to
+    opacity: 1
+    transform: translate3d(0, 0, 0)
+
+@keyframes fadeIn
+  from
+    opacity: 0
+  to
+    opacity: 1
+
+$quarter-background: rgba(200, 200, 200, 0.85)
+
+
+$rainbow-blue: #bae1ff
+$rainbow-green: #baffc9
+$rainbow-yellow: #ffffba
+$rainbow-orange: #ffdfba
+$rainbow-red: #ffb3ba
+$rainbow-violet: #d2b3ff
+
+$rainbow-colors: $rainbow-blue, $rainbow-green, $rainbow-yellow, $rainbow-orange, $rainbow-red, $rainbow-violet
+$gradient-colors: #61A7FF, #69A3FA, #719FF5, #799BF1, #8298EC, #8A94E7, #9290E3, #9B8DDE, #A389D9, #AB85D5, #B482D0, #BC7ECC, #C47AC7, #CD77C2, #D573BE, #DD6FB9, #E66CB4, #EE68B0, #F664AB, #FF61A7
+$gradient-colors-2: #61A7FF, #719FF5, #8298EC, #9290E3, #A389D9, #B482D0, #C47AC7, #D573BE, #E66CB4, #F664AB, #FF61A7
+$gradient-colors-3: $nudge-blue, $nudge-pink
+$gradient-colors-4: #61a7ff, #8099ed, #a08bdb, #bf7dca, #df6fb8, #ff61a7
+
+$nudge-colors: $gradient-colors-4
+$quarter-opacity: 0.4
+
+// For auto-generation
+$n: 20
+$n-z-index: 20
+
+.body-reset
+  margin: 0
+
+##{$nudge}
+  @extend %reset
+  display: block
+
+    // Auto-generated quarter styles (IDs)
+  @while $n >= 0
+    ##{$nudge}-quarter-#{$n + 1}
+      z-index: $n-z-index - $n
+      border-color: nth($nudge-colors, ($n % length($nudge-colors)) + 1)
+      background-color: nth($nudge-colors, ($n % length($nudge-colors)) + 1)
+      border-width: unquote(($n * 100) + 'px')
+      opacity: 0
+      visibility: hidden
+      transition: opacity 5s
+
+    ##{$nudge}-quarter-label-#{$n + 1}
+      z-index: $n-z-index - $n
+      background-color: nth($nudge-colors, ($n % length($nudge-colors)) + 1)
+      right: unquote(($n * 100 + 104) + 'px')
+
+    $n: $n - 1
+
+  // All classes
+  .#{$nudge}-  
+    &quarters
+      opacity: 0
+      position: fixed
+      z-index: -1
+
+    &quarter
+      opacity: 0
+      display: block
+      position: fixed
+      +size(100px)
+      bottom: 0
+      right: 0
+      border-radius: 100% 0 0 0
+      border-style: solid
+      border-right-style: none
+      border-bottom-style: none
+
+    &rounded
+      +border($style: solid, $color: rgba(0,0,0,0.05))
+
+    &translucent
+      +hardware
+      background: rgba(255, 255, 255, 0.95)
+      opacity: 1
+      box-shadow: 0px 0px 16px 0.5px rgba(0, 0, 0, 0.14)
+
+    &rounded_no_border
+      +border($style: none)
+
+    &transparent_grey
+      background: rgba(0, 0, 0, 0.1)
+
+    &transparent_white
+      background: rgba(255, 255, 255, 0.8)
+
+    &text_align
+      p
+        padding: 0 0 .1em 0
+        align-self: center
+
+    &container
+      // Typography
+      @extend %typography
+      // Existence
+      display: none
+      position: fixed
+      // Flex
+      flex-direction: row
+      align-items: baseline
+      justify-content: center
+
+    &container-reveal
+      display: flex
+
+    &quarter-label
+      bottom: -3px
+      position: absolute
+      width: auto
+      font-size: 12px
+      padding: 0em .3em .3em .3em
+      // color: $nudge-grey-medium
+      color: $white
+      opacity: 0
+      +border($style: none)
+      // background: $white
+      position: fixed
+      // // Little animation
+      // animation-name: fadeInUp
+      // animation-duration: 0.5s
+
+    &banner
+      // Font size
+      font-size: (17/14) * $default-font-size
+      // Display and position
+      bottom: 0
+      left: 0
+      width: 100%
+      height: 40px
+      // Z-index
+      z-index: $max-z - 1
+
+    &top
+      width: auto
+      size: auto
+      position: relative
+      background: red
+      transition: opacity 6s
+      opacity: 0
+      animation: fadeIn 4s forwards
+
+    &control_position
+      z-index: $max-z
+      bottom: 0px
+      right: 0
+      pointer-events: none
+
+    &control_flex_direction
+      flex-direction: column
+
+    &control_font_size
+      // Font size
+      font-size: (16/14) * $default-font-size
+
+    &scroll
+      margin: 0
+      padding: 0
+      border-radius: 0
+    
+    &intro
+      animation: fade-in 0.5s forwards
+    
+    &outro
+      animation: fade-out 0.5s forwards
+
+    &menu_position
+      bottom: 4.6em
+      right: 0
+      height: auto
+      margin-right: 5px
+      padding-top: 1em
+      padding-left: 4em
+      width: auto
+      position: fixed
+
+    &menu
+      flex-direction: column-reverse
+      flex-wrap: nowrap
+      display: none
+      pointer-events: auto
+      align-items: flex-end
+    
+    &menu_item
+      +border($style: none)
+      // background: rgba(255, 255, 255, 0.75)
+      background: $white
+      opacity: 0.9
+      color: $nudge-grey-medium
+      padding: 0.2em 0.6em 0.3em 0.6em
+      // transform: rotate(30deg)
+      // transform-origin: 100% 50%
+      // Do a little animation
+      // animation-name: fadeInRight
+      // animation-duration: 0.5s
+      position: fixed
+      right: 75px
+      width: auto
+      cursor: pointer
+      font-size: (12 / 14) * $default-font-size
+      z-index: 1
+      display: none
+      // box-shadow: 0px 0px 16px 0.5px rgba(0, 0, 0, 0.14)
+
+    &visits_value
+      font-size: 12px
+      color: $white
+    
+    &minutes_value
+      // margin-bottom: 8px
+      // font-size: 12px
+      font-size: 18px
+      color: $white
+
+    &time
+      font-size: 1em
+      display: none
+      color: $nudge-grey-medium
+      position: absolute
+      right: 80px
+      bottom: 0
+      z-index: -1
+
+    &menu_circle
+      +size(4em)
+      display: flex
+      align-items: center
+      margin-top: 0.3em
+      justify-content: center
+      cursor: pointer
+      border-radius: 100%
+      // border-radius: 100%
+      &:hover
+        .nudge-menu_item
+          display: block
+
+    &menu_close
+      background: url('chrome-extension://__MSG_@@extension_id__/img/icon/logo-color.svg') center center/2em no-repeat $white
+      &:hover
+        background: $nudge-pink url('chrome-extension://__MSG_@@extension_id__/img/icon/closewhite.svg') center center/2em no-repeat
+
+    &menu_hide
+      background: url('chrome-extension://__MSG_@@extension_id__/img/icon/hidegreynew.svg') center center/2em no-repeat $white
+      &:hover
+        background: $nudge-pink url('chrome-extension://__MSG_@@extension_id__/img/icon/hidewhitenew.svg') center center/2em no-repeat
+
+    &menu_settings
+      background: url('chrome-extension://__MSG_@@extension_id__/img/icon/newcoggrey.svg') center center/1.6em no-repeat $white
+      &:hover
+        background: $nudge-pink url('chrome-extension://__MSG_@@extension_id__/img/icon/newcogwhite.svg') center center/1.6em no-repeat
+
+    &menu_time
+      color: $white
+      opacity: 0.8
+      border-radius: 18px
+      cursor: default
+      background: $nudge-blue
+
+    &corner
+      // Display and position
+      display: flex
+      position: absolute
+      width: auto
+      height: auto
+      bottom: 5px
+      right: 5px
+      margin: 0
+      align-items: center
+      pointer-events: auto
+      z-index: $max-z
+      user-select: none
+      overflow: hidden
+
+      &:hover
+        padding-left: 4em
+        >.nudge-menu
+          display: flex
+        .nudge-time
+          display: flex
+        &~.nudge-quarters
+          // opacity: 0.6
+          // background: blue
+          .nudge-quarter
+            .nudge-quarter-label
+              opacity: 0.9
+
+    &close
+      +size(0.8em)
+      background: url('chrome-extension://__MSG_@@extension_id__/img/icon/closegrey.svg') center center/0.8em no-repeat
+      align-self: center
+      opacity: 0.3
+      cursor: pointer
+      margin-left: 1em
+      &:hover
+        opacity: 1
+
+    &floating
+      position: absolute
+      bottom: 5px
+      left: 5px
+
+    &highlight_margin
+      margin-left: 0.3em
+      margin-right: 0.3em
+
+    &switch
+      opacity: 1
+      +size(2.25em)
+      background: url('chrome-extension://__MSG_@@extension_id__/img/icon/offswitch.svg') center 0.25em / 1.5em no-repeat $nudge-pink
+      border-radius: 3em
+      position: absolute
+      bottom: 5px
+      right: 5px
+
+      &:hover
+        background-color: $nudge-grey-lightest
+
+        &::before
+          border-color: $nudge-grey-light
+
+    &highlight
+      background: $nudge-grey-light
+      color: $white
+      +border($style: none)
+      padding: 0em .3em .1em .3em
+      align-self: center
+
+    &small-highlight
+      background: $nudge-grey-lightest
+      +border($style: none)
+      padding: 0em .3em .1em .3em
+      margin-left: 0.3em
+      margin-right: 0.3em
+      margin-top: 0.1em
+      align-self: center
+    
+    &pink
+      background: $nudge-pink
+
+    &blue
+      background: $nudge-blue
+
+    &white
+      background: rgba(255, 255, 255, 0.3)
+      color: $white
+
+    &blue_transparent
+      background: rgba(97, 167, 255, 0.7)
+
+    &match_quarter
+      background: rgba(255, 255, 255, 0.2)
+
+    &transparent_icon
+      opacity: 0.7
+
+    &favicon
+      animation: none
+      width: 32px
+      height: 32px
+      align-self: center
+      padding: 0
+      +border($style: none)
+      margin-left: 0.3em
+      margin-right: 0.3em
+
+    &scale
+      padding-left: 1em
+      text-indent: -1em
+
+      li
+        display: block
+        padding: 0 0 0 2em
+        font-size: (6 / 7) * 1em
+        width: 1em
+        height: 1cm
+
+        &::before
+          +pseudo
+          left: 0
+          background: blue
+          padding: (3 / 4) * 1em 0 0 0
+          width: 1em
+          border-bottom: $border-primary
+
+        &::after
+          +pseudo
+          left: 0
+          background: red
+          padding: (3 / 4) * 1em 0 0 0
+          width: 0.25em
+          border-bottom: $border-primary

@@ -1,0 +1,209 @@
+// Options
+$primary: lighten($nudge-grey-medium, 7%)
+$light-fill: lighten($nudge-grey-lightest, 4%)
+$secondary-text: $nudge-grey-light
+$toggle-fill: $nudge-blue
+$toggle-secondary: $nudge-blue
+$toggle-fill-text: $primary
+$toggle-light-text: $white
+$toggle-white: $light-fill
+
+body
+  font-size: 13px
+  color: $primary
+  opacity: 0
+  animation-delay: 0.5s
+  animation: fade-in 0.3s forwards
+
+.options-container
+  +container($min-width: 500px)
+
+.options-logo
+  +size(80px)
+  background: url('chrome-extension://__MSG_@@extension_id__/img/icon/logo-color.svg') center center/80px no-repeat      
+
+.options-header
+  width: 100%
+  display: flex
+  flex-direction: row
+  margin-top: 1em
+  justify-content: center
+  align-items: baseline
+
+.options-flash
+  background-color: $nudge-pink !important
+
+.options-sub-header
+  color: $primary
+  font-size: 22px
+  margin-bottom: 0.5em
+  // text-transform: uppercase
+  // font-size: 0.9em
+  // color: $primary
+  margin-bottom: 0.6em
+  margin-top: 1em
+
+#share_data
+  margin-bottom: 0
+
+.data-banner
+  +border
+  margin-top: 1em
+  padding: 0.8em 1em 1em 1em
+  flex-direction: column
+  ::before
+    +pseudo
+    width: 100%
+    background: blue
+  
+  h1
+    margin-top: 0em
+    color: $primary
+    font-size: 22px
+    margin-bottom: 0.5em
+  
+  .toggle
+    margin-top: 1em
+    margin-bottom: 1em
+
+.data-text
+  line-height: 1.5em !important
+  font-size: 13px
+  color: $primary
+  p
+    margin-top: 1em
+  a
+    color: $primary
+
+  .toggle
+    font-size: 1em
+
+.options-guidance-text
+  font-size: 11px
+  color: $secondary-text
+
+.options-guidance-text-highlight
+  color: $primary  
+
+.id-banner
+  @extend .data-banner
+  padding: 0.5em
+  padding-top: 0.6em
+  text-align: center
+
+.id-text
+  @extend .data-text
+  align-self: center
+  font-size: 12px
+  font-family: 'Courier New'
+  text-align: center
+
+.options-lastpara
+  margin-bottom: 6em
+
+#domainList
+  transition: height 1s
+
+.tags
+  li
+    +border($style: none)
+    +left-icon($size: ((16 / 12) * 1em))
+    display: flex
+    padding-right: 1em
+    float: left
+    height: 2em
+    line-height: 2em
+    position: relative
+    color: $primary
+    font-size: (12 / 13) * 1em
+    background-color: $light-fill
+    margin-right: .5em
+    margin-bottom: .5em
+    
+    &::before
+      filter: grayscale(80%)
+      opacity: 0.5
+      border-radius: 2px
+      background:
+        repeat: no-repeat
+        position: center center
+
+    &:hover
+      background: none
+      cursor: pointer
+
+      &::after
+        +pseudo
+        background-color: $nudge-blue
+        border-color: transparent
+        border-radius: inherit
+        color: $light
+        content: 'Remove'
+        height: 100%
+        left: 0
+        text-align: center
+        top: 0
+        width: 100%
+        z-index: 1
+
+.toggle
+  background: none
+  cursor: pointer
+  margin: 0
+  outline: none
+  box-shadow: none
+  color: $toggle-fill-text
+  // +border($color: $toggle-fill)
+  +border($style: none)
+  display: flex
+  background: $toggle-white
+  padding: 0 !important
+  font-size: (12 / 13) * 1em
+
+  .left
+    +padding
+    color: inherit
+
+  .right
+    +padding
+    color: inherit
+
+  .on
+    +border($style: none)
+    background: $toggle-fill
+    background-clip: border-box
+    color: $toggle-light-text
+
+  &:hover
+    background: inherit
+    border-color: $toggle-secondary
+    box-shadow: none
+    background: $nudge-grey-lightest
+    box-shadow: none    
+
+    .on
+      background: $toggle-secondary
+      color: $white
+
+.text-input
+  input
+    caret-color: $primary
+    border-bottom: $border-primary
+    border-bottom-color: $secondary-text
+    border-bottom-width: 1px
+    left: 0
+    list-style: none
+    margin: 0
+    padding-bottom: 0.4em
+    padding-top: 0.2em
+    position: relative
+    width: 400px
+
+    &::placeholder
+      color: $secondary-text
+
+    &:focus
+      border-bottom: $border-primary
+      border-bottom-color: $primary
+      border-bottom-width: 1px
+      color: $primary

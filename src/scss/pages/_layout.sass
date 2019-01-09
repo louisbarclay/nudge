@@ -1,0 +1,31 @@
+.header
+  border-bottom: $border-primary
+
+.header-line
+    &::after
+      +pseudo
+      background: red
+      width: 10px
+      height: 10px
+      z-index: -1
+
+.leftPara
+  flex-basis: 50%
+  display: block
+  padding-right: 15px
+
+.rightImage
+  flex-basis: 50%
+  height: 200px
+  background: $nudge-grey-light
+
+.paraImage
+  border-bottom: solid 1px
+  height: 90vh
+  width: 100vw
+  background-color: yellow
+  align-items: flex-start
+
+.space-out
+  >*
+    margin-top: 100px

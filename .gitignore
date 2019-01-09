@@ -1,0 +1,6 @@
+/node_modules
+/releases
+/.sass-cache
+/.vscode
+/.deprecated
+credentials.js

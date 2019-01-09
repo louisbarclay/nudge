@@ -1,0 +1,31 @@
+@import 'variables'
+@import 'abstracts'
+@import 'components'
+@import 'layout'
+@import 'reset'
+
+body
+  @extend %typography
+  +size(300px)
+  margin: 5px
+  padding: 5px
+
+.popup-container
+  +container($left: 0, $width: 300px, $spacing: 5px)
+  height: 300px
+
+  // This is for perfect centering
+  >div
+    margin: auto
+    background: red
+  
+  >a
+
+
+.popup-button
+  @extend %button
+  +border($style: none)
+  background: $nudge-blue
+  color: $white
+  &:hover
+    background: darken($nudge-blue, 10%)

@@ -1,0 +1,85 @@
+include ../../bemto/bemto.pug
+- 
+  set_bemto_settings({
+    prefix: {
+      '': 'off-',
+      'js-': true,
+    }
+  })
+
+html
+  head
+    title Site off
+    link(href="../../img/icon/nudgeoff32.png", rel="icon", type="image/png", sizes="32x32")
+    link(href="../../img/icon/nudgeoff96.png", rel="icon", type="image/png", sizes="96x96")
+    link(href="../../img/icon/nudgeoff16.png", rel="icon", type="image/png", sizes="16x16")
+    link(rel="stylesheet", href="../../css/pages/main.css")
+  +b.BODY.text_globals.body
+    +b.settings#js-settings
+    +b.donate
+      //- | Want to support Nudge 
+      //- +b.SPAN and 
+      //- | boost your boring career at the same time? 
+      +b.A.donate-link(href="https://bit.ly/2NtEdxG" target='_blank') Like Nudge? Donate $1 a month and we'll make you our co-CEO
+    +b.IMG.background
+    +b.IMG.background-enhanced#js-bg-image
+    +b.CANVAS.blur#js-blur
+    +b.container
+      +b.logo 
+      +b.H1.headline.text_shadow
+        if normal
+          | Nice one! You switched
+          +b.SPAN.highlight.js-domain facebook.com
+          | off
+          +b.P.text_paragraph.text_shadow
+            | Tip: hit
+            +b.SPAN.key Alt
+            | +
+            +b.SPAN.key &darr;
+            | on Windows or
+            +b.SPAN.key &#8997
+            | +
+            +b.SPAN.key &darr;
+            | on Mac to switch off easily
+        else if compulsive
+          | You left
+          +b.SPAN.highlight.js-domain facebook.com
+          |  less than 
+          +b.SPAN.highlight.js-time 5 minutes
+          |  ago
+        else if bydefault
+          +b.SPAN#js-headline
+            | You've been away from
+            +b.SPAN.highlight.js-domain facebook.com
+            | for
+            +b.SPAN.highlight#js-lastvisit a while
+          +b.P.text_paragraph.text_shadow#js-tip
+            | Go to Options 
+            |   (
+            +b.settings.cog-small#js-settings2
+            | ) to remove 
+            +b.SPAN.js-domain this site
+            |  from your Nudge sites or change off by default
+      +b.slider
+        +b.button
+          +b.button-centre
+        +b.slider-text Drag slider to switch back on
+    script(src="../../js/vendor/moment.min.js")
+    script(src="../../js/vendor/blur1.js")
+    script(src="../../js/helpers.js")
+    script(src="../../js/bgImages.js")
+    script(src="../../js/off.js")
+
+          //-     +b.P.text_paragraph.text_shadow
+          //-   | We do this to help you avoid getting sucked in. To continue to the Nudge site, please drag the slider below.
+          //- +b.P.text_paragraph.text_shadow
+          //-   | You've gone 
+          //-   | without visiting
+          //-   span.js-domain
+          //-   | That's pretty cool. To keep your record going, do this.
+          //- +b.P.text_paragraph.text_shadow
+          //-   | If this is too much, you can either 
+          //-   +b.SPAN.underline remove facebook.com from your Nudge sites
+          //-   |  or 
+          //-   +b.SPAN.underline stop Nudge switching sites off by default
+          //-   | .
