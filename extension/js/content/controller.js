@@ -243,7 +243,7 @@ function execSettings(settings) {
         // Check the div is always covered
 <<<<<<< HEAD
         // keepAddingCircles(function() {
-          setInterval(function() {console.log('asd'); elHiderAndCircleAdder(settings.divs[key])}, 1000);
+          setInterval(function() {elHiderAndCircleAdder(settings.divs[key])}, 1000);
         // });
 =======
         keepAddingCircles(function() {
@@ -424,37 +424,6 @@ function clickHandler(element, domain) {
   }
 <<<<<<< HEAD
 
-  // 99% sure I should delete this
-
-  // function yesHide(container, element, showAlways) {
-  //   // console.log(container, element);
-  //   deleteEl(container);
-  //   var selector = makeUniqueSelector(element);
-  //   console.log(element);
-  //   console.log(selector);
-  //   var hideStyle = el(`${selector}-hide-style`);
-  //   console.log(hideStyle);
-  //   // createEl(element, "div", selector);
-  //   removeElement('related');
-  //   for (var j = 0; j < divs[domain].length; j++) {
-  //     var found = false;
-  //     var item = divs[domain][j];
-  //     document
-  //       .querySelectorAll(`[${item.type}="${item.name}"]`)
-  //       .forEach(function(hideElement) {
-  //         if (hideElement === element) {
-  //           divs[domain][j].hidden = false;
-  //           if (showAlways) {
-  //             changeSettingRequest(divs, "divs");
-  //           }
-  //           found = true;
-  //         }
-  //       });
-  //     if (found) {
-  //       break;
-  //     }
-  //   }
-  // }
 =======
 >>>>>>> refs/remotes/origin/master
 }
