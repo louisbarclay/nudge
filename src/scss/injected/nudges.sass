@@ -52,7 +52,13 @@ $n-z-index: 20
     ##{$nudge}-quarter-#{$n + 1}
       z-index: $n-z-index - $n
       border-color: nth($nudge-colors, ($n % length($nudge-colors)) + 1)
+      
+      // Old background
       background-color: nth($nudge-colors, ($n % length($nudge-colors)) + 1)
+      
+      // New tweak
+      // background: linear-gradient(145deg, nth($nudge-colors, ($n % length($nudge-colors)) + 1), $white)
+
       border-width: unquote(($n * 100) + 'px')
       opacity: 0
       visibility: hidden
