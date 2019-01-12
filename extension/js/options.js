@@ -185,13 +185,3 @@ function loadFavicon(elementId, domain) {
   }
   updateFavicon();
 }
-
-// Disabling auto-complete for now because pressing 'Enter' shows strange behaviour
-// because the field is already waiting for an 'Enter' hit
-// $(function() {
-//   $("#addDomain").suggest(suggestDomains, {
-//     suggestionColor: "#cccccc",
-//     moreIndicatorClass: "suggest-more",
-//     moreIndicatorText: "&hellip;"
-//   });
-// });
