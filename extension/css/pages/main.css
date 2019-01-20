@@ -420,8 +420,8 @@ h6 {
   margin: auto;
   top: 50%;
   transform: translateY(-50%);
-  height: 54px;
-  width: 54px;
+  height: 4em;
+  width: 4em;
   background-color: #ffffff;
   border-radius: 30px;
   transition: background-color 0.2s ease;

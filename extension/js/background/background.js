@@ -41,6 +41,20 @@ function initialise() {
   });
 }
 
+// // Option to reset hidden divs
+// chrome.contextMenus.removeAll();
+// chrome.contextMenus.create({
+//   title: "Reset hidden sections",
+//   contexts: ["browser_action"],
+//   onclick: function () {
+//     var statusObj = open("status");
+//     var currentDomain = statusObj.currentState.domain
+//     var currentDivs = settingsLocal.divs
+//     currentDivs[currentDomain] = divs[currentDomain];
+//     changeSetting(currentDivs, "divs");
+//   }
+// });
+
 // Get settings from sync to settingsLocal, and run options page if asked for
 function getAndUpdateSettings() {
   // Get settings

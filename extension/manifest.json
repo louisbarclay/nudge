@@ -32,12 +32,7 @@
     "open_in_tab": true
   },
   "options_page": "html/pages/options.html",
-  "web_accessible_resources": [
-    "img/*",
-    "fonts/*",
-    "html/*",
-    "css/*"
-  ],
+  "web_accessible_resources": ["img/*", "fonts/*", "html/*", "css/*"],
   "background": {
     "scripts": [
       "js/vendor/moment.min.js",
@@ -58,9 +53,7 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "<all_urls>"
-      ],
+      "matches": ["<all_urls>"],
       "js": [
         "js/vendor/moment.min.js",
         "config.js",
@@ -71,22 +64,13 @@
         "js/content/nudger.js"
       ],
       "css": [],
-      "exclude_globs": [
-        "*business.facebook.com*"
-      ],
+      "exclude_globs": ["*business.facebook.com*"],
       "run_at": "document_start"
     },
     {
-      "matches": [
-        "*://www.facebook.com/*",
-        "*://facebook.com/*"
-      ],
-      "js": [
-        "js/facebook/unfollow.js"
-      ],
-      "exclude_globs": [
-        "*business.facebook.com*"
-      ],
+      "matches": ["*://www.facebook.com/*", "*://facebook.com/*"],
+      "js": ["js/facebook/unfollow.js"],
+      "exclude_globs": ["*business.facebook.com*"],
       "run_at": "document_start"
     }
   ]

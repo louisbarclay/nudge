@@ -199,6 +199,12 @@ function execSettings(settings) {
   }
   // Init div_hider
   if (settings.div_hider) {
+    
+    // Ignore Twitter while broken
+    if (domain === 'twitter.com') {
+      return;
+    }
+    
     // Add the CSS that you will need
     doAtEarliest(function() {
       addCSS("nudge-circle", "css/injected/circle.css");
@@ -212,7 +218,11 @@ function execSettings(settings) {
         // Do it a first time
         elHiderAndCircleAdder(settings.divs[key]);
         // Check the div is always covered
+        // setInterval(function () { 
+        //   elHiderAndCircleAdder(settings.divs[key]) 
+        // }, 1000);
         keepAddingCircles(function() {
+          // Deactivate it once every  element is hidden basically
           elHiderAndCircleAdder(settings.divs[key]);
         });
       }
