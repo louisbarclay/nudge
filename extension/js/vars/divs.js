@@ -47,7 +47,7 @@ var divs = {
   ],
   "twitter.com": [
     {
-      name: "trends-inner",
+      name: "module Trends trends",
       type: "class",
       hidden: true
     },

@@ -123,7 +123,7 @@
   margin-right: auto;
   opacity: 0;
   background: #ffffff;
-  height: 80px;
+  height: 100px;
   overflow: visible;
   transition: opacity 0.3s;
   padding-bottom: 1em;
@@ -168,6 +168,15 @@
   cursor: pointer;
   color: #bdbdbd; }
   .circle-show-always:hover {
+    color: #ff61a7; }
+
+.circle-reset-settings {
+  text-transform: uppercase;
+  margin-top: 2px;
+  font-size: 9px;
+  cursor: pointer;
+  color: #bdbdbd; }
+  .circle-reset-settings:hover {
     color: #ff61a7; }
 
 .circle-logo {
