@@ -1,0 +1,22 @@
+include ../../bemto/bemto.pug
+- 
+  set_bemto_settings({
+    prefix: {
+      '': '',
+      'js-': true,
+    }
+  })
+
+html
+  head
+    title Site off
+    link(href="../../img/icon/nudgeoff32.png", rel="icon", type="image/png", sizes="32x32")
+    link(href="../../img/icon/nudgeoff96.png", rel="icon", type="image/png", sizes="96x96")
+    link(href="../../img/icon/nudgeoff16.png", rel="icon", type="image/png", sizes="16x16")
+    link(rel="stylesheet", href="../../css/pages/main.css")
+  +b.BODY.text_globals.body.black-page
+    +b Analytics page
+      +b#analytics
+    script(src="../../js/vendor/moment.min.js")
+    script(src="../../js/helpers.js")
+    script(src="../../js/analytics.js")

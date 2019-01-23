@@ -208,6 +208,9 @@ h6 {
 .space-out > * {
   margin-top: 100px; }
 
+.black-page {
+  background-color: black; }
+
 @keyframes fade_out {
   from {
     opacity: 1; }
@@ -798,6 +801,9 @@ body a {
 
 .space-out > * {
   margin-top: 100px; }
+
+.black-page {
+  background-color: black; }
 
 textarea,
 input {
