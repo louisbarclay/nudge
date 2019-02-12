@@ -160,6 +160,21 @@
   text-align: center;
   line-height: 1.5em;
   color: #4f4f4f; }
+.facebook-alt-headline {
+  font-size: 14px;
+  color: #6d6d6d;
+  text-align: center; }
+  .facebook-alt-headline a {
+    color: #6d6d6d;
+    text-align: center;
+    line-height: 1.7em;
+    letter-spacing: 0.01em; }
+.facebook-tweaker {
+  margin-top: 8px; }
+.facebook-tweaker2 a {
+  color: #bdbdbd; }
+  .facebook-tweaker2 a:hover {
+    color: #ff61a7; }
 .facebook-text-larger {
   font-size: 14px; }
 .facebook-small-text {

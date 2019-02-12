@@ -755,15 +755,15 @@ function stopInit() {
 // UX for share.html
 function shareUx() {
   var container = document.querySelector(".facebook-container");
-  var button = document.querySelector(".facebook-button-blue");
-  button.onclick = function() {
-    popupCenter(
-      "https://www.facebook.com/sharer/sharer.php?u=http%3A//nudgeware.io",
-      "Share Nudge on Facebook",
-      555,
-      626
-    );
-  };
+  // var button = document.querySelector(".facebook-button-blue");
+  // button.onclick = function() {
+  //   popupCenter(
+  //     "https://www.facebook.com/sharer/sharer.php?u=http%3A//nudgeware.io",
+  //     "Share Nudge on Facebook",
+  //     555,
+  //     626
+  //   );
+  // };
   var close = document.querySelector(".facebook-close");
   close.onclick = function() {
     deleteEl(container);
