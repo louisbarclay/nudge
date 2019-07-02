@@ -5,6 +5,7 @@
     box-shadow: 0 0 5px 10px rgba(255, 255, 255, 0); }
   100% {
     box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+
 @keyframes pulse-shadow--collection {
   0% {
     box-shadow: 0 0; }
@@ -12,6 +13,7 @@
     box-shadow: 0 0 5px 10px rgba(255, 255, 255, 0); }
   100% {
     box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+
 @keyframes pulse-shadow--onboarding {
   0% {
     box-shadow: 0 0 0 0 #61a7ff; }
@@ -21,6 +23,7 @@
     box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0); }
   100% {
     box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+
 @keyframes fade-in-left {
   from {
     opacity: 0;
@@ -28,22 +31,26 @@
   to {
     opacity: 1;
     transform: none; } }
+
 @keyframes fade-in {
   from {
     opacity: 0; }
   to {
     opacity: 1; } }
+
 @keyframes fade-out {
   from {
     opacity: 1; }
   to {
     opacity: 0; } }
+
 @font-face {
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
   src: local("Open Sans Regular"), local("OpenSans-Regular"), url("chrome-extension://__MSG_@@extension_id__/fonts/OpenSans.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215; }
+
 @keyframes background-move {
   0% {
     background-position: 17% 0%; }
@@ -51,7 +58,8 @@
     background-position: 84% 100%; }
   100% {
     background-position: 17% 0%; } }
-#nudge * {
+
+#nudge-scroll *, #nudge * {
   border: 0;
   bottom: initial;
   box-sizing: content-box;
@@ -66,7 +74,7 @@
   top: initial;
   vertical-align: baseline;
   display: initial; }
-  #nudge * ::before, #nudge * ::after {
+  #nudge-scroll * ::before, #nudge * ::before, #nudge-scroll * ::after, #nudge * ::after {
     border: 0;
     bottom: initial;
     box-sizing: content-box;
@@ -82,15 +90,16 @@
     vertical-align: baseline;
     display: initial; }
 
-#nudge .nudge-container * {
-  font-family: "Open Sans";
+#nudge-scroll .nudge-scroll-container *, #nudge .nudge-container * {
+  font-family: 'Open Sans';
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   line-height: normal; }
-#nudge .nudge-container a {
+
+#nudge-scroll .nudge-scroll-container a, #nudge .nudge-container a {
   text-decoration: none;
   color: initial; }
-  #nudge .nudge-container a:hover {
+  #nudge-scroll .nudge-scroll-container a:hover, #nudge .nudge-container a:hover {
     color: #ff61a7; }
 
 @keyframes fadeInUp {
@@ -100,13 +109,42 @@
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0); } }
+
 @keyframes fadeIn {
   from {
     opacity: 0; }
   to {
     opacity: 1; } }
+
 .body-reset {
   margin: 0; }
+
+#nudge-scroll {
+  display: block; }
+  #nudge-scroll .nudge-scroll-container {
+    display: none;
+    position: fixed;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: center; }
+  #nudge-scroll .nudge-scroll-scroll_position {
+    z-index: 2147483647;
+    bottom: 0px;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    pointer-events: none; }
+  #nudge-scroll .nudge-scroll-scroll_flex_direction {
+    flex-direction: row; }
+  #nudge-scroll .nudge-scroll-scroll {
+    border-radius: 60px 60px 0 0;
+    width: 300px;
+    opacity: 0.8;
+    height: 60px;
+    background: #61a7ff; }
+  #nudge-scroll .nudge-scroll-container-reveal {
+    display: flex; }
 
 #nudge {
   display: block; }
@@ -117,7 +155,7 @@
     border-width: 2000px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 5s; }
+    transition: opacity 30s; }
   #nudge #nudge-quarter-label-21 {
     z-index: 0;
     background-color: #a08bdb;
@@ -129,7 +167,7 @@
     border-width: 1900px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 5s; }
+    transition: opacity 30s; }
   #nudge #nudge-quarter-label-20 {
     z-index: 1;
     background-color: #8099ed;
@@ -141,7 +179,7 @@
     border-width: 1800px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 5s; }
+    transition: opacity 30s; }
   #nudge #nudge-quarter-label-19 {
     z-index: 2;
     background-color: #61a7ff;
@@ -153,7 +191,7 @@
     border-width: 1700px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 5s; }
+    transition: opacity 30s; }
   #nudge #nudge-quarter-label-18 {
     z-index: 3;
     background-color: #ff61a7;
@@ -165,7 +203,7 @@
     border-width: 1600px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 5s; }
+    transition: opacity 30s; }
   #nudge #nudge-quarter-label-17 {
     z-index: 4;
     background-color: #df6fb8;
@@ -177,7 +215,7 @@
     border-width: 1500px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 5s; }
+    transition: opacity 30s; }
   #nudge #nudge-quarter-label-16 {
     z-index: 5;
     background-color: #bf7dca;
@@ -189,7 +227,7 @@
     border-width: 1400px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 5s; }
+    transition: opacity 30s; }
   #nudge #nudge-quarter-label-15 {
     z-index: 6;
     background-color: #a08bdb;
@@ -201,7 +239,7 @@
     border-width: 1300px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 5s; }
+    transition: opacity 30s; }
   #nudge #nudge-quarter-label-14 {
     z-index: 7;
     background-color: #8099ed;
@@ -213,7 +251,7 @@
     border-width: 1200px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 5s; }
+    transition: opacity 30s; }
   #nudge #nudge-quarter-label-13 {
     z-index: 8;
     background-color: #61a7ff;
@@ -225,7 +263,7 @@
     border-width: 1100px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 5s; }
+    transition: opacity 30s; }
   #nudge #nudge-quarter-label-12 {
     z-index: 9;
     background-color: #ff61a7;
@@ -237,7 +275,7 @@
     border-width: 1000px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 5s; }
+    transition: opacity 30s; }
   #nudge #nudge-quarter-label-11 {
     z-index: 10;
     background-color: #df6fb8;
@@ -249,7 +287,7 @@
     border-width: 900px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 5s; }
+    transition: opacity 30s; }
   #nudge #nudge-quarter-label-10 {
     z-index: 11;
     background-color: #bf7dca;
@@ -261,7 +299,7 @@
     border-width: 800px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 5s; }
+    transition: opacity 30s; }
   #nudge #nudge-quarter-label-9 {
     z-index: 12;
     background-color: #a08bdb;
@@ -273,7 +311,7 @@
     border-width: 700px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 5s; }
+    transition: opacity 30s; }
   #nudge #nudge-quarter-label-8 {
     z-index: 13;
     background-color: #8099ed;
@@ -285,7 +323,7 @@
     border-width: 600px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 5s; }
+    transition: opacity 30s; }
   #nudge #nudge-quarter-label-7 {
     z-index: 14;
     background-color: #61a7ff;
@@ -297,7 +335,7 @@
     border-width: 500px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 5s; }
+    transition: opacity 30s; }
   #nudge #nudge-quarter-label-6 {
     z-index: 15;
     background-color: #ff61a7;
@@ -309,7 +347,7 @@
     border-width: 400px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 5s; }
+    transition: opacity 30s; }
   #nudge #nudge-quarter-label-5 {
     z-index: 16;
     background-color: #df6fb8;
@@ -321,7 +359,7 @@
     border-width: 300px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 5s; }
+    transition: opacity 30s; }
   #nudge #nudge-quarter-label-4 {
     z-index: 17;
     background-color: #bf7dca;
@@ -333,7 +371,7 @@
     border-width: 200px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 5s; }
+    transition: opacity 30s; }
   #nudge #nudge-quarter-label-3 {
     z-index: 18;
     background-color: #a08bdb;
@@ -345,7 +383,7 @@
     border-width: 100px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 5s; }
+    transition: opacity 30s; }
   #nudge #nudge-quarter-label-2 {
     z-index: 19;
     background-color: #8099ed;
@@ -357,7 +395,7 @@
     border-width: 0px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 5s; }
+    transition: opacity 30s; }
   #nudge #nudge-quarter-label-1 {
     z-index: 20;
     background-color: #61a7ff;
@@ -395,7 +433,7 @@
   #nudge .nudge-transparent_white {
     background: rgba(255, 255, 255, 0.8); }
   #nudge .nudge-text_align p {
-    padding: 0 0 0.1em 0;
+    padding: 0 0 .1em 0;
     align-self: center; }
   #nudge .nudge-container {
     display: none;
@@ -410,7 +448,7 @@
     position: absolute;
     width: auto;
     font-size: 12px;
-    padding: 0em 0.3em 0.3em 0.3em;
+    padding: 0em .3em .3em .3em;
     color: #ffffff;
     opacity: 0;
     border: 1px none #bdbdbd;
@@ -427,7 +465,6 @@
     width: auto;
     size: auto;
     position: relative;
-    background: red;
     transition: opacity 6s;
     opacity: 0;
     animation: fadeIn 4s forwards; }
@@ -440,10 +477,20 @@
     flex-direction: column; }
   #nudge .nudge-control_font_size {
     font-size: 16px; }
+  #nudge .nudge-scroll_position {
+    z-index: 2147483647;
+    bottom: 0px;
+    left: 0;
+    pointer-events: none; }
+  #nudge .nudge-scroll_flex_direction {
+    flex-direction: row; }
   #nudge .nudge-scroll {
     margin: 0;
     padding: 0;
-    border-radius: 0; }
+    border-radius: 0;
+    width: 100px;
+    height: 100px;
+    background: red; }
   #nudge .nudge-intro {
     animation: fade-in 0.5s forwards; }
   #nudge .nudge-outro {
@@ -576,13 +623,13 @@
     color: #ffffff;
     border: 1px none #bdbdbd;
     border-radius: 4px;
-    padding: 0em 0.3em 0.1em 0.3em;
+    padding: 0em .3em .1em .3em;
     align-self: center; }
   #nudge .nudge-small-highlight {
     background: #ededed;
     border: 1px none #bdbdbd;
     border-radius: 4px;
-    padding: 0em 0.3em 0.1em 0.3em;
+    padding: 0em .3em .1em .3em;
     margin-left: 0.3em;
     margin-right: 0.3em;
     margin-top: 0.1em;
@@ -616,7 +663,7 @@
     #nudge .nudge-scale li {
       display: block;
       padding: 0 0 0 2em;
-      font-size: 0.8571428571em;
+      font-size: 0.85714em;
       width: 1em;
       height: 1cm; }
       #nudge .nudge-scale li::before {
