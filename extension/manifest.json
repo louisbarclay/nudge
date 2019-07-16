@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "version": "1.0.34",
+  "version": "1.0.35",
   "name": "Nudge",
   "permissions": [
     "idle",
@@ -25,7 +25,9 @@
     "48": "img/icon/48.png",
     "128": "img/icon/128.png"
   },
-  "browser_action": {},
+  "browser_action": {
+    "default_popup": "html/pages/popup.html"
+  },
   "options_ui": {
     "page": "html/pages/options.html",
     "chrome_style": false,
@@ -53,7 +55,8 @@
       "js/background/recorder.js",
       "js/background/switch.js",
       "js/background/background.js",
-      "js/background/tests.js"
+      "js/background/tests.js",
+      "js/background/stopautoplay.js"
     ]
   },
   "content_scripts": [
@@ -66,26 +69,23 @@
         "config.js",
         "js/vars/vars.js",
         "js/helpers.js",
-        "js/utils/images.js",
         "js/content/controller.js",
-        "js/content/nudger.js"
+        "js/content/time.js",
+        "js/content/scroll.js",
+        "js/content/cache.js",
+        "js/content/hide.js"
       ],
       "css": [],
-      "exclude_globs": [
-        "*business.facebook.com*"
-      ],
       "run_at": "document_start"
     },
     {
       "matches": [
         "*://www.facebook.com/*",
-        "*://facebook.com/*"
+        "*://facebook.com/*",
+        "*://web.facebook.com/*"
       ],
       "js": [
-        "js/facebook/unfollow.js"
-      ],
-      "exclude_globs": [
-        "*business.facebook.com*"
+        "js/facebook/facebook.js"
       ],
       "run_at": "document_start"
     }

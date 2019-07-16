@@ -12,7 +12,7 @@ function everySecond() {
     return;
   }
   // Don't do anything if no windows exist
-  chrome.windows.getAll(null, function(windows) {
+  chrome.windows.getAll(null, function (windows) {
     if (windows.length === 0) {
       if (currentState.domain !== notInChrome) {
         timeline(notInChrome, "everySecond");
@@ -20,7 +20,7 @@ function everySecond() {
       }
     } else {
       // Find out if there are any windows active, and if so grab the active tab
-      chrome.windows.getLastFocused({ populate: true }, function(window) {
+      chrome.windows.getLastFocused({ populate: true }, function (window) {
         // If no windows are focused, check if notInChrome, and if not, add notInChrome to timeline
         if (!window.focused) {
           if (currentState.domain !== notInChrome) {
@@ -36,7 +36,7 @@ function everySecond() {
               foundActiveTab = true;
               if (currentState.domain === notInChrome) {
                 var domain = false;
-                domain = inDomainsSetting(window.tabs[i].url);
+                domain = domainCheck(window.tabs[i].url, settingsLocal);
                 timeline(domain, "everySecond");
               }
               // Check if there is a nudge waiting to go out on the active tab
@@ -69,18 +69,8 @@ function onTabIdle(status, domain) {
   }
 }
 
-// Creates a timeline event (or object, same thing)
-function timelineObject(domain, source, timeOverride) {
-  return {
-    time: timeOverride ? moment(timeOverride) : moment(),
-    domain: domain,
-    source: source,
-    lastEverySecond: moment()
-  };
-}
-
 // Check whether new version is installed
-chrome.runtime.onInstalled.addListener(function(details) {
+chrome.runtime.onInstalled.addListener(function (details) {
   if (details.reason == "install") {
     eventLog("install", "install"); // seems weird
     // Show options page on install
@@ -97,14 +87,14 @@ chrome.runtime.onInstalled.addListener(function(details) {
 });
 
 // Tab closed, and tell about shutdown
-chrome.tabs.onRemoved.addListener(function(tabId) {
+chrome.tabs.onRemoved.addListener(function (tabId) {
   if (typeof tabIdStorage[tabId] === undefined) {
     return;
   } else {
     var tabRecord = tabIdStorage[tabId];
-    var domain = inDomainsSetting(tabRecord.url);
+    var domain = domainCheck(tabRecord.url, settingsLocal);
     if (domain) {
-      chrome.tabs.query({}, function(tabs) {
+      chrome.tabs.query({}, function (tabs) {
         // If no tabs with that domain now exist
         if (tabsChecker(tabs, domain)) {
           var statusObj = open("status");
@@ -118,9 +108,13 @@ chrome.tabs.onRemoved.addListener(function(tabId) {
           if (lastShutdown !== endTime) {
             dataAdder(statusObj, domain, endTime, "lastShutdown");
             // Shutdown happened so turn off site if you should
-            if (settingsLocal.off_by_default) {
+
+            // Check for snooze
+            if (settingsLocal.off_by_default && settingsLocal.snooze.all < (+ Date.now())) {
               changeSetting(true, "domains", domain, "off");
+              console.log('Snoozed');
             }
+
             close("status", statusObj, "status close in check off");
             eventLog(
               domain,
@@ -142,7 +136,7 @@ chrome.tabs.onRemoved.addListener(function(tabId) {
 function tabsChecker(tabs, domain) {
   // log(tabs);
   for (var i = 0; i < tabs.length; i++) {
-    if (inDomainsSetting(tabs[i].url) === domain) {
+    if (domainCheck(tabs[i].url, settingsLocal) === domain) {
       return false;
     }
   }
@@ -150,31 +144,53 @@ function tabsChecker(tabs, domain) {
 }
 
 // When Chrome window closed
-chrome.windows.onRemoved.addListener(function(windowId) {
-  chrome.windows.getAll(null, function(windows) {
+chrome.windows.onRemoved.addListener(function (windowId) {
+  chrome.windows.getAll(null, function (windows) {
     if (windows.length === 0) {
       timeline(notInChrome, "chrome.windows.onRemoved");
     }
   });
 });
 
+
+// Switch off
+chrome.webNavigation.onBeforeNavigate.addListener(function (details) {
+  var domain = false;
+  if (details.parentFrameId <= 0) {
+      try {
+        domain = domainCheck(details.url, settingsLocal);
+        // Check for domain we care about, that's off, and for snoozing
+        if (domain && settingsLocal.domains[domain].off && settingsLocal.snooze.all < (+ Date.now())) {
+          if (settingsLocal.off_by_default) {
+            switchOff(domain, details.url, details.tabId, "bydefault");
+          } else {
+            switchOff(domain, details.url, details.tabId, "normal");
+          }
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  }
+});
+
 // Add to timeline onStateChanged
-chrome.idle.onStateChanged.addListener(function(newState) {
+chrome.idle.onStateChanged.addListener(function (newState) {
   if (newState !== "active") {
     // switching this part off because onTabIdle can handle it on its own
     timeline(false, "Gone idle zZZzZzZZ");
   }
   if (newState === "active") {
     // FIXME: is triggering error when only chrome window is the background one
-    chrome.windows.getLastFocused(function(window) {
+    chrome.windows.getLastFocused(function (window) {
       if (typeof window == "undefined" || window.focused === false) {
         // This may be the problem
         timeline(false, "idle.onStateChanged");
       } else {
-        chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(
+        chrome.tabs.query({ active: true, lastFocusedWindow: true }, function (
           tabs
         ) {
-          var domain = inDomainsSetting(tabs[0].url);
+          var domain = domainCheck(tabs[0].url, settingsLocal);
           timeline(domain, "idle.onStateChanged");
         });
       }
@@ -183,18 +199,18 @@ chrome.idle.onStateChanged.addListener(function(newState) {
 });
 
 // Add to timeline onActivated
-chrome.tabs.onActivated.addListener(function(activatedTab) {
+chrome.tabs.onActivated.addListener(function (activatedTab) {
   if (typeof activatedTab == "undefined") {
     return;
   }
   try {
-    chrome.tabs.get(activatedTab.tabId, function(tabDetails) {
+    chrome.tabs.get(activatedTab.tabId, function (tabDetails) {
       // Don't need check of whether tab is active, because it is by default
       try {
-        var domain = inDomainsSetting(tabDetails.url);
+        var domain = domainCheck(tabDetails.url, settingsLocal);
       } catch (e) {
         console.log(e);
-        console.log("Couldn't evaluate inDomainsSetting");
+        console.log("Couldn't evaluate domainCheck");
       }
       timeline(domain, "tabs.onActivated");
     });
@@ -204,15 +220,15 @@ chrome.tabs.onActivated.addListener(function(activatedTab) {
 });
 
 // Add to timeline window onFocusedChange
-chrome.windows.onFocusChanged.addListener(function() {
-  chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(tabs) {
+chrome.windows.onFocusChanged.addListener(function () {
+  chrome.tabs.query({ active: true, lastFocusedWindow: true }, function (tabs) {
     var domain = false;
     if (typeof tabs[0] != "undefined") {
       try {
-        domain = inDomainsSetting(tabs[0].url);
+        domain = domainCheck(tabs[0].url, settingsLocal);
       } catch (e) {
         console.log(e);
-        console.log("Couldn't evaluate inDomainsSetting");
+        console.log("Couldn't evaluate domainCheck");
       }
       timeline(domain, "windows.onFocusedChanged");
     }
@@ -220,7 +236,7 @@ chrome.windows.onFocusChanged.addListener(function() {
 });
 
 // Add to tabIdStorage onCreated
-chrome.tabs.onCreated.addListener(function(tab) {
+chrome.tabs.onCreated.addListener(function (tab) {
   // New record in tabIdStorage
   tabIdStorage[tab.id] = {
     url: tab.url,
@@ -230,26 +246,29 @@ chrome.tabs.onCreated.addListener(function(tab) {
 
 // Add to timeline onUpdated
 // Update URL in tabIdStorage
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  console.log(tab);
   try {
-    var domain = inDomainsSetting(tab.url);
+    var domain = domainCheck(tab.url, settingsLocal);
   } catch (e) {
     console.log(e);
-    console.log("Couldn't evaluate inDomainsSetting");
+    console.log("Couldn't evaluate domainCheck");
     return;
   }
 
   // Switch off
-  if (domain && domain in settingsLocal.domains) {
-    // If off
-    if (settingsLocal.domains[domain]["off"]) {
-      if (settingsLocal.off_by_default) {
-        switchOff(domain, tab.url, tabId, "bydefault");
-      } else {
-        switchOff(domain, tab.url, tabId, "normal");
-      }
-    }
-  }
+  // if (domain && domain in settingsLocal.domains) {
+  //   // If off
+  //   if (settingsLocal.domains[domain]["off"]) {
+  //     if (settingsLocal.off_by_default && settingsLocal.snooze.all < (+ Date.now())) {
+  //       // Switch off no longer happens here
+  //       // switchOff(domain, tab.url, tabId, "bydefault");
+  //     } else {
+  //       // Switch off no longer happens here
+  //       // switchOff(domain, tab.url, tabId, "normal");
+  //     }
+  //   }
+  // }
 
   // Update record in tabIdStorage
   if (typeof tabIdStorage[tabId] === "undefined") {
@@ -262,7 +281,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   }
 
   if (tab.active === true) {
-    chrome.windows.get(tab.windowId, function(window) {
+    chrome.windows.get(tab.windowId, function (window) {
       if (window.focused) {
         timeline(domain, "tabs.onUpdated");
       }

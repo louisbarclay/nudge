@@ -1,17 +1,11 @@
 // Extract core domain from URL you want to check
 function extractDomain(url) {
-  var getLocation = function(href) {
-    var location = document.createElement("a");
-    location.href = href;
-    return location;
-  };
-  var location = getLocation(url);
-  var path = "/" + location.pathname.split("/")[1];
-  var domain = location.hostname + path;
-  return domain;
+  var niceUrl = new URL(url);
+  // console.log(niceUrl.hostname + '/' + niceUrl.pathname.split("/")[1]);
+  return niceUrl.hostname + '/' + niceUrl.pathname.split("/")[1];
 }
 
-(function(funcName, baseObj) {
+(function (funcName, baseObj) {
   // The public function name defaults to window.docReady
   // but you can pass in your own object and own function name and those will be used
   // if you want to put them in a different namespace
@@ -51,14 +45,14 @@ function extractDomain(url) {
   // docReady(fn, context);
   // the context argument is optional - if present, it will be passed
   // as an argument to the callback
-  baseObj[funcName] = function(callback, context) {
+  baseObj[funcName] = function (callback, context) {
     if (typeof callback !== "function") {
       throw new TypeError("callback for docReady(fn) must be a function");
     }
     // if ready has already fired, then just schedule the callback
     // to fire asynchronously, but right away
     if (readyFired) {
-      setTimeout(function() {
+      setTimeout(function () {
         callback(context);
       }, 1);
       return;
@@ -129,13 +123,13 @@ function popupCenter(url, title, w, h) {
     url,
     title,
     "scrollbars=no, width=" +
-      w +
-      ", height=" +
-      h +
-      ", top=" +
-      top +
-      ", left=" +
-      left
+    w +
+    ", height=" +
+    h +
+    ", top=" +
+    top +
+    ", left=" +
+    left
   );
 
   // Puts focus on the newWindow
@@ -152,7 +146,7 @@ function sendHTMLRequest(url, callback, errorFunction) {
   var request = new XMLHttpRequest();
   request.open("GET", url, true);
 
-  request.onload = function() {
+  request.onload = function () {
     if (request.status >= 200 && request.status < 400) {
       // Success!
       var response = request.responseText;
@@ -162,7 +156,7 @@ function sendHTMLRequest(url, callback, errorFunction) {
     }
   };
 
-  request.onerror = function() {
+  request.onerror = function () {
     // console.log("Error in HTML request");
     if (errorFunction) {
       errorFunction;
@@ -197,7 +191,7 @@ function addScript(scriptId, nudgeUrl, dataObj) {
     script.type = "text/javascript";
     script.src = chrome.extension.getURL(nudgeUrl);
     if (dataObj) {
-      Object.keys(dataObj).forEach(function(key) {
+      Object.keys(dataObj).forEach(function (key) {
         script.dataset[key] = dataObj[key];
       });
     }
@@ -294,7 +288,7 @@ function styleAdder(name, style, id) {
 
 function liveUpdate(domain, liveUpdateObj) {
   if (notNonDomain(domain)) {
-    chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(
+    chrome.tabs.query({ active: true, lastFocusedWindow: true }, function (
       tabs
     ) {
       if (typeof tabs[0] != "undefined") {
@@ -343,7 +337,6 @@ function toggleClass(el, className) {
 }
 
 // Fade out
-
 function fadeOut(el) {
   el.style.opacity = 1;
 
@@ -399,15 +392,15 @@ function el(id) {
 function classList(element) {
   var list = element.classList;
   return {
-    toggle: function(c) {
+    toggle: function (c) {
       list.toggle(c);
       return this;
     },
-    add: function(c) {
+    add: function (c) {
       list.add(c);
       return this;
     },
-    remove: function(c) {
+    remove: function (c) {
       list.remove(c);
       return this;
     }
@@ -416,10 +409,10 @@ function classList(element) {
 
 function storeForUse(url, response) {
   url = url.split("/").pop();
-  if (typeof tempStorage === 'undefined') {
-    // console.log(`Can't find tempStorage`);
+  if (typeof localStorage === 'undefined') {
+    // console.log(`Can't find localStorage`);
   } else {
-    tempStorage[url] = response;
+    localStorage[url] = response;
   }
 }
 
@@ -444,8 +437,8 @@ function randomTime(floor, variance) {
 function fbTokenReady(name, callback) {
   var found = false;
 
-  var observer = new MutationObserver(function(mutations) {
-    mutations.forEach(function(mutation) {
+  var observer = new MutationObserver(function (mutations) {
+    mutations.forEach(function (mutation) {
       for (var i = 0; i < mutation.addedNodes.length; i++) {
         var node = document.getElementsByName(name);
         node = node[0];
@@ -468,6 +461,56 @@ function fbTokenReady(name, callback) {
   });
 }
 
+// FIXME: this is an extremely important function and this might be the wrong place for it
+// Check if in domains setting
+function domainCheck(url, settings) {
+  var domainToCheck = extractDomain(url);
+  var domain = false;
+
+  // Check if settings are undefined
+  if (typeof settings.domains == "undefined") {
+    console.log("Settings not yet defined so no point continuing");
+    return false;
+  }
+
+
+  // console.log(domainToCheck)
+  // Check against Nudge domains
+  Object.keys(settings.domains).forEach(function (nudgeDomain) {
+    if (domainToCheck.includes(nudgeDomain) && settings.domains[nudgeDomain].nudge) {
+      domain = nudgeDomain;
+    }
+  });
+
+  // Check against the whitelist
+  settings.whitelist.forEach(function (whitelistDomain) {
+    // console.log(whitelistDomain)
+    if (domainToCheck.includes(whitelistDomain.split('/')[0])) {
+      // console.log(whitelistDomain.split('/')[0]);
+      var match = true;
+      for (var i = 0; i < whitelistDomain.split('*').length; i++) {
+        // console.log(url, whitelistDomain.split('*')[i])
+        if (!(url.includes(whitelistDomain.split('*')[i]))) {
+          match = false
+        }
+      }
+
+      if (match) {
+        domain = false;
+        // Whitelisted
+        // console.log('whitelisted')
+      }
+      
+    }
+  });
+
+  return domain;
+}
+
+function tabIdler() {
+  chrome.runtime.sendMessage({ type: "inject_tabidler" });
+}
+
 function click(x, y) {
   var ev = new MouseEvent("click", {
     view: window,
@@ -483,7 +526,7 @@ function click(x, y) {
 }
 
 function getSettings(callback) {
-  chrome.runtime.sendMessage({ type: "settings" }, function(response) {
+  chrome.runtime.sendMessage({ type: "settings" }, function (response) {
     callback(response.settings);
   });
 }
@@ -506,7 +549,7 @@ function changeSettingRequest(newVal, setting, domain, domainSetting) {
 function imgSrcToDataURL(src, callback, outputFormat) {
   var img = new Image();
   img.crossOrigin = "Anonymous";
-  img.onload = function() {
+  img.onload = function () {
     var canvas = document.createElement("CANVAS");
     var ctx = canvas.getContext("2d");
     var dataURL;
@@ -538,7 +581,7 @@ function sendData(userId, data, date, url) {
 }
 
 function printAllTabs() {
-  chrome.tabs.query({}, function(tabs) {
+  chrome.tabs.query({}, function (tabs) {
     for (var i = 0; i < tabs.length; i++) {
       console.log(tabs[i]);
     }

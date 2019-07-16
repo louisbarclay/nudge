@@ -3,6 +3,7 @@ function initSettings() {
   // Add static stuff
   var settings = defaultSettings;
   // Add dynamic stuff
+  // Add new settings areas here!
   settings.userId = getUserId();
   settings.domains = defaultDomainPopulate(defaultDomains);
   settings.divs = divs;
@@ -15,25 +16,6 @@ function defaultDomainPopulate(domainsArray) {
     object[domainsArray[i]] = defaultDomainInfo;
   }
   return object;
-}
-
-// Check if in domains setting
-function inDomainsSetting(url) {
-  url = extractDomain(url);
-  var domain = false;
-  if (typeof settingsLocal.domains == "undefined") {
-    console.log("Settings not yet defined so no point continuing");
-    return false;
-  }
-  Object.keys(settingsLocal.domains).forEach(function(key) {
-    if (url.includes(key)) {
-      domain = key;
-    }
-    // Whitelist goes here
-    // Would need to just add it to vars.js, that's about it
-    // And obviously create UX for it
-  });
-  return domain;
 }
 
 function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
@@ -56,6 +38,7 @@ function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
       if (newVal === "toggle") {
         settingsLocal[setting] = !settingsLocal[setting];
       } else {
+        // This can also create a new setting - I think!
         settingsLocal[setting] = newVal;
       }
     }
@@ -82,7 +65,7 @@ function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
 
 function toggleOffByDefault(newVal) {
   var domainsTemp = settingsLocal.domains;
-  Object.keys(domainsTemp).forEach(function(item) {
+  Object.keys(domainsTemp).forEach(function (item) {
     domainsTemp[item].off = newVal;
   });
   changeSetting(domainsTemp, "domains");

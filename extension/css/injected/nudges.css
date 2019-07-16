@@ -116,33 +116,62 @@
   to {
     opacity: 1; } }
 
+@keyframes fadeOut {
+  from {
+    opacity: 1; }
+  to {
+    opacity: 0; } }
+
 .body-reset {
   margin: 0 !important; }
 
 #nudge-scroll {
   display: block !important; }
   #nudge-scroll .nudge-scroll-container {
-    display: none !important;
+    opacity: 0 !important;
+    display: flex !important;
     position: fixed !important;
     flex-direction: row !important;
     align-items: baseline !important;
-    justify-content: center !important; }
-  #nudge-scroll .nudge-scroll-scroll_position {
-    z-index: 2147483647 !important;
-    bottom: 0px !important;
-    left: 0 !important;
-    right: 0 !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+    justify-content: center !important;
     pointer-events: none !important; }
-  #nudge-scroll .nudge-scroll-scroll_flex_direction {
-    flex-direction: row !important; }
-  #nudge-scroll .nudge-scroll-scroll {
-    border-radius: 60px 60px 0 0 !important;
-    width: 300px !important;
-    opacity: 0.8 !important;
-    height: 60px !important;
-    background: #61a7ff !important; }
+  #nudge-scroll .nudge-scroll-show {
+    animation: fadeIn 0.6s forwards; }
+  #nudge-scroll .nudge-scroll-hide {
+    animation: fadeOut 0.3s forwards; }
+  #nudge-scroll .nudge-scroll-show-display {
+    display: flex !important; }
+  #nudge-scroll .nudge-scroll-position {
+    z-index: 2147483647 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    top: 0 !important;
+    right: 0 !important;
+    margin: auto !important;
+    align-items: center !important;
+    justify-content: center !important; }
+  #nudge-scroll .nudge-scroll-display {
+    height: auto !important;
+    width: auto !important;
+    padding: 1em 2em 1em 2em !important;
+    font-size: 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    opacity: 0.6 !important;
+    border-radius: 4em !important;
+    cursor: default !important;
+    background: #ededed !important;
+    color: #6d6d6d !important;
+    text-align: center !important;
+    flex-direction: column !important; }
+  #nudge-scroll .nudge-scroll-value {
+    font-size: 18px !important;
+    margin-bottom: 0.5em !important; }
+  #nudge-scroll .nudge-scroll-menu_item {
+    height: 100% !important;
+    font-size: 12px !important;
+    z-index: 1 !important; }
   #nudge-scroll .nudge-scroll-container-reveal {
     display: flex !important; }
 
@@ -150,255 +179,255 @@
   display: block !important; }
   #nudge #nudge-quarter-21 {
     z-index: 0 !important;
-    border-color: #a08bdb !important;
-    background-color: #a08bdb !important;
-    border-width: 2000px !important;
+    background: linear-gradient(145deg, #8099ed 0%, #61a7ff 16.66667%) !important;
+    width: 2100px !important;
+    height: 2100px !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: opacity 30s !important; }
   #nudge #nudge-quarter-label-21 {
     z-index: 0 !important;
-    background-color: #a08bdb !important;
+    background-color: #8099ed !important;
     right: 2104px !important; }
   #nudge #nudge-quarter-20 {
     z-index: 1 !important;
-    border-color: #8099ed !important;
-    background-color: #8099ed !important;
-    border-width: 1900px !important;
+    background: linear-gradient(145deg, #ff61a7 0%, #61a7ff 50%) !important;
+    width: 2000px !important;
+    height: 2000px !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: opacity 30s !important; }
   #nudge #nudge-quarter-label-20 {
     z-index: 1 !important;
-    background-color: #8099ed !important;
+    background-color: #ff61a7 !important;
     right: 2004px !important; }
   #nudge #nudge-quarter-19 {
     z-index: 2 !important;
-    border-color: #61a7ff !important;
-    background-color: #61a7ff !important;
-    border-width: 1800px !important;
+    background: linear-gradient(145deg, #df6fb8 0%, #61a7ff 44.44444%) !important;
+    width: 1900px !important;
+    height: 1900px !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: opacity 30s !important; }
   #nudge #nudge-quarter-label-19 {
     z-index: 2 !important;
-    background-color: #61a7ff !important;
+    background-color: #df6fb8 !important;
     right: 1904px !important; }
   #nudge #nudge-quarter-18 {
     z-index: 3 !important;
-    border-color: #ff61a7 !important;
-    background-color: #ff61a7 !important;
-    border-width: 1700px !important;
+    background: linear-gradient(145deg, #bf7dca 0%, #61a7ff 37.5%) !important;
+    width: 1800px !important;
+    height: 1800px !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: opacity 30s !important; }
   #nudge #nudge-quarter-label-18 {
     z-index: 3 !important;
-    background-color: #ff61a7 !important;
+    background-color: #bf7dca !important;
     right: 1804px !important; }
   #nudge #nudge-quarter-17 {
     z-index: 4 !important;
-    border-color: #df6fb8 !important;
-    background-color: #df6fb8 !important;
-    border-width: 1600px !important;
+    background: linear-gradient(145deg, #a08bdb 0%, #61a7ff 28.57143%) !important;
+    width: 1700px !important;
+    height: 1700px !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: opacity 30s !important; }
   #nudge #nudge-quarter-label-17 {
     z-index: 4 !important;
-    background-color: #df6fb8 !important;
+    background-color: #a08bdb !important;
     right: 1704px !important; }
   #nudge #nudge-quarter-16 {
     z-index: 5 !important;
-    border-color: #bf7dca !important;
-    background-color: #bf7dca !important;
-    border-width: 1500px !important;
+    background: linear-gradient(145deg, #8099ed 0%, #61a7ff 16.66667%) !important;
+    width: 1600px !important;
+    height: 1600px !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: opacity 30s !important; }
   #nudge #nudge-quarter-label-16 {
     z-index: 5 !important;
-    background-color: #bf7dca !important;
+    background-color: #8099ed !important;
     right: 1604px !important; }
   #nudge #nudge-quarter-15 {
     z-index: 6 !important;
-    border-color: #a08bdb !important;
-    background-color: #a08bdb !important;
-    border-width: 1400px !important;
+    background: linear-gradient(145deg, #ff61a7 0%, #61a7ff 50%) !important;
+    width: 1500px !important;
+    height: 1500px !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: opacity 30s !important; }
   #nudge #nudge-quarter-label-15 {
     z-index: 6 !important;
-    background-color: #a08bdb !important;
+    background-color: #ff61a7 !important;
     right: 1504px !important; }
   #nudge #nudge-quarter-14 {
     z-index: 7 !important;
-    border-color: #8099ed !important;
-    background-color: #8099ed !important;
-    border-width: 1300px !important;
+    background: linear-gradient(145deg, #df6fb8 0%, #61a7ff 44.44444%) !important;
+    width: 1400px !important;
+    height: 1400px !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: opacity 30s !important; }
   #nudge #nudge-quarter-label-14 {
     z-index: 7 !important;
-    background-color: #8099ed !important;
+    background-color: #df6fb8 !important;
     right: 1404px !important; }
   #nudge #nudge-quarter-13 {
     z-index: 8 !important;
-    border-color: #61a7ff !important;
-    background-color: #61a7ff !important;
-    border-width: 1200px !important;
+    background: linear-gradient(145deg, #bf7dca 0%, #61a7ff 37.5%) !important;
+    width: 1300px !important;
+    height: 1300px !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: opacity 30s !important; }
   #nudge #nudge-quarter-label-13 {
     z-index: 8 !important;
-    background-color: #61a7ff !important;
+    background-color: #bf7dca !important;
     right: 1304px !important; }
   #nudge #nudge-quarter-12 {
     z-index: 9 !important;
-    border-color: #ff61a7 !important;
-    background-color: #ff61a7 !important;
-    border-width: 1100px !important;
+    background: linear-gradient(145deg, #a08bdb 0%, #61a7ff 28.57143%) !important;
+    width: 1200px !important;
+    height: 1200px !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: opacity 30s !important; }
   #nudge #nudge-quarter-label-12 {
     z-index: 9 !important;
-    background-color: #ff61a7 !important;
+    background-color: #a08bdb !important;
     right: 1204px !important; }
   #nudge #nudge-quarter-11 {
     z-index: 10 !important;
-    border-color: #df6fb8 !important;
-    background-color: #df6fb8 !important;
-    border-width: 1000px !important;
+    background: linear-gradient(145deg, #8099ed 0%, #61a7ff 16.66667%) !important;
+    width: 1100px !important;
+    height: 1100px !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: opacity 30s !important; }
   #nudge #nudge-quarter-label-11 {
     z-index: 10 !important;
-    background-color: #df6fb8 !important;
+    background-color: #8099ed !important;
     right: 1104px !important; }
   #nudge #nudge-quarter-10 {
     z-index: 11 !important;
-    border-color: #bf7dca !important;
-    background-color: #bf7dca !important;
-    border-width: 900px !important;
+    background: linear-gradient(145deg, #ff61a7 0%, #61a7ff 50%) !important;
+    width: 1000px !important;
+    height: 1000px !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: opacity 30s !important; }
   #nudge #nudge-quarter-label-10 {
     z-index: 11 !important;
-    background-color: #bf7dca !important;
+    background-color: #ff61a7 !important;
     right: 1004px !important; }
   #nudge #nudge-quarter-9 {
     z-index: 12 !important;
-    border-color: #a08bdb !important;
-    background-color: #a08bdb !important;
-    border-width: 800px !important;
+    background: linear-gradient(145deg, #df6fb8 0%, #61a7ff 44.44444%) !important;
+    width: 900px !important;
+    height: 900px !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: opacity 30s !important; }
   #nudge #nudge-quarter-label-9 {
     z-index: 12 !important;
-    background-color: #a08bdb !important;
+    background-color: #df6fb8 !important;
     right: 904px !important; }
   #nudge #nudge-quarter-8 {
     z-index: 13 !important;
-    border-color: #8099ed !important;
-    background-color: #8099ed !important;
-    border-width: 700px !important;
+    background: linear-gradient(145deg, #bf7dca 0%, #61a7ff 37.5%) !important;
+    width: 800px !important;
+    height: 800px !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: opacity 30s !important; }
   #nudge #nudge-quarter-label-8 {
     z-index: 13 !important;
-    background-color: #8099ed !important;
+    background-color: #bf7dca !important;
     right: 804px !important; }
   #nudge #nudge-quarter-7 {
     z-index: 14 !important;
-    border-color: #61a7ff !important;
-    background-color: #61a7ff !important;
-    border-width: 600px !important;
+    background: linear-gradient(145deg, #a08bdb 0%, #61a7ff 28.57143%) !important;
+    width: 700px !important;
+    height: 700px !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: opacity 30s !important; }
   #nudge #nudge-quarter-label-7 {
     z-index: 14 !important;
-    background-color: #61a7ff !important;
+    background-color: #a08bdb !important;
     right: 704px !important; }
   #nudge #nudge-quarter-6 {
     z-index: 15 !important;
-    border-color: #ff61a7 !important;
-    background-color: #ff61a7 !important;
-    border-width: 500px !important;
+    background: linear-gradient(145deg, #8099ed 0%, #61a7ff 16.66667%) !important;
+    width: 600px !important;
+    height: 600px !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: opacity 30s !important; }
   #nudge #nudge-quarter-label-6 {
     z-index: 15 !important;
-    background-color: #ff61a7 !important;
+    background-color: #8099ed !important;
     right: 604px !important; }
   #nudge #nudge-quarter-5 {
     z-index: 16 !important;
-    border-color: #df6fb8 !important;
-    background-color: #df6fb8 !important;
-    border-width: 400px !important;
+    background: linear-gradient(145deg, #ff61a7 0%, #61a7ff 100%) !important;
+    width: 500px !important;
+    height: 500px !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: opacity 30s !important; }
   #nudge #nudge-quarter-label-5 {
     z-index: 16 !important;
-    background-color: #df6fb8 !important;
+    background-color: #ff61a7 !important;
     right: 504px !important; }
   #nudge #nudge-quarter-4 {
     z-index: 17 !important;
-    border-color: #bf7dca !important;
-    background-color: #bf7dca !important;
-    border-width: 300px !important;
+    background: linear-gradient(145deg, #df6fb8 0%, #61a7ff 100%) !important;
+    width: 400px !important;
+    height: 400px !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: opacity 30s !important; }
   #nudge #nudge-quarter-label-4 {
     z-index: 17 !important;
-    background-color: #bf7dca !important;
+    background-color: #df6fb8 !important;
     right: 404px !important; }
   #nudge #nudge-quarter-3 {
     z-index: 18 !important;
-    border-color: #a08bdb !important;
-    background-color: #a08bdb !important;
-    border-width: 200px !important;
+    background: linear-gradient(145deg, #bf7dca 0%, #61a7ff 100%) !important;
+    width: 300px !important;
+    height: 300px !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: opacity 30s !important; }
   #nudge #nudge-quarter-label-3 {
     z-index: 18 !important;
-    background-color: #a08bdb !important;
+    background-color: #bf7dca !important;
     right: 304px !important; }
   #nudge #nudge-quarter-2 {
     z-index: 19 !important;
-    border-color: #8099ed !important;
-    background-color: #8099ed !important;
-    border-width: 100px !important;
+    background: linear-gradient(145deg, #a08bdb 0%, #61a7ff 100%) !important;
+    width: 200px !important;
+    height: 200px !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: opacity 30s !important; }
   #nudge #nudge-quarter-label-2 {
     z-index: 19 !important;
-    background-color: #8099ed !important;
+    background-color: #a08bdb !important;
     right: 204px !important; }
   #nudge #nudge-quarter-1 {
     z-index: 20 !important;
-    border-color: #61a7ff !important;
-    background-color: #61a7ff !important;
-    border-width: 0px !important;
+    background: linear-gradient(145deg, #8099ed 0%, #61a7ff 100%) !important;
+    width: 100px !important;
+    height: 100px !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: opacity 30s !important; }
   #nudge #nudge-quarter-label-1 {
     z-index: 20 !important;
-    background-color: #61a7ff !important;
+    background-color: #8099ed !important;
     right: 104px !important; }
   #nudge .nudge-quarters {
     opacity: 0 !important;

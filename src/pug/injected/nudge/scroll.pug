@@ -1,0 +1,18 @@
+include ../../../bemto/bemto.pug
+- 
+  set_bemto_settings({
+    prefix: {
+      '': 'nudge-scroll-',
+      'js-': true,
+    }
+  })
+
+//- This is set to display: none by default to avoid awkward loading behaviour
+
++b.container.position#nudge-scroll-controller(style="display:none")
+  +b.display
+    +b.value 
+      | Scrolled 
+      span#nudge-scroll-value 10 
+      |  screens down this page
+    +b.menu_item Turn this Nudge off in Settings

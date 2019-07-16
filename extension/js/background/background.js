@@ -41,20 +41,6 @@ function initialise() {
   });
 }
 
-// // Option to reset hidden divs
-// chrome.contextMenus.removeAll();
-// chrome.contextMenus.create({
-//   title: "Reset hidden sections",
-//   contexts: ["browser_action"],
-//   onclick: function () {
-//     var statusObj = open("status");
-//     var currentDomain = statusObj.currentState.domain
-//     var currentDivs = settingsLocal.divs
-//     currentDivs[currentDomain] = divs[currentDomain];
-//     changeSetting(currentDivs, "divs");
-//   }
-// });
-
 // Get settings from sync to settingsLocal, and run options page if asked for
 function getAndUpdateSettings() {
   // Get settings
@@ -92,7 +78,8 @@ function checkCurrentState() {
     domain: false,
     source: "initial",
     time: moment(),
-    lastEverySecond: moment()
+    lastEverySecond: moment(),
+    lastRealDomain: false
   };
   var statusObj = open("status");
   // FIXME: sometimes lastEverySecond is not defined. This is a problem!
@@ -103,9 +90,6 @@ function checkCurrentState() {
   } else {
     // Only if any tabs exist - because then we are still 'in' Chrome
     // If there is already a gap, don't update lastEverySecond
-    // console.log(
-    //   moment().diff(moment(statusObj.currentState.lastEverySecond), "seconds")
-    // );
     if (
       moment().diff(moment(statusObj.currentState.lastEverySecond), "seconds") >
       2
@@ -117,6 +101,17 @@ function checkCurrentState() {
   }
   close("status", statusObj, "checkCurrentState");
   return statusObj.currentState;
+}
+
+// Creates a timeline event (or object, same thing)
+function timelineObject(domain, source, timeOverride, lastRealDomain) {
+  return {
+    time: timeOverride ? moment(timeOverride) : moment(),
+    domain: domain,
+    source: source,
+    lastEverySecond: moment(),
+    lastRealDomain: domain == false || domain == notInChrome || domain == chromeOrTabIdle ? lastRealDomain : domain
+  };
 }
 
 function timeline(domain, source, timeOverride) {
@@ -150,12 +145,14 @@ function timeline(domain, source, timeOverride) {
   // Set prevDomain
   var prevDomain = previousState.domain;
   var prevTime = previousState.time;
+  var lastRealDomain = previousState.lastRealDomain;
 
   // Define currentState
   status.currentState = timelineObject(
     domain,
     source,
-    timeOverride ? timeOverride : false
+    timeOverride ? timeOverride : false,
+    lastRealDomain
   );
 
   // Set other variables

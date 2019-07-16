@@ -1,9 +1,13 @@
 var addDomain = document.getElementById("addDomain");
-var tags = document.getElementById("domainList");
+var addWhitelist = document.getElementById("addWhitelist");
+var domainTags = document.getElementById("domainList");
+var whitelistTags = document.getElementById("whiteList");
 var id_button = document.getElementById("id");
 var domains = {};
 var facebookNotif = document.getElementById("facebookNotif");
 var blankFaviconString = "";
+var domainTest = /^((([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\.)*([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\.[a-zA-Z]{2,3})(\/(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,200}[a-zA-Z0-9]))?)?(\/)?$/
+var whitelistTest = /^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\.([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\.[a-zA-Z]{2,3})(\/?)(.[^\s]*)|(\/)?$/
 
 imgSrcToDataURL(chrome.runtime.getURL("img/favicon/blankfavicon.png"), function(
   dataUrl
@@ -18,7 +22,6 @@ sendHTMLRequest(getUrl("html/pages/welcome.html"), function(url, response) {
 });
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  console.log(request);
   if (request.type === "send_settingsLocal") {
     settingsLocal = request.settingsLocal;
     console.log(settingsLocal);
@@ -30,12 +33,18 @@ var settingsLocal = {};
 function execSettings(settings) {
   settingsLocal = settings;
   populateDomains(settings.domains);
+  
+  // Populate whitelist
+  settings.whitelist.forEach(function(domain) {
+    addLi(domain, whitelistTags, whitelistTagsHandler);
+  })
+
   populateBooleans(settings);
   // Reset
   // changeSettingRequest(0, "show_intro");
   console.log(settingsLocal.show_intro);
   if (settingsLocal.show_intro < 2) {
-    el("welcome").innerHTML = tempStorage["welcome.html"];
+    el("welcome").innerHTML = localStorage["welcome.html"];
     handleWelcomeBoolean(settings);
     var increaseCounter = settingsLocal.show_intro + 1;
     changeSettingRequest(increaseCounter, "show_intro");
@@ -50,9 +59,33 @@ function updateLocalSettings(settings) {
 function populateDomains(domains) {
   Object.keys(domains).forEach(function(key) {
     if (domains[key].nudge) {
-      addLi(key);
+      addLi(key, domainTags, domainTagsHandler);
+    } else {
+      console.log(key)
     }
   });
+}
+
+// Handle domain tag if you click remove
+function domainTagsHandler(li, domain) {
+  loadFavicon(li.id, domain);
+  // remove
+  li.onclick = function() {
+    console.log(li, domain);
+    deleteEl(li);
+    changeSettingRequest(false, "domains", domain, "nudge");
+  };
+}
+
+// Handle whitelist tag if you click remove
+function whitelistTagsHandler(li, domain) {
+  loadFavicon(li.id, domain);
+  // remove
+  li.onclick = function() {
+    deleteEl(li);
+    settingsLocal.whitelist.splice(settingsLocal.whitelist.indexOf(domain));
+    changeSettingRequest(settingsLocal.whitelist, "whitelist");
+  };
 }
 
 function populateBooleans(settings) {
@@ -100,17 +133,31 @@ function toggleBoolean(id) {
   toggleClass(right, "on");
 }
 
+// Adding a new whitelist item
+addWhitelist.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    var newDomain = addWhitelist.value;
+    if (whitelistTest.test(newDomain)) {
+      addLi(newDomain, whitelistTags, whitelistTagsHandler);
+      console.log(settingsLocal.whitelist);
+      console.log(newDomain);
+      settingsLocal.whitelist.push(newDomain);
+      changeSettingRequest(settingsLocal.whitelist, "whitelist");
+      addWhitelist.value = "";
+    }
+  }
+})
+
+// Adding a new domain
 addDomain.addEventListener("keydown", function(event) {
   if (event.key === "Enter") {
     var newDomain = addDomain.value;
-    var domainCheck = new RegExp(
-      "^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9])).([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}.[a-zA-Z]{2,3})(/(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,200}[a-zA-Z0-9]))?)?(/)?$"
-    );
+    
     var isInDomainList = false;
     var nudge = true;
-    if (domainCheck.test(newDomain)) {
+    if (domainTest.test(newDomain)) {
       Object.keys(settingsLocal.domains).forEach(function(key) {
-        if (newDomain.includes(key)) {
+        if (newDomain == key) {
           isInDomainList = true;
           nudge = settingsLocal.domains[key].nudge;
           newDomain = key;
@@ -128,12 +175,12 @@ addDomain.addEventListener("keydown", function(event) {
         addDomain.value = "";
       } else if (isInDomainList && !nudge) {
         console.log("in domain list and is not nudge");
-        addLi(newDomain);
+        addLi(newDomain, domainTags, domainTagsHandler);
         changeSettingRequest(true, "domains", newDomain, "nudge");
         addDomain.value = "";
       } else if (!isInDomainList) {
         console.log("not in domain list");
-        addLi(newDomain);
+        addLi(newDomain, domainTags, domainTagsHandler);
         changeSettingRequest(true, "domains", newDomain, "add");
         addDomain.value = "";
       }
@@ -141,20 +188,12 @@ addDomain.addEventListener("keydown", function(event) {
   }
 });
 
-function addLi(domain) {
+function addLi(domain, element, callback) {
   var li = document.createElement("li");
   li.innerHTML = domain;
   li.id = "li" + getRandomInt(1000, 10000000000000);
-  tags.appendChild(li);
-  loadFavicon(li.id, domain);
-  removeDomainOnClick(li, domain);
-}
-
-function removeDomainOnClick(li, domain) {
-  li.onclick = function() {
-    deleteEl(li);
-    changeSettingRequest(false, "domains", domain, "nudge");
-  };
+  element.appendChild(li);
+  callback(li,domain);
 }
 
 function getRandomInt(min, max) {
@@ -163,7 +202,7 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
 
-var items = tags.getElementsByTagName("li");
+var items = domainTags.getElementsByTagName("li");
 
 function styleAdder(id, style) {
   var styleText = id + style;
@@ -180,8 +219,13 @@ function loadFavicon(elementId, domain) {
     }
   });
   function updateFavicon() {
-    var bgStyle = `{ color: red; border: 3px; background: url("http://www.google.com/s2/favicons?domain=${domain}") 16px 16px; }`;
+    var bgStyle = `{ background-image: url("http://www.google.com/s2/favicons?domain=${domain}"); background-size: cover }`;
     styleAdder("#" + elementId + ":before", bgStyle);
   }
   updateFavicon();
 }
+
+// Some alternatives for getting favicons:
+// http://www.google.com/s2/favicons?domain=${domain}
+// https://api.statvoo.com/favicon/?url=google.com
+// https://api.faviconkit.com/twitter.com/144

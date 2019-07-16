@@ -52,6 +52,11 @@ var divs = {
       hidden: true
     },
     {
+      name: "stream-container",
+      type: "class",
+      hidden: true
+    },
+    {
       name: "module wtf-module js-wtf-module roaming-module has-content",
       type: "class",
       hidden: true
@@ -60,6 +65,16 @@ var divs = {
   "buzzfeed.com": [
     {
       name: "mod-site-component-list-1",
+      type: "id",
+      hidden: true
+    },
+    {
+      name: "mod-feed-cards-1",
+      type: "id",
+      hidden: true
+    },
+    {
+      name: "mod-recsys-thumbstrip-1",
       type: "id",
       hidden: true
     },
@@ -96,15 +111,30 @@ var divs = {
       name: "related",
       type: "id",
       hidden: true
+    },
+    {
+      name: "contents",
+      type: "id",
+      hidden: true
     }
   ],
-  // "linkedin.com": [
-  //   {
-  //     name: "relative ember-view",
-  //     type: "class",
-  //     hidden: true
-  //   }
-  // ],
+  "linkedin.com": [
+    {
+      name: "ember53",
+      type: "id",
+      hidden: true
+    },
+    {
+      name: "ember396",
+      type: "id",
+      hidden: true
+    },
+    {
+      name: "ember210",
+      type: "id",
+      hidden: true
+    }
+  ],
   "facebook.com": [
     {
       name: "pagelet_navigation",

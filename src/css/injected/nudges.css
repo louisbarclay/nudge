@@ -116,33 +116,62 @@
   to {
     opacity: 1; } }
 
+@keyframes fadeOut {
+  from {
+    opacity: 1; }
+  to {
+    opacity: 0; } }
+
 .body-reset {
   margin: 0; }
 
 #nudge-scroll {
   display: block; }
   #nudge-scroll .nudge-scroll-container {
-    display: none;
+    opacity: 0;
+    display: flex;
     position: fixed;
     flex-direction: row;
     align-items: baseline;
-    justify-content: center; }
-  #nudge-scroll .nudge-scroll-scroll_position {
-    z-index: 2147483647;
-    bottom: 0px;
-    left: 0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
+    justify-content: center;
     pointer-events: none; }
-  #nudge-scroll .nudge-scroll-scroll_flex_direction {
-    flex-direction: row; }
-  #nudge-scroll .nudge-scroll-scroll {
-    border-radius: 60px 60px 0 0;
-    width: 300px;
-    opacity: 0.8;
-    height: 60px;
-    background: #61a7ff; }
+  #nudge-scroll .nudge-scroll-show {
+    animation: fadeIn 0.6s forwards; }
+  #nudge-scroll .nudge-scroll-hide {
+    animation: fadeOut 0.3s forwards; }
+  #nudge-scroll .nudge-scroll-show-display {
+    display: flex; }
+  #nudge-scroll .nudge-scroll-position {
+    z-index: 2147483647;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    right: 0;
+    margin: auto;
+    align-items: center;
+    justify-content: center; }
+  #nudge-scroll .nudge-scroll-display {
+    height: auto;
+    width: auto;
+    padding: 1em 2em 1em 2em;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+    border-radius: 4em;
+    cursor: default;
+    background: #ededed;
+    color: #6d6d6d;
+    text-align: center;
+    flex-direction: column; }
+  #nudge-scroll .nudge-scroll-value {
+    font-size: 18px;
+    margin-bottom: 0.5em; }
+  #nudge-scroll .nudge-scroll-menu_item {
+    height: 100%;
+    font-size: 12px;
+    z-index: 1; }
   #nudge-scroll .nudge-scroll-container-reveal {
     display: flex; }
 
@@ -150,255 +179,255 @@
   display: block; }
   #nudge #nudge-quarter-21 {
     z-index: 0;
-    border-color: #a08bdb;
-    background-color: #a08bdb;
-    border-width: 2000px;
+    background: linear-gradient(145deg, #8099ed 0%, #61a7ff 16.66667%);
+    width: 2100px;
+    height: 2100px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-21 {
     z-index: 0;
-    background-color: #a08bdb;
+    background-color: #8099ed;
     right: 2104px; }
   #nudge #nudge-quarter-20 {
     z-index: 1;
-    border-color: #8099ed;
-    background-color: #8099ed;
-    border-width: 1900px;
+    background: linear-gradient(145deg, #ff61a7 0%, #61a7ff 50%);
+    width: 2000px;
+    height: 2000px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-20 {
     z-index: 1;
-    background-color: #8099ed;
+    background-color: #ff61a7;
     right: 2004px; }
   #nudge #nudge-quarter-19 {
     z-index: 2;
-    border-color: #61a7ff;
-    background-color: #61a7ff;
-    border-width: 1800px;
+    background: linear-gradient(145deg, #df6fb8 0%, #61a7ff 44.44444%);
+    width: 1900px;
+    height: 1900px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-19 {
     z-index: 2;
-    background-color: #61a7ff;
+    background-color: #df6fb8;
     right: 1904px; }
   #nudge #nudge-quarter-18 {
     z-index: 3;
-    border-color: #ff61a7;
-    background-color: #ff61a7;
-    border-width: 1700px;
+    background: linear-gradient(145deg, #bf7dca 0%, #61a7ff 37.5%);
+    width: 1800px;
+    height: 1800px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-18 {
     z-index: 3;
-    background-color: #ff61a7;
+    background-color: #bf7dca;
     right: 1804px; }
   #nudge #nudge-quarter-17 {
     z-index: 4;
-    border-color: #df6fb8;
-    background-color: #df6fb8;
-    border-width: 1600px;
+    background: linear-gradient(145deg, #a08bdb 0%, #61a7ff 28.57143%);
+    width: 1700px;
+    height: 1700px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-17 {
     z-index: 4;
-    background-color: #df6fb8;
+    background-color: #a08bdb;
     right: 1704px; }
   #nudge #nudge-quarter-16 {
     z-index: 5;
-    border-color: #bf7dca;
-    background-color: #bf7dca;
-    border-width: 1500px;
+    background: linear-gradient(145deg, #8099ed 0%, #61a7ff 16.66667%);
+    width: 1600px;
+    height: 1600px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-16 {
     z-index: 5;
-    background-color: #bf7dca;
+    background-color: #8099ed;
     right: 1604px; }
   #nudge #nudge-quarter-15 {
     z-index: 6;
-    border-color: #a08bdb;
-    background-color: #a08bdb;
-    border-width: 1400px;
+    background: linear-gradient(145deg, #ff61a7 0%, #61a7ff 50%);
+    width: 1500px;
+    height: 1500px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-15 {
     z-index: 6;
-    background-color: #a08bdb;
+    background-color: #ff61a7;
     right: 1504px; }
   #nudge #nudge-quarter-14 {
     z-index: 7;
-    border-color: #8099ed;
-    background-color: #8099ed;
-    border-width: 1300px;
+    background: linear-gradient(145deg, #df6fb8 0%, #61a7ff 44.44444%);
+    width: 1400px;
+    height: 1400px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-14 {
     z-index: 7;
-    background-color: #8099ed;
+    background-color: #df6fb8;
     right: 1404px; }
   #nudge #nudge-quarter-13 {
     z-index: 8;
-    border-color: #61a7ff;
-    background-color: #61a7ff;
-    border-width: 1200px;
+    background: linear-gradient(145deg, #bf7dca 0%, #61a7ff 37.5%);
+    width: 1300px;
+    height: 1300px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-13 {
     z-index: 8;
-    background-color: #61a7ff;
+    background-color: #bf7dca;
     right: 1304px; }
   #nudge #nudge-quarter-12 {
     z-index: 9;
-    border-color: #ff61a7;
-    background-color: #ff61a7;
-    border-width: 1100px;
+    background: linear-gradient(145deg, #a08bdb 0%, #61a7ff 28.57143%);
+    width: 1200px;
+    height: 1200px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-12 {
     z-index: 9;
-    background-color: #ff61a7;
+    background-color: #a08bdb;
     right: 1204px; }
   #nudge #nudge-quarter-11 {
     z-index: 10;
-    border-color: #df6fb8;
-    background-color: #df6fb8;
-    border-width: 1000px;
+    background: linear-gradient(145deg, #8099ed 0%, #61a7ff 16.66667%);
+    width: 1100px;
+    height: 1100px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-11 {
     z-index: 10;
-    background-color: #df6fb8;
+    background-color: #8099ed;
     right: 1104px; }
   #nudge #nudge-quarter-10 {
     z-index: 11;
-    border-color: #bf7dca;
-    background-color: #bf7dca;
-    border-width: 900px;
+    background: linear-gradient(145deg, #ff61a7 0%, #61a7ff 50%);
+    width: 1000px;
+    height: 1000px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-10 {
     z-index: 11;
-    background-color: #bf7dca;
+    background-color: #ff61a7;
     right: 1004px; }
   #nudge #nudge-quarter-9 {
     z-index: 12;
-    border-color: #a08bdb;
-    background-color: #a08bdb;
-    border-width: 800px;
+    background: linear-gradient(145deg, #df6fb8 0%, #61a7ff 44.44444%);
+    width: 900px;
+    height: 900px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-9 {
     z-index: 12;
-    background-color: #a08bdb;
+    background-color: #df6fb8;
     right: 904px; }
   #nudge #nudge-quarter-8 {
     z-index: 13;
-    border-color: #8099ed;
-    background-color: #8099ed;
-    border-width: 700px;
+    background: linear-gradient(145deg, #bf7dca 0%, #61a7ff 37.5%);
+    width: 800px;
+    height: 800px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-8 {
     z-index: 13;
-    background-color: #8099ed;
+    background-color: #bf7dca;
     right: 804px; }
   #nudge #nudge-quarter-7 {
     z-index: 14;
-    border-color: #61a7ff;
-    background-color: #61a7ff;
-    border-width: 600px;
+    background: linear-gradient(145deg, #a08bdb 0%, #61a7ff 28.57143%);
+    width: 700px;
+    height: 700px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-7 {
     z-index: 14;
-    background-color: #61a7ff;
+    background-color: #a08bdb;
     right: 704px; }
   #nudge #nudge-quarter-6 {
     z-index: 15;
-    border-color: #ff61a7;
-    background-color: #ff61a7;
-    border-width: 500px;
+    background: linear-gradient(145deg, #8099ed 0%, #61a7ff 16.66667%);
+    width: 600px;
+    height: 600px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-6 {
     z-index: 15;
-    background-color: #ff61a7;
+    background-color: #8099ed;
     right: 604px; }
   #nudge #nudge-quarter-5 {
     z-index: 16;
-    border-color: #df6fb8;
-    background-color: #df6fb8;
-    border-width: 400px;
+    background: linear-gradient(145deg, #ff61a7 0%, #61a7ff 100%);
+    width: 500px;
+    height: 500px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-5 {
     z-index: 16;
-    background-color: #df6fb8;
+    background-color: #ff61a7;
     right: 504px; }
   #nudge #nudge-quarter-4 {
     z-index: 17;
-    border-color: #bf7dca;
-    background-color: #bf7dca;
-    border-width: 300px;
+    background: linear-gradient(145deg, #df6fb8 0%, #61a7ff 100%);
+    width: 400px;
+    height: 400px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-4 {
     z-index: 17;
-    background-color: #bf7dca;
+    background-color: #df6fb8;
     right: 404px; }
   #nudge #nudge-quarter-3 {
     z-index: 18;
-    border-color: #a08bdb;
-    background-color: #a08bdb;
-    border-width: 200px;
+    background: linear-gradient(145deg, #bf7dca 0%, #61a7ff 100%);
+    width: 300px;
+    height: 300px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-3 {
     z-index: 18;
-    background-color: #a08bdb;
+    background-color: #bf7dca;
     right: 304px; }
   #nudge #nudge-quarter-2 {
     z-index: 19;
-    border-color: #8099ed;
-    background-color: #8099ed;
-    border-width: 100px;
+    background: linear-gradient(145deg, #a08bdb 0%, #61a7ff 100%);
+    width: 200px;
+    height: 200px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-2 {
     z-index: 19;
-    background-color: #8099ed;
+    background-color: #a08bdb;
     right: 204px; }
   #nudge #nudge-quarter-1 {
     z-index: 20;
-    border-color: #61a7ff;
-    background-color: #61a7ff;
-    border-width: 0px;
+    background: linear-gradient(145deg, #8099ed 0%, #61a7ff 100%);
+    width: 100px;
+    height: 100px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-1 {
     z-index: 20;
-    background-color: #61a7ff;
+    background-color: #8099ed;
     right: 104px; }
   #nudge .nudge-quarters {
     opacity: 0;

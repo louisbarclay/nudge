@@ -4,11 +4,12 @@ html
     link(rel="stylesheet", href="../../css/injected/nudges.css")
   body.body-reset
     div#buttons
-      button.one Hey
-      button.two What's
-      button.three Up
+      button#show Show or hide scroll nudge
       input#nudge-test-input
     div#nudge
       include ../injected/nudge/corner
   script(src="../../js/helpers.js")
+  script(src="../../js/content/time.js")
+  script(src="../../js/content/scroll.js")
   script(src="../../js/content/controller.js")
+  script(src="../../js/content/ui.js")

@@ -30,7 +30,7 @@ function switchOn(domain, url, tabId) {
 function closeAll(domain) {
   chrome.tabs.query({}, function(tabs) {
     for (var i = 0; i < tabs.length; i++) {
-      if (inDomainsSetting(tabs[i].url) === domain) {
+      if (domainCheck(tabs[i].url, settingsLocal) === domain) {
         chrome.tabs.remove(tabs[i].id);
       }
     }

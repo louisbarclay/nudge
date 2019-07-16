@@ -32,8 +32,10 @@ var defaultDomains = [
   "pinterest.com",
   "theguardian.com",
   "bbc.co.uk/news",
+  "news.bbc.co.uk",
   "tinder.com",
   "theguardian.co.uk",
+  "guardian.co.uk",
   "dailymail.co.uk",
   "iwastesomuchtime.com",
   "nytimes.com",
@@ -67,13 +69,18 @@ var defaultSettings = {
   constantise: true,
   share_data: true,
   time_nudge: true,
+  whitelist: [
+    'facebook.com/*/dialog/oauth', 'api.twitter.com/oauth/authenticate', 'accounts.google.com/signin/oauth', 'login.yahoo.com/config/login', 'business.facebook.com', 'developers.facebook.com', 'developer.twitter.com'
+  ],
+  scroll_nudge: true,
   compulsive_nudge: true,
   show_intro: 0,
   share_data: true,
   // New settings
   show_switch: true,
-  off_by_default: true,
+  off_by_default: false, // TODO: change this back before launch
   bg_image: false,
+  snooze: { all: 0 },
   get_stickier: true,
   show_update_article: true,
   updated_divs: true
@@ -132,9 +139,6 @@ var refollow = {
     end: "});"
   }
 };
-
-// Store info in localStorage status
-var tempStorage = {};
 
 // Element hide style for hiding divs
 var elementHideStyle =

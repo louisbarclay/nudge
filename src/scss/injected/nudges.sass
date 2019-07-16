@@ -17,6 +17,12 @@
   to
     opacity: 1
 
+@keyframes fadeOut
+  from
+    opacity: 1
+  to
+    opacity: 0
+
 $quarter-background: rgba(200, 200, 200, 0.85)
 
 
@@ -32,8 +38,9 @@ $gradient-colors: #61A7FF, #69A3FA, #719FF5, #799BF1, #8298EC, #8A94E7, #9290E3,
 $gradient-colors-2: #61A7FF, #719FF5, #8298EC, #9290E3, #A389D9, #B482D0, #C47AC7, #D573BE, #E66CB4, #F664AB, #FF61A7
 $gradient-colors-3: $nudge-blue, $nudge-pink
 $gradient-colors-4: #61a7ff, #8099ed, #a08bdb, #bf7dca, #df6fb8, #ff61a7
+$gradient-colors-5: #8099ed, #a08bdb, #bf7dca, #df6fb8, #ff61a7
 
-$nudge-colors: $gradient-colors-4
+$nudge-colors: $gradient-colors-5
 $quarter-opacity: 0.4
 
 // For auto-generation
@@ -43,6 +50,73 @@ $n-z-index: 20
 .body-reset
   margin: 0
 
+// Scroll
+##{$nudge}-scroll
+  @extend %reset
+  display: block
+
+  .#{$nudge}-scroll-
+    &container
+      // Typography
+      @extend %typography
+      // Existence
+      opacity: 0
+      display: flex
+      position: fixed
+      // Flex
+      flex-direction: row
+      align-items: baseline
+      justify-content: center
+      pointer-events: none
+      // transition: opacity 0.6s
+
+    &show
+      animation: fadeIn 0.6s forwards
+
+    &hide
+      animation: fadeOut 0.3s forwards
+
+    &show-display
+      display: flex
+
+    &position
+      z-index: $max-z
+      bottom: 0
+      left: 0
+      top: 0
+      right: 0
+      margin: auto
+      align-items: center
+      justify-content: center
+
+    &display
+      height: auto
+      width: auto
+      padding: 1em 2em 1em 2em
+      font-size: 16/14 * $default-font-size
+      display: flex
+      align-items: center
+      justify-content: center
+      opacity: 0.6
+      border-radius: 4em
+      cursor: default
+      background: $nudge-grey-lightest
+      color: $nudge-grey-medium
+      text-align: center
+      flex-direction: column
+
+    &value
+      font-size: 18px
+      margin-bottom: 0.5em
+
+    &menu_item
+      height: 100%
+      font-size: (12 / 14) * $default-font-size
+      z-index: 1
+
+    &container-reveal
+      display: flex
+
 ##{$nudge}
   @extend %reset
   display: block
@@ -51,18 +125,19 @@ $n-z-index: 20
   @while $n >= 0
     ##{$nudge}-quarter-#{$n + 1}
       z-index: $n-z-index - $n
-      border-color: nth($nudge-colors, ($n % length($nudge-colors)) + 1)
+      // border-color: nth($nudge-colors, ($n % length($nudge-colors)) + 1)
       
-      // Old background
-      background-color: nth($nudge-colors, ($n % length($nudge-colors)) + 1)
+      // // Old background
+      // background-color: nth($nudge-colors, ($n % length($nudge-colors)) + 1)
       
       // New tweak
-      // background: linear-gradient(145deg, nth($nudge-colors, ($n % length($nudge-colors)) + 1), $white)
+      background: linear-gradient(145deg, nth($nudge-colors, ($n % length($nudge-colors)) + 1) 0%, $nudge-blue if(($n + 1 > length($nudge-colors)), percentage((($n % length($nudge-colors)) + 1)/(length($nudge-colors) + (($n % length($nudge-colors)) + 1))), 100%))
 
-      border-width: unquote(($n * 100) + 'px')
+      +size(unquote((($n + 1) * 100) + 'px'))
+      // border-width: unquote(($n * 100) + 'px')
       opacity: 0
       visibility: hidden
-      transition: opacity 5s
+      transition: opacity 30s
 
     ##{$nudge}-quarter-label-#{$n + 1}
       z-index: $n-z-index - $n
@@ -158,7 +233,6 @@ $n-z-index: 20
       width: auto
       size: auto
       position: relative
-      background: red
       transition: opacity 6s
       opacity: 0
       animation: fadeIn 4s forwards
@@ -176,10 +250,21 @@ $n-z-index: 20
       // Font size
       font-size: (16/14) * $default-font-size
 
+    &scroll_position
+      z-index: $max-z
+      bottom: 0px
+      left: 0
+      pointer-events: none
+
+    &scroll_flex_direction
+      flex-direction: row
+
     &scroll
       margin: 0
       padding: 0
       border-radius: 0
+      +size(100px)
+      background: red
     
     &intro
       animation: fade-in 0.5s forwards

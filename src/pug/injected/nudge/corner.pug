@@ -7,7 +7,9 @@ include ../../../bemto/bemto.pug
     }
   })
 
-+b.container.control_position.control_flex_direction.control_font_size
+//- This is set to display: none by default to avoid awkward loading behaviour
+
++b.container.control_position.control_flex_direction.control_font_size(style="display:none")
   +b.top
     +b.edge#js-edge
     +b.corner
@@ -33,28 +35,3 @@ include ../../../bemto/bemto.pug
       while n <= 20
         +b.quarter(id=`nudge-quarter-${n}`)
           +b.quarter-label(id=`nudge-quarter-label-${n}`) #{5 * n++}m
-
-//- Switch off site
-//- Switch off all sites
-//- Off by default
-//- Settings
-//- Hide
-//- Snooze
-
-//- Old stuff to use if useful:
-
-//- +b.container.banner.translucent.rounded.text_align
-//-   p You know that
-//-   +b.highlight this is a highlight
-//-   p right?
-//-   +b.close
-
-//- +b.container.control_position.control_flex_direction.control_font_size
-//-   +b.top
-//-     +b.quarter
-//-     +b.switch
-//-     +b.highlight.floating.pink Hide
-//-     +b.icon
-//-     +b.corner.translucent.rounded.text_align
-//-       +b.highlight.blue#js-time 21m05s
-//-   //- +b.switch

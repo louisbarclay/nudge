@@ -1,0 +1,116 @@
+@import 'variables'
+@import 'abstracts'
+@import 'components'
+@import 'layout'
+@import 'reset'
+
+// Options
+$primary: lighten($nudge-grey-medium, 7%)
+$light-fill: lighten($nudge-grey-lightest, 4%)
+$secondary-text: $nudge-grey-light
+$toggle-fill: $nudge-blue
+$toggle-secondary: $nudge-blue
+$toggle-fill-text: $primary
+$toggle-light-text: $white
+$toggle-white: $light-fill
+
+body
+  @extend %typography
+  width: 300px
+  height: 300px
+  background: $white
+
+.popup-container
+  +container($left: 0, $width: 300px, $spacing: 5px)
+  height: 300px
+
+  // This is for perfect centering
+  >div
+    margin: auto
+  >a
+
+#options, #dont-nudge, #reset-hide
+  color: $nudge-grey-light
+  margin-bottom: 1em
+  &:hover
+    color: $nudge-pink
+
+#button-container
+  flex-direction: column
+  margin-top: 1em
+  align-items: center
+
+.popup-button
+  @extend %button
+  +border($style: none)
+  font-size: 16/14 * $default-font-size
+  padding: 0.5em 1em 0.5em 1em
+  background: $nudge-grey-light
+  color: $white
+  margin-bottom: none
+  &:hover
+    background: darken($nudge-grey-light, 10%)
+
+.popup-snooze-button
+  background: $nudge-pink
+  &:hover
+    background: darken($nudge-pink, 10%)
+
+#dont-nudge
+  pointer: cursor
+
+#time-headline
+  font-size: 18/14 * $default-font-size
+  +size(4em)
+  background-color: $nudge-blue
+  align-items: center
+  justify-content: center
+  color: white
+  border-radius: 50%
+  opacity: 0.8
+  pointer-events: none
+
+#logo
+  font-size: 18px
+  +logo-color(4em)
+
+#domain-line
+  justify-content: center
+  align-items: center
+  font-size: 16/14 * $default-font-size
+  color: $primary
+
+#extras-line
+  justify-content: center
+  align-items: center
+  flex-direction: column
+  display: flex
+
+#domain
+  margin-right: 0.25em
+  margin-left: 0.25em
+
+#notice
+  height: 1em
+  margin-top: 0.5em
+
+#refresh
+  color: $nudge-pink
+
+// .domain
+//   +border($style: none)
+//   display: flex
+//   padding-right: 1em
+//   padding-left: 1em
+//   float: left
+//   height: 2em
+//   line-height: 2em
+//   position: relative
+//   color: $primary
+//   font-size: (12 / 13) * 1em
+//   background-color: $nudge-grey-lightest
+//   margin-left: 0.5em
+//   margin-right: 0.5em
+
+.hide
+  display: none !important

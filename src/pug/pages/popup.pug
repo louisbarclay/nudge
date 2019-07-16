@@ -1,23 +1,26 @@
 html
   head
     title
-    link(rel="stylesheet", href="../css/pages/popup.css")
+    link(rel="stylesheet", href="/css/pages/popup.css")
   body.popup-body
     div.popup-container
-      div
-        h1
-        span.thing 15 minutes 13 seconds
-        | today on 
-        span.domain facebook.com
-      div
-        button.popup-button Don't Nudge this site
-      div
-        a(href="#")#options Choose Nudge domains, and other settings
-      div
-        p more options
-      div
-        p snooze nudge for this site for 60 mins
-      div
-        p pause nudge
-    script(src="../../js/helpers.js")    
+      div.time-headline#time-headline
+      div#logo.hide
+      div#domain-line
+        div#on on
+        div.domain#domain facebook.com
+        div#today today
+      div#button-container
+        button.popup-button#snooze Snooze Nudge for 
+          span#snooze-time
+          span  minutes  
+        div#notice
+          div#refresh.hide Refresh for snooze to kick in
+      div#extras-line
+        a(href="#")#dont-nudge Don't nudge this site
+        a(href="#")#reset-hide Reset hidden sections
+        a(href="#")#options Settings
+    script(src="../../js/helpers.js")
+    script(src="../../js/vars/divs.js")
+    script(src="../../js/vendor/moment.min.js")    
     script(src="../../js/popup.js")

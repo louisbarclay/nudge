@@ -1,3 +1,5 @@
+var switchedOff = true;
+
 // Off elements that we care about
 var off = "off-";
 var js = "js-";
@@ -26,9 +28,7 @@ function highlightify(text) {
   return `<span class='off-highlight'>${text}</span>`;
 }
 
-// Three possible off sites. Determine which one like this:
-
-// Move to pug
+// Get stuff from the query string
 var QueryString = (function() {
   // This function is anonymous, is executed immediately and
   // the return value is assigned to QueryString!
@@ -90,7 +90,7 @@ function getLocalStorage() {
     } else {
       var diff = moment()
         .startOf("day")
-        .diff(moment(settingsLocal.bg_image).startOf("day"), "days");
+        .diff(moment("2018-01-01T19:05:57.810Z").startOf("day"), "days");
       var index = diff % bgImages.length;
       setBackground(background, `${dir_small}${getBackgroundFile(index)}`);
       backgroundLoader(index);
@@ -135,14 +135,6 @@ function getLocalStorage() {
 }
 
 getLocalStorage();
-
-function initOn() {
-  chrome.runtime.sendMessage({
-    type: "on",
-    url,
-    domain
-  });
-}
 
 button.addEventListener("mousedown", sliderdown, true);
 button.addEventListener("touchstart", sliderTouchdown, true);
@@ -308,6 +300,7 @@ var backgroundEnhanced = document.querySelector(`.${off}background-enhanced`);
 
 // Get the photos if exist in sync. Set them if not
 function initOn() {
+  switchedOff = false;
   chrome.runtime.sendMessage({
     type: "on",
     url,

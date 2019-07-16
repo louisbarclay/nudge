@@ -31,7 +31,7 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
         // FIXME: believe that domains are getting made 'off' before this function runs. This should be the place for turning off
         if (!settingsLocal.domains[domain].off) {
           dataAdder(statusObj, domain, endTime, "lastShutdown");
-          if (settingsLocal.off_by_default) {
+          if (settingsLocal.off_by_default && settingsLocal.snooze.all < (+ Date.now())) {
             changeSetting(true, "domains", domain, "off");
           }
           close("status", statusObj, "status close in check off");
@@ -238,7 +238,6 @@ function domainVisitUpdater(domain, time, source) {
   if (compulsive) {
     if (settingsLocal.compulsive) {
       // console.log("run switch off here");
-      // switchOff(domain, url, tabId);
     }
     dataAdder(dateObj, domain, 1, "compulsives", addTogether);
     console.log("Sent compulsive nudge to", domain);
