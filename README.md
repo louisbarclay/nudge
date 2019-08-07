@@ -2,6 +2,8 @@
 
 ##### Make the internet less addictive with nudges that help you avoid getting sucked in
 
+<button name="button" onclick="https://chrome.google.com/webstore/detail/nudge/dmhgdnbkjkejeddddlklojinngaideac">Download here</button>
+
 Nudge tweaks website designs to make them less persuasive, turns off notifications, alerts you to addictive browsing patterns, and gives you tools to manage some of the most addictive parts of the internet — e.g. to delete your Facebook News Feed.
 
 - Get nudged every 15 minutes on an addictive site, or when you quit the site but compulsively return straight away
