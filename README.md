@@ -1,27 +1,22 @@
-# Overview
+# Nudge
 
-##### Make the internet less addictive with nudges that help you avoid getting sucked in
+### Make the internet less addictive with nudges that help you avoid getting sucked in
 
-<button name="button" onclick="https://chrome.google.com/webstore/detail/nudge/dmhgdnbkjkejeddddlklojinngaideac">Download here</button>
+Nudge hacks website designs to make them less persuasive, visualises addictive browsing patterns, and gives you tools to manage some of the most addictive parts of the internet — e.g. to delete your Facebook News Feed.
 
-Nudge tweaks website designs to make them less persuasive, turns off notifications, alerts you to addictive browsing patterns, and gives you tools to manage some of the most addictive parts of the internet — e.g. to delete your Facebook News Feed.
+[Download here (4.7 star rating on Chrome Web Store)](https://chrome.google.com/webstore/detail/nudge/dmhgdnbkjkejeddddlklojinngaideac)
 
-- Get nudged every 15 minutes on an addictive site, or when you quit the site but compulsively return straight away
+#### 1. Switches off addictive sites by default
 
-- Avoid annoying notifications in tab titles ('(1)' and red dots designed to bring you back)
+![Drag a slider to enter the site](https://miro.medium.com/max/1575/1*IGUSpdJqP7Vu6EvpQEeIEA.gif)
 
-- Save hundreds of hours of your life by deleting your Facebook News Feed forever, across all devices, with Nudge's auto-unfollowing tool
+#### 2. Visualises time spent browsing, by showing one more ring every 5 minutes
 
-- Enjoy websites with some of their most distracting features hidden unless you choose to show them (nominations welcome for features to hide by default - email feedback@nudgeware.io)
+![Each ring represents five minutes of time spent](https://miro.medium.com/max/1211/1*O1FCCSwcjYm964BJekPZ-Q.gif)
 
-- Be part of a science-driven experiment to make the internet a healthier, less addictive place
+#### 3. Hides some of the most compulsive sections of websites unless you choose to show them
 
-- Choose the sites Nudge works on and more in Options
+![Avoid distracting parts of sites](https://miro.medium.com/max/1575/1*xDJiRl4jbk7Oj7RhqS8ppg.gif)
 
-# Set up for development
-
-1. Pull the project onto your local machine
-2. Inside Chrome navigate to chrome://extensions/
-3. Set Chrome to Developer Mode
-4. Hit load unpacked extension and add '/extension'
-5. CSS and HTML files compile from .sass and .pug files - run 'yarn dev' to compile after making changes
+#### 4. Helps you save hundreds of hours of your life by deleting your Facebook News Feed forever, across all devices, with Nudge's auto-unfollowing tool
+![Unfollow everything](https://miro.medium.com/max/1154/1*nzCWrM338a5UIfUsFV2X7w.gif)
