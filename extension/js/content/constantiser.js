@@ -1,21 +1,21 @@
-var currentScript = document.currentScript;
-var domain = currentScript.getAttribute("data-domain");
+var currentScript = document.currentScript
+var domain = currentScript.getAttribute("data-domain")
 
 function constantiser(newTitle) {
   if (newTitle) {
-    document.getElementsByTagName("title")[0].remove();
-    document.title = newTitle;
+    document.getElementsByTagName("title")[0].remove()
+    document.title = newTitle
     Object.defineProperty(document, "title", {
       enumerable: false,
       configurable: false,
       writable: false,
       value: document.title
-    });
+    })
     // var iconArray = ["link[rel*='shortcut icon']", "link[rel*='icon']"];
     // for (var i = 0; i < iconArray.length; i++) {
     //   var element = document.querySelector(iconArray[i]);
     //   if (element) {
-    //     console.log(element);
+    //     log(element);
     //     element.remove();
     //   }
     // }
@@ -30,7 +30,7 @@ function domainTranslate(domain) {
   //   return "Twitter";
   // }
   if (domain === "messenger.com") {
-    return "Messenger";
+    return "Messenger"
   }
   // if (domain === "mail.google.com") {
   //   return "Gmail";
@@ -38,7 +38,7 @@ function domainTranslate(domain) {
   // if (domain === "linkedin.com") { // This is making LinkedIn mess up
   //   return "LinkedIn";
   // }
-  return false;
+  return false
 }
 
-constantiser(domainTranslate(domain));
+constantiser(domainTranslate(domain))

@@ -1,13 +1,13 @@
 // URL receiver from content script and init options giver
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   // Avoid sending a message to a tab that is part of the extension
-  var chromeTab = !sender.tab || sender.tab.url.includes("chrome-extension:");
+  var chromeTab = !sender.tab || sender.tab.url.includes("chrome-extension:")
   // Get settings
   if (request.type === "settings") {
-    sendResponse({ settings: settingsLocal });
+    sendResponse({ settings: settingsLocal })
   }
   if (request.type === "get_localStorage") {
-    sendResponse({ localStorage, settingsLocal });
+    sendResponse({ localStorage, settingsLocal })
   }
   if (request.type === "change_setting") {
     changeSetting(
@@ -17,33 +17,32 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       request.domainSetting,
       // If sender.tab doesn't make sense, don't pass tab.id! e.g. popup.js message
       !sender.tab ? null : sender.tab.id
-    );
+    )
   }
   if (request.type === "event") {
-    eventLogReceiver(request);
+    eventLogReceiver(request)
   }
   if (request.type === "off") {
-    if (domainCheck(sender.url), settingsLocal) {
-      changeSetting(true, "domains", request.domain, "off");
-      switchOff(request.domain, sender.url, sender.tabId, "normal");
+    if ((domainCheck(sender.url), settingsLocal)) {
+      changeSetting(true, "domains", request.domain, "off")
+      switchOff(request.domain, sender.url, sender.tabId, "normal")
     }
   }
   if (request.type === "on") {
     if (request.domain) {
-      var url = request.url;
-      console.log(url);
-      changeSetting(false, "domains", request.domain, "off");
-      switchOn(request.domain, request.url, sender.tabId);
+      var url = request.url
+      changeSetting(false, "domains", request.domain, "off")
+      switchOn(request.domain, request.url, sender.tabId)
     }
     // Register a new switch on
-    var date = moment().format("YYYY-MM-DD");
-    var dateObj = open(date);
+    var date = moment().format("YYYY-MM-DD")
+    var dateObj = open(date)
     if (isUndefined(dateObj.switch_ons)) {
-      dateObj.switch_ons = 1;
+      dateObj.switch_ons = 1
     } else {
-      dateObj.switch_ons++;
+      dateObj.switch_ons++
     }
-    close(date, dateObj, "close date in messager");
+    close(date, dateObj, "close date in messager")
   }
   if (
     request.type === "scroll" ||
@@ -54,38 +53,42 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     // nudgeSender(request);
   }
   if (request.type === "options") {
-    chrome.runtime.openOptionsPage();
+    chrome.runtime.openOptionsPage()
   }
   if (request.type === "close_one") {
-    chrome.tabs.remove(sender.tab.id);
+    try {
+      chrome.tabs.remove(sender.tab.id)
+    } catch (e) {
+      log(e)
+    }
   }
   if (request.type === "close_all") {
-    closeAll(request.domain);
+    closeAll(request.domain)
   }
   if (request.type === "inject_tabidler" && !chromeTab) {
     try {
-      chrome.tabs.get(sender.tab.id, checkIfExists);
+      chrome.tabs.get(sender.tab.id, checkIfExists)
     } catch (e) {
-      console.log(e);
+      log(e)
     }
     function checkIfExists() {
       try {
         if (chrome.runtime.lastError) {
           // Tab doesn't exist
-          console.log(chrome.runtime.lastError.message);
+          log(chrome.runtime.lastError.message)
         } else {
           // Tab exists
           try {
             chrome.tabs.executeScript(sender.tab.id, {
               file: "js/tabidler.js"
-            });
-            sendResponse({ message: "tab idler injected" });
+            })
+            sendResponse({ message: "tab idler injected" })
           } catch (e) {
-            console.log(e);
+            log(e)
           }
         }
       } catch (e) {
-        console.log(e);
+        log(e)
       }
     }
   }
@@ -94,9 +97,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       tabs
     ) {
       if (typeof tabs[0] != "undefined" && tabs[0].id === sender.tab.id) {
-        var domain = domainCheck(sender.url, settingsLocal);
-        onTabIdle(request.status, domain);
+        var domain = domainCheck(sender.url, settingsLocal)
+        onTabIdle(request.status, domain)
       }
-    });
+    })
   }
-});
+})

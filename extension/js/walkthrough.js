@@ -1,6 +1,6 @@
-var arrows = document.getElementsByClassName("arrow");
+var arrows = document.getElementsByClassName("arrow")
 
-console.log(arrows);
+log(arrows)
 
 for (var i = 0; i < arrows.length; i++) {
   arrows[i].onclick = function() {
@@ -8,6 +8,6 @@ for (var i = 0; i < arrows.length; i++) {
       top: 1000,
       left: 0,
       behavior: "smooth"
-    });
-  };
+    })
+  }
 }

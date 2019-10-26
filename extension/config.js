@@ -1,9 +1,9 @@
-var config = {
-  debug: false,
-  dev: true,
-  // 'apiEndpoint': 'http://localhost:3000/' // for testing
-  'apiEndpoint': 'http://ec2-34-252-87-55.eu-west-1.compute.amazonaws.com:3000/'
-};
+// Release values in notes
 
-// Global debug option for logger
-debugMode = config.debug;
+var config = {
+  debug: false, // false
+  offByDefault: true, // true
+  resetDivSettings: false, // false
+  fastTimer: false, // false
+  timelineTest: false // false
+}

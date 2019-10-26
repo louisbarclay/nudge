@@ -1,20 +1,20 @@
 // Non-domains
-var notInChrome = "$notInChrome";
-var chromeOrTabIdle = "$chromeOrTabIdle";
-var allDomains = "$allDomains";
+var notInChrome = "$notInChrome"
+var chromeOrTabIdle = "$chromeOrTabIdle"
+var allDomains = "$allDomains"
 
 // Do we show the options page on init?
-var showOptionsPage = false;
+var showOptionsPage = false
 
 // Quick access to settings
-var settingsLocal = {};
+var settingsLocal = {}
 
 // Default domain info
 var defaultDomainInfo = {
   nudge: true,
   off: false,
   faviconUrl: false
-};
+}
 
 // Default domains
 var defaultDomains = [
@@ -25,7 +25,7 @@ var defaultDomains = [
   "reddit.com",
   "buzzfeed.com",
   "youtube.com",
-  "gmail.com",
+  "mail.google.com",
   "ladbible.com",
   "news.ycombinator.com",
   "instagram.com",
@@ -53,7 +53,7 @@ var defaultDomains = [
   "telegraph.co.uk",
   "vk.com",
   "dailymaverick.co.za"
-];
+]
 
 // Default non-domain settings
 var defaultSettings = {
@@ -70,7 +70,13 @@ var defaultSettings = {
   share_data: true,
   time_nudge: true,
   whitelist: [
-    'facebook.com/*/dialog/oauth', 'api.twitter.com/oauth/authenticate', 'accounts.google.com/signin/oauth', 'login.yahoo.com/config/login', 'business.facebook.com', 'developers.facebook.com', 'developer.twitter.com'
+    "facebook.com/*/dialog/oauth",
+    "api.twitter.com/oauth/authenticate",
+    "accounts.google.com/signin/oauth",
+    "login.yahoo.com/config/login",
+    "business.facebook.com",
+    "developers.facebook.com",
+    "developer.twitter.com"
   ],
   scroll_nudge: true,
   compulsive_nudge: true,
@@ -78,17 +84,18 @@ var defaultSettings = {
   share_data: true,
   // New settings
   show_switch: true,
-  off_by_default: false, // TODO: change this back before launch
+  off_by_default: config.offByDefault,
   bg_image: false,
   snooze: { all: 0 },
   get_stickier: true,
   show_update_article: true,
-  updated_divs: true
-};
+  updated_divs: true,
+  unhidden_divs: {}
+}
 
 // Other constants
-var minSec = 60;
-var sendFailLimit = 10;
+var minSec = 60
+var sendFailLimit = 10
 
 var unfollow = {
   listUrl:
@@ -113,7 +120,7 @@ var unfollow = {
     start: 'Arbiter.inform("UnfollowUser", {"profile_id":',
     end: "});"
   }
-};
+}
 
 var refollow = {
   listUrl:
@@ -138,8 +145,4 @@ var refollow = {
     start: 'Arbiter.inform("FollowUser", {"profile_id":',
     end: "});"
   }
-};
-
-// Element hide style for hiding divs
-var elementHideStyle =
-  "{ visibility: hidden; pointer-events: none ; cursor: default }";
+}

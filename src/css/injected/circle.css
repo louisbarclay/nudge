@@ -105,10 +105,12 @@
 .circle-container {
   width: 100%;
   position: static;
-  text-align: center;
+  margin-top: 5px;
   top: 0;
   display: flex;
-  font-family: initial; }
+  font-family: initial;
+  justify-content: center;
+  transform: translateZ(0); }
 
 .circle-dropdown {
   margin: 0;
@@ -119,7 +121,6 @@
   z-index: 3;
   border: 1px none #bdbdbd;
   border-radius: 4px;
-  opacity: 1;
   visibility: visible;
   font-size: 12px; }
 
@@ -132,6 +133,7 @@
   margin-left: auto;
   margin-right: auto;
   opacity: 0;
+  visibility: hidden;
   background: #ffffff;
   height: 100px;
   overflow: visible;
@@ -152,13 +154,17 @@
   margin: 0;
   opacity: 1;
   pointer-events: auto;
-  width: 100%;
+  transform: translateZ(0);
+  width: auto;
   transition: top 0.3s;
+  animation: fade-in 0.3s;
   background: url("chrome-extension://__MSG_@@extension_id__/img/icon/newcirclewhite.svg") center 0px/40px no-repeat; }
   .circle-content:hover {
     top: 5px; }
     .circle-content:hover .circle-dropdown-content {
-      opacity: 1; }
+      opacity: 1;
+      visibility: visible;
+      display: flex; }
 
 .circle-text {
   color: #6d6d6d;
@@ -203,6 +209,7 @@
 
 .circle-logo {
   margin-top: 0;
+  transform: translateZ(0);
   width: 40px;
   height: 40px;
   background-image: url("chrome-extension://__MSG_@@extension_id__/img/icon/newcirclewhite.svg");

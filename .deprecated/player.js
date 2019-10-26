@@ -95,7 +95,7 @@ var modalNudge = {
 };
 
 // Keyboard shortcuts for testing
-// if (window.addEventListener && config.debug) {
+// if (window.addEventListener) {
 //         var letters = [], prompt1 = ["z","x"], prompt2 = ["c","v"];
 //         window.addEventListener("keydown", function(e) {
 //                 letters.push(e.key);

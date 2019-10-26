@@ -105,10 +105,12 @@
 .circle-container {
   width: 100% !important;
   position: static !important;
-  text-align: center !important;
+  margin-top: 5px !important;
   top: 0 !important;
   display: flex !important;
-  font-family: initial !important; }
+  font-family: initial !important;
+  justify-content: center !important;
+  transform: translateZ(0) !important; }
 
 .circle-dropdown {
   margin: 0 !important;
@@ -119,7 +121,6 @@
   z-index: 3 !important;
   border: 1px none #bdbdbd !important;
   border-radius: 4px !important;
-  opacity: 1 !important;
   visibility: visible !important;
   font-size: 12px !important; }
 
@@ -132,6 +133,7 @@
   margin-left: auto !important;
   margin-right: auto !important;
   opacity: 0 !important;
+  visibility: hidden !important;
   background: #ffffff !important;
   height: 100px !important;
   overflow: visible !important;
@@ -152,13 +154,17 @@
   margin: 0 !important;
   opacity: 1 !important;
   pointer-events: auto !important;
-  width: 100% !important;
+  transform: translateZ(0) !important;
+  width: auto !important;
   transition: top 0.3s !important;
+  animation: fade-in 0.3s;
   background: url("chrome-extension://__MSG_@@extension_id__/img/icon/newcirclewhite.svg") center 0px/40px no-repeat !important; }
   .circle-content:hover {
     top: 5px !important; }
     .circle-content:hover .circle-dropdown-content {
-      opacity: 1 !important; }
+      opacity: 1 !important;
+      visibility: visible !important;
+      display: flex !important; }
 
 .circle-text {
   color: #6d6d6d !important;
@@ -203,6 +209,7 @@
 
 .circle-logo {
   margin-top: 0 !important;
+  transform: translateZ(0) !important;
   width: 40px !important;
   height: 40px !important;
   background-image: url("chrome-extension://__MSG_@@extension_id__/img/icon/newcirclewhite.svg") !important;

@@ -1,155 +1,70 @@
+// Beware! Some cases are more appropriate for className, others more appropriate for id
+// For instance, on Buzzfeed there is a section that clearly has id applied a little late in page load
+// Which means that it doesn't get hidden as immediately as you'd want
+
 var divs = {
   "stackoverflow.com": [
     {
-      name: "hot-network-questions",
-      type: "id",
-      hidden: true
-    }
-  ],
-  "dailymail.co.uk": [
-    {
-      name: "femail-item",
-      type: "class",
-      hidden: true
-    },
-    {
-      name: "sport-item",
-      type: "class",
-      hidden: true
-    },
-    {
-      name: "tvshowbiz item",
-      type: "class",
-      hidden: true
-    }
-  ],
-  "mailonline.com": [
-    {
-      name: "femail-item",
-      type: "class",
-      hidden: true
-    },
-    {
-      name: "sport-item",
-      type: "class",
-      hidden: true
-    },
-    {
-      name: "home item html_snippet_module",
-      type: "class",
-      hidden: true
-    },
-    {
-      name: "tvshowbiz item",
-      type: "class",
-      hidden: true
-    }
-  ],
-  "twitter.com": [
-    {
-      name: "module Trends trends",
-      type: "class",
-      hidden: true
-    },
-    {
-      name: "stream-container",
-      type: "class",
-      hidden: true
-    },
-    {
-      name: "module wtf-module js-wtf-module roaming-module has-content",
-      type: "class",
-      hidden: true
+      id: "hot-network-questions"
     }
   ],
   "buzzfeed.com": [
     {
-      name: "mod-site-component-list-1",
-      type: "id",
-      hidden: true
+      id: "mod-site-component-list-1"
     },
     {
-      name: "mod-feed-cards-1",
-      type: "id",
-      hidden: true
+      className: "feed-cards col xs-col-12 md-col-8 clearfix xs-mb3"
     },
     {
-      name: "mod-recsys-thumbstrip-1",
-      type: "id",
-      hidden: true
+      id: "mod-recsys-thumbstrip-1"
     },
     {
-      name: "mod-site-component-list-2",
-      type: "id",
-      hidden: true
+      id: "mod-recsys-list-1"
     },
     {
-      name: "now-buzzing",
-      type: "class",
-      hidden: true
+      id: "mod-quickly-catch-up-1"
     },
     {
-      name: "feedgrid",
-      type: "data-module",
-      hidden: true
-    }
-  ],
-  "theguardian.com": [
-    {
-      name: "most-viewed",
-      type: "id",
-      hidden: true
+      id: "mod-site-component-list-2"
     },
     {
-      name: "more-on-this-story",
-      type: "id",
-      hidden: true
+      id: "mod-site-component-list-3"
+    },
+    {
+      className: "now-buzzing"
     }
   ],
   "youtube.com": [
     {
-      name: "related",
-      type: "id",
-      hidden: true
+      id: "related",
+      className: "style-scope ytd-watch-flexy"
     },
     {
-      name: "contents",
-      type: "id",
-      hidden: true
+      id: "contents",
+      className: "style-scope ytd-section-list-renderer"
     }
   ],
   "linkedin.com": [
     {
-      name: "ember53",
-      type: "id",
-      hidden: true
+      className: "core-rail"
     },
     {
-      name: "ember396",
-      type: "id",
-      hidden: true
-    },
-    {
-      name: "ember210",
-      type: "id",
-      hidden: true
+      className: "feed-right-rail right-rail"
     }
   ],
   "facebook.com": [
     {
-      name: "pagelet_navigation",
-      type: "id",
-      hidden: true
+      id: "leftCol"
     },
     {
-      name: "fallback_feed",
-      type: "id",
-      hidden: true
+      id: "fallback_feed"
     },
     {
-      name: "rightCol",
-      type: "id",
-      hidden: true
+      id: "rightCol"
     }
   ]
-};
+}
+
+var whitelist = ["youtube.com/results?search_query"]
+
+var blacklist = [{ domain: "linkedin.com", url: "linkedin.com/feed/" }]

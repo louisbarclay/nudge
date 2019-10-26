@@ -1,64 +1,64 @@
-var dateCheck = new RegExp("[0-9]{4}-[0-9]{2}-[0-9]{2}");
+var dateCheck = new RegExp("[0-9]{4}-[0-9]{2}-[0-9]{2}")
 
 function hms(hms) {
-  var a = hms.split(":"); // split it at the colons
+  var a = hms.split(":") // split it at the colons
   // minutes are worth 60 seconds. Hours are worth 60 minutes.
-  var seconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2];
-  return seconds;
+  var seconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2]
+  return seconds
 }
 
 function getLocalStorage() {
   chrome.runtime.sendMessage({ type: "get_localStorage" }, function(response) {
-    var localStorage = response.localStorage;
-    var date = false;
+    var localStorage = response.localStorage
+    var date = false
     Object.keys(localStorage).forEach(function(key) {
       if (dateCheck.test(key)) {
-        date = JSON.parse(localStorage[key]);
+        date = JSON.parse(localStorage[key])
       }
-    });
+    })
 
-    var events = date.events;
+    var events = date.events
 
-    console.log(events);
+    log(events)
 
-    var testDataObject = {};
+    var testDataObject = {}
 
     Object.keys(events).forEach(event => {
       if (events[event].eventType === "visit") {
-        console.log(events[event]);
+        log(events[event])
         if (events[event].domain && events[event].domain in testDataObject) {
           testDataObject[
             {
               starting_time: hms(events[event].startTime),
               ending_time: hms(events[event].endTime)
             }
-          ];
+          ]
         } else {
-          console.log(testDataObject);
-          testDataObject[events[event].domain] = [];
+          log(testDataObject)
+          testDataObject[events[event].domain] = []
           testDataObject[events[event].domain].push({
             starting_time: hms(events[event].startTime),
             ending_time: hms(events[event].endTime)
-          });
+          })
         }
       }
-    });
+    })
 
-    console.log(testDataObject);
+    log(testDataObject)
 
-    var chart = d3.timelines();
+    var chart = d3.timelines()
 
     var svg = d3
       .select("#timeline1")
       .append("svg")
       .attr("width", 500)
       .datum(testDataObject)
-      .call(chart);
-  });
+      .call(chart)
+  })
 }
-getLocalStorage();
+getLocalStorage()
 
-var colours = ["green", "blue", "red", "orange"];
+var colours = ["green", "blue", "red", "orange"]
 
 /*Get events from localStorage
   So what I do here is pass a callback to getLocalStorage in order to
