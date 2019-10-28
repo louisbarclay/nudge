@@ -281,8 +281,8 @@ function execSettings(settings) {
 
       el("reset-hide").onclick = function() {
         var unhiddenDivs = settings.unhidden_divs
-        if (domain in unhiddenDivs) {
-          unhiddenDivs[domain] = []
+        if ((domain || newDomain) in unhiddenDivs) {
+          delete unhiddenDivs[domain || newDomain]
         }
         changeSettingRequest(unhiddenDivs, "unhidden_divs")
       }
