@@ -9,10 +9,12 @@ console.log(config)
 
 // Reset div settings
 if (config.resetDivSettings) {
+  log("Reset div settings")
   changeSettingRequest({}, "unhidden_divs")
 }
 
-function divHider(settings, url, domain) {
+function divHider(settings, url, extractedDomain) {
+  log(settings.unhidden_divs)
   // Add the CSS that you will need
   // Doesn't matter if it's a Nudge site
   // Matters if it's in the div list
@@ -21,17 +23,19 @@ function divHider(settings, url, domain) {
   })
 
   var observerOn = false
-  Object.keys(divs).forEach(function(key) {
+  Object.keys(divs).forEach(function(realDomain) {
     // This now refers to divs, not settings.divs
-    if (url.includes(key) && !observerOn) {
+    if (url.includes(realDomain) && !observerOn) {
       // Find the unhidden divs for this particular domain
       var unhiddenDivs = settings.unhidden_divs
       // Load up unhidden divs
-      if (domain in unhiddenDivs) {
-        unhiddenDivsLocal = unhiddenDivs[domain]
+      // log(extractedDomain)
+      if (realDomain in unhiddenDivs) {
+        unhiddenDivsLocal = unhiddenDivs[realDomain]
+        // log(unhiddenDivsLocal)
       }
       // Run the document observer
-      documentObserver(divs[key], domain, unhiddenDivs)
+      documentObserver(divs[realDomain], realDomain, unhiddenDivs)
       observerOn = true
     }
   })
@@ -138,8 +142,17 @@ function circleHandler(element, domain, div, randomiser, unhiddenDivs) {
     // Div tracker
     // Knows which divs have been unhidden
     // So that you don't recursively mess with them with the document observer
-    // FIXME: now we know
-    unhiddenDivsLocal.push(div)
+
+    var alreadyUnhidden = false
+    unhiddenDivsLocal.forEach(function(unhiddenDiv) {
+      if (isEquivalent(div, unhiddenDiv)) {
+        alreadyUnhidden = true
+      }
+    })
+
+    if (!alreadyUnhidden) {
+      unhiddenDivsLocal.push(div)
+    }
 
     // Go back to before
     element.style.visibility = hiddenDivs[randomiser].visibility
@@ -228,19 +241,19 @@ function checkList(domain, currentUrl) {
   // If you're on a blacklist site, you'll only nudge if you are on the right URL
   if (blacklistMatch) {
     if (currentUrl.includes(blacklistMatch.url)) {
-      console.log("On blacklist url, so let's nudge it")
+      log("On blacklist url, so let's nudge it")
       return false
     } else {
-      console.log("On blacklist site but not on targeted url")
+      log("On blacklist site but not on targeted url")
       return true
     }
     // Otherwise, go whitelist hunting because you're on a regular site
   } else {
     if (whitelist.some(w => currentUrl.includes(w))) {
-      console.log("On regular site, on whitelist url")
+      log("On regular site, on whitelist url")
       return true
     } else {
-      console.log("On regular site, blocking regularly")
+      log("On regular site, blocking regularly")
       return false
     }
   }
@@ -260,24 +273,20 @@ function documentObserver(divs, domain, unhiddenDivs) {
           // If the URL is in the whitelist, temporarily turn off all the hide styles on divs and opacity hide styles
           turnOffHider()
           hiderOff = true
-          console.log("Won't hide on this site")
+          log("Won't hide on this site")
         } else {
           if (hiderOff) {
             turnOnHider()
           }
-          console.log("Can hide on this site")
+          log("Can hide on this site")
           hiderOff = false
         }
       }
 
       // Cycle through divs
       divs.forEach(function(div) {
-        if (
-          unhiddenDivsLocal.some(
-            unhiddenDiv => JSON.stringify(unhiddenDiv) == JSON.stringify(div)
-          )
-        ) {
-          // console.log('Unhidden - will ignore')
+        if (unhiddenDivsLocal.some(u => isEquivalent(u, div))) {
+          // log("Unhidden - will ignore")
         } else {
           if ("id" in div && "className" in div) {
             // Search for brand new ones
@@ -308,7 +317,7 @@ function documentObserver(divs, domain, unhiddenDivs) {
         try {
           // Stringify this because we got a weird SVG className value once which caused an error
           if (JSON.stringify(node.className).includes("circle-container")) {
-            console.log("Removed:", node)
+            log("Removed:", node)
             var divInfo = node.getAttribute("nudge")
             if (divInfo.includes("#") && divInfo.includes(".")) {
               var id = divInfo.match(/(?!#)(.*?)(?=\s\.)/g)[0]
@@ -321,9 +330,7 @@ function documentObserver(divs, domain, unhiddenDivs) {
                 if (
                   div.id == id &&
                   className.includes(div.className) &&
-                  !unhiddenDivsLocal.some(
-                    u => JSON.stringify(u) == JSON.stringify(div)
-                  )
+                  !unhiddenDivsLocal.some(u => isEquivalent(u, div))
                 ) {
                   Array.from(
                     document.getElementsByClassName(className)
@@ -341,9 +348,7 @@ function documentObserver(divs, domain, unhiddenDivs) {
               divs.forEach(function(div) {
                 if (
                   div.id == id &&
-                  !unhiddenDivsLocal.some(
-                    u => JSON.stringify(u) == JSON.stringify(div)
-                  )
+                  !unhiddenDivsLocal.some(u => isEquivalent(u, div))
                 ) {
                   var element = document.getElementById(id)
                   processNode(element, div, domain, true)
@@ -356,9 +361,7 @@ function documentObserver(divs, domain, unhiddenDivs) {
               divs.forEach(function(div) {
                 if (
                   className.includes(div.className) &&
-                  !unhiddenDivsLocal.some(
-                    u => JSON.stringify(u) == JSON.stringify(div)
-                  )
+                  !unhiddenDivsLocal.some(u => isEquivalent(u, div))
                 ) {
                   Array.from(
                     document.getElementsByClassName(className)
@@ -393,7 +396,7 @@ function documentObserver(divs, domain, unhiddenDivs) {
         // Remove
 
         if (!node.className.includes("nudge")) {
-          console.log("Found:", node)
+          log("Found:", node)
           node.className = node.className + ` nudge-${randomiser}`
         } else {
           // Grab the randomiser value from the existing className with an offset of 6
@@ -405,9 +408,9 @@ function documentObserver(divs, domain, unhiddenDivs) {
         try {
           if (node.childNodes[0].className !== "circle-container") {
             if (fromRemoved) {
-              console.log("Readded:", node)
+              log("Readded:", node)
             } else {
-              console.log("Initialised:", node)
+              log("Initialised:", node)
             }
             processForCircle(node, div, domain, randomiser, unhiddenDivs)
           }
