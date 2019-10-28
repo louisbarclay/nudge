@@ -27,7 +27,35 @@ function execSettings(settings) {
 
   // Init div hider
   if (settings.div_hider) {
-    divHider(settings, url, domain)
+    var extractedDomain = extractDomain(url)
+    console.log(settings.whitelist)
+    console.log(extractedDomain)
+    settings.whitelist.forEach(function(whitelistDomain) {
+      // log(whitelistDomain)
+      if (
+        extractedDomain &&
+        extractedDomain.includes(whitelistDomain.split("/")[0])
+      ) {
+        console.log("here")
+        // log(whitelistDomain.split('/')[0]);
+        var match = true
+        for (var i = 0; i < whitelistDomain.split("*").length; i++) {
+          // log(url, whitelistDomain.split('*')[i])
+          if (!url.includes(whitelistDomain.split("*")[i])) {
+            match = false
+          }
+        }
+
+        if (match) {
+          // Whitelisted
+          extractedDomain = false
+        }
+      }
+    })
+    if (extractedDomain) {
+      // If we have a domain, pass that through. If not, pass through extractedDomain
+      divHider(settings, url, domain || extractedDomain)
+    }
   }
 
   if (domain) {
