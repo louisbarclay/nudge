@@ -28,15 +28,12 @@ function execSettings(settings) {
   // Init div hider
   if (settings.div_hider) {
     var extractedDomain = extractDomain(url)
-    console.log(settings.whitelist)
-    console.log(extractedDomain)
     settings.whitelist.forEach(function(whitelistDomain) {
       // log(whitelistDomain)
       if (
         extractedDomain &&
         extractedDomain.includes(whitelistDomain.split("/")[0])
       ) {
-        console.log("here")
         // log(whitelistDomain.split('/')[0]);
         var match = true
         for (var i = 0; i < whitelistDomain.split("*").length; i++) {
