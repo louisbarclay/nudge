@@ -179,7 +179,8 @@
   margin-top: 0.2em;
   opacity: 0.5;
   filter: grayscale(0.5);
-  line-height: 18px; }
+  line-height: 18px;
+  width: auto; }
   .circle-share:hover {
     filter: grayscale(0);
     opacity: 1; }
