@@ -38,11 +38,11 @@ var divs = {
     {
       id: "related",
       className: "style-scope ytd-watch-flexy"
-    },
-    {
-      id: "contents",
-      className: "style-scope ytd-section-list-renderer"
     }
+    // {
+    //   id: "contents",
+    //   className: "style-scope ytd-section-list-renderer"
+    // }
   ],
   "linkedin.com": [
     {
