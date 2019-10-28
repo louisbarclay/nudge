@@ -8,7 +8,7 @@ var hiderOff = false
 console.log(config)
 
 // Reset div settings
-if (true) {
+if (config.resetDivSettings) {
   changeSettingRequest({}, "unhidden_divs")
 }
 
