@@ -1,0 +1,49 @@
+html
+  head
+    title Help out
+    link(rel="stylesheet", href="../../css/pages/main.css")
+    link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
+    meta(charset="UTF-8")
+  body
+    div.options-container
+      div
+        div.options-header
+          div.options-logo
+      div#welcome
+      div.options-main-header Help out Nudge
+      div Here are a few ways you can help Nudge
+      span.options-sub-header 📧 Get updates
+      div I'll email you a few times a year about new features and anything else Nudge-related that you might find interesting.
+      div
+        ul.text-input
+          li
+            form#mc-embedded-subscribe-form.validate(action='https://nudgeware.us5.list-manage.com/subscribe/post?u=8b0fe4a0d9e0cb9ac0d96db09&id=d3b4c5f9ac' method='post' name='mc-embedded-subscribe-form' target='_blank' novalidate='')
+              #mc_embed_signup_scroll
+                .mc-field-group
+                  input#mce-EMAIL.required.email(type='email' value='' name='EMAIL' placeholder='Your email address' autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false")
+                #mce-responses.clear
+                  #mce-error-response.response(style='display:none')
+                  #mce-success-response.response(style='display:none')
+                div(style='position: absolute; left: -5000px;' aria-hidden='true')
+                  input(type='text' name='b_8b0fe4a0d9e0cb9ac0d96db09_d3b4c5f9ac' tabindex='-1' value='')
+                .clear.options-subscribe-button-container
+                  input#mc-embedded-subscribe.options-subscribe-button.button(type='submit' value='Subscribe' name='subscribe')
+      span.options-sub-header 📯 Review Nudge
+      div.help-text Give me a boost on the Chrome Web Store.
+      //- a Nudge on the Chrome Web Store
+      span.options-sub-header 🐟 Tell a friend about Nudge
+      div.help-text Email a friend about Nudge and CC 
+        a(href="mark.zuckerberg@nudgeware.io" target='_blank') mark.zuckerfish@nudgeware.io
+        | . You'll get a picture of Mark Zuckerberg's head on a fish.
+      //- a(href="https://medium.com/@louisbarclay/mark-zuckerbergs-head-on-a-fish-91dd6ba78967" target='_blank') Instructions for how to claim your Zuckerfish
+      span.options-sub-header 💰 Become a Co-CEO of Nudge
+      div.help-text Give your career the boost it probably needs.
+      //- a(href="https://medium.com/@louisbarclay/mark-zuckerbergs-head-on-a-fish-91dd6ba78967" target='_blank') Join the senior leadership team
+      span.options-sub-header 📬 Give feedback
+      div.help-text Feature idea? Bug? I'd love to know.
+      //- a(href="mailto:feedback@nudgeware.io" target='_blank') feedback@nudgeware.io
+  script(src="../../config.js")
+  script(src="../../js/background/storage.js")
+  script(src="../../js/helpers.js")
+  script(src="../../js/vars/vars.js")
+  script(src="../../js/help_out.js")
