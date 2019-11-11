@@ -130,6 +130,19 @@ getLocalStorage()
 button.addEventListener("mousedown", sliderdown, true)
 button.addEventListener("touchstart", sliderTouchdown, true)
 
+// Reveal the signup prompt
+el("mce-EMAIL").onfocus = function() {
+  el("js-signup-prompt").style.visibility = "visible"
+  el("mce-EMAIL").placeholder = ""
+}
+
+// Reveal the signup prompt
+el("mce-EMAIL").onblur = function() {
+  el("js-signup-prompt").style.visibility = "hidden"
+  el("mce-EMAIL").placeholder =
+    "First 7 billion newsletter subscribers get Nudge for free"
+}
+
 // Vars for the slider
 var buttonPosition = 0
 var mousePosition = false
