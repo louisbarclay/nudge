@@ -2,13 +2,15 @@ html
   head
     title Options
     link(rel="stylesheet", href="../../css/pages/main.css")
+    link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
+    meta(charset="UTF-8")
   body
     div.options-container
       div
         div.options-header
           div.options-logo
       div#welcome
-      span.options-sub-header Nudge enabled sites
+      span.options-sub-header 🎰 Nudge enabled sites
       div
         ul.text-input
           li
@@ -22,7 +24,7 @@ html
           span.options-guidance-text-highlight site.com/page
           | )
       ul.tags#domainList
-      span.options-sub-header Nudge whitelisted sites
+      span.options-sub-header 🌼 Nudge whitelisted sites
       div
         ul.text-input
           li
@@ -42,7 +44,7 @@ html
           span.options-guidance-text-highlight site.com/that/page
           | )
       ul.tags#whiteList
-      span.options-sub-header Stuff Nudge does
+      span.options-sub-header 🔨 Stuff Nudge does
       mixin optionBoolean(name, divId)
         div.boolean(id=divId)
           div=name
@@ -62,7 +64,7 @@ html
       +optionBoolean('Shows Facebook unfollow dialog', 'fb_show_unfollow')
       //- +optionBoolean('Shows an off switch on Nudge sites', 'show_switch')
       +optionBoolean('Shares anonymised data to help make Nudge better', 'share_data')
-      span.options-sub-header Your Nudge ID
+      span.options-sub-header ⚜️ Your Nudge ID
       p Here is your Nudge ID:
       div.id-banner
         div.id-text#id

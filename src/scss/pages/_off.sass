@@ -2,6 +2,16 @@
 $slider-height: 60px  
 $opacity-global: 0.7
 
+// Options
+$primary: lighten($nudge-grey-medium, 7%)
+$light-fill: lighten($nudge-grey-lightest, 4%)
+$secondary-text: $nudge-grey-light
+$toggle-fill: $nudge-blue
+$toggle-secondary: $nudge-blue
+$toggle-fill-text: $primary
+$toggle-light-text: $white
+$toggle-white: $light-fill
+
 @keyframes fade_out
   from
     opacity: 1
@@ -78,19 +88,35 @@ $opacity-global: 0.7
     font-size: 15px
     position: absolute
     width: 100%
+    display: flex
+    flex-direction: column
     text-align: center
     z-index: 50
+    align-items: center
+    justify-content: center
 
   &italics
     font-style: italic
 
   &donate-link
     // text-decoration: underline
-    cursor: pointer
+    // cursor: pointer
     opacity: 0.8
-    &:hover
-      opacity: 1
-      color: $white
+    // &:hover
+    //   opacity: 1
+    //   color: $white
+    margin-right: 0.5em
+
+  &signup-prompt
+    // text-decoration: underline
+    // cursor: pointer
+    opacity: 0.8
+    // &:hover
+    //   opacity: 1
+    //   color: $white
+    margin-right: 0.5em
+    font-size: 0.8em
+    visibility: hidden
 
   &cog-small
     display: inline-block
@@ -203,6 +229,40 @@ $opacity-global: 0.7
     height: 1.4em
     opacity: 0.8
 
+  &donate-container
+    width: auto
+    height: 32px
+
+  &text-input
+    width: auto
+    input
+      caret-color: $white
+      // border-bottom: $border-primary
+      // border-bottom-color: $secondary-text
+      // border-bottom-width: 1px
+      font-size: 16px
+      left: 0
+      list-style: none
+      margin: 0
+      padding-top: 0.2em
+      position: relative
+      text-align: center
+      width: 500px
+      background: none
+      opacity: 0.8
+      cursor: pointer
+
+      &::placeholder
+        color: $white
+
+      &:focus
+        // border-bottom: $border-primary
+        // border-bottom-color: $primary
+        // border-bottom-width: 1px
+        cursor: text
+        color: $white
+        opacity: 0.9
+
   &button
     position: relative
     height: $slider-height
@@ -258,3 +318,4 @@ $opacity-global: 0.7
     top: 12px
   .off-slider
     margin-top: 0vh
+

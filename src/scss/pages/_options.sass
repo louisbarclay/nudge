@@ -9,6 +9,7 @@ $toggle-light-text: $white
 $toggle-white: $light-fill
 
 body
+  // Careful - this font size has an impact on the off page, not sure why
   font-size: 13px
   color: $primary
   opacity: 0
@@ -36,13 +37,21 @@ body
 
 .options-sub-header
   color: $primary
-  font-size: 22px
-  margin-bottom: 0.5em
-  // text-transform: uppercase
-  // font-size: 0.9em
-  // color: $primary
-  margin-bottom: 0.6em
-  margin-top: 1em
+  font-size: 24px
+  font-family: 'Roboto', sans-serif
+  font-weight: 500
+  color: black
+  margin-bottom: 0.8em
+  margin-top: 1.2em
+
+.options-main-header
+  color: $primary
+  font-size: 30px
+  color: black
+  font-family: 'Roboto', sans-serif
+  font-weight: 700
+  margin-bottom: 1em
+  margin-top: 1.5em
 
 #share_data
   margin-bottom: 0
@@ -80,7 +89,7 @@ body
     font-size: 1em
 
 .options-guidance-text
-  font-size: 11px
+  font-size: 12px
   color: $secondary-text
 
 .options-guidance-text-highlight
@@ -122,9 +131,11 @@ body
     margin-bottom: .5em
     
     &::before
-      // filter: grayscale(80%)
       opacity: 1
+      +size(16px)
       border-radius: 2px
+      margin-right: 0.8em
+      margin-left: 0.4em
       background:
         repeat: no-repeat
         position: center center
@@ -146,6 +157,16 @@ body
         top: 0
         width: 100%
         z-index: 1
+
+.options-subscribe-button
+  +border($style: none)
+  border-bottom: none !important
+  width: 100px !important
+  margin-top: 1em !important
+  cursor: pointer !important
+
+.help-text
+  display: inline-block !important
 
 .toggle
   background: none
@@ -192,13 +213,14 @@ body
     border-bottom: $border-primary
     border-bottom-color: $secondary-text
     border-bottom-width: 1px
+    // font-size: 16px
     left: 0
     list-style: none
     margin: 0
     padding-bottom: 0.4em
     padding-top: 0.2em
     position: relative
-    width: 400px
+    width: 600px
 
     &::placeholder
       color: $secondary-text
