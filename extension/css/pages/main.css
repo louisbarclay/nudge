@@ -291,18 +291,25 @@ h6 {
   font-size: 15px;
   position: absolute;
   width: 100%;
+  display: flex;
+  flex-direction: column;
   text-align: center;
-  z-index: 50; }
+  z-index: 50;
+  align-items: center;
+  justify-content: center; }
 
 .off-italics {
   font-style: italic; }
 
 .off-donate-link {
-  cursor: pointer;
-  opacity: 0.8; }
-  .off-donate-link:hover {
-    opacity: 1;
-    color: #ffffff; }
+  opacity: 0.8;
+  margin-right: 0.5em; }
+
+.off-signup-prompt {
+  opacity: 0.8;
+  margin-right: 0.5em;
+  font-size: 0.8em;
+  visibility: hidden; }
 
 .off-cog-small {
   display: inline-block;
@@ -439,6 +446,32 @@ h6 {
   text-align: center;
   height: 1.4em;
   opacity: 0.8; }
+
+.off-donate-container {
+  width: auto;
+  height: 32px; }
+
+.off-text-input {
+  width: auto; }
+  .off-text-input input {
+    caret-color: #ffffff;
+    font-size: 16px;
+    left: 0;
+    list-style: none;
+    margin: 0;
+    padding-top: 0.2em;
+    position: relative;
+    text-align: center;
+    width: 500px;
+    background: none;
+    opacity: 0.8;
+    cursor: pointer; }
+    .off-text-input input::placeholder {
+      color: #ffffff; }
+    .off-text-input input:focus {
+      cursor: text;
+      color: #ffffff;
+      opacity: 0.9; }
 
 .off-button {
   position: relative;
@@ -811,10 +844,21 @@ body {
 
 .options-sub-header {
   color: #7f7f7f;
-  font-size: 22px;
-  margin-bottom: 0.5em;
-  margin-bottom: 0.6em;
-  margin-top: 1em; }
+  font-size: 24px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  color: black;
+  margin-bottom: 0.8em;
+  margin-top: 1.2em; }
+
+.options-main-header {
+  color: #7f7f7f;
+  font-size: 30px;
+  color: black;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  margin-bottom: 1em;
+  margin-top: 1.5em; }
 
 #share_data {
   margin-bottom: 0; }
@@ -852,7 +896,7 @@ body {
     font-size: 1em; }
 
 .options-guidance-text {
-  font-size: 11px;
+  font-size: 12px;
   color: #bdbdbd; }
 
 .options-guidance-text-highlight {
@@ -897,7 +941,11 @@ body {
     z-index: 0; }
   .tags li::before {
     opacity: 1;
+    width: 16px;
+    height: 16px;
     border-radius: 2px;
+    margin-right: 0.8em;
+    margin-left: 0.4em;
     background-repeat: no-repeat;
     background-position: center center; }
   .tags li:hover {
@@ -918,6 +966,17 @@ body {
       top: 0;
       width: 100%;
       z-index: 1; }
+
+.options-subscribe-button {
+  border: 1px none #bdbdbd;
+  border-radius: 4px;
+  border-bottom: none !important;
+  width: 100px !important;
+  margin-top: 1em !important;
+  cursor: pointer !important; }
+
+.help-text {
+  display: inline-block !important; }
 
 .toggle {
   background: none;
@@ -965,7 +1024,7 @@ body {
   padding-bottom: 0.4em;
   padding-top: 0.2em;
   position: relative;
-  width: 400px; }
+  width: 600px; }
   .text-input input::placeholder {
     color: #bdbdbd; }
   .text-input input:focus {
