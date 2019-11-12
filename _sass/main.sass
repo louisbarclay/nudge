@@ -33,6 +33,8 @@ button
   border-radius: 4px
   padding: (2 / 6) * 1em (5 / 6) * 1em (2 / 6) * 1em (5 / 6) * 1em
   margin: 0 0 20px
+  &:hover
+    background: darken(#61a7ff, 5%)
 
 #mc-embedded-subscribe
   background: #ededed
@@ -44,14 +46,13 @@ button
   border: none
   border-radius: 4px
   padding: (2 / 6) * 1em (5 / 6) * 1em (2 / 6) * 1em (5 / 6) * 1em
-
-#mc-embedded-subscribe:hover 
-  box-shadow: none
-  color: #6d6d6d
-  border: none
-  border-color: transparent
-  background: darken(#ededed, 5%)
-  box-shadow: none
+  &:hover 
+    box-shadow: none
+    color: #6d6d6d
+    border: none
+    border-color: transparent
+    background: darken(#ededed, 5%)
+    box-shadow: none
 
 .logo
   width: 15%
@@ -70,21 +71,19 @@ button
   margin: 0
   padding-bottom: 0.4em
   padding-top: 0.2em
+  &::placeholder
+    color: #bdbdbd
+  &:focus
+    border-bottom: solid
+    border-bottom-color: #ff61a7
+    border-bottom-width: 1px
+    color: #ff61a7
+    &::placeholder
+    color: lighten(#ff61a7, 10%)
 
 .mc-field-group
   width: 100%
-  margin-right: 10px
-  
-#mce-EMAIL::placeholder
-  color: #bdbdbd
-
-#mce-EMAIL:focus
-  border-bottom: solid
-  border-bottom-color: #ff61a7
-  border-bottom-width: 1px
-  color: #ff61a7
-  &::placeholder
-    color: lighten(#ff61a7, 10%)
+  margin-right: 10px  
 
 #mc_embed_signup_scroll
   display: flex
