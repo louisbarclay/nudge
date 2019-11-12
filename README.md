@@ -6,7 +6,7 @@ Nudge makes the internet less addictive.
 
 You choose which parts of Nudge to enable in Settings. Download Nudge here, or read about Nudge's features below:
 
-## 🚷 Defaulter
+# 🚷 Defaulter
 
 *Addictive sites can only be reached by dragging across a slider*
 
@@ -22,7 +22,7 @@ To visit the site, you have to drag the slider across. The slider gets harder to
 
 💎 Bonus: the off page image changes every day so you don't get bored.
 
-## 🌒 Hider
+# 🌒 Hider
 
 *Hides addictive sections of websites*
 
@@ -36,7 +36,7 @@ It's like ad blocking, except for things like YouTube recommended videos that ar
 
 💎 Bonus: email me on louis [at] nudgeware [dot] io if you have a suggestion of a section you'd like hidden. I hope to soon let you add your own hidden sections in Nudge's Settings.
 
-## 👋 Unfollower
+# 👋 Unfollower
 
 *Deletes your Facebook News Feed across all devices*
 
@@ -56,7 +56,7 @@ This is what a blank News Feed looks like:
 
 ⚠️ Warning: if you use the Unfollower, there is no automated way to refollow everyone and everything. However, you can do this manually in Facebook's News Feed Preferences.
 
-## 🕰 Time Nudger
+# 🕰 Time Nudger
 
 *Shows you how long you spend on addictive sites*
 
@@ -70,7 +70,7 @@ It helps you see when you're getting sucked in, without disrupting you too much.
 
 💎 Bonus: clicking the Time Nudger's first button will close the current tab and any other tabs of that domain that you have open. Sort of like a nuclear option to get you back on track.
 
-## 🧻 Scroll Nudger
+# 🧻 Scroll Nudger
 
 *Shows you when you're infinitely scrolling*
 
@@ -82,7 +82,7 @@ It helps you see when you're on an infinite scroll binge, without disrupting you
 
 ⚙️ You can: choose the sites the Scroll Nudger works on; switch off the Scroll Nudger completely.
 
-## 💤 Snoozer
+# 💤 Snoozer
 
 *Lets you switch off Nudge when you need to*
 
@@ -94,7 +94,7 @@ It's for situations where you need a break; maybe because you need to get into a
 
 ⚙️ You can: turn the Snoozer off early after you've done whatever you needed to do.
 
-## Other Features
+# Other Features
 
 - 🌼 Add Whitelist sites that you don't ever want to nudge
 - ✂️ Remove Facebook's notifications
