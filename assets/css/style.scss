@@ -48,7 +48,7 @@ input {
   width: 18%
 }
 
-.mc-field-group {
+#mce-EMAIL {
   caret-color: black;
   border: none;
   border-bottom: solid;
@@ -61,11 +61,11 @@ input {
   padding-top: 0.2em;
 }
 
-.mc-field-group::placeholder {
+#mce-EMAIL::placeholder {
   color: grey;
 }
 
-.mc-field-group:focus {
+#mce-EMAIL:focus {
   border-bottom: solid;
   border-bottom-color: black;
   border-bottom-width: 1px;
