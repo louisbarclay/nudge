@@ -39,3 +39,25 @@ h1, h2, h3 {
 .logo {
   width: 18%
 }
+
+.mc-field-group {
+  caret-color: black;
+  border-bottom: solid;
+  border-bottom-color: grey;
+  border-bottom-width: 1px;
+  list-style: none;
+  margin: 0;
+  padding-bottom: 0.4em;
+  padding-top: 0.2em;
+}
+
+.mc-field-group::placeholder {
+  color: grey;
+}
+
+.mc-field-group:focus {
+  border-bottom: solid;
+  border-bottom-color: black;
+  border-bottom-width: 1px;
+  color: black;
+}
