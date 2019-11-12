@@ -6,7 +6,7 @@ Nudge makes the internet less addictive.
 
 You can choose which parts of Nudge you want enabled.
 
-[Download Nudge for Google Chrome here](https://bit.ly/2q7VE0K), or read about Nudge's features below.
+[Download Nudge for Google Chrome](https://bit.ly/2q7VE0K), or read about Nudge's features below.
 
 # 🚷 Defaulter
 
