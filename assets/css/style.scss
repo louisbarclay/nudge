@@ -31,6 +31,7 @@ h1, h2, h3 {
 .button:hover {
   box-shadow: none;
   color: white;
+  border: none;
   border-color: transparent;
   background: darken(#61a7ff, 5%);
   box-shadow: none;
@@ -42,9 +43,11 @@ h1, h2, h3 {
 
 .mc-field-group {
   caret-color: black;
+  border: none;
   border-bottom: solid;
   border-bottom-color: grey;
   border-bottom-width: 1px;
+  outline: none
   list-style: none;
   margin: 0;
   padding-bottom: 0.4em;
