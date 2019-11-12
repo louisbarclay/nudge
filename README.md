@@ -4,7 +4,7 @@ Nudge makes the internet less addictive.
 - Shows you when you're getting sucked in
 - Gets rid of some of the most addictive parts of the internet
 
-[Download Nudge here](https://bit.ly/2q7VE0K), or read about Nudge's features below.
+[Download Nudge for Google Chrome here](https://bit.ly/2q7VE0K), or read about Nudge's features below.
 
 # 🚷 Defaulter
 
