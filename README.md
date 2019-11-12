@@ -1,5 +1,3 @@
-# Nudge
-
 ### Make the internet less addictive with nudges that help you avoid getting sucked in
 
 Nudge hacks website designs to make them less persuasive, visualises addictive browsing patterns, and gives you tools to manage some of the most addictive parts of the internet — e.g. to delete your Facebook News Feed.
