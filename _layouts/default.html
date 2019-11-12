@@ -20,7 +20,7 @@
           <img class="logo" src="{{site.logo | relative_url}}" alt="Logo" />
         {% endif %}
         
-        <h1>{{ site.title | default: site.github.repository_name }}</h1>
+        <h1 class="title">{{ site.title | default: site.github.repository_name }}</h1>
 
         <p>{{ site.description | default: site.github.project_tagline }}</p>
         
@@ -43,12 +43,16 @@
         <p class="small">Get interesting and infrequent updates. First 7 billion subscribers get Nudge for free.</p>
 
         <div class="icon-container">
-          <a href="https://github.com/lgwb89/nudge" target="_blank">
-            <img class="icon" src="/docs/img/github.svg" />
+          <a href="https://medium.com/@louisbarclay" target="_blank">
+            <img class="icon" src="/docs/img/medium.svg" />
           </a>
           <a href="https://www.linkedin.com/in/louis-b-51458a4/" target="_blank">
             <img class="icon" src="/docs/img/linkedin.svg" />
           </a>
+          <a href="https://github.com/lgwb89/nudge" target="_blank">
+            <img class="icon" src="/docs/img/github.svg" />
+          </a>
+          
         </div>
           
         {% if site.show_downloads %}
