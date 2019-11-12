@@ -58,7 +58,7 @@ This is what a blank News Feed looks like:
 
 ⚠️ Warning: if you use the Unfollower, there is no automated way to refollow everyone and everything. However, you can do this manually in Facebook's News Feed Preferences.
 
-# 🕰 Time Nudger
+# ⏱ Time Nudger
 
 *Shows you how long you spend on addictive sites*
 
