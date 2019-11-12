@@ -100,4 +100,4 @@ It's for situations where you need a break; maybe because you need to get into a
 
 - 🌼 Add Whitelist sites that you don't ever want to nudge
 - ✂️ Remove Facebook's notifications
-- 🌫️ Make Facebook's top bar grey
+- ☁️ Make Facebook's top bar grey
