@@ -23,7 +23,7 @@ input {
   padding: 0;
 }
 
-.button {
+#mc-embedded-subscribe {
   background: #61a7ff;
   cursor: pointer;
   margin: 0;
@@ -35,7 +35,7 @@ input {
   padding: (2 / 6) * 1em (5 / 6) * 1em (2 / 6) * 1em (5 / 6) * 1em;
 }
 
-.button:hover {
+#mc-embedded-subscribe:hover {
   box-shadow: none;
   color: white;
   border: none;
