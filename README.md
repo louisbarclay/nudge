@@ -12,9 +12,9 @@ You can choose which parts of Nudge you want enabled.
 
 *Addictive sites can only be reached by dragging across a slider*
 
-The Defaulter turns addictive sites off by default, so that you don't visit a site mindlessly.
+The Defaulter turns addictive sites off by default, so that instead of visiting a site out of habit, you get to decide whether you really want to visit after all.
 
-When you try to visit, you are instead shown the Nudge off page, with an image and a slider (see screenshot below).
+When you try to go to an addictive site, you are redirected to a page showing a nice image and a slider (see screenshot below).
 
 To visit the site, you have to drag the slider across. The slider gets harder to drag across the more you do it in a given day.
 
@@ -22,7 +22,7 @@ To visit the site, you have to drag the slider across. The slider gets harder to
 
 ⚙️ You can: choose the sites the Defaulter works on; turn off the setting which makes the slider harder to drag across; switch off the Defaulter entirely.
 
-💎 Bonus: the off page image changes every day so you don't get bored.
+💎 Bonus: the nice image changes every day so you don't get bored.
 
 # 🌒 Hider
 
@@ -100,4 +100,4 @@ It's for situations where you need a break; maybe because you need to get into a
 
 - 🌼 Add Whitelist sites that you don't ever want to nudge
 - ✂️ Remove Facebook's notifications
-- ☁️ Make Facebook's top bar grey
+- ☁️ Change the colour of Facebook's top bar from blue to grey
