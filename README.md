@@ -18,7 +18,7 @@ When you try to go to an addictive site, you are redirected to a page showing a 
 
 To visit the site, you have to drag the slider across. The slider gets harder to drag across the more you do it in a given day.
 
-![](docs/img/defaulter.gif)
+![](docs/img/defaulter2.gif)
 
 ⚙️ You can: choose the sites the Defaulter works on; turn off the setting which makes the slider harder to drag across; switch off the Defaulter entirely.
 
@@ -92,7 +92,7 @@ The Snoozer is a button that turns off all of Nudge's features for 10 minutes.
 
 It's for situations where you need a break; maybe because you need to get into a site for work, or because you're feeling like you don't need to be nudged just then.
 
-![](docs/img/snoozer.png)
+![](docs/img/snoozer2.png)
 
 ⚙️ You can: turn the Snoozer off early after you've done whatever you needed to do.
 
