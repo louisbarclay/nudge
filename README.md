@@ -58,19 +58,19 @@ This is what a blank News Feed looks like:
 
 ⚠️ Warning: if you use the Unfollower, there is no automated way to refollow everyone and everything. However, you can do this manually in Facebook's News Feed Preferences.
 
-# ⏱ Time Nudger
+# 🌈 Rainbow Timer
 
 *Shows you how long you spend on addictive sites*
 
-The Time Nudger is a blue circle that grows (and becomes pink) the longer you spend on an addictive site.
+The Rainbow Timer is a rainbow that grows the longer you spend on an addictive site.
 
-It helps you see when you're getting sucked in, without disrupting you too much. You can still continue using the site while the Time Nudger grows.
+It helps you see when you're getting sucked in, without disrupting you too much. You can still continue using the site while the Rainbow Timer grows.
 
 ![](docs/img/timenudger.png)
 
-⚙️ You can: choose the sites the Time Nudger works on; hide the Time Nudger at any point if it's nudging you a little too much; switch off the Time Nudger completely.
+⚙️ You can: choose the sites the Rainbow Timer works on; hide the Rainbow Timer at any point if it's nudging you a little too much; switch off the Rainbow Timer completely.
 
-💎 Bonus: clicking the Time Nudger's first button will close the current tab and any other tabs of that domain that you have open. Sort of like a nuclear option to get you back on track.
+💎 Bonus: clicking the Rainbow Timer's first button will close the current tab and any other tabs of that domain that you have open. Sort of like a nuclear option to get you back on track.
 
 # 🧻 Scroll Nudger
 
