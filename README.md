@@ -62,7 +62,7 @@ This is what a blank News Feed looks like:
 
 *Shows you how long you spend on addictive sites*
 
-The Rainbow Timer is a rainbow that grows the longer you spend on an addictive site.
+The Rainbow Timer is a subtle rainbow that grows the longer you spend on an addictive site.
 
 It helps you see when you're getting sucked in, without disrupting you too much. You can still continue using the site while the Rainbow Timer grows.
 
