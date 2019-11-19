@@ -76,7 +76,7 @@ function getLocalStorage() {
     var settingsLocal = response.settingsLocal
     getStickier = settingsLocal.get_stickier
     // Get domain today
-    // var domainToday = JSON.parse(localStorage[date])[domain];
+    var domainToday = JSON.parse(localStorage[date])[domain]
     // Pull the status out
     var status = JSON.parse(localStorage.status)
 
@@ -103,6 +103,10 @@ function getLocalStorage() {
       .humanize()
     // Update it in headline
     document.getElementById("js-lastvisit").innerHTML = sinceLastVisitEnd
+
+    el("js-stats").innerHTML = `Visits: ${
+      domainToday.visits
+    }. Time: ${domainToday.time / 1000}s`
 
     switch_ons = JSON.parse(localStorage[date]).switch_ons
     if (getStickier) {
