@@ -90,6 +90,7 @@ function eventLog(domain, eventType, detailsObj, date, time) {
   }
   var timeStamp = moment().toString()
   consoleLogger(domain, eventType, detailsObj, date, time)
+  amplitude.getInstance().logEvent(eventType)
   // should match up perfectly
   if (eventType != "visitStart") {
     if (
