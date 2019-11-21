@@ -317,10 +317,9 @@ function styleAdder(name, style, id) {
 }
 
 function liveUpdate(domain, liveUpdateObj) {
-  if (notNonDomain(domain)) {
-    chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(
-      tabs
-    ) {
+  chrome.tabs.query(
+    { active: true, lastFocusedWindow: true },
+    function liveUpdateSender(tabs) {
       if (typeof tabs[0] != "undefined") {
         // Live updater for control center
         try {
@@ -329,8 +328,8 @@ function liveUpdate(domain, liveUpdateObj) {
           log(e)
         }
       }
-    })
-  }
+    }
+  )
 }
 
 // Send event from content script
@@ -598,13 +597,21 @@ function domainCheck(url, settings) {
     return false
   }
 
+  if (url.startsWith(getUrl("/")) && url.includes("pages/off")) {
+    var offDomain = decodeURIComponent(url.split("domain=")[1].split("&")[0])
+    domain = `${offPage}/${offDomain}`
+    return domain
+  }
+
   // Check against Nudge domains
   Object.keys(settings.domains).forEach(function(nudgeDomain) {
     if (
       domainToCheck.includes(nudgeDomain) &&
       settings.domains[nudgeDomain].nudge
+      // Worth noting this means that previously nudged but now nudge = off sites will be httpPages
     ) {
       domain = nudgeDomain
+      // Don't return here because you need to do a whitelist check
     }
   })
 
@@ -623,11 +630,42 @@ function domainCheck(url, settings) {
 
       if (match) {
         // Whitelisted
-        domain = false
+        domain = `${whitelistPage}/${whitelistDomain}`
+        return domain
       }
     }
   })
+
+  // If domain still hasn't been identified and URL starts with http, we have an httpPage
+  if (!domain && url.startsWith("http")) {
+    domain = httpPage
+  }
+
+  // If it's a Chrome page
+  if (!domain && url.startsWith("chrome://")) {
+    domain = `${chromePage}/${domainToCheck.split("/")[0]}`
+  }
+
+  // If it's a Chrome page
+  if (!domain && url.startsWith(getUrl("/"))) {
+    domain = `${nudgePage}/${url.split(getUrl("/"))[1]}`
+  }
+
+  // If it's some other random page. Could include ftp, and other protocols
+  if (!domain) {
+    domain = unknownPage
+    log(domainToCheck)
+    log(url)
+  }
+
   return domain
+}
+
+function isNudgeDomain(domain) {
+  if (domain.startsWith("$")) {
+    return false
+  }
+  return true
 }
 
 function tabIdler() {
