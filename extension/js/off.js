@@ -306,10 +306,12 @@ var backgroundEnhanced = document.querySelector(`.${off}background-enhanced`)
 
 // Get the photos if exist in sync. Set them if not
 function initOn() {
+  eventLogSender("slide_on", { domain }, moment())
   chrome.runtime.sendMessage({
     type: "on",
     url,
-    domain
+    domain,
+    stickyMultiplier
   })
 }
 
