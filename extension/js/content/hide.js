@@ -165,20 +165,10 @@ function circleHandler(element, domain, div, randomiser, unhiddenDivs) {
     deleteEl(el(`nudge-opacity-${randomiser}`))
 
     if (showAlways) {
-      if (domain in unhiddenDivs) {
-        var foundDiv = false
-        // If the div is already unhidden, don't do it again
-        unhiddenDivs[domain].forEach(function(div) {
-          foundDiv = true
-        })
-        if (!foundDiv) {
-          unhiddenDivs[domain].push(div)
-        }
-      } else {
-        unhiddenDivs[domain] = []
-        unhiddenDivs[domain].push(div)
-      }
-      changeSettingRequest(unhiddenDivs, "unhidden_divs")
+      changeSettingRequest(div, "unhidden_divs_add", domain)
+      eventLogSender("hide_show_always", { div, domain })
+    } else {
+      eventLogSender("hide_show_once", { div, domain })
     }
   }
 }
