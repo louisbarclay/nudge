@@ -1,7 +1,9 @@
-function consoleLogger(domain, eventType, detailsObj, date, time) {
-  var enabled = true
+var CONSOLE_LOG = true
+var AMPLITUDE_LOG = true
+
+function consoleLogger(eventType, detailsObj, time) {
   function logWithColor(message, color) {
-    if (enabled) {
+    if (CONSOLE_LOG) {
       message = `%c${message}`
       color = `color:${color};`
       log(message, color)
@@ -10,100 +12,103 @@ function consoleLogger(domain, eventType, detailsObj, date, time) {
   switch (eventType) {
     case "visit":
       logWithColor(
-        `${date} ${detailsObj.startTime} ${detailsObj.endTime} ${domain} ${detailsObj.duration} (${detailsObj.totalTimeToday} today). Source: ${detailsObj.source}`,
+        `${moment(detailsObj.time).format(
+          "HH:mm:ss"
+        )} ${detailsObj.startTime.format(
+          "HH:mm:ss"
+        )} ${detailsObj.endTime.format("HH:mm:ss")} ${
+          detailsObj.domain
+        } ${logMinutes(detailsObj.duration / 1000)} (${logMinutes(
+          detailsObj.totalTimeToday / 1000
+        )} today). Source (linked to next visit's domain): ${
+          detailsObj.source
+        }. Shutdown: ${detailsObj.shutdown}`,
         "green"
       )
       break
     case "leftChrome":
       logWithColor(
-        `${date} ${time} Left Chrome ${domain} Source: ${detailsObj.source}`,
+        `${moment(detailsObj.time).format("HH:mm:ss")} Left Chrome ${
+          detailsObj.domain
+        } Source: ${detailsObj.source}`,
         "darkmagenta"
       )
       break
     case "shutdown":
-      logWithColor(`${time} ${domain} shutdown`, "red")
+      logWithColor(
+        `${moment(detailsObj.time).format("HH:mm:ss")} ${
+          detailsObj.domain
+        } shutdown`,
+        "red"
+      )
       break
     case "startup":
-      logWithColor(`${time} startup`, "blue")
+      logWithColor(
+        `${moment(detailsObj.time).format("HH:mm:ss")} startup`,
+        "blue"
+      )
       break
     case "install":
-      logWithColor(`${time} install`, "orange")
+      logWithColor(
+        `${moment(detailsObj.time).format("HH:mm:ss")} install`,
+        "orange"
+      )
       break
     case "update":
       logWithColor(
-        `${time} update ${detailsObj.previousVersion} ${detailsObj.thisVersion}`,
+        `${moment(detailsObj.time).format("HH:mm:ss")} update ${
+          detailsObj.previousVersion
+        } ${detailsObj.thisVersion}`,
         "yellow"
       )
       break
-    // case "visitStart":
-    //   logWithColor(
-    //     `${time} new Visit ${domain} no.${detailsObj.totalVisits}. Source: ${
-    //       detailsObj.source
-    //     }`,
-    //     "brown"
-    //   );
-    //   break;
+    case "changeSetting":
+      logWithColor(
+        `${moment(detailsObj.time).format("HH:mm:ss")} ${eventType} ${
+          detailsObj.setting
+        } ${JSON.stringify(detailsObj.newVal)} ${JSON.stringify(
+          detailsObj.domainSetting
+        )}`,
+        "magenta"
+      )
+      break
     default:
+      logWithColor(
+        `${moment(detailsObj.time).format(
+          "HH:mm:ss"
+        )} ${eventType} ${detailsObj}`,
+        "pink"
+      )
   }
-}
-
-// Nudge logger function
-function nudgeLogger(nudgeObject) {
-  // Nudges get recorded in the 'nudges' object within each date
-  // Also, 'lastNudged' gets recorded in the status object
-  var date = moment().format("YYYY-MM-DD")
-  var time = moment()
-  var statusObj = open("status")
-  var dateObj = open(date)
-  dateObj = dataAdder(dateObj, "nudges", nudgeObject, time)
-  statusObj = dataAdder(statusObj, nudgeObject.domain, time, "lastNudged")
-  close("status", statusObj, "close status in nudge logger")
-  // log(JSON.parse(localStorage["status"]));
-  close(date, dateObj, "close date in nudge logger")
 }
 
 function eventLogReceiver(request) {
-  eventLog(
-    request.domain,
-    request.eventType,
-    request.detailsObj,
-    request.date,
-    request.time
-  )
+  eventLog(request.eventType, request.detailsObj, request.time)
 }
 
-function eventLog(domain, eventType, detailsObj, date, time) {
-  // Define event
-  var event = {
-    domain,
-    eventType
-  }
-  if (detailsObj) {
-    Object.keys(detailsObj).forEach(function(key) {
-      event[key] = detailsObj[key]
-    })
-  }
+function eventLog(eventType, detailsObj, time) {
   // Define date and time
-  if (!date && !time) {
-    date = moment().format("YYYY-MM-DD")
-    time = moment().format("HH:mm:ss")
+  if (!time) {
+    time = moment()
   }
-  var timeStamp = moment().toString()
-  consoleLogger(domain, eventType, detailsObj, date, time)
-  amplitude.getInstance().logEvent(eventType)
-  // should match up perfectly
-  if (eventType != "visitStart") {
+  // Log the event
+  consoleLogger(eventType, detailsObj, time)
+
+  // Send the event to Amplitude only if user is not opted out
+  if (settingsLocal.share_data && AMPLITUDE_LOG) {
+    // Send event
+    amplitude.getInstance().logEvent(eventType, { time, ...detailsObj })
+  }
+
+  // One special case - send an event for the user switching off share_data
+  // So we can understand why a user's data is no longer showing
+  if (!settingsLocal.share_data && AMPLITUDE_LOG) {
     if (
-      eventType === "visit" &&
-      detailsObj.allDomainsDiff[0] - detailsObj.allDomainsDiff[1] != 0
+      eventType === "changeSetting" &&
+      detailsObj.setting === "share_data" &&
+      detailsObj.previousVal
     ) {
-      var dateObj = open(date)
-      dataAdder(dateObj, "events", event, `${timeStamp} ${eventType}CHECKFAIL`)
-      close(date, dateObj, "close date in logger1")
-    } else {
-      var dateObj = open(date)
-      dataAdder(dateObj, "events", event, `${timeStamp} ${eventType}`)
-      close(date, dateObj, "close date in logger2")
+      amplitude.getInstance().logEvent(eventType, { time, ...detailsObj })
     }
   }
 }
