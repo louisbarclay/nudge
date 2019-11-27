@@ -16,12 +16,7 @@ getSettings(execSettings)
 
 function debugLogger(eventType, detailsObj) {
   if (config.debug) {
-    log(eventType, detailsObj)
-  }
-  if (detailsObj) {
-    eventLogSender(domain, eventType, detailsObj)
-  } else {
-    eventLogSender(domain, eventType)
+    // log(eventType, detailsObj)
   }
 }
 
@@ -85,6 +80,7 @@ function execSettings(settings) {
   if (settings.fb_auto_unfollow) {
     executeUnfollow = true
     autoUnfollow = true
+    eventLogSender("fb_unfollow_autounfollow", {})
   }
   // If the ratio has never been set, send through Xhr requests to find out what it is
   if (ratio === false) {
@@ -467,6 +463,12 @@ function friendAndPageToggler(option) {
             headlineLogger(
               `${option.profileCounter} of ${option.totalProfiles} friends, pages, and groups unfollowed`
             )
+            if (option.profileCounter % 10 === 0) {
+              eventLogSender("fb_unfollow_progress", {
+                unfollowedOfFollowed:
+                  option.profileCounter / option.totalProfiles
+              })
+            }
             debugLogger("unfollowSuccess", {
               nameIdentifier: name.charAt(0) + name.length,
               count: option.profileCounter,
@@ -489,6 +491,9 @@ function friendAndPageToggler(option) {
                 headlineLogger(
                   `Congratulations! Finished unfollowing ${option.profileCounter} friends, pages and groups.`
                 )
+                eventLogSender("fb_unfollow_success", {
+                  ratio: 1 - option.profileCounter / option.totalProfiles
+                })
                 autoUnfollowLogger(`100% auto-unfollowed `, false, false)
                 var button = document.getElementById("facebook-button")
                 if (button) {
@@ -513,7 +518,7 @@ function friendAndPageToggler(option) {
           }
         } else {
           // We got data back but the unfollow request didn't work, so we log it
-          eventLogSender("fb_unfollow", "major_fail", {
+          debugLogger("fb_unfollow_fail", {
             responseText: friendandpage_toggle.responseText
           })
         }
@@ -712,6 +717,9 @@ function introUx(element) {
   var button = document.querySelector(".facebook-button-blue")
   button.onclick = function() {
     container.innerHTML = localStorage["confirm_content.html"]
+    eventLogSender("fb_unfollow_intro_button", {
+      ratio: 1 - option.profileCounter / option.totalProfiles
+    })
     confirmUx()
   }
   hideLink()
@@ -731,6 +739,9 @@ function confirmUx() {
   button.onclick = function() {
     cancelOperation = false
     container.innerHTML = localStorage["run_content.html"]
+    eventLogSender("fb_unfollow_confirm_button", {
+      ratio: 1 - option.profileCounter / option.totalProfiles
+    })
     if (profilesLoaded && !currentlyUnfollowing) {
       friendAndPageToggler(unfollow)
     } else {
@@ -751,6 +762,7 @@ function runUx() {
 function buttonInit() {
   var button = document.querySelector(".facebook-button-blue")
   button.onclick = function() {
+    eventLogSender("fb_unfollow_cancel", {})
     progressLogger(`Stopped unfollowing`)
     stopInit()
     // TODO: add feel free to move to another tab. this process will continue
@@ -767,6 +779,7 @@ function stopInit() {
     friendAndPageToggler(unfollow)
     button.innerHTML = "Stop unfollowing"
     progressLogger(`Resuming...`)
+    eventLogSender("fb_unfollow_resume", {})
     buttonInit()
   }
 }
