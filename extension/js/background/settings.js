@@ -118,6 +118,14 @@ function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
       amplitude.getInstance().setUserId(settingsLocal.userId)
     }
 
+    // Sync settings with Amplitude
+    if (settingsLocal.share_data) {
+      amplitude.getInstance().identify(identify)
+      // When share_data is off, only allow to sync share_data setting itself
+    } else if (setting === "share_data" && !settingsLocal.share_data) {
+      amplitude.getInstance().identify(identify)
+    }
+
     // Send the event
     eventLog("changeSetting", {
       newVal,
