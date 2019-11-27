@@ -333,19 +333,13 @@ function liveUpdate(domain, liveUpdateObj) {
 }
 
 // Send event from content script
-function eventLogSender(domain, eventType, detailsObj) {
-  if (!detailsObj) {
-    detailsObj = false
-  }
-  // should be a SENDMESSAGE so it can happen from anywhere in the app
+function eventLogSender(eventType, detailsObj, time) {
   chrome.runtime.sendMessage({
     type: "event",
-    domain,
     eventType,
     detailsObj,
-    date: moment().format("YYYY-MM-DD"),
-    time: moment()
-  }) // needs receiver
+    time: time ? time : moment()
+  })
 }
 
 // Helper to check if key defined
@@ -584,8 +578,6 @@ function fbTokenReady(name, callback) {
   e.amplitude = n
 })(window, document)
 
-amplitude.getInstance().init("a5d19f66e1e6891cd22dcb350a04b08a")
-
 // Check if in domains setting
 function domainCheck(url, settings) {
   var domainToCheck = extractDomain(url)
@@ -594,7 +586,7 @@ function domainCheck(url, settings) {
   // Check if settings are undefined
   if (typeof settings.domains == "undefined") {
     log("Settings not yet defined so no point continuing")
-    return false
+    return notInChrome
   }
 
   if (url.startsWith(getUrl("/")) && url.includes("pages/off")) {
@@ -662,7 +654,7 @@ function domainCheck(url, settings) {
 }
 
 function isNudgeDomain(domain) {
-  if (domain.startsWith("$")) {
+  if (!(typeof domain === "string") || domain.startsWith("$")) {
     return false
   }
   return true
