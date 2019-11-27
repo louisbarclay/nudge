@@ -491,8 +491,7 @@ function fbTokenReady(name, callback) {
   var n = e.amplitude || { _q: [], _iq: {} }
   var r = t.createElement("script")
   r.type = "text/javascript"
-  r.integrity =
-    "sha384-d/yhnowERvm+7eCU79T/bYjOiMmq4F11ElWYLmt0ktvYEVgqLDazh4+gW9CKMpYW"
+  r.integrity = amplitudeCreds.integrity
   r.crossOrigin = "anonymous"
   r.async = true
   r.src = getUrl("js/vendor/amplitude-5.2.2-min.gz.js")
