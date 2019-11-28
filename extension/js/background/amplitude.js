@@ -3,7 +3,6 @@
   var n = e.amplitude || { _q: [], _iq: {} }
   var r = t.createElement("script")
   r.type = "text/javascript"
-  r.integrity = amplitudeCreds.integrity
   r.crossOrigin = "anonymous"
   r.async = true
   r.src = getUrl("js/vendor/amplitude-5.2.2-min.gz.js")
