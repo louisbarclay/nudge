@@ -3,10 +3,6 @@ var unhiddenDivsLocal = []
 var currentUrl = false
 var hiderOff = false
 
-// Tweak the facebook share box a little
-
-console.log(config)
-
 // Reset div settings
 if (config.resetDivSettings) {
   log("Reset div settings")
@@ -14,7 +10,6 @@ if (config.resetDivSettings) {
 }
 
 function divHider(settings, url, extractedDomain) {
-  log(settings.unhidden_divs)
   // Add the CSS that you will need
   // Doesn't matter if it's a Nudge site
   // Matters if it's in the div list
