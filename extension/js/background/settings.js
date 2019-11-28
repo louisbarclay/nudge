@@ -116,6 +116,12 @@ function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
       amplitude.getInstance().init(amplitudeCreds.apiKey)
       // Set user ID
       amplitude.getInstance().setUserId(settingsLocal.userId)
+      // Always sync all settings on re-sharing data, just to make sure they're in sync
+      var identify = new amplitude.Identify()
+      Object.keys(settingsLocal).forEach(function(key) {
+        identify.set(key, settingsLocal[key])
+      })
+      amplitude.getInstance().identify(identify)
     }
 
     // Sync settings with Amplitude
