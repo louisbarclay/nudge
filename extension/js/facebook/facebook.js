@@ -789,6 +789,9 @@ function shareUx() {
     deleteEl(close)
     styleAdder("#pagelet_composer::before", "{ content: none !important; }")
   }
+  el("nudge-share").onclick = function() {
+    eventLogSender("share_link", { location: "fb_ad", domain })
+  }
   shareBottomLinks()
   // to refollow, go to // want to make clear where you go to refollow
 }
