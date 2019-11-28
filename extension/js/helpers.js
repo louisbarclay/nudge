@@ -634,7 +634,11 @@ function domainCheck(url, settings) {
 
   // If it's a Chrome page
   if (!domain && url.startsWith("chrome://")) {
-    domain = `${chromePage}/${domainToCheck.split("/")[0]}`
+    if (domainToCheck.includes("newtab/")) {
+      domain = `${chromePage}/${domainToCheck.split("/")[0]}`
+    } else {
+      domain = `${chromePage}/other`
+    }
   }
 
   // If it's a Chrome page
