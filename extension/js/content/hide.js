@@ -124,6 +124,10 @@ function circleHandler(element, domain, div, randomiser, unhiddenDivs) {
   // This is quite hard-coded, beware
   var showOnceLink = dropdown.childNodes[1]
   var showAlwaysLink = dropdown.childNodes[2]
+  var shareLink = dropdown.childNodes[3]
+  shareLink.onclick = function() {
+    eventLogSender("share_link", { location: div, domain })
+  }
 
   showOnceLink.onclick = function() {
     unHide(container, element, false)
