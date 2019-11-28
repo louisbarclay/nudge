@@ -1,5 +1,3 @@
-// Release values in notes
-
 var config = {
   debug: false,
   offByDefault: true,
@@ -10,9 +8,9 @@ var config = {
 
 // Dev config variables
 if (!chrome.runtime.getManifest().update_url) {
-  console.log("In dev env")
+  console.log("Env: dev")
   config.debug = true
-  config.offByDefault = true
+  config.offByDefault = false
   config.resetDivSettings = false
   config.fastTimer = false
   config.timelineTest = false

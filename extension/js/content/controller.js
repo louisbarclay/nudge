@@ -13,14 +13,11 @@ function execSettings(settings) {
     return
   }
 
-  // Set domain as false
-  var domain = false
-
   var url = window.location.href
 
   // Find domain
   try {
-    domain = domainCheck(url, settings)
+    var domain = domainCheck(url, settings)
   } catch (e) {
     log(e)
   }
@@ -55,7 +52,7 @@ function execSettings(settings) {
     }
   }
 
-  if (domain) {
+  if (isNudgeDomain(domain)) {
     doAtEarliest(function() {
       addCSS("nudges", "css/injected/nudges.css")
       docReady(function() {

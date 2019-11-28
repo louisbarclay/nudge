@@ -23,7 +23,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     eventLogReceiver(request)
   }
   if (request.type === "off") {
-    if ((domainCheck(sender.url), settingsLocal)) {
+    if (isNudgeDomain(domainCheck(sender.url, settingsLocal))) {
       changeSetting(true, "domains", request.domain, "off")
       switchOff(request.domain, sender.url, sender.tabId, "normal")
     }

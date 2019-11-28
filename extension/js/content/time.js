@@ -60,7 +60,6 @@ function cornerInit(totalSeconds, totalVisits, domain) {
     var quarterStyle = `{ opacity: 1 !important; visibility: visible !important; }`
     var quartersStyle = `{ opacity: 0.4 !important; }`
     // Define quarter class and style
-    // log(currentLevel);
     for (var i = 1; i <= currentLevel; i++) {
       // Find out if that quarter style already exists
       if (document.getElementById(`nudge-quarter-${i}-style`)) {
@@ -70,7 +69,13 @@ function cornerInit(totalSeconds, totalVisits, domain) {
           quarterStyle,
           `nudge-quarter-${i}-style`
         )
+        eventLogSender("nudge_scroll", {
+          currentLevel,
+          totalSeconds,
+          fastTimer: config.fastTimer
+        })
       }
+      // Run this condition at the end of the loop
       if (
         i === currentLevel &&
         !document.getElementById("nudge-quarters-style")

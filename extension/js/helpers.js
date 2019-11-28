@@ -9,6 +9,10 @@ function extractDomain(url) {
   return niceUrl.hostname + "/" + niceUrl.pathname.split("/")[1]
 }
 
+function getUrl(path) {
+  return chrome.extension.getURL(path)
+}
+
 ;(function(funcName, baseObj) {
   // The public function name defaults to window.docReady
   // but you can pass in your own object and own function name and those will be used
@@ -168,10 +172,6 @@ function popupCenter(url, title, w, h) {
   }
 }
 
-function getUrl(path) {
-  return chrome.extension.getURL(path)
-}
-
 function sendHTMLRequest(url, callback, errorFunction) {
   var request = new XMLHttpRequest()
   request.open("GET", url, true)
@@ -317,10 +317,9 @@ function styleAdder(name, style, id) {
 }
 
 function liveUpdate(domain, liveUpdateObj) {
-  if (notNonDomain(domain)) {
-    chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(
-      tabs
-    ) {
+  chrome.tabs.query(
+    { active: true, lastFocusedWindow: true },
+    function liveUpdateSender(tabs) {
       if (typeof tabs[0] != "undefined") {
         // Live updater for control center
         try {
@@ -329,24 +328,18 @@ function liveUpdate(domain, liveUpdateObj) {
           log(e)
         }
       }
-    })
-  }
+    }
+  )
 }
 
 // Send event from content script
-function eventLogSender(domain, eventType, detailsObj) {
-  if (!detailsObj) {
-    detailsObj = false
-  }
-  // should be a SENDMESSAGE so it can happen from anywhere in the app
+function eventLogSender(eventType, detailsObj, time) {
   chrome.runtime.sendMessage({
     type: "event",
-    domain,
     eventType,
     detailsObj,
-    date: moment().format("YYYY-MM-DD"),
-    time: moment()
-  }) // needs receiver
+    time: time ? time : moment()
+  })
 }
 
 // Helper to check if key defined
@@ -501,7 +494,13 @@ function domainCheck(url, settings) {
   // Check if settings are undefined
   if (typeof settings.domains == "undefined") {
     log("Settings not yet defined so no point continuing")
-    return false
+    return notInChrome
+  }
+
+  if (url.startsWith(getUrl("/")) && url.includes("pages/off")) {
+    var offDomain = decodeURIComponent(url.split("domain=")[1].split("&")[0])
+    domain = `${offPage}/${offDomain}`
+    return domain
   }
 
   // Check against Nudge domains
@@ -509,8 +508,10 @@ function domainCheck(url, settings) {
     if (
       domainToCheck.includes(nudgeDomain) &&
       settings.domains[nudgeDomain].nudge
+      // Worth noting this means that previously nudged but now nudge = off sites will be httpPages
     ) {
       domain = nudgeDomain
+      // Don't return here because you need to do a whitelist check
     }
   })
 
@@ -529,11 +530,46 @@ function domainCheck(url, settings) {
 
       if (match) {
         // Whitelisted
-        domain = false
+        domain = `${whitelistPage}/${whitelistDomain}`
+        return domain
       }
     }
   })
+
+  // If domain still hasn't been identified and URL starts with http, we have an httpPage
+  if (!domain && url.startsWith("http")) {
+    domain = httpPage
+  }
+
+  // If it's a Chrome page
+  if (!domain && url.startsWith("chrome://")) {
+    if (domainToCheck.includes("newtab/")) {
+      domain = `${chromePage}/${domainToCheck.split("/")[0]}`
+    } else {
+      domain = `${chromePage}/other`
+    }
+  }
+
+  // If it's a Chrome page
+  if (!domain && url.startsWith(getUrl("/"))) {
+    domain = `${nudgePage}/${url.split(getUrl("/"))[1]}`
+  }
+
+  // If it's some other random page. Could include ftp, and other protocols
+  if (!domain) {
+    domain = unknownPage
+    log(domainToCheck)
+    log(url)
+  }
+
   return domain
+}
+
+function isNudgeDomain(domain) {
+  if (!(typeof domain === "string") || domain.startsWith("$")) {
+    return false
+  }
+  return true
 }
 
 function tabIdler() {

@@ -4,16 +4,15 @@ function switchOff(domain, url, tabId, option) {
       chrome.extension.getURL(`html/pages/off_${option}.html`) +
       "?" +
       "domain=" +
-      domain +
+      encodeURIComponent(domain) +
       "&" +
       "url=" +
       encodeURIComponent(url) +
       "&" +
       "option=" +
       option
-    var nudged = false
     // if ( domain last nudged was within 1 minute,,, ,, , , , )
-    eventLog(domain, "off", { nudged, url })
+    eventLog("nudge_off", { domain })
     settingsLocal.domains[domain].off = true
     chrome.tabs.update(tabId, { url }, function() {})
   }

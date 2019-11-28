@@ -1,14 +1,13 @@
-var previousScroll = false;
+var previousScroll = false
 
-var screensToReach = 10;
-var scrollIncrement = 10;
-var mostRecentScrollLevel = 0;
+var screensToReach = 10
+var scrollIncrement = 10
+var mostRecentScrollLevel = 0
 
 function scrollCheck() {
-
   // Check scroll level
   // And Convert it to number of screens
-  var scrollLevel = window.scrollY / screen.height;
+  var scrollLevel = window.scrollY / screen.height
 
   // Check if this is higher than screensToReach
   if (scrollLevel > screensToReach) {
@@ -16,39 +15,42 @@ function scrollCheck() {
 
     // Check if you are going in a positive direction of travel
     if (scrollLevel > mostRecentScrollLevel) {
-
       // Start a scroll listener to trigger a scroll nudge at the next scroll (not doing this yet - feels a bit pointless)
 
       // Do a scroll nudge cycle
-      scrollCycle(screensToReach);
-
+      scrollNudge(screensToReach)
     }
-    screensToReach = screensToReach + scrollIncrement;
+    screensToReach = screensToReach + scrollIncrement
   }
   // At the end, update most recent scroll level
-  mostRecentScrollLevel = scrollLevel;
+  mostRecentScrollLevel = scrollLevel
 }
 
-function scrollCycle(screens) {
+function scrollNudge(screens) {
   // Show the scroll nudge
-  el('nudge-scroll-value').innerHTML = screens;
-  if (el('nudge-scroll-controller').classList.toString().includes('nudge-scroll-hide')) {
-    toggleClass(el('nudge-scroll-controller'), 'nudge-scroll-hide');
+  el("nudge-scroll-value").innerHTML = screens
+  if (
+    el("nudge-scroll-controller")
+      .classList.toString()
+      .includes("nudge-scroll-hide")
+  ) {
+    toggleClass(el("nudge-scroll-controller"), "nudge-scroll-hide")
   }
-  toggleClass(el('nudge-scroll-controller'), 'nudge-scroll-show')
+  toggleClass(el("nudge-scroll-controller"), "nudge-scroll-show")
+  eventLogSender("nudge_scroll", { screens })
 
   // Hide the scroll nudge after a short time
-  setTimeout(function () {
-    toggleClass(el('nudge-scroll-controller'), 'nudge-scroll-show')
-    toggleClass(el('nudge-scroll-controller'), 'nudge-scroll-hide')
+  setTimeout(function() {
+    toggleClass(el("nudge-scroll-controller"), "nudge-scroll-show")
+    toggleClass(el("nudge-scroll-controller"), "nudge-scroll-hide")
   }, 4000)
 }
 
 function insertScroll() {
-  var scrollContainer = createEl(document.body, "div", "nudge-scroll");
-  appendHtml(scrollContainer, localStorage["scroll.html"]);
+  var scrollContainer = createEl(document.body, "div", "nudge-scroll")
+  appendHtml(scrollContainer, localStorage["scroll.html"])
   // Start scroll checking
-  setInterval(function () {
+  setInterval(function() {
     scrollCheck()
-  }, 1000);
+  }, 1000)
 }

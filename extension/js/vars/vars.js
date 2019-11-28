@@ -1,6 +1,15 @@
-// Non-domains
+// Non-Nudge domains
 var notInChrome = "$notInChrome"
-var chromeOrTabIdle = "$chromeOrTabIdle"
+var chromeIdle = "$idleSystem"
+var tabIdle = "$idleTab"
+var offPage = "$offPage"
+var whitelistPage = "$whitelistDomain"
+var chromePage = "$chromePage"
+var httpPage = "$httpPage"
+var unknownPage = "$unknownPage"
+var nudgePage = "$nudgePage"
+
+// Catch all domain
 var allDomains = "$allDomains"
 
 // Do we show the options page on init?
@@ -12,8 +21,7 @@ var settingsLocal = {}
 // Default domain info
 var defaultDomainInfo = {
   nudge: true,
-  off: false,
-  faviconUrl: false
+  off: false
 }
 
 // Default domains
@@ -84,18 +92,14 @@ var defaultSettings = {
   share_data: true,
   // New settings
   show_switch: true,
-  off_by_default: config.offByDefault,
+  off_by_default: true,
   bg_image: false,
   snooze: { all: 0 },
-  get_stickier: true,
+  get_stickier: false,
   show_update_article: true,
   updated_divs: true,
   unhidden_divs: {}
 }
-
-// Other constants
-var minSec = 60
-var sendFailLimit = 10
 
 var unfollow = {
   listUrl:

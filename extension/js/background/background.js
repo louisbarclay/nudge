@@ -1,52 +1,63 @@
 var reload = false
 
-initialise()
+start()
 
 setInterval(everySecond, 1000)
 
 chrome.runtime.setUninstallURL("https://goo.gl/forms/YqSuCKMQhP3PcFz13")
 
-// TODO: need security around this!
-function initialise() {
-  chrome.storage.sync.get(null, function(items) {
+// Get things going
+function start() {
+  chrome.storage.sync.get(null, function(syncStorage) {
     // If items.settings doesn't exist, the user is old school style
     // This must hardly ever trigger!
-    if (typeof items == "undefined") {
-      console.log("Startup A")
-      runInit()
-    } else if (typeof items.settings == "undefined") {
-      console.log("Startup B")
-      runInit()
-    } else if (typeof items.settings.userId == "undefined") {
-      console.log("Startup C")
-      runInit()
+    if (typeof syncStorage == "undefined") {
+      log("Startup: no sync storage")
+      createNewInstance()
+    } else if (typeof syncStorage.settings == "undefined") {
+      log("Startup: no settings in sync storage")
+      createNewInstance()
+    } else if (typeof syncStorage.settings.userId == "undefined") {
+      log("Startup: no user ID in syncstorage.settings")
+      createNewInstance()
     } else {
-      console.log("Startup D")
+      log("Startup: user ID in syncstorage.settings")
       // If items.settings and userId does exist, there is stuff there we need to grab
       // This will also add any new settings in
-      getAndUpdateSettings()
+      loadSettingsAndAmplitude()
     }
-    function runInit() {
+
+    // Clear local and sync storage and create settings for the first time
+    function createNewInstance() {
       // Clear localStorage
       localStorageClear()
       // Clear syncStorage
       syncStorageClear()
       storageSet(
         {
-          settings: initSettings()
+          settings: createSettings()
         },
-        getAndUpdateSettings
+        loadSettingsAndAmplitude
       )
     }
   })
 }
 
 // Get settings from sync to settingsLocal, and run options page if asked for
-function getAndUpdateSettings() {
+async function loadSettingsAndAmplitude() {
   // Get settings
   chrome.storage.sync.get("settings", function(item) {
+    // Get settings locally
     settingsLocal = item.settings
-    // Update settings if don't exist
+
+    // Initialise Amplitude - must do it here, before any Amplitude events are sent
+    if (settingsLocal.share_data) {
+      amplitude.getInstance().init(amplitudeCreds.apiKey)
+      // Set user ID
+      amplitude.getInstance().setUserId(settingsLocal.userId)
+    }
+
+    // Add individual settings that don't exist
     Object.keys(defaultSettings).forEach(function(key) {
       if (isUndefined(item.settings[key])) {
         console.log(`${key} not present in settings, will update with default`)
@@ -57,6 +68,15 @@ function getAndUpdateSettings() {
       changeSetting(divs, "divs")
       changeSetting(true, "updated_divs")
     }
+
+    // Clean up deprecated settings
+    if (
+      "faviconUrl" in
+      settingsLocal.domains[Object.keys(settingsLocal.domains)[0]]
+    ) {
+      changeSetting(true, "domains", true, "removeFaviconUrl")
+    }
+
     // Open options page if it's not been shown
     if (settingsLocal.show_update_article) {
       chrome.tabs.create({
@@ -65,9 +85,57 @@ function getAndUpdateSettings() {
       })
       changeSetting(false, "show_update_article")
     }
-    // Update off by default
+
+    // Set all domains off by default
     if (settingsLocal.off_by_default) {
       toggleOffByDefault(settingsLocal.off_by_default)
+    }
+
+    // Analytics
+    if (settingsLocal.share_data) {
+      // Log startup event
+      amplitude
+        .getInstance()
+        .logEvent("startup", { share_data: settingsLocal.share_data })
+      // Always sync all settings on startup, just to make sure they're in sync
+      var identify = new amplitude.Identify()
+      Object.keys(settingsLocal).forEach(function(key) {
+        identify.set(key, settingsLocal[key])
+      })
+      amplitude.getInstance().identify(identify)
+    } else {
+      // Amplitude HTTP request for non-share data people
+      var url = "https://api.amplitude.com/2/httpapi"
+
+      var data = {
+        api_key: amplitudeCreds.apiKey,
+        events: [
+          {
+            user_id: settingsLocal.userId,
+            event_type: "startup",
+            event_properties: {
+              share_data: settingsLocal.share_data
+            }
+          }
+        ]
+      }
+
+      async function postData() {
+        try {
+          const response = await fetch(url, {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "*/*"
+            }
+          })
+          const json = await response.json()
+          // log("Success:", JSON.stringify(json))
+        } catch (error) {}
+      }
+
+      postData()
     }
   })
 }
@@ -75,11 +143,11 @@ function getAndUpdateSettings() {
 // Set the initial currentState
 function checkCurrentState() {
   var initialState = {
-    domain: false,
+    domain: notInChrome,
     source: "initial",
     time: moment(),
     lastEverySecond: moment(),
-    lastRealDomain: false
+    lastRealDomain: notInChrome
   }
   var statusObj = open("status")
   // FIXME: sometimes lastEverySecond is not defined. This is a problem!
@@ -107,13 +175,10 @@ function checkCurrentState() {
 function timelineObject(domain, source, timeOverride, lastRealDomain) {
   return {
     time: timeOverride ? moment(timeOverride) : moment(),
-    domain: domain,
+    domain,
     source: source,
     lastEverySecond: moment(),
-    lastRealDomain:
-      domain == false || domain == notInChrome || domain == chromeOrTabIdle
-        ? lastRealDomain
-        : domain
+    lastRealDomain: isNudgeDomain(domain) ? domain : lastRealDomain
   }
 }
 
@@ -155,20 +220,6 @@ function timeline(domain, source, timeOverride) {
   var currDomain = status.currentState.domain
   var currTime = status.currentState.time
   var gapTime = previousState.lastEverySecond
-
-  // Logs
-  // console.log(prevDomain);
-  // console.log(domain);
-  // console.log(`Closed ${source} ${status.currentState.time.toISOString()}`);
-  // if (moment(prevTime).valueOf() === moment(currTime).valueOf()) {
-  //   console.log("This can happen and it's OK");
-  // }
-  // console.log(moment(prevTime).format("hh:mm:ss"));
-  // console.log(moment(currTime).format("hh:mm:ss"));
-
-  // console.log(`Curr time: ${moment(currTime).toISOString()}`);
-  // console.log(`Last e s : ${gapTime}`);
-  // console.log(`Prev time: ${prevTime}`);
 
   // Define gap diff
   var gapDiff = moment(currTime).diff(moment(gapTime), "seconds")

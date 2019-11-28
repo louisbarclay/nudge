@@ -89,6 +89,9 @@ function execSettings(settings) {
     // Find domain
     try {
       domain = domainCheck(currentTab.url, settings)
+      if (!isNudgeDomain(domain)) {
+        domain = false
+      }
 
       // Quite inefficient, but still need to loop here
       Object.keys(settings.domains).forEach(function(nudgeDomain) {
