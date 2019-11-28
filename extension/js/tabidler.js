@@ -7,37 +7,58 @@ function checkVideo() {
   )
 }
 
+var enableLog = false
+
+function idleLog(message) {
+  if (enableLog) {
+    log(message)
+  }
+}
+
+idleLog("watching for activity")
+
 function inactivityTime() {
   var idle = false
   var t
-  window.onload = resetTimer
   // DOM Events
-  document.onmousemove = resetTimer
-  document.onkeypress = resetTimer
-  document.onmousedown = resetTimer // touchscreen presses
-  document.ontouchstart = resetTimer
-  document.onclick = resetTimer // touchpad clicks
-  document.onscroll = resetTimer // scrolling with arrow keys
-  document.onkeypress = resetTimer
+  document.onmousemove = function() {
+    resetTimer("onmousemove")
+  }
+  document.onkeypress = function() {
+    resetTimer("onkeypress")
+  }
+  document.onmousedown = function() {
+    resetTimer("onmousedown") // touchscreen presses
+  }
+  document.ontouchstart = function() {
+    resetTimer("ontouchstart")
+  }
+  document.onclick = function() {
+    resetTimer("onclick") // touchpad clicks
+  }
+  document.onscroll = function() {
+    resetTimer("onscroll") // scrolling with arrow keys
+  }
   function idleStart() {
     if (checkVideo()) {
-      resetTimer()
+      resetTimer("oncheckvideo")
     } else {
       idle = true
       chrome.runtime.sendMessage({ type: "tabIdle", status: true }, function(
         response
       ) {})
-      // log('gone tab idle');
+      idleLog("gone tab idle")
     }
   }
 
-  function resetTimer() {
+  function resetTimer(source) {
+    idleLog(source)
     if (idle) {
       idle = false
       chrome.runtime.sendMessage({ type: "tabIdle", status: false }, function(
         response
       ) {})
-      // log('back from tab idle');
+      idleLog("back from tab idle")
     }
     clearTimeout(t)
     t = setTimeout(idleStart, 60000)
