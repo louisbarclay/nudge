@@ -717,9 +717,7 @@ function introUx(element) {
   var button = document.querySelector(".facebook-button-blue")
   button.onclick = function() {
     container.innerHTML = localStorage["confirm_content.html"]
-    eventLogSender("fb_unfollow_intro_button", {
-      ratio: 1 - option.profileCounter / option.totalProfiles
-    })
+    eventLogSender("fb_unfollow_intro_button", {})
     confirmUx()
   }
   hideLink()
@@ -739,9 +737,7 @@ function confirmUx() {
   button.onclick = function() {
     cancelOperation = false
     container.innerHTML = localStorage["run_content.html"]
-    eventLogSender("fb_unfollow_confirm_button", {
-      ratio: 1 - option.profileCounter / option.totalProfiles
-    })
+    eventLogSender("fb_unfollow_confirm_button", {})
     if (profilesLoaded && !currentlyUnfollowing) {
       friendAndPageToggler(unfollow)
     } else {
