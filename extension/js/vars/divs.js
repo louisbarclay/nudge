@@ -3,6 +3,12 @@
 // Which means that it doesn't get hidden as immediately as you'd want
 
 var divs = {
+  "twitter.com": [
+    {
+      className:
+        "css-1dbjc4n r-1u4rsef r-9cbz99 r-t23y2h r-1phboty r-rs99b7 r-ku1wi2 r-1udh08x"
+    }
+  ],
   "stackoverflow.com": [
     {
       id: "hot-network-questions"
