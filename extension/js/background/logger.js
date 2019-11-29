@@ -22,7 +22,7 @@ function consoleLogger(eventType, detailsObj, time) {
           detailsObj.totalTimeToday / 1000
         )} today). Source (linked to next visit's domain): ${
           detailsObj.source
-        }. Shutdown: ${detailsObj.shutdown}`,
+        }. Shutdown: ${detailsObj.shutdown}. Off: ${detailsObj.offDomain}`,
         "green"
       )
       break
@@ -76,7 +76,7 @@ function consoleLogger(eventType, detailsObj, time) {
       logWithColor(
         `${moment(detailsObj.time).format(
           "HH:mm:ss"
-        )} ${eventType} ${detailsObj}`,
+        )} ${eventType} ${JSON.stringify(detailsObj)}`,
         "pink"
       )
   }
