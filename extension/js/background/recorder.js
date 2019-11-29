@@ -79,6 +79,9 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
         "visit",
         {
           domain,
+          offDomain: domain.includes(offPage)
+            ? domain.split(`${offPage}/`)[1]
+            : domain,
           startTime,
           endTime,
           duration,
@@ -96,6 +99,9 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
       "visit",
       {
         domain,
+        offDomain: domain.includes(offPage)
+          ? domain.split(`${offPage}/`)[1]
+          : domain,
         startTime,
         endTime,
         duration,
