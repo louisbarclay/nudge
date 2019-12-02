@@ -14,6 +14,10 @@ var settings = document.getElementsByClassName(`${off}settings`)
 var settings2 = document.getElementById(`js-settings2`)
 var headline = document.getElementById(`js-headline`)
 
+// Signup mode
+var signupMode = false
+var surveyMode = true
+
 // Settings click handlers
 Array.from(settings).forEach(function(element) {
   element.onclick = function() {
@@ -24,6 +28,12 @@ Array.from(settings).forEach(function(element) {
 // FIXME: this is a bit of a kludge
 function highlightify(text) {
   return `<span class='off-highlight'>${text}</span>`
+}
+
+if (surveyMode) {
+  el("js-survey").onclick = function() {
+    eventLogSender("survey", { source: "off_page" }, moment())
+  }
 }
 
 // Get stuff from the query string
@@ -130,17 +140,17 @@ getLocalStorage()
 button.addEventListener("mousedown", sliderdown, true)
 button.addEventListener("touchstart", sliderTouchdown, true)
 
-// Reveal the signup prompt
-el("mce-EMAIL").onfocus = function() {
-  el("js-signup-prompt").style.visibility = "visible"
-  el("mce-EMAIL").placeholder = ""
-}
-
-// Reveal the signup prompt
-el("mce-EMAIL").onblur = function() {
-  el("js-signup-prompt").style.visibility = "hidden"
-  el("mce-EMAIL").placeholder =
-    "First 7 billion newsletter subscribers get Nudge for free"
+// Signup mode stuff
+if (signupMode) {
+  el("mce-EMAIL").onfocus = function() {
+    el("js-signup-prompt").style.visibility = "visible"
+    el("mce-EMAIL").placeholder = ""
+  }
+  el("mce-EMAIL").onblur = function() {
+    el("js-signup-prompt").style.visibility = "hidden"
+    el("mce-EMAIL").placeholder =
+      "First 7 billion newsletter subscribers get Nudge for free"
+  }
 }
 
 // Vars for the slider

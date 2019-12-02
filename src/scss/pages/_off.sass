@@ -100,12 +100,14 @@ $toggle-white: $light-fill
 
   &donate-link
     // text-decoration: underline
-    // cursor: pointer
+    cursor: pointer
     opacity: 0.8
-    // &:hover
-    //   opacity: 1
-    //   color: $white
-    margin-right: 0.5em
+    &:hover
+      opacity: 1
+      color: $white
+    a
+      &:hover
+        color: $white
 
   &signup-prompt
     // text-decoration: underline

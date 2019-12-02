@@ -69,11 +69,14 @@ function cornerInit(totalSeconds, totalVisits, domain) {
           quarterStyle,
           `nudge-quarter-${i}-style`
         )
-        eventLogSender("nudge_scroll", {
-          currentLevel,
-          totalSeconds,
-          fastTimer: config.fastTimer
-        })
+        if (i === currentLevel) {
+          // This should be here to avoid sending duplicate events
+          eventLogSender("nudge_time", {
+            currentLevel,
+            totalSeconds,
+            fastTimer: config.fastTimer
+          })
+        }
       }
       // Run this condition at the end of the loop
       if (

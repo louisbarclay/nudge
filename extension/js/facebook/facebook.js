@@ -714,11 +714,14 @@ function introUx(element) {
     deleteEl(close)
     styleAdder("#pagelet_composer::before", "{ content: none !important; }")
   }
-  var button = document.querySelector(".facebook-button-blue")
-  button.onclick = function() {
+  var unfollowButton = el("js-unfollow")
+  unfollowButton.onclick = function() {
     container.innerHTML = localStorage["confirm_content.html"]
     eventLogSender("fb_unfollow_intro_button", {})
     confirmUx()
+  }
+  el("js-survey").onclick = function() {
+    eventLogSender("survey", { source: "fb_intro" }, moment())
   }
   hideLink()
   close.onclick = function() {
@@ -789,9 +792,13 @@ function shareUx() {
     deleteEl(close)
     styleAdder("#pagelet_composer::before", "{ content: none !important; }")
   }
-  el("nudge-share").onclick = function() {
-    eventLogSender("share_link", { location: "fb_ad", domain })
+  el("js-survey").onclick = function() {
+    eventLogSender("survey", { source: "fb_share" }, moment())
   }
+  // Old sharing function
+  // el("nudge-share").onclick = function() {
+  //   eventLogSender("share_link", { location: "fb_ad", domain })
+  // }
   shareBottomLinks()
   // to refollow, go to // want to make clear where you go to refollow
 }
