@@ -302,8 +302,13 @@ h6 {
   font-style: italic; }
 
 .off-donate-link {
-  opacity: 0.8;
-  margin-right: 0.5em; }
+  cursor: pointer;
+  opacity: 0.8; }
+  .off-donate-link:hover {
+    opacity: 1;
+    color: #ffffff; }
+  .off-donate-link a:hover {
+    color: #ffffff; }
 
 .off-signup-prompt {
   opacity: 0.8;
