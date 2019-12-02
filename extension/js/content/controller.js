@@ -66,7 +66,7 @@ function execSettings(settings) {
     })
 
     // Init off keyboard shortcut
-    keyboardShortcut(domain)
+    // keyboardShortcut(domain)
 
     // Tab idler
     tabIdler()
