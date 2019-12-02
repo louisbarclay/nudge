@@ -84,10 +84,10 @@ function execSettings(settings) {
   }
 }
 
-function keyboardShortcut(domain) {
-  document.onkeyup = function(key) {
-    if (key.altKey && key.keyCode == 40) {
-      switchOffRequest(domain)
-    }
-  }
-}
+// function keyboardShortcut(domain) {
+//   document.onkeyup = function(key) {
+//     if (key.altKey && key.keyCode == 40) {
+//       switchOffRequest(domain)
+//     }
+//   }
+// }
