@@ -91,9 +91,9 @@ function getLocalStorage() {
     // If false, use value 0 to grab image from array and set it
     // If true, check what day you are on versus the first ever day, and use that value to get array
     // Check if domain in status
-    if (!(domain in status)) {
-      headline.innerHTML = `Nudge switches off${highlightify(domain)}by default`
-    }
+    // if (!(domain in status)) {
+    //   headline.innerHTML = `Nudge switches off${highlightify(domain)}by default`
+    // }
 
     // Grab lastVisitEnd for updating the headline
     var lastVisitEnd = status[domain] ? status[domain].lastVisitEnd : false
@@ -102,11 +102,16 @@ function getLocalStorage() {
       .duration(moment().diff(moment(lastVisitEnd)))
       .humanize()
     // Update it in headline
-    document.getElementById("js-lastvisit").innerHTML = sinceLastVisitEnd
 
-    el("js-stats").innerHTML = `Visits: ${
-      domainToday.visits
-    }. Time: ${domainToday.time / 1000}s`
+    try {
+      if (!(domain in status)) {
+        el("js-stats").innerHTML = `Visits: none. Time: zilch. Nice!`
+      } else {
+        el("js-stats").innerHTML = `Visits: ${
+          domainToday.sessions
+        }. Time: ${logMinutes(domainToday.time / 1000)}. `
+      }
+    } catch (e) {}
 
     switch_ons = JSON.parse(localStorage[date]).switch_ons
     if (getStickier) {
