@@ -1,12 +1,16 @@
-Nudge makes the internet less addictive.
+# Don't block the internet, nudge it
 
-- Hacks websites to make them less persuasive
-- Shows you when you're getting sucked in
-- Gets rid of some of the most addictive parts of the internet
+The biggest sites on the internet are designed to keep you addicted, with features like content feeds, related videos, and infinitely scrolling pages.
 
-You can choose which parts of Nudge you want enabled.
+But blocking them completely is not always an option.
 
-[Download Nudge for Google Chrome (4.7 stars)](https://bit.ly/2q7VE0K), or read about Nudge's features below.
+You need Facebook to message your friends. You want to play music on YouTube. You feel like browsing Reddit in your spare time.
+
+That’s why I made Nudge.
+
+Nudge makes the internet less addictive by removing addictive features, putting friction in the right places, and telling you how much time you’re spending.
+
+Nudge never blocks. It just nudges. If you like the sound of that, [download Nudge for Google Chrome (4.7 stars)](https://bit.ly/2q7VE0K), or read about Nudge's features below. You choose which features you want enabled.
 
 # 🚷 Defaulter
 
