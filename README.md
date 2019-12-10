@@ -1,4 +1,4 @@
-# Don't block the internet, nudge it
+# Don't block the internet, Nudge it
 
 The biggest sites on the internet are designed to keep you addicted, with features like content feeds, related videos, and infinitely scrolling pages.
 
