@@ -16,7 +16,7 @@ Nudge never blocks. It just nudges. If you like the sound of that, [download Nud
 
 *Addictive sites can only be reached by dragging across a slider*
 
-The Defaulter turns addictive sites off by default, so that instead of visiting a site out of habit, you get to decide whether you really want to visit after all.
+The Defaulter turns addictive sites off by default, so that instead of visiting a site out of habit, you get to decide whether you want to visit at all.
 
 When you try to go to an addictive site, you are redirected to a page showing a nice image and a slider (see screenshot below).
 
