@@ -60,7 +60,7 @@ function execSettings(settings) {
           insertCorner(domain, settings.off_by_default)
         }
         if (settings.scroll_nudge) {
-          insertScroll(domain, false)
+          insertScroll(domain)
         }
       })
     })
