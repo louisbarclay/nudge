@@ -1,51 +1,56 @@
 html
   head
-    title Choose your Nudge sites
-    link(rel="stylesheet" href="../../css/pages/main.css")
+    title Defaulter
+    link(rel="stylesheet" href="../../css/pages/onboarding.css")
     link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
     meta(charset="UTF-8")
   body
-    div.options-container
-      div
-        div.options-header
-          div.options-logo
-      span.options-sub-header Your Nudge sites
-      div
-        ul.text-input
-          li
-            input#addDomain(type='text' placeholder='Add a site here, or remove a site by clicking on it below') 
-      div
-        span.options-guidance-text  (In format 
-          span.options-guidance-text-highlight site.com
-          | , 
-          span.options-guidance-text-highlight  partof.site.com
-          |  or 
-          span.options-guidance-text-highlight site.com/page
-          | )
-      ul.tags#domainList
-      span.options-sub-header 🌼 Nudge whitelisted sites
-      div
-        ul.text-input
-          li
-            input#addWhitelist(type='text' placeholder='Add a site here, or remove a site by clicking on it below') 
-      div
-        span.options-guidance-text  (In format 
-          span.options-guidance-text-highlight site.com
-          | , 
-          span.options-guidance-text-highlight  partof.site.com
-          |  or 
-          span.options-guidance-text-highlight site.com/page
-          | . You can use * to represent any part of a URL, e.g. 
-          span.options-guidance-text-highlight site.com/*/page
-          |  will match 
-          span.options-guidance-text-highlight site.com/this/page
-          |  and 
-          span.options-guidance-text-highlight site.com/that/page
-          | )
-      ul.tags#whiteList
-    div.other-one
+    .header.horizontal
+      a.back#js-back 🠐 Choose Sites
+      div.logo-small
+      div.forward
+    .horizontal.centered
+      #off_by_default.contents
+        h1 Choose Sites
+        p Choose the sites.
+        input#addDomain(type='text' placeholder='Add a site').spacing-small
+        div.spacing
+          span.secondary  (In format 
+            span.highlight site.com
+            | , 
+            span.highlight  partof.site.com
+            |  or 
+            span.highlight site.com/page
+            | )
+        ul.tags.spacing
+          li facebook.com
+          li youtube.com
+          li gmail.com
+          li bbc.com
+          li outlook.com
+          li random.com
+          li morestuff.com
+        .horizontal.onboarding-bar.spacing.full-width
+          button.primary.pink#js-next Next: Choose Features
+        //- button.popup-button Turn the Defaulter on
+    .horizontal.centered.onboarding-preview
+      .left
+      .center
+        h2 Recommended sites
+        ul.tags.inverted
+          li facebook.com
+          li youtube.com
+          li gmail.com
+          li bbc.com
+          li outlook.com
+          li random.com
+          li morestuff.com
+      .right
+
+
   script(src="../../config.js")
   script(src="../../js/background/storage.js")
   script(src="../../js/helpers.js")
   script(src="../../js/vars/vars.js")
-  //- script(src="../../js/options.js")
+  script(src="../../js/option.js")
+  script(src="../../js/sites.js")

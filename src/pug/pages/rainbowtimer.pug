@@ -1,0 +1,43 @@
+html
+  head
+    title Defaulter
+    link(rel="stylesheet" href="../../css/pages/onboarding.css")
+    link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
+    meta(charset="UTF-8")
+  body
+    .header.horizontal
+      a.back#js-back 🠐 Choose Sites
+      div.logo-small
+      div.forward
+    .horizontal.centered
+      #time_nudge.contents
+        h1 Rainbow Timer
+        button.toggle.spacing
+          div.left.on
+          div.right
+        p The Rainbow Timer is a subtle rainbow that grows the longer you spend on an addictive site.
+        p It helps you see when you’re getting sucked in, without disrupting you too much. You can still continue using the site while the Rainbow Timer grows.
+        p 💡 Tip: you can always hide the Rainbow Timer by hovering over the Nudge logo and selecting the second button from the bottom.
+        //- h3 Options:
+        //- .horizontal.spacing
+        //-   .form-checkbox
+        //-     input#get_stickier(type="checkbox")
+        //-     label(for="get_stickier") Make slider harder to drag across each time
+        .horizontal.onboarding-bar.spacing.full-width
+          button.primary#js-onboarding-enable Enable the Rainbow Timer
+          button.secondary#js-onboarding-skip Skip this feature
+        .horizontal.onboarding-bar.spacing.full-width(style="display:none")
+          button.primary.pink#js-next Next: Hider
+        //- button.popup-button Turn the Defaulter on
+    .horizontal.centered.onboarding-preview
+      .left
+      .center
+        img(src="../../img/preview/timenudger.png").preview-image
+      .right
+
+
+  script(src="../../config.js")
+  script(src="../../js/background/storage.js")
+  script(src="../../js/helpers.js")
+  script(src="../../js/vars/vars.js")
+  script(src="../../js/option.js")
