@@ -1,3 +1,78 @@
+button
+  @extend %button
+  +border($style: none)
+  font-size: 18/16 * 1em
+  padding: 0.5em 1em 0.5em 1em
+  background: $nudge-grey-lightest
+  color: $nudge-grey-medium
+  font-family: 'Roboto', sans-serif
+  margin-bottom: none
+  user-select: none
+  &:hover
+    background: darken($nudge-grey-lightest, 2%)  
+    color: $nudge-grey-medium
+  
+.back
+  align-items: center
+  user-select: none
+
+.onboarding-bar
+  justify-content: stretch
+  flex: 0 1 50px
+  white-space: nowrap
+  .primary,.secondary
+    height: 3em
+    border-radius: 8px
+  .primary
+    margin-right: $spacing/2
+    background: $nudge-blue
+    color: $white
+    width: 100%
+    &:hover
+      background: darken($nudge-blue, 2%)
+  .secondary
+    width: 50%
+  .pink
+    background: $nudge-pink
+    margin-right: 0
+    &:hover
+      background: darken($nudge-pink, 2%)
+
+
+// Variables
+$checkbox-width: 24px
+$checkbox-color: $nudge-blue
+
+// Checkboxes
+input[type="checkbox"]
+  position: absolute
+  display: none
+
+  & + label
+    position: absolute
+    display: flex
+    justify-content: center
+    padding: 0 0 0 ($checkbox-width + 10)
+    cursor: pointer
+    user-select: none
+
+    // Default State
+    &:before
+      display: block
+      +border
+      content: ""
+      align-self: center
+      position: absolute
+      left: 0
+      width: $checkbox-width
+      height: $checkbox-width
+
+  // Checked State
+  &:checked + label
+    &:before
+      +border($color: $checkbox-color)
+      background: url('chrome-extension://__MSG_@@extension_id__/img/icon/checkbox.svg') center center/14px no-repeat $checkbox-color
+
 .arrow
   border-left: 1px solid #a9a9a9
   border-top: 1px solid #a9a9a9
@@ -20,3 +95,143 @@
   +padding
   +arrow
   width: 500px
+
+.logo-small
+  +logo-color(3em)
+
+.toggle
+  background: none
+  cursor: pointer
+  margin: 0
+  min-height: 0.8em
+  outline: none
+  box-shadow: none
+  color: $primary
+  // +border($color: $toggle-fill)
+  +border($style: none)
+  display: flex
+  background: $nudge-grey-lightest
+  padding: 0 !important
+  font-size: (12 / 13) * 1em
+
+  .left
+    +padding
+    color: inherit
+    min-width: 1.6em
+    min-height: inherit
+
+  .right
+    +padding
+    color: inherit
+    min-width: 1.6em
+    min-height: inherit
+
+  .on
+    +border($style: none)
+    background: $nudge-blue
+    background-clip: border-box
+    color: $white
+
+  .left.on
+      background: $nudge-grey-light
+
+  &:hover
+    background: inherit
+    box-shadow: none
+    background: darken($nudge-grey-lightest, 2%)
+    box-shadow: none    
+
+    .on
+      background: darken($nudge-grey-light, 2%)
+      color: $white
+
+    .right.on
+      background: darken($nudge-blue, 2%)
+
+.onboarding-preview
+  padding-top: 40px
+  padding-bottom: 40px
+  background: $nudge-grey-lightest
+  height: auto
+  .center
+    width: $page-width
+    .preview-image
+      width: 100%
+      height: auto
+      border: 0
+      border-radius: 8px
+
+input[type="text"]
+  caret-color: $primary
+  border-bottom: $border-primary
+  border-bottom-color: $primary
+  border-bottom-width: 1px
+  // font-size: 16px
+  left: 0
+  list-style: none
+  margin: 0
+  padding-bottom: 0.4em
+  padding-top: 0.2em
+  position: relative
+  width: 600px
+
+  &::placeholder
+    color: $nudge-grey-light
+
+  &:focus
+    border-bottom: $border-primary
+    border-bottom-color: $primary
+    color: $primary
+
+.tags
+  li
+    +border($style: none)
+    +left-icon($size: ((16 / 12) * 1em))
+    display: flex
+    padding-right: 1em
+    float: left
+    height: 2em
+    line-height: 2em
+    position: relative
+    color: $primary
+    font-size: 1em
+    background-color: $nudge-grey-lightest
+    margin-right: .5em
+    margin-bottom: .5em
+    
+    &::before
+      opacity: 1
+      +size(16px)
+      border-radius: 2px
+      margin-right: 0.8em
+      margin-left: 0.4em
+      background:
+        repeat: no-repeat
+        position: center center
+
+    &:hover
+      background: none
+      cursor: pointer
+
+      &::after
+        +pseudo
+        background-color: $nudge-blue
+        border-color: transparent
+        border-radius: inherit
+        color: $light
+        content: 'Remove'
+        height: 100%
+        left: 0
+        text-align: center
+        top: 0
+        width: 100%
+        z-index: 1
+
+.inverted
+  li
+    background: $white
+
+    &:hover
+      &::after
+        background-color: $nudge-pink
+        content: 'Add'
