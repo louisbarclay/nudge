@@ -1,34 +1,41 @@
 .header
+  min-height: 50px
   border-bottom: $border-primary
+  border-color: $nudge-grey-lightest
+  justify-content: space-between
+  padding: 1em 0
+  align-items: center
+  .back
+    margin-left: $spacing
 
-.header-line
-    &::after
-      +pseudo
-      background: red
-      width: 10px
-      height: 10px
-      z-index: -1
+.vertical
+  display: flex
+  flex-direction: column
 
-.leftPara
-  flex-basis: 50%
-  display: block
-  padding-right: 15px
+.horizontal
+  display: flex
+  flex-direction: row
 
-.rightImage
-  flex-basis: 50%
-  height: 200px
-  background: $nudge-grey-light
+.centered
+  justify-content: center
 
-.paraImage
-  border-bottom: solid 1px
-  height: 90vh
-  width: 100vw
-  background-color: yellow
+.spacing
+  margin-bottom: $spacing * 2 !important
+
+.spacing-small
+  margin-bottom: $spacing /2 !important
+
+.stretch
+  align-items: initial
+
+.full-width
+  width: 100%
+
+.contents
   align-items: flex-start
-
-.space-out
-  >*
-    margin-top: 100px
-
-.black-page
-  background-color: black
+  display: flex
+  flex-direction: column
+  width: $page-width
+  margin-left: auto
+  margin-right: auto
+  height: auto
