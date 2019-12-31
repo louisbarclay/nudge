@@ -253,10 +253,8 @@ function slidermove(e) {
 
   // Filter set
   var blurExtent = (difference + buttonPosition) / slider.offsetWidth
-  // FIXME: blur max size should depend on scale of background photos.
-  // backgroundEnhanced.style.filter = `blur(${blurExtent}px)`;
-  background.style.opacity = blurExtent.toFixed(2)
-  // FIXME: maybe hide the enhanced background and then blur the other one more
+  background.style.opacity =
+    blurExtent > 1 ? 1 : blurExtent < 0 ? 0 : blurExtent.toFixed(2)
 
   // If you go negative, set to 0px
   if (difference + buttonPosition < 0) {
@@ -286,10 +284,8 @@ function slidermoveTouch(e) {
 
   // Filter set
   var blurExtent = (difference + buttonPosition) / slider.offsetWidth
-  // FIXME: blur max size should depend on scale of background photos.
-  // backgroundEnhanced.style.filter = `blur(${blurExtent}px)`;
-  background.style.opacity = blurExtent.toFixed(2)
-  // FIXME: maybe hide the enhanced background and then blur the other one more
+  background.style.opacity =
+    blurExtent > 1 ? 1 : blurExtent < 0 ? 0 : blurExtent.toFixed(2)
 
   // If you go negative, set to 0px
   if (difference + buttonPosition < 0) {
@@ -310,6 +306,7 @@ var off = "off-"
 var js = "js-"
 var dir = "img/bg/"
 var dir_small = "small/"
+var dir_blur = "blur/"
 
 var background = document.querySelector(`.${off}background`)
 var backgroundEnhanced = document.querySelector(`.${off}background-enhanced`)
@@ -343,7 +340,9 @@ function backgroundLoader(index) {
     toggleClass(background, `${off}background_animation`)
     setTimeout(function() {
       background.style.opacity = 0
+      background.style.filter = "none"
       toggleClass(background, `${off}background_animation`)
+      setBackground(background, `${dir_blur}${getBackgroundFile(index)}`)
     }, 1000)
   }
 
@@ -354,13 +353,13 @@ function backgroundLoader(index) {
 var backgroundNumber = 0
 
 // Keyboard shortcut to cycle through background images
-function cycleThroughBackgrounds() {
-  document.onkeyup = function(key) {
-    if (key.altKey && key.keyCode == 39) {
-      backgroundLoader(backgroundNumber)
-      backgroundNumber++
-    }
-  }
-}
+// function cycleThroughBackgrounds() {
+//   document.onkeyup = function(key) {
+//     if (key.altKey && key.keyCode == 39) {
+//       backgroundLoader(backgroundNumber)
+//       backgroundNumber++
+//     }
+//   }
+// }
 
 // cycleThroughBackgrounds();
