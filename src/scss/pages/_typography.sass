@@ -1,2 +1,37 @@
+$primary: #000000
+
 body
   @extend %typography
+
+h1, h2, h3
+  color: $primary
+  font-family: 'Roboto', sans-serif
+  font-weight: 700
+
+p
+  margin-bottom: $spacing
+  line-height: 1.6em
+
+h1
+  font-size: 30px
+  margin-bottom: 0.5em
+  margin-top: 1.5em
+
+h3
+  font-size: 16px
+  font-family: 'Open Sans'
+  font-weight: 700
+
+*
+  font-size: 16px
+  color: $primary
+  &::selection
+    background: $nudge-pink
+    color: $white
+
+.secondary
+  font-size: 12px
+  color: $nudge-grey-light
+  .highlight
+    font-size: inherit
+    color: $primary
