@@ -12,6 +12,9 @@ $toggle-fill-text: $primary
 $toggle-light-text: $white
 $toggle-white: $light-fill
 
+body
+  font-size: 13px
+
 @keyframes fade_out
   from
     opacity: 1
@@ -31,7 +34,7 @@ $toggle-white: $light-fill
     width: 100%
     // background-color: $nudge-grey-lightest
     filter: blur(10px)
-    transform: translateZ(0) scale(1.1) translate3d(0,0,0)
+    transform: translateZ(0) translate3d(0,0,0)
 
   &background-enhanced
     +hardware
@@ -40,7 +43,7 @@ $toggle-white: $light-fill
     object-fit: cover
     height: 100%
     width: 100%
-    transform: translateZ(0) scale(1.1)
+    transform: translateZ(0)
 
   &background_animation
     // transition: filter 2s
@@ -106,6 +109,7 @@ $toggle-white: $light-fill
       opacity: 1
       color: $white
     a
+      text-decoration: none
       &:hover
         color: $white
 
