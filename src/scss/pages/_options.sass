@@ -9,7 +9,6 @@ $toggle-light-text: $white
 $toggle-white: $light-fill
 
 body
-  // Careful - this font size has an impact on the off page, not sure why
   font-size: 13px
   color: $primary
   opacity: 0
@@ -157,6 +156,10 @@ body
         top: 0
         width: 100%
         z-index: 1
+
+.inverted
+  li
+    background: red
 
 .options-subscribe-button
   +border($style: none)
