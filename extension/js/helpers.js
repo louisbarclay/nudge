@@ -596,6 +596,15 @@ function getSettings(callback) {
   })
 }
 
+// New version of getSettings
+async function loadSettings() {
+  return new Promise(resolve => {
+    chrome.runtime.sendMessage({ type: "settings" }, function(response) {
+      resolve(response.settings)
+    })
+  })
+}
+
 function changeSettingRequest(newVal, setting, domain, domainSetting) {
   if (!domain) {
     domain = false
