@@ -43,10 +43,7 @@ var tabIdStorage = {}
 function flushToTabIdStorage() {
   chrome.tabs.query({}, function(tabs) {
     for (var i = 0; i < tabs.length; i++) {
-      tabIdStorage[tabs[i].id] = {
-        url: tabs[i].url,
-        nudge: false
-      }
+      tabIdStorage[tabs[i].id] = tabs[i]
     }
   })
 }

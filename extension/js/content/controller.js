@@ -60,13 +60,13 @@ function execSettings(settings) {
           insertCorner(domain, settings.off_by_default)
         }
         if (settings.scroll_nudge) {
-          insertScroll(domain, false)
+          insertScroll(domain)
         }
       })
     })
 
     // Init off keyboard shortcut
-    keyboardShortcut(domain)
+    // keyboardShortcut(domain)
 
     // Tab idler
     tabIdler()
@@ -84,10 +84,10 @@ function execSettings(settings) {
   }
 }
 
-function keyboardShortcut(domain) {
-  document.onkeyup = function(key) {
-    if (key.altKey && key.keyCode == 40) {
-      switchOffRequest(domain)
-    }
-  }
-}
+// function keyboardShortcut(domain) {
+//   document.onkeyup = function(key) {
+//     if (key.altKey && key.keyCode == 40) {
+//       switchOffRequest(domain)
+//     }
+//   }
+// }

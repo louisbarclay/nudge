@@ -77,11 +77,40 @@ chrome.runtime.onInstalled.addListener(function(details) {
 var lastClosedTabId = false
 
 // Tab closed, and tell about shutdown
+// This is important for situations where a tab is closed when it's not currently in focus
 chrome.tabs.onRemoved.addListener(function onRemoved(tabId) {
   lastClosedTabId = tabId
+  // log(tabId)
   if (typeof tabIdStorage[tabId] === undefined) {
+    // log("Major fail")
+    // log(tabId)
+    // log(tabIdStorage)
     return
   } else {
+    // We need the information of the deleted tab
+    var removedTab = tabIdStorage[tabId]
+    var domain = domainCheck(removedTab.url, settingsLocal)
+    // Check if the tab was inactive and whether we care about it
+    var statusObj = open("status")
+    // If the domain of the closed tab is not the same as the domain of the current tab from currentState, and if we care about that tab
+    if (statusObj.currentState.domain !== domain && isNudgeDomain(domain)) {
+      chrome.tabs.query({}, function(tabs) {
+        // If no tabs with that domain now exist
+        if (tabsChecker(tabs, domain)) {
+          var statusObj = open("status")
+          dataAdder(statusObj, domain, moment(), "lastShutdown")
+          // Shutdown happened so turn off site if off by default is on, even if snooze is on
+          if (settingsLocal.off_by_default) {
+            changeSetting(true, "domains", domain, "off")
+          }
+          close("status", statusObj, "status close in check off")
+          eventLog("shutdown", { domain }, moment())
+        }
+      })
+    } else {
+      // log(statusObj.currentState.domain)
+      // log(domain)
+    }
     delete tabIdStorage[tabId]
   }
 })
@@ -111,25 +140,28 @@ chrome.windows.onRemoved.addListener(function(windowId) {
 chrome.webNavigation.onBeforeNavigate.addListener(function runOnBeforeNavigate(
   details
 ) {
-  // Prevent this from happening if config.offByDefault is not on
-  if (details.parentFrameId === -1 && config.offByDefault) {
-    try {
-      var domain = domainCheck(details.url, settingsLocal)
-      // Check for domain we care about, that's off, and for snoozing
-      if (
-        isNudgeDomain(domain) &&
-        settingsLocal.domains[domain] &&
-        settingsLocal.domains[domain].off &&
-        !(settingsLocal.snooze.all > +Date.now())
-      ) {
-        if (settingsLocal.off_by_default) {
-          switchOff(domain, details.url, details.tabId, "bydefault")
-        } else {
-          switchOff(domain, details.url, details.tabId, "normal")
+  // We add this condition to prevent the mysterious runtime.lastError bug, which feels like a Chrome defect
+  if (details.tabId in tabIdStorage) {
+    // Prevent this from happening if config.offByDefault is not on
+    if (details.parentFrameId === -1 && config.offByDefault) {
+      try {
+        var domain = domainCheck(details.url, settingsLocal)
+        // Check for domain we care about, that's off, and for snoozing
+        if (
+          isNudgeDomain(domain) &&
+          settingsLocal.domains[domain] &&
+          settingsLocal.domains[domain].off &&
+          !(settingsLocal.snooze.all > +Date.now())
+        ) {
+          if (settingsLocal.off_by_default) {
+            switchOff(domain, details.url, details.tabId, "bydefault")
+          } else {
+            switchOff(domain, details.url, details.tabId, "normal")
+          }
         }
+      } catch (e) {
+        // log(e)
       }
-    } catch (e) {
-      log(e)
     }
   }
 })
@@ -141,7 +173,6 @@ chrome.idle.onStateChanged.addListener(function idleHandler(newState) {
     timeline(chromeIdle, "chrome.idle")
   }
   if (newState === "active") {
-    // FIXME: is triggering error when only Chrome window is the background one
     chrome.windows.getLastFocused(function findLastFocusedWindow(window) {
       if (typeof window == "undefined" || window.focused === false) {
         // This may be the problem
@@ -214,10 +245,7 @@ chrome.windows.onFocusChanged.addListener(function windowOnFocusChanged() {
 // Add to tabIdStorage onCreated
 chrome.tabs.onCreated.addListener(function findCreatedTab(tab) {
   // New record in tabIdStorage
-  tabIdStorage[tab.id] = {
-    url: tab.url,
-    nudge: false
-  }
+  tabIdStorage[tab.id] = tab
 })
 
 // Add to timeline onUpdated
@@ -236,19 +264,20 @@ chrome.tabs.onUpdated.addListener(function findUpdatedTab(
   }
 
   // Update record in tabIdStorage
-  if (typeof tabIdStorage[tabId] === "undefined") {
-    tabIdStorage[tabId] = {
-      url: tab.url,
-      nudge: false
-    }
-  } else {
-    tabIdStorage[tabId].url = tab.url
-  }
+  tabIdStorage[tabId] = tab
 
   if (tab.active === true) {
     try {
       chrome.windows.get(tab.windowId, function(window) {
-        if (window.focused) {
+        if (
+          window.focused &&
+          !(
+            isNudgeDomain(domain) &&
+            settingsLocal.domains[domain] &&
+            settingsLocal.domains[domain].off &&
+            !(settingsLocal.snooze.all > +Date.now())
+          )
+        ) {
           timeline(domain, "tabs.onUpdated")
         }
       })

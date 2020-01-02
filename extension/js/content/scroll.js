@@ -4,7 +4,7 @@ var screensToReach = 10
 var scrollIncrement = 10
 var mostRecentScrollLevel = 0
 
-function scrollCheck() {
+function scrollCheck(domain) {
   // Check scroll level
   // And Convert it to number of screens
   var scrollLevel = window.scrollY / screen.height
@@ -19,7 +19,7 @@ function scrollCheck() {
       // Start a scroll listener to trigger a scroll nudge at the next scroll (not doing this yet - feels a bit pointless)
 
       // Do a scroll nudge cycle
-      scrollNudge(screensToReach)
+      scrollNudge(screensToReach, domain)
     }
     screensToReach = screensToReach + scrollIncrement
   }
@@ -27,7 +27,7 @@ function scrollCheck() {
   mostRecentScrollLevel = scrollLevel
 }
 
-function scrollNudge(screens) {
+function scrollNudge(screens, domain) {
   // Show the scroll nudge
   el("nudge-scroll-value").innerHTML = screens
   if (
@@ -38,7 +38,7 @@ function scrollNudge(screens) {
     toggleClass(el("nudge-scroll-controller"), "nudge-scroll-hide")
   }
   toggleClass(el("nudge-scroll-controller"), "nudge-scroll-show")
-  eventLogSender("nudge_scroll", { screens })
+  eventLogSender("nudge_scroll", { screens, domain })
 
   // Hide the scroll nudge after a short time
   setTimeout(function() {
@@ -47,11 +47,11 @@ function scrollNudge(screens) {
   }, 4000)
 }
 
-function insertScroll() {
+function insertScroll(domain) {
   var scrollContainer = createEl(document.body, "div", "nudge-scroll")
   appendHtml(scrollContainer, localStorage["scroll.html"])
   // Start scroll checking
   setInterval(function() {
-    scrollCheck()
+    scrollCheck(domain)
   }, 1000)
 }

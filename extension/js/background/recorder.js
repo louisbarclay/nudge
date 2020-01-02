@@ -13,13 +13,13 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
   // Open date
   var date = moment(endTime).format("YYYY-MM-DD")
   var dateObj = open(date)
-  var prevAllDomainsTime = false
-  if (
-    typeof dateObj.$allDomains !== "undefined" &&
-    "time" in dateObj.$allDomains
-  ) {
-    prevAllDomainsTime = dateObj.$allDomains.time
-  }
+  // var prevAllDomainsTime = false
+  // if (
+  //   typeof dateObj.$allDomains !== "undefined" &&
+  //   "time" in dateObj.$allDomains
+  // ) {
+  //   prevAllDomainsTime = dateObj.$allDomains.time
+  // }
 
   // If startOfDay exists already, check it's for the right day
   if ("startOfDay" in statusObj) {
@@ -29,6 +29,7 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
     ) {
       statusObj.startOfDay = moment(endTime).startOf("day")
     }
+    // Otherwise, it's OK - you have a valid startOfDay
     // If not, set it
   } else {
     statusObj.startOfDay = moment(endTime).startOf("day")
@@ -45,12 +46,13 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
   // Define previous and now, in
   var totalTimeToday = dateObj[domain].time
 
-  if (allDomainsReal - dateObj.$allDomains.time !== 0) {
-    eventLog("allDomains_unsynced", {
-      allDomainsReal,
-      allDomains: dateObj.$allDomains.time
-    })
-  }
+  // Don't log allDomains_unsynced. The information is not helpful
+  // if (allDomainsReal - dateObj.$allDomains.time !== 0) {
+  //   eventLog("allDomains_unsynced", {
+  //     allDomainsReal,
+  //     allDomains: dateObj.$allDomains.time
+  //   })
+  // }
 
   // We assume it wasn't a shutdown
   var shutdown = false

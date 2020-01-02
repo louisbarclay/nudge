@@ -19,23 +19,24 @@ html
     +b.settings#js-settings
     +b.donate
       +b.donate-container
-        ul
-          li
-            form#mc-embedded-subscribe-form.validate(action='https://nudgeware.us5.list-manage.com/subscribe/post?u=8b0fe4a0d9e0cb9ac0d96db09&id=d3b4c5f9ac' method='post' name='mc-embedded-subscribe-form' target='_blank' novalidate='')
-              #mc_embed_signup_scroll
-                +b.text-input.mc-field-group
-                  input#mce-EMAIL.required.email(type='email' value='' name='EMAIL' placeholder='First 7 billion newsletter subscribers get Nudge for free' autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false")
-                #mce-responses.clear
-                  #mce-error-response.response(style='display:none')
-                  #mce-success-response.response(style='display:none')
-                div(style='position: absolute; left: -5000px;' aria-hidden='true')
-                  input(type='text' name='b_8b0fe4a0d9e0cb9ac0d96db09_d3b4c5f9ac' tabindex='-1' value='')
-                .clear.options-subscribe-button-container(style="visibility: hidden; height: 0; padding: 0; margin: 0")
-                  input#mc-embedded-subscribe.options-subscribe-button.button(type='submit' value='Subscribe' name='subscribe')
-      +b.signup-prompt#js-signup-prompt
-        | If you'd like interesting and infrequent Nudge updates, type your email and hit 
-        +b.SPAN.key ↵
-      //- +b.donate-link Sign up for updates. First 7 billion subscribers will get Nudge free forever
+        +b.donate-link
+          a(href="https://forms.gle/Epi26c6Eyd8aLnKX6" target="_blank")#js-survey Got two minutes? Want to help make Nudge better? Take the Nudge survey
+      //-   ul
+      //-     li
+      //-       form#mc-embedded-subscribe-form.validate(action='https://nudgeware.us5.list-manage.com/subscribe/post?u=8b0fe4a0d9e0cb9ac0d96db09&id=d3b4c5f9ac' method='post' name='mc-embedded-subscribe-form' target='_blank' novalidate='')
+      //-         #mc_embed_signup_scroll
+      //-           +b.text-input.mc-field-group
+      //-             input#mce-EMAIL.required.email(type='email' value='' name='EMAIL' placeholder='First 7 billion newsletter subscribers get Nudge for free' autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false")
+      //-           #mce-responses.clear
+      //-             #mce-error-response.response(style='display:none')
+      //-             #mce-success-response.response(style='display:none')
+      //-           div(style='position: absolute; left: -5000px;' aria-hidden='true')
+      //-             input(type='text' name='b_8b0fe4a0d9e0cb9ac0d96db09_d3b4c5f9ac' tabindex='-1' value='')
+      //-           .clear.options-subscribe-button-container(style="visibility: hidden; height: 0; padding: 0; margin: 0")
+      //-             input#mc-embedded-subscribe.options-subscribe-button.button(type='submit' value='Subscribe' name='subscribe')
+      //- +b.signup-prompt#js-signup-prompt
+      //-   | If you'd like interesting and infrequent Nudge updates, type your email and hit 
+      //-   +b.SPAN.key ↵
     +b.IMG.background
     +b.IMG.background-enhanced#js-bg-image
     +b.CANVAS.blur#js-blur
