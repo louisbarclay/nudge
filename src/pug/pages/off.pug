@@ -10,10 +10,10 @@ include ../../bemto/bemto.pug
 html
   head
     title Site off
-    link(href="../../img/icon/nudgeoff32.png", rel="icon", type="image/png", sizes="32x32")
-    link(href="../../img/icon/nudgeoff96.png", rel="icon", type="image/png", sizes="96x96")
-    link(href="../../img/icon/nudgeoff16.png", rel="icon", type="image/png", sizes="16x16")
-    link(rel="stylesheet", href="../../css/pages/main.css")
+    link(href="../../img/icon/nudgeoff32.png" rel="icon" type="image/png" sizes="32x32")
+    link(href="../../img/icon/nudgeoff96.png" rel="icon" type="image/png" sizes="96x96")
+    link(href="../../img/icon/nudgeoff16.png" rel="icon" type="image/png" sizes="16x16")
+    link(rel="stylesheet" href="../../css/pages/main.css")
     meta(charset="UTF-8")
   +b.BODY.text_globals.body
     +b.settings#js-settings
@@ -66,13 +66,13 @@ html
           +b.SPAN#js-headline
             +b.SPAN.highlight.js-domain facebook.com
             | is off
-          +b.P.text_paragraph.text_shadow#js-tip
-            | Go to Options 
-            |   (
-            +b.settings.cog-small#js-settings2
-            | ) to remove 
-            +b.SPAN.js-domain this site
-            |  from your Nudge sites or change off by default
+          //- +b.P.text_paragraph.text_shadow#js-tip
+          //-   | Go to Options 
+          //-   |   (
+          //-   +b.settings.cog-small#js-settings2
+          //-   | ) to remove 
+          //-   +b.SPAN.js-domain this site
+          //-   |  from your Nudge sites or change off by default
           +b.P.text_paragraph.text_shadow#js-stats
       +b.slider
         +b.button
@@ -84,16 +84,16 @@ html
     script(src="../../js/bgImages.js")
     script(src="../../js/off.js")
 
-          //-     +b.P.text_paragraph.text_shadow
-          //-   | We do this to help you avoid getting sucked in. To continue to the Nudge site, please drag the slider below.
-          //- +b.P.text_paragraph.text_shadow
-          //-   | You've gone 
-          //-   | without visiting
-          //-   span.js-domain
-          //-   | That's pretty cool. To keep your record going, do this.
-          //- +b.P.text_paragraph.text_shadow
-          //-   | If this is too much, you can either 
-          //-   +b.SPAN.underline remove facebook.com from your Nudge sites
-          //-   |  or 
-          //-   +b.SPAN.underline stop Nudge switching sites off by default
-          //-   | .
+      //-     +b.P.text_paragraph.text_shadow
+      //-   | We do this to help you avoid getting sucked in. To continue to the Nudge site, please drag the slider below.
+      //- +b.P.text_paragraph.text_shadow
+      //-   | You've gone 
+      //-   | without visiting
+      //-   span.js-domain
+      //-   | That's pretty cool. To keep your record going, do this.
+      //- +b.P.text_paragraph.text_shadow
+      //-   | If this is too much, you can either 
+      //-   +b.SPAN.underline remove facebook.com from your Nudge sites
+      //-   |  or 
+      //-   +b.SPAN.underline stop Nudge switching sites off by default
+      //-   | .
