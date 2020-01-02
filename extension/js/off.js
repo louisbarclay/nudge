@@ -104,12 +104,41 @@ function getLocalStorage() {
     // Update it in headline
 
     try {
+      moment.locale("en", {
+        calendar: {
+          lastDay: "[yesterday at] h:mma",
+          sameDay: "[today at] h:mma",
+          nextDay: "[tomorrow at] h:mma",
+          lastWeek: "[last] dddd [at] h:mma",
+          nextWeek: "dddd [at] h:mma",
+          sameElse: "LL"
+        }
+      })
+
       if (!(domain in status)) {
-        el("js-stats").innerHTML = `Visits: none. Time: zilch. Nice!`
+        if (lastVisitEnd) {
+          log("a")
+          el("js-stats").innerHTML = `You last visited ${domain} ${moment(
+            lastVisitEnd
+          ).calendar()}.`
+        } else {
+          log("b")
+          el(
+            "js-stats"
+          ).innerHTML = `You haven't been on this site recently. Nice one!`
+        }
       } else {
-        el("js-stats").innerHTML = `Visits: ${
-          domainToday.sessions
-        }. Time: ${logMinutes(domainToday.time / 1000)}. `
+        if (domainToday) {
+          el("js-stats").innerHTML = `${msToDuration(
+            domainToday.time
+          )} today (${domainToday.sessions} visit). Last visit was ${moment(
+            lastVisitEnd
+          ).calendar()}.`
+        } else {
+          el("js-stats").innerHTML = `You last visited ${domain} ${moment(
+            lastVisitEnd
+          ).calendar()}.`
+        }
       }
     } catch (e) {}
 
