@@ -15,8 +15,8 @@ var settings2 = document.getElementById(`js-settings2`)
 var headline = document.getElementById(`js-headline`)
 
 // Signup mode
-var signupMode = false
-var surveyMode = true
+var signupMode = true
+var surveyMode = false
 
 // Settings click handlers
 Array.from(settings).forEach(function(element) {
