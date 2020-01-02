@@ -279,10 +279,24 @@ function logMinutes(time) {
   return minutes + "m" + lastTwo(seconds) + "s"
 }
 
-// Turn lots of seconds into e.g. 10m15s
+// Turn lots of seconds into e.g. 10m
 function logMinutesNoSeconds(time) {
   var minutes = Math.floor(time / 60)
   return minutes + "m"
+}
+
+// Turn lots of seconds into e.g. 10m15s
+function msToDuration(ms) {
+  var seconds = Math.floor(ms / 1000)
+  var time = false
+  if (seconds < 60) {
+    time = `${seconds}s`
+  } else if (seconds < 3600) {
+    time = `${Math.floor(seconds / 60)}m${seconds % 60}s`
+  } else {
+    time = `${Math.floor(seconds / 3600)}h${Math.floor(seconds / 60) % 60}m`
+  }
+  return time
 }
 
 // Text for button

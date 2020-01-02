@@ -65,21 +65,20 @@ html
           |  ago
         else if bydefault
           +b.SPAN#js-headline
-            | You've been away from
             +b.SPAN.highlight.js-domain facebook.com
-            | for
-            +b.SPAN.highlight#js-lastvisit a while
-          +b.P.text_paragraph.text_shadow#js-tip
-            | Go to Options 
-            |   (
-            +b.settings.cog-small#js-settings2
-            | ) to remove 
-            +b.SPAN.js-domain this site
-            |  from your Nudge sites or change off by default
+            | is off
+          //- +b.P.text_paragraph.text_shadow#js-tip
+          //-   | Go to Options 
+          //-   |   (
+          //-   +b.settings.cog-small#js-settings2
+          //-   | ) to remove 
+          //-   +b.SPAN.js-domain this site
+          //-   |  from your Nudge sites or change off by default
+          +b.P.text_paragraph.text_shadow#js-stats
       +b.slider
         +b.button
           +b.button-centre
-        +b.slider-text Drag slider to switch back on
+        +b.slider-text Drag slider to switch on
     script(src="../../js/vendor/moment.min.js")
     script(src="../../config.js")
     script(src="../../js/helpers.js")

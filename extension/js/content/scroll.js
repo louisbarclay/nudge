@@ -9,6 +9,7 @@ function scrollCheck(domain) {
   // And Convert it to number of screens
   var scrollLevel = window.scrollY / screen.height
 
+  // log(Math.round(scrollLevel), screensToReach)
   // Check if this is higher than screensToReach
   if (scrollLevel > screensToReach) {
     // If it is, immediately stash that level + 5

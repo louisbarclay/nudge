@@ -145,7 +145,6 @@ function domainVisitUpdater(domain, time, source) {
   var date = moment(time).format("YYYY-MM-DD")
   var dateObj = open(date)
   dataAdder(dateObj, domain, 1, "visits", addTogether)
-  close(date, dateObj, "date close in visit updater")
   var totalVisits = dateObj[domain].visits
   var totalTimeToday = dateObj[domain].time
 
@@ -166,6 +165,17 @@ function domainVisitUpdater(domain, time, source) {
   if (!keyDefined(statusObj, domain)) {
     statusObj[domain] = {}
   }
+
+  // If either the domain does not exist today yet or lastVisitEnd is not the same as lastShutdown, this is a new realVisit
+  if (
+    (!statusObj[domain].lastVisitEnd && !statusObj[domain].lastShutdown) ||
+    statusObj[domain].lastShutdown >= statusObj[domain].lastVisitEnd
+  ) {
+    dataAdder(dateObj, domain, 1, "sessions", addTogether)
+  }
+
+  close(date, dateObj, "date close in visit updater")
+
   // Initialise domain statusObj keys if don't exist
   var domainStatusObj = statusObj[domain]
   // Assume no last shutdown
