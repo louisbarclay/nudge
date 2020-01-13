@@ -25,42 +25,66 @@ var defaultDomainInfo = {
 }
 
 // Default domains
-var defaultDomains = [
-  "messenger.com",
+var defaultDomains = []
+
+// Suggestions
+var topRecommendations = [
   "facebook.com",
-  "twitter.com",
-  "linkedin.com",
-  "reddit.com",
-  "buzzfeed.com",
-  "youtube.com",
-  "mail.google.com",
-  "ladbible.com",
-  "news.ycombinator.com",
   "instagram.com",
-  "pinterest.com",
-  "theguardian.com",
-  "bbc.co.uk/news",
-  "news.bbc.co.uk",
-  "tinder.com",
-  "theguardian.co.uk",
-  "guardian.co.uk",
-  "dailymail.co.uk",
-  "iwastesomuchtime.com",
-  "nytimes.com",
-  "breitbart.com",
-  "wsj.com",
-  "usatoday.com",
-  "vox.com",
-  "foxnews.com",
-  "cnn.com",
-  "huffingtonpost.com",
-  "mailonline.com",
-  "imgur.com",
+  "youtube.com",
+  "twitter.com",
+  "buzzfeed.com",
+  "yahoo.com",
+  "reddit.com",
+  "linkedin.com",
   "tumblr.com",
-  "thesportbible.com",
-  "telegraph.co.uk",
+  "netflix.com"
+]
+
+var shoppingRecommendations = [
+  "amazon.com",
+  "amazon.co.uk",
+  "ebay.com",
+  "ebay.co.uk"
+]
+
+var socialRecommendations = [
+  "facebook.com",
+  "instagram.com",
+  "imgur.com",
+  "linkedin.com",
+  "tumblr.com",
+  "pinterest.com",
+  "reddit.com",
+  "twitter.com",
   "vk.com",
-  "dailymaverick.co.za"
+  "youtube.com"
+]
+
+var newsRecommendations = [
+  "cnn.com",
+  "bbc.co.uk/news",
+  "buzzfeed.com",
+  "dailymail.co.uk",
+  "foxnews.com",
+  "theguardian.com",
+  "huffpost.com",
+  "mashable.com",
+  "mailonline.com",
+  "news.ycombinator.com",
+  "nytimes.com",
+  "telegraph.co.uk",
+  "usatoday.com",
+  "wsj.com",
+  "bbc.com"
+]
+
+var messagingRecommendations = [
+  "web.whatsapp.com",
+  "messenger.com",
+  "slack.com",
+  "mail.google.com",
+  "outlook.live.com"
 ]
 
 // Default non-domain settings
@@ -150,3 +174,6 @@ var refollow = {
     end: "});"
   }
 }
+
+var domainTest = /^((([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\.)*([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\.[a-zA-Z]{2,3})(\/(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,200}[a-zA-Z0-9]))?)?(\/)?$/
+var whitelistTest = /^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\.([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\.[a-zA-Z]{2,3})(\/?)(.[^\s]*)|(\/)?$/

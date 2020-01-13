@@ -164,7 +164,7 @@ input[type="checkbox"]
 input[type="text"]
   caret-color: $primary
   border-bottom: $border-primary
-  border-bottom-color: $primary
+  border-bottom-color: $nudge-grey-light
   border-bottom-width: 1px
   // font-size: 16px
   left: 0
@@ -180,7 +180,7 @@ input[type="text"]
 
   &:focus
     border-bottom: $border-primary
-    border-bottom-color: $primary
+    border-bottom-color: $nudge-grey-medium
     color: $primary
 
 .tags
@@ -191,23 +191,27 @@ input[type="text"]
     padding-right: 1em
     float: left
     height: 2em
-    line-height: 2em
+    line-height: 1.9em
     position: relative
     color: $primary
     font-size: 1em
     background-color: $nudge-grey-lightest
     margin-right: .5em
-    margin-bottom: .5em
+    margin-bottom: .8em
+    overflow: hidden
+    position: relative
     
     &::before
       opacity: 1
-      +size(16px)
+      +size(10px)
       border-radius: 2px
-      margin-right: 0.8em
-      margin-left: 0.4em
+      margin-right: 0.5em
+      margin-left: 0.5em
+      will-change: transform
       background:
         repeat: no-repeat
         position: center center
+        size: 10px
 
     &:hover
       background: none
@@ -226,12 +230,29 @@ input[type="text"]
         top: 0
         width: 100%
         z-index: 1
+    
+  .tag-flash
+    background-color: lighten($nudge-pink, 25%)
 
 .inverted
   li
     background: $white
-
+    padding-right: 0.5em
+    
     &:hover
       &::after
         background-color: $nudge-pink
         content: 'Add'
+    
+  .selected-tag
+    justify-content: baseline
+    align-items: center
+    .checkmark
+      +size(14px)
+      margin-left: 0.5em
+      border-radius: 10px
+      background: url('chrome-extension://__MSG_@@extension_id__/img/icon/checkbox.svg') center center/8px no-repeat $nudge-pink
+
+    &:hover
+      &::after
+        content: 'Remove'

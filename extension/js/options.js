@@ -6,8 +6,6 @@ var id_button = document.getElementById("id")
 var domains = {}
 var facebookNotif = document.getElementById("facebookNotif")
 var blankFaviconString = ""
-var domainTest = /^((([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\.)*([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\.[a-zA-Z]{2,3})(\/(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,200}[a-zA-Z0-9]))?)?(\/)?$/
-var whitelistTest = /^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\.([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\.[a-zA-Z]{2,3})(\/?)(.[^\s]*)|(\/)?$/
 
 imgSrcToDataURL(chrome.runtime.getURL("img/favicon/blankfavicon.png"), function(
   dataUrl
@@ -59,7 +57,7 @@ function updateLocalSettings(settings) {
 function populateDomains(domains) {
   Object.keys(domains).forEach(function(key) {
     if (domains[key].nudge) {
-      addLi(key, domainTags, domainTagsHandler)
+      addLi(key, domainTags, tagHandler)
     } else {
       console.log(key)
     }
@@ -67,7 +65,7 @@ function populateDomains(domains) {
 }
 
 // Handle domain tag if you click remove
-function domainTagsHandler(li, domain) {
+function tagHandler(li, domain) {
   loadFavicon(li.id, domain)
   // remove
   li.onclick = function() {
@@ -175,12 +173,12 @@ addDomain.addEventListener("keydown", function(event) {
         addDomain.value = ""
       } else if (isInDomainList && !nudge) {
         console.log("in domain list and is not nudge")
-        addLi(newDomain, domainTags, domainTagsHandler)
+        addLi(newDomain, domainTags, tagHandler)
         changeSettingRequest(true, "domains", newDomain, "nudge")
         addDomain.value = ""
       } else if (!isInDomainList) {
         console.log("not in domain list")
-        addLi(newDomain, domainTags, domainTagsHandler)
+        addLi(newDomain, domainTags, tagHandler)
         changeSettingRequest(true, "domains", newDomain, "add")
         addDomain.value = ""
       }
@@ -194,12 +192,6 @@ function addLi(domain, element, callback) {
   li.id = "li" + getRandomInt(1000, 10000000000000)
   element.appendChild(li)
   callback(li, domain)
-}
-
-function getRandomInt(min, max) {
-  min = Math.ceil(min)
-  max = Math.floor(max)
-  return Math.floor(Math.random() * (max - min)) + min //The maximum is exclusive and the minimum is inclusive
 }
 
 var items = domainTags.getElementsByTagName("li")

@@ -160,6 +160,11 @@ h1 {
   margin-bottom: 0.5em;
   margin-top: 1.5em; }
 
+h2 {
+  font-size: 20px;
+  margin-bottom: 0.5em;
+  margin-top: 1.5em; }
+
 h3 {
   font-size: 16px;
   font-family: 'Open Sans';
@@ -172,12 +177,20 @@ h3 {
     background: #ff61a7;
     color: #ffffff; }
 
-.secondary {
+.tooltip {
   font-size: 12px;
   color: #bdbdbd; }
-  .secondary .highlight {
+  .tooltip .highlight {
     font-size: inherit;
-    color: #000000; }
+    color: #6d6d6d; }
+
+.sublink {
+  user-select: none;
+  text-decoration: underline;
+  font-size: 14px;
+  color: #6d6d6d; }
+  .sublink ::hover {
+    color: #ff61a7; }
 
 button {
   border: 1px none #bdbdbd;
@@ -348,7 +361,7 @@ input[type="checkbox"] {
 input[type="text"] {
   caret-color: #000000;
   border-bottom: 1px solid #bdbdbd;
-  border-bottom-color: #000000;
+  border-bottom-color: #bdbdbd;
   border-bottom-width: 1px;
   left: 0;
   list-style: none;
@@ -361,7 +374,7 @@ input[type="text"] {
     color: #bdbdbd; }
   input[type="text"]:focus {
     border-bottom: 1px solid #bdbdbd;
-    border-bottom-color: #000000;
+    border-bottom-color: #6d6d6d;
     color: #000000; }
 
 .tags li {
@@ -371,13 +384,15 @@ input[type="text"] {
   padding-right: 1em;
   float: left;
   height: 2em;
-  line-height: 2em;
+  line-height: 1.9em;
   position: relative;
   color: #000000;
   font-size: 1em;
   background-color: #ededed;
   margin-right: .5em;
-  margin-bottom: .5em; }
+  margin-bottom: .8em;
+  overflow: hidden;
+  position: relative; }
   .tags li::before {
     content: '';
     margin: auto 0.33333em auto 0.33333em;
@@ -386,13 +401,15 @@ input[type="text"] {
     z-index: 0; }
   .tags li::before {
     opacity: 1;
-    width: 16px;
-    height: 16px;
+    width: 10px;
+    height: 10px;
     border-radius: 2px;
-    margin-right: 0.8em;
-    margin-left: 0.4em;
+    margin-right: 0.5em;
+    margin-left: 0.5em;
+    will-change: transform;
     background-repeat: no-repeat;
-    background-position: center center; }
+    background-position: center center;
+    background-size: 10px; }
   .tags li:hover {
     background: none;
     cursor: pointer; }
@@ -412,11 +429,27 @@ input[type="text"] {
       width: 100%;
       z-index: 1; }
 
+.tags .tag-flash {
+  background-color: #ffe1ee; }
+
 .inverted li {
-  background: #ffffff; }
+  background: #ffffff;
+  padding-right: 0.5em; }
   .inverted li:hover::after {
     background-color: #ff61a7;
     content: 'Add'; }
+
+.inverted .selected-tag {
+  justify-content: baseline;
+  align-items: center; }
+  .inverted .selected-tag .checkmark {
+    width: 14px;
+    height: 14px;
+    margin-left: 0.5em;
+    border-radius: 10px;
+    background: url("chrome-extension://__MSG_@@extension_id__/img/icon/checkbox.svg") center center/8px no-repeat #ff61a7; }
+  .inverted .selected-tag:hover::after {
+    content: 'Remove'; }
 
 .header {
   min-height: 50px;
@@ -424,6 +457,10 @@ input[type="text"] {
   border-color: #ededed;
   justify-content: space-between;
   padding: 1em 0;
+  position: fixed;
+  width: 100%;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.9);
   align-items: center; }
   .header .back {
     margin-left: 2em; }
@@ -459,3 +496,9 @@ input[type="text"] {
   margin-left: auto;
   margin-right: auto;
   height: auto; }
+
+.headspace {
+  margin-top: 5em; }
+
+.display-none {
+  display: none; }

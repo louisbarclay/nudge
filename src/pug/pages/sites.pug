@@ -1,6 +1,6 @@
 html
   head
-    title Defaulter
+    title Choose sites
     link(rel="stylesheet" href="../../css/pages/onboarding.css")
     link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
     meta(charset="UTF-8")
@@ -10,41 +10,54 @@ html
       div.logo-small
       div.forward
     .horizontal.centered
-      #off_by_default.contents
+      #off_by_default.contents.headspace
         h1 Choose Sites
-        p Choose the sites.
-        input#addDomain(type='text' placeholder='Add a site').spacing-small
+        p Add the sites you'd like Nudge to work on. Don't go crazy – stick to the sites that suck you in the most.
+        input#js-add(type='text' placeholder='Add a site').spacing-small
         div.spacing
-          span.secondary  (In format 
+          span.tooltip  (In format 
             span.highlight site.com
             | , 
             span.highlight  partof.site.com
             |  or 
             span.highlight site.com/page
             | )
-        ul.tags.spacing
-          li facebook.com
-          li youtube.com
-          li gmail.com
-          li bbc.com
-          li outlook.com
-          li random.com
-          li morestuff.com
+        ul.tags#js-domainlist
+        a.spacing.sublink Remove all sites
+        a.spacing-small.sublink#js-whitelist-toggle Choose whitelist sites
+        .vertical#js-whitelist-container
+          input#js-whitelistadd(type='text' placeholder='Add a site').spacing-small
+          div.spacing
+            span.tooltip  (In format 
+              span.highlight site.com
+              | , 
+              span.highlight  partof.site.com
+              |  or 
+              span.highlight site.com/page
+              | )
+          ul.tags.spacing#js-whitelist
         .horizontal.onboarding-bar.spacing.full-width
           button.primary.pink#js-next Next: Choose Features
         //- button.popup-button Turn the Defaulter on
     .horizontal.centered.onboarding-preview
       .left
-      .center
-        h2 Recommended sites
-        ul.tags.inverted
-          li facebook.com
-          li youtube.com
-          li gmail.com
-          li bbc.com
-          li outlook.com
-          li random.com
-          li morestuff.com
+      .center.contents
+        h1 Recommended sites
+        div
+          h2 Top 10 sites:
+          ul.tags.inverted#js-toplist
+        div
+          h2 Social sites:
+          ul.tags.inverted#js-sociallist
+        div
+          h2 Email and messaging sites:
+          ul.tags.inverted#js-messaginglist
+        div
+          h2 News sites:
+          ul.tags.inverted#js-newslist
+        div
+          h2 Shopping sites:
+          ul.tags.inverted#js-shoppinglist
       .right
 
 
