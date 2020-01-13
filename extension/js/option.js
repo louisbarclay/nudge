@@ -12,12 +12,19 @@ for (var i = 0; i < optionsIndex.length; i++) {
   if (window.location.href.includes(optionsIndex[i].page)) {
     log(i)
     try {
-      log(optionsIndex[i - 1].name)
-      // Set up back link
-      el("js-back").innerHTML = `🠐 ${optionsIndex[i - 1].name}`
-      el("js-back").onclick = function() {
-        window.location = `./${optionsIndex[i - 1].page}`
+      // Catch possible error on Change Site page
+      if (optionsIndex[i - 1]) {
+        log(optionsIndex[i - 1].name)
+        // Set up back link
+        el("js-back").innerHTML = `🠐 ${optionsIndex[i - 1].name}`
+        el("js-back").onclick = function() {
+          window.location = `./${optionsIndex[i - 1].page}`
+        }
       }
+    } catch (e) {
+      log(e)
+    }
+    try {
       // Set up next link
       el("js-next").innerHTML = `Next: ${optionsIndex[i + 1].name}`
       el("js-next").onclick = function() {
