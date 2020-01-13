@@ -296,6 +296,13 @@ function badgeTime(time) {
   }
 }
 
+// Gets a random integer
+function getRandomInt(min, max) {
+  min = Math.ceil(min)
+  max = Math.floor(max)
+  return Math.floor(Math.random() * (max - min)) + min //The maximum is exclusive and the minimum is inclusive
+}
+
 // Adds together two numbers onto the second
 function addTogether(a, b) {
   if (!a || a == "undefined" || a == null) {
