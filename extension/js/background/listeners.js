@@ -201,7 +201,15 @@ chrome.tabs.onActivated.addListener(function findActivatedTab(activatedTab) {
     ) {
       // Don't need check of whether tab is active, because it is by default
       try {
-        var domain = domainCheck(tabDetails.url, settingsLocal)
+        if (
+          tabDetails.url === "" &&
+          tabDetails.pendingUrl &&
+          tabDetails.pendingUrl !== ""
+        ) {
+          var domain = domainCheck(tabDetails.pendingUrl, settingsLocal)
+        } else {
+          var domain = domainCheck(tabDetails.url, settingsLocal)
+        }
       } catch (e) {
         log(e)
         log("Couldn't evaluate domainCheck")
