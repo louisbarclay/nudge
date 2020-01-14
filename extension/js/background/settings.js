@@ -19,6 +19,7 @@ function defaultDomainPopulate(domainsArray) {
 }
 
 function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
+  // log(newVal, setting, domain, domainSetting)
   // Set up Amplitude identify
   var identify = new amplitude.Identify()
   // For event logging
@@ -54,12 +55,15 @@ function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
         )
         info = "domain never unhidden"
       }
+      // Stuff related to tweaking a certain domain setting
     } else if (domain && domainSetting) {
       // Add
       if (domainSetting === "add") {
-        settingsLocal[setting][domain] = defaultDomainInfo
-        identify.set(`${setting}.${domain}`, settingsLocal[setting][domain])
+        settingsLocal.domains[domain] = defaultDomainInfo
 
+        // Change domains info into an array for Amplitude
+        var nudgeDomains = domainsSettingToAmplitude(settingsLocal, "nudge")
+        identify.set("nudge_domains", nudgeDomains)
         // Special once off
       } else if (domainSetting === "removeFaviconUrl") {
         Object.keys(settingsLocal[setting]).forEach(function(key) {
@@ -75,17 +79,32 @@ function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
         settingsLocal[setting][domain][domainSetting] = !settingsLocal[setting][
           domain
         ][domainSetting]
-        identify.set(
-          `${setting}.${domain}.${domainSetting}`,
-          settingsLocal[setting][domain][domainSetting]
+        // Change domains info into an array for Amplitude
+        var amplitudeDomains = domainsSettingToAmplitude(
+          settingsLocal,
+          domainSetting
         )
+        if (domainSetting === "off") {
+          identify.set("on_domains", onDomains)
+        } else if (domainSetting === "nudge") {
+          identify.set("nudge_domains", nudgeDomains)
+        }
         // Off by default is a special case - we must update the settings for all domains
       } else {
         // Set previousVal for log
         previousVal = settingsLocal[setting][domain][domainSetting]
         // Set value
         settingsLocal[setting][domain][domainSetting] = newVal
-        identify.set(`${setting}.${domain}.${domainSetting}`, newVal)
+        // Change domains info into an array for Amplitude
+        var amplitudeDomains = domainsSettingToAmplitude(
+          settingsLocal,
+          domainSetting
+        )
+        if (domainSetting === "off") {
+          identify.set("on_domains", amplitudeDomains)
+        } else if (domainSetting === "nudge") {
+          identify.set("nudge_domains", amplitudeDomains)
+        }
       }
     } else {
       if (newVal === "toggle") {
@@ -100,7 +119,12 @@ function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
         previousVal = settingsLocal[setting]
         // Set value
         settingsLocal[setting] = newVal
-        identify.set(`${setting}`, newVal)
+        if (domainSetting && domainSetting === "off") {
+          var onDomains = domainsSettingToAmplitude(settingsLocal, "off")
+          identify.set("on_domains", amplitudeDomains)
+        } else {
+          identify.set(`${setting}`, newVal)
+        }
       }
     }
     // Update settings in the cloud
@@ -110,18 +134,14 @@ function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
       toggleOffByDefault(settingsLocal.off_by_default)
     }
 
-    // If the setting was share_data and it's now on, run Amplitude
+    // If the setting was share_data and it's now on, run a whole identify to update settings
     if (setting === "share_data" && settingsLocal.share_data) {
       // Start Amplitude
       amplitude.getInstance().init(amplitudeCreds.apiKey)
       // Set user ID
       amplitude.getInstance().setUserId(settingsLocal.userId)
       // Always sync all settings on re-sharing data, just to make sure they're in sync
-      var identify = new amplitude.Identify()
-      Object.keys(settingsLocal).forEach(function(key) {
-        identify.set(key, settingsLocal[key])
-      })
-      amplitude.getInstance().identify(identify)
+      flushSettingsToAmplitude(settingsLocal, identify)
     }
 
     // Sync settings with Amplitude
@@ -167,4 +187,46 @@ function toggleOffByDefault(newVal) {
   // and the 'off' so that this doesn't get sent to the cloud
   changeSetting(domainsTemp, "domains", false, "off")
   // log(`Switched 'off' for all domains to ${newVal}`)
+}
+
+// This takes settings and an identify and flushes settings correctly
+// We use this to prevent domains settings creating tons of User Properties in Amplitude
+function flushSettingsToAmplitude(settings, identify) {
+  Object.keys(settings).forEach(function(key) {
+    if (key === "domains") {
+      var nudgeDomains = []
+      var onDomains = []
+      Object.keys(settings.domains).forEach(function(key) {
+        if (settings.domains[key].nudge) {
+          nudgeDomains.push(key)
+          if (!settings.domains[key].off) {
+            onDomains.push(key)
+          }
+        }
+      })
+      identify.set("on_domains", onDomains)
+      identify.set("nudge_domains", nudgeDomains)
+    } else {
+      identify.set(key, settings[key])
+    }
+  })
+}
+
+function domainsSettingToAmplitude(settings, setting) {
+  var nudgeDomains = []
+  var onDomains = []
+  Object.keys(settings.domains).forEach(function(key) {
+    if (settings.domains[key].nudge) {
+      nudgeDomains.push(key)
+      if (!settings.domains[key].off && setting === "off") {
+        onDomains.push(key)
+      }
+    }
+  })
+
+  if (setting === "off") {
+    return onDomains
+  } else if (setting === "nudge") {
+    return nudgeDomains
+  }
 }
