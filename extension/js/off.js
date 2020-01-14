@@ -135,15 +135,17 @@ function getLocalStorage() {
           log("b")
           el(
             "js-stats"
-          ).innerHTML = `You haven't been on this site recently. Nice one!`
+          ).innerHTML = `You haven't been on this site recently, as far as Nudge can tell. Nice one!`
         }
       } else {
         if (domainToday) {
           el("js-stats").innerHTML = `${msToDuration(
             domainToday.time
-          )} today (${domainToday.sessions} visit). Last visit was ${moment(
-            lastVisitEnd
-          ).calendar()}.`
+          )} today (${
+            domainToday.sessions === 1
+              ? `${domainToday.sessions} visit`
+              : `${domainToday.sessions} visits`
+          }). Last visit was ${moment(lastVisitEnd).calendar()}.`
         } else {
           el("js-stats").innerHTML = `You last visited ${domain} ${moment(
             lastVisitEnd
