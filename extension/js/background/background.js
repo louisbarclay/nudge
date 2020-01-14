@@ -99,9 +99,7 @@ async function loadSettingsAndAmplitude() {
         .logEvent("startup", { share_data: settingsLocal.share_data })
       // Always sync all settings on startup, just to make sure they're in sync
       var identify = new amplitude.Identify()
-      Object.keys(settingsLocal).forEach(function(key) {
-        identify.set(key, settingsLocal[key])
-      })
+      flushSettingsToAmplitude(settingsLocal, identify)
       amplitude.getInstance().identify(identify)
     } else {
       // Amplitude HTTP request for non-share data people

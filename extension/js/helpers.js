@@ -4,9 +4,13 @@ else var log = function() {}
 
 // Extract core domain from URL you want to check
 function extractDomain(url) {
-  var niceUrl = new URL(url)
-  // log(niceUrl.hostname + '/' + niceUrl.pathname.split("/")[1]);
-  return niceUrl.hostname + "/" + niceUrl.pathname.split("/")[1]
+  if (url !== "") {
+    var niceUrl = new URL(url)
+    // log(niceUrl.hostname + '/' + niceUrl.pathname.split("/")[1]);
+    return niceUrl.hostname + "/" + niceUrl.pathname.split("/")[1]
+  } else {
+    return "empty.url/empty"
+  }
 }
 
 function getUrl(path) {
