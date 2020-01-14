@@ -683,15 +683,20 @@ function stopAuto() {
 }
 
 // Make 'FAQ' link work
-function moreLink() {
+function moreLink(intro) {
   var container = document.querySelector(".facebook-container")
   var link_to_more = document.getElementById("link_to_more")
   link_to_more.onclick = function() {
     container.innerHTML = localStorage["more_content.html"]
     var back_to_share = document.getElementById("back_to_share")
     back_to_share.onclick = function() {
-      container.innerHTML = localStorage["share_content.html"]
-      shareUx()
+      if (intro) {
+        container.innerHTML = localStorage["intro.html"]
+        intro()
+      } else {
+        container.innerHTML = localStorage["share_content.html"]
+        shareUx()
+      }
     }
   }
 }
@@ -709,6 +714,7 @@ function shareBottomLinks() {
 function introUx(element) {
   var close = document.querySelector(".facebook-close")
   var container = document.querySelector(".facebook-container")
+  moreLink(true)
   if (!container) {
     deleteEl(container)
     deleteEl(close)
@@ -735,7 +741,7 @@ function introUx(element) {
 
 // UX for confirm.html
 function confirmUx() {
-  var button = document.querySelector(".facebook-button-blue")
+  var button = el("js-execute-unfollow")
   var container = document.querySelector(".facebook-container")
   button.onclick = function() {
     cancelOperation = false
@@ -759,7 +765,7 @@ function runUx() {
 
 // UX for stopping unfollowing
 function buttonInit() {
-  var button = document.querySelector(".facebook-button-blue")
+  var button = el("facebook-button")
   button.onclick = function() {
     eventLogSender("fb_unfollow_cancel", {})
     progressLogger(`Stopped unfollowing`)
@@ -770,7 +776,7 @@ function buttonInit() {
 
 // UX for having hit stop
 function stopInit() {
-  var button = document.querySelector(".facebook-button-blue")
+  var button = el("facebook-button")
   button.innerHTML = "Resume unfollowing"
   cancelOperation = true
   button.onclick = function() {
