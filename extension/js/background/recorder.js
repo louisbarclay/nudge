@@ -219,7 +219,8 @@ function domainCurrentTimeUpdater() {
       total: totalTimeTemp,
       visits: dateObj[domain].visits
     }
+    // if (totalTimeTemp % 10 === 0) {
     liveUpdate(domain, liveUpdateObj)
-    // Live updater for popup would need to be chrome.runtime.sendMessage
+    // }
   }
 }
