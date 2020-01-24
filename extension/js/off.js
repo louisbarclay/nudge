@@ -128,7 +128,9 @@ function getLocalStorage() {
       if (!(domain in status)) {
         if (lastVisitEnd) {
           log("a")
-          el("js-stats").innerHTML = `You last visited ${domain} ${moment(
+          el(
+            "js-stats"
+          ).innerHTML = `Your last visit to ${domain} ended ${moment(
             lastVisitEnd
           ).calendar()}.`
         } else {
@@ -142,12 +144,16 @@ function getLocalStorage() {
           el("js-stats").innerHTML = `${msToDuration(
             domainToday.time
           )} today (${
-            domainToday.sessions === 1
+            !domainToday.sessions
+              ? "from a visit that started yesterday but ended today"
+              : domainToday.sessions === 1
               ? `${domainToday.sessions} visit`
               : `${domainToday.sessions} visits`
-          }). Last visit was ${moment(lastVisitEnd).calendar()}.`
+          }). Last visit ended ${moment(lastVisitEnd).calendar()}.`
         } else {
-          el("js-stats").innerHTML = `You last visited ${domain} ${moment(
+          el(
+            "js-stats"
+          ).innerHTML = `Your last visit to ${domain} ended ${moment(
             lastVisitEnd
           ).calendar()}.`
         }
