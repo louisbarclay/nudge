@@ -462,7 +462,6 @@ function storeForUse(url, response) {
 function appendHtml(parent, childString, callback) {
   if (parent) {
     parent.insertAdjacentHTML("afterbegin", childString)
-    log("doneX")
   }
   if (callback) {
     callback()
