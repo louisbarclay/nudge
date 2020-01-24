@@ -1,6 +1,9 @@
 // Options set
 getSettings(execSettings)
 
+// Initialise storage
+var storage = {}
+
 // Have to load these all here to get them in early
 sendHTMLRequest(getUrl("html/injected/other/circle.html"), storeForUse)
 sendHTMLRequest(getUrl("html/injected/nudge/corner.html"), storeForUse)
