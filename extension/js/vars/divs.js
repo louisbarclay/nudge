@@ -55,7 +55,7 @@ var divs = {
       className: "core-rail"
     },
     {
-      className: "feed-right-rail right-rail"
+      className: "right-rail"
     }
   ],
   "facebook.com": [

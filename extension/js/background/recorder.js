@@ -13,13 +13,13 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
   // Open date
   var date = moment(endTime).format("YYYY-MM-DD")
   var dateObj = open(date)
-  var prevAllDomainsTime = false
-  if (
-    typeof dateObj.$allDomains !== "undefined" &&
-    "time" in dateObj.$allDomains
-  ) {
-    prevAllDomainsTime = dateObj.$allDomains.time
-  }
+  // var prevAllDomainsTime = false
+  // if (
+  //   typeof dateObj.$allDomains !== "undefined" &&
+  //   "time" in dateObj.$allDomains
+  // ) {
+  //   prevAllDomainsTime = dateObj.$allDomains.time
+  // }
 
   // If startOfDay exists already, check it's for the right day
   if ("startOfDay" in statusObj) {
@@ -29,6 +29,7 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
     ) {
       statusObj.startOfDay = moment(endTime).startOf("day")
     }
+    // Otherwise, it's OK - you have a valid startOfDay
     // If not, set it
   } else {
     statusObj.startOfDay = moment(endTime).startOf("day")
@@ -45,12 +46,13 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
   // Define previous and now, in
   var totalTimeToday = dateObj[domain].time
 
-  if (allDomainsReal - dateObj.$allDomains.time !== 0) {
-    eventLog("allDomains_unsynced", {
-      allDomainsReal,
-      allDomains: dateObj.$allDomains.time
-    })
-  }
+  // Don't log allDomains_unsynced. The information is not helpful
+  // if (allDomainsReal - dateObj.$allDomains.time !== 0) {
+  //   eventLog("allDomains_unsynced", {
+  //     allDomainsReal,
+  //     allDomains: dateObj.$allDomains.time
+  //   })
+  // }
 
   // We assume it wasn't a shutdown
   var shutdown = false
@@ -143,7 +145,6 @@ function domainVisitUpdater(domain, time, source) {
   var date = moment(time).format("YYYY-MM-DD")
   var dateObj = open(date)
   dataAdder(dateObj, domain, 1, "visits", addTogether)
-  close(date, dateObj, "date close in visit updater")
   var totalVisits = dateObj[domain].visits
   var totalTimeToday = dateObj[domain].time
 
@@ -164,6 +165,17 @@ function domainVisitUpdater(domain, time, source) {
   if (!keyDefined(statusObj, domain)) {
     statusObj[domain] = {}
   }
+
+  // If either the domain does not exist today yet or lastVisitEnd is not the same as lastShutdown, this is a new realVisit
+  if (
+    (!statusObj[domain].lastVisitEnd && !statusObj[domain].lastShutdown) ||
+    statusObj[domain].lastShutdown >= statusObj[domain].lastVisitEnd
+  ) {
+    dataAdder(dateObj, domain, 1, "sessions", addTogether)
+  }
+
+  close(date, dateObj, "date close in visit updater")
+
   // Initialise domain statusObj keys if don't exist
   var domainStatusObj = statusObj[domain]
   // Assume no last shutdown
@@ -207,7 +219,8 @@ function domainCurrentTimeUpdater() {
       total: totalTimeTemp,
       visits: dateObj[domain].visits
     }
+    // if (totalTimeTemp % 10 === 0) {
     liveUpdate(domain, liveUpdateObj)
-    // Live updater for popup would need to be chrome.runtime.sendMessage
+    // }
   }
 }

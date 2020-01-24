@@ -4,9 +4,13 @@ else var log = function() {}
 
 // Extract core domain from URL you want to check
 function extractDomain(url) {
-  var niceUrl = new URL(url)
-  // log(niceUrl.hostname + '/' + niceUrl.pathname.split("/")[1]);
-  return niceUrl.hostname + "/" + niceUrl.pathname.split("/")[1]
+  if (url !== "") {
+    var niceUrl = new URL(url)
+    // log(niceUrl.hostname + '/' + niceUrl.pathname.split("/")[1]);
+    return niceUrl.hostname + "/" + niceUrl.pathname.split("/")[1]
+  } else {
+    return "empty.url/empty"
+  }
 }
 
 function getUrl(path) {
@@ -279,10 +283,24 @@ function logMinutes(time) {
   return minutes + "m" + lastTwo(seconds) + "s"
 }
 
-// Turn lots of seconds into e.g. 10m15s
+// Turn lots of seconds into e.g. 10m
 function logMinutesNoSeconds(time) {
   var minutes = Math.floor(time / 60)
   return minutes + "m"
+}
+
+// Turn lots of seconds into e.g. 10m15s
+function msToDuration(ms) {
+  var seconds = Math.floor(ms / 1000)
+  var time = false
+  if (seconds < 60) {
+    time = `${seconds}s`
+  } else if (seconds < 3600) {
+    time = `${Math.floor(seconds / 60)}m${seconds % 60}s`
+  } else {
+    time = `${Math.floor(seconds / 3600)}h${Math.floor(seconds / 60) % 60}m`
+  }
+  return time
 }
 
 // Text for button
@@ -441,10 +459,10 @@ function classList(element) {
 
 function storeForUse(url, response) {
   url = url.split("/").pop()
-  if (typeof localStorage === "undefined") {
-    // log(`Can't find localStorage`);
+  if (typeof storage === "undefined") {
+    // log(`Can't find storage`);
   } else {
-    localStorage[url] = response
+    storage[url] = response
   }
 }
 
@@ -570,6 +588,47 @@ function domainCheck(url, settings) {
   }
 
   return domain
+}
+
+// Returns a function, that, as long as it continues to be invoked, will not
+// be triggered. The function will be called after it stops being called for
+// N milliseconds. If `immediate` is passed, trigger the function on the
+// leading edge, instead of the trailing.
+function debounce(func, wait, immediate) {
+  var timeout
+  return function() {
+    var context = this,
+      args = arguments
+    var later = function() {
+      timeout = null
+      if (!immediate) func.apply(context, args)
+    }
+    var callNow = immediate && !timeout
+    clearTimeout(timeout)
+    timeout = setTimeout(later, wait)
+    if (callNow) func.apply(context, args)
+  }
+}
+
+const throttle = (func, limit) => {
+  let lastFunc
+  let lastRan
+  return function() {
+    const context = this
+    const args = arguments
+    if (!lastRan) {
+      func.apply(context, args)
+      lastRan = Date.now()
+    } else {
+      clearTimeout(lastFunc)
+      lastFunc = setTimeout(function() {
+        if (Date.now() - lastRan >= limit) {
+          func.apply(context, args)
+          lastRan = Date.now()
+        }
+      }, limit - (Date.now() - lastRan))
+    }
+  }
 }
 
 function isNudgeDomain(domain) {

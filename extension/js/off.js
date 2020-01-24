@@ -15,8 +15,8 @@ var settings2 = document.getElementById(`js-settings2`)
 var headline = document.getElementById(`js-headline`)
 
 // Signup mode
-var signupMode = false
-var surveyMode = true
+var signupMode = true
+var surveyMode = false
 
 // Settings click handlers
 Array.from(settings).forEach(function(element) {
@@ -86,7 +86,7 @@ function getLocalStorage() {
     var settingsLocal = response.settingsLocal
     getStickier = settingsLocal.get_stickier
     // Get domain today
-    // var domainToday = JSON.parse(localStorage[date])[domain];
+    var domainToday = JSON.parse(localStorage[date])[domain]
     // Pull the status out
     var status = JSON.parse(localStorage.status)
 
@@ -101,9 +101,9 @@ function getLocalStorage() {
     // If false, use value 0 to grab image from array and set it
     // If true, check what day you are on versus the first ever day, and use that value to get array
     // Check if domain in status
-    if (!(domain in status)) {
-      headline.innerHTML = `Nudge switches off${highlightify(domain)}by default`
-    }
+    // if (!(domain in status)) {
+    //   headline.innerHTML = `Nudge switches off${highlightify(domain)}by default`
+    // }
 
     // Grab lastVisitEnd for updating the headline
     var lastVisitEnd = status[domain] ? status[domain].lastVisitEnd : false
@@ -112,7 +112,53 @@ function getLocalStorage() {
       .duration(moment().diff(moment(lastVisitEnd)))
       .humanize()
     // Update it in headline
-    document.getElementById("js-lastvisit").innerHTML = sinceLastVisitEnd
+
+    try {
+      moment.locale("en", {
+        calendar: {
+          lastDay: "[yesterday at] h:mma",
+          sameDay: "[today at] h:mma",
+          nextDay: "[tomorrow at] h:mma",
+          lastWeek: "[last] dddd [at] h:mma",
+          nextWeek: "dddd [at] h:mma",
+          sameElse: "LL"
+        }
+      })
+
+      if (!(domain in status)) {
+        if (lastVisitEnd) {
+          log("a")
+          el(
+            "js-stats"
+          ).innerHTML = `Your last visit to ${domain} ended ${moment(
+            lastVisitEnd
+          ).calendar()}.`
+        } else {
+          log("b")
+          el(
+            "js-stats"
+          ).innerHTML = `You haven't been on this site recently, as far as Nudge can tell. Nice one!`
+        }
+      } else {
+        if (domainToday) {
+          el("js-stats").innerHTML = `${msToDuration(
+            domainToday.time
+          )} today (${
+            !domainToday.sessions
+              ? "from a visit that started yesterday but ended today"
+              : domainToday.sessions === 1
+              ? `${domainToday.sessions} visit`
+              : `${domainToday.sessions} visits`
+          }). Last visit ended ${moment(lastVisitEnd).calendar()}.`
+        } else {
+          el(
+            "js-stats"
+          ).innerHTML = `Your last visit to ${domain} ended ${moment(
+            lastVisitEnd
+          ).calendar()}.`
+        }
+      }
+    } catch (e) {}
 
     switch_ons = JSON.parse(localStorage[date]).switch_ons
     if (getStickier) {

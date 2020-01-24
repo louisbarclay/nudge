@@ -27,12 +27,18 @@ function cornerInit(totalSeconds, totalVisits, domain) {
   Array.from(document.getElementsByClassName("js-domain")).forEach(function(
     element
   ) {
-    element.innerHTML = domain
+    // Don't change the domain if it's already fine!
+    if (element.innerHTML !== domain) {
+      element.innerHTML = domain
+    }
   })
 
   // Update time
   if (jsTime) {
-    jsTime.innerHTML = timeMins
+    // Don't change the time if it's already fine!
+    if (jsTime.innerHTML !== timeMins) {
+      jsTime.innerHTML = timeMins
+    }
   }
 
   // Update visits
@@ -96,7 +102,7 @@ function cornerInit(totalSeconds, totalVisits, domain) {
 
 function insertCorner(domain, off_by_default) {
   var cornerContainer = createEl(document.body, "div", "nudge")
-  appendHtml(cornerContainer, localStorage["corner.html"])
+  appendHtml(cornerContainer, storage["corner.html"])
   // Remove
   var remove = document.getElementById("js-hide")
   remove.onclick = function hideBanner() {
