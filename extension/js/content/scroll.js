@@ -49,7 +49,7 @@ function scrollNudge(screens, domain) {
 
 function insertScroll(domain) {
   var scrollContainer = createEl(document.body, "div", "nudge-scroll")
-  appendHtml(scrollContainer, localStorage["scroll.html"])
+  appendHtml(scrollContainer, storage["scroll.html"])
   // Start scroll checking
   setInterval(function() {
     scrollCheck(domain)
