@@ -34,12 +34,7 @@
     "open_in_tab": true
   },
   "options_page": "html/pages/options.html",
-  "web_accessible_resources": [
-    "img/*",
-    "fonts/*",
-    "html/*",
-    "css/*"
-  ],
+  "web_accessible_resources": ["img/*", "fonts/*", "html/*", "css/*"],
   "background": {
     "scripts": [
       "js/vendor/moment.min.js",
@@ -63,15 +58,14 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "<all_urls>"
-      ],
+      "matches": ["<all_urls>"],
       "js": [
         "js/vendor/moment.min.js",
         "config.js",
         "js/vars/vars.js",
         "js/vars/divs.js",
         "js/helpers.js",
+        "js/content/snippets.js",
         "js/content/controller.js",
         "js/content/time.js",
         "js/content/scroll.js",
@@ -87,9 +81,7 @@
         "*://facebook.com/*",
         "*://web.facebook.com/*"
       ],
-      "js": [
-        "js/facebook/facebook.js"
-      ],
+      "js": ["js/facebook/facebook.js"],
       "run_at": "document_start"
     }
   ]
