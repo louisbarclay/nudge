@@ -1,0 +1,40 @@
+html
+  head
+    title Options
+    link(rel="stylesheet" href="../../css/pages/onboarding.css")
+    link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
+    meta(charset="UTF-8")
+  body
+    .header.horizontal
+      a.back#js-back
+      div.logo-small
+      div.forward
+    .horizontal.centered
+      .contents.headspace
+        h1.spacing Options
+        p Manage your Nudge options here.
+        .card.card-highlight
+          a(href='./sites.html')
+            .main
+              h2 Choose Sites
+              p Manage the sites that Nudge works on
+        mixin card(id, title, desc, imgUrl, url)
+          .card
+            a(href=url)
+              .main(id=id)
+                h2=title
+                p=desc
+                button.toggle
+                  div.left.on
+                  div.right
+              .image
+                img(src=imgUrl)
+        +card(`off_by_default`, `Defaulter`, `Sites are off by default`, `../../img/preview/defaulter2.gif`, `./defaulter.html`)
+        +card(`div_hider`, `Hider`, `Addictive sections of websites are hidden`, `../../img/preview/hider.gif`, `./hider.html`)
+        +card(`time_nudge`, `Rainbow Timer`, `See how long you're spending on sites`, `../../img/preview/timenudger.png`, `./rainbowtimer.html`)
+
+  script(src="../../config.js")
+  script(src="../../js/background/storage.js")
+  script(src="../../js/helpers.js")
+  script(src="../../js/vars/vars.js")
+  script(src="../../js/option.js")

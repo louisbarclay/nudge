@@ -17,7 +17,10 @@ html
           div.right
         p The Hider replaces addictive sections of websites with the Nudge logo.
         p It’s like ad blocking, except for things like YouTube recommended videos that are designed to keep you on the site for longer.
-        p 💡 Tip: if you accidentally hit 'Show always', you can reset this by clicking the Nudge icon in the Chrome menu and selecting 'Reset hidden sections'.
+        p#js-hider-warning(style="display: none").p-highlight ⚠️ Warning: the Hider won't work because none of the sites that the Hider currently works for are in your Nudge sites. You can see which sites those are below.
+        p 💡 Tip: if you accidentally hit 'Show always', you can reset this by clicking on the link directly under here.
+        a.spacing-small.sublink#js-hidden-sections-toggle Show the sections that Nudge hides
+        #js-hiddensections.vertical.full-width.spacing.display-none
         //- h3 Options:
         //- .horizontal.spacing
         //-   .form-checkbox
@@ -40,4 +43,6 @@ html
   script(src="../../js/background/storage.js")
   script(src="../../js/helpers.js")
   script(src="../../js/vars/vars.js")
+  script(src="../../js/vars/divs.js")
+  script(src="../../js/hider.js")
   script(src="../../js/option.js")

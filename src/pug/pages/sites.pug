@@ -6,15 +6,15 @@ html
     meta(charset="UTF-8")
   body
     .header.horizontal
-      a.back#js-back 🠐 Choose Sites
+      a.back#js-back 🠐 Choose sites
       div.logo-small
       div.forward
     .horizontal.centered
       #off_by_default.contents.headspace
-        h1 Choose Sites
-        p Add the sites you'd like Nudge to work on. Don't go crazy – stick to the sites that suck you in the most.
-        input#js-add(type='text' placeholder='Add a site').spacing-small
-        div.spacing
+        h1.spacing Choose sites
+        p Choose sites you'd like Nudge to work on.
+        input#js-add(type='text' placeholder="Add a site...").spacing-small
+        div.spacing-small
           span.tooltip  (In format 
             span.highlight site.com
             | , 
@@ -22,18 +22,29 @@ html
             |  or 
             span.highlight site.com/page
             | )
-        ul.tags#js-domainlist
-        a.spacing.sublink Remove all sites
+        ul.tags#js-domainlist.spacing
+        .sites-empty-state.spacing(style="display: none")#js-empty-state No Nudge sites yet – add some above
+        p 💡 Tip: don't go crazy – stick to the sites that suck you in the most.
+        //- a.spacing.sublink Remove all sites
         a.spacing-small.sublink#js-whitelist-toggle Choose whitelist sites
-        .vertical#js-whitelist-container
-          input#js-whitelistadd(type='text' placeholder='Add a site').spacing-small
-          div.spacing
+        .vertical#js-whitelist-container.display-none
+          h2 Whitelist sites
+          p Choose sites you'd like Nudge to ignore.
+          p Nudge's default whitelist includes Facebook, Google, Twitter and Yahoo sign in pages.
+          input#js-whitelistadd(type='text' placeholder="Add a whitelist site...").spacing-small
+          div.spacing-small
             span.tooltip  (In format 
               span.highlight site.com
               | , 
               span.highlight  partof.site.com
               |  or 
               span.highlight site.com/page
+              | . You can use * to represent any part of a URL, e.g. 
+              span.highlight site.com/*/page
+              |  will match 
+              span.highlight site.com/this/page
+              |  and 
+              span.highlight site.com/that/page
               | )
           ul.tags.spacing#js-whitelist
         .horizontal.onboarding-bar.spacing.full-width
