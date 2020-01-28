@@ -143,13 +143,12 @@ function addCircle(element, domain, div, randomiser, unhiddenDivs) {
     try {
       // log(storage["circle.html"])
       if (
-        storage["circle.html"] &&
-        storage["circle.html"].includes("circle-container")
+        nudgeStorage["circle.html"] &&
+        nudgeStorage["circle.html"].includes("circle-container")
       ) {
-        appendHtml(element, storage["circle.html"])
+        appendHtml(element, nudgeStorage["circle.html"])
       } else {
         // log("Need to reload circle.html")
-        sendHTMLRequest(getUrl("html/injected/other/circle.html"), storeForUse)
       }
       circleHandler(element, domain, div, randomiser, unhiddenDivs)
     } catch (e) {
