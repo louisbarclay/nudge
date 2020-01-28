@@ -45,14 +45,11 @@ $checkbox-color: $nudge-blue
 
 // Checkboxes
 input[type="checkbox"]
-  position: absolute
   display: none
 
   & + label
-    position: absolute
     display: flex
-    justify-content: center
-    padding: 0 0 0 ($checkbox-width + 10)
+    line-height: 1.8em
     cursor: pointer
     user-select: none
 
@@ -62,8 +59,8 @@ input[type="checkbox"]
       +border
       content: ""
       align-self: center
-      position: absolute
       left: 0
+      margin-right: 0.5em
       width: $checkbox-width
       height: $checkbox-width
 
@@ -72,6 +69,12 @@ input[type="checkbox"]
     &:before
       +border($color: $checkbox-color)
       background: url('chrome-extension://__MSG_@@extension_id__/img/icon/checkbox.svg') center center/14px no-repeat $checkbox-color
+
+
+.label-inactive
+  color: $nudge-grey-medium
+  &:before
+    background: $nudge-grey-lightest
 
 .arrow
   border-left: 1px solid #a9a9a9
@@ -173,7 +176,7 @@ input[type="text"]
   padding-bottom: 0.4em
   padding-top: 0.2em
   position: relative
-  width: 600px
+  width: 100%
 
   &::placeholder
     color: $nudge-grey-light
@@ -184,6 +187,7 @@ input[type="text"]
     color: $primary
 
 .tags
+  min-height: $spacing * 4
   li
     +border($style: none)
     +left-icon($size: ((16 / 12) * 1em))
@@ -256,3 +260,55 @@ input[type="text"]
     &:hover
       &::after
         content: 'Remove'
+
+.card
+  a
+    width: 100%
+    display: flex
+    flex-direction: row
+    align-items: center
+  
+  margin-bottom: $spacing * 1.5
+  box-shadow: 2px 2px 10px 2px (rgba(0,0,0,0.1))
+  
+  .main
+    width: 75%
+    height: 100%
+  .image
+    width: 25%
+  border-radius: 8px
+  padding: $spacing
+  h2
+    margin-top: 0
+  width: 100%
+  img
+    border-radius: 8px
+    width: 100%
+  
+.card-highlight
+  border-style: none
+  background: lighten($nudge-blue,5%)
+  a
+    .main
+      h2,p
+        color: $white
+      h2
+        font-size: 1.5em
+        font-weight: 500
+      p
+        margin-bottom: 0
+
+.sites-empty-state
+  background: repeating-linear-gradient(45deg,$nudge-grey-lightest,$nudge-grey-lightest 10px,lighten($nudge-grey-lightest,2%) 10px,lighten($nudge-grey-lightest,2%) 20px)
+  display: flex
+  min-height: $spacing * 4
+  align-items: center
+  justify-content: center
+  width: 100%
+  color: $nudge-grey-medium
+  border-radius: 8px
+
+.p-highlight
+  background: $nudge-grey-lightest
+  padding: $spacing / 2
+  border-radius: 8px
