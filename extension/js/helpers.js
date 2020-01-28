@@ -450,15 +450,6 @@ function classList(element) {
   }
 }
 
-function storeForUse(url, response) {
-  url = url.split("/").pop()
-  if (typeof storage === "undefined") {
-    // log(`Can't find storage`);
-  } else {
-    storage[url] = response
-  }
-}
-
 function appendHtml(parent, childString, callback) {
   if (parent) {
     parent.insertAdjacentHTML("afterbegin", childString)
