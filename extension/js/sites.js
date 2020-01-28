@@ -10,17 +10,23 @@ function runSites(settings) {
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.type === "send_settingsLocal") {
     settingsLocal = request.settingsLocal
-
-    console.log(settingsLocal)
   }
 })
 
 function populateDomains(domains) {
+  var domainsExist = false
   Object.keys(domains).forEach(function(key) {
     if (domains[key].nudge) {
       addTag(key, el("js-domainlist"), domainTagHandler)
+      if (!domainsExist) {
+        domainsExist = true
+      }
     }
   })
+  if (!domainsExist) {
+    el("js-empty-state").style.display = "flex"
+    el("js-domainlist").style.display = "none"
+  }
 }
 
 function populateRecommendations(domains) {
@@ -50,31 +56,42 @@ function populateWhitelist(domains) {
 
 function addTag(domain, list, callback, domains) {
   var li = document.createElement("li")
-  log(domain)
   li.innerHTML = domain
   li.id = "li" + getRandomInt(1000, 10000000000000)
   li.setAttribute("domain", domain)
   list.appendChild(li)
+  // Adjust the placeholder
+  if (
+    list.id === "js-domainlist" &&
+    el("js-empty-state").style.display != "none"
+  ) {
+    el("js-empty-state").style.display = "none"
+    el("js-domainlist").style.display = "flex"
+  }
   loadFavicon(li.id, domain)
   callback(li, domain, domains)
 }
 
 // Handle domain tag if you click remove
-function domainTagHandler(li, domain) {
+function domainTagHandler(li) {
   li.onclick = function() {
+    var domain = li.getAttribute("domain")
+    log(domain)
     deleteEl(li)
+    log("hjere")
     changeSettingRequest(false, "domains", domain, "nudge")
-    // TODO: also remove the tick from the domain below, if it is below
+    domainRecSelectToggle(domain)
   }
 }
 
 // Handle domain tag if you click remove
-function whitelistTagHandler(li, domain, whitelist) {
+function whitelistTagHandler(li, domain) {
   li.onclick = function() {
     deleteEl(li)
-    whitelist = whitelist.splice(whitelist.indexOf(domain), 1)
-    changeSettingRequest(whitelist, "whitelist")
-    // TODO: also remove the tick from the domain below, if it is below
+    settingsLocal.whitelist = settingsLocal.whitelist.filter(function(value) {
+      return value !== domain
+    })
+    changeSettingRequest(settingsLocal.whitelist, "whitelist")
   }
 }
 
@@ -88,7 +105,6 @@ function recommendationTagHandler(li, domain, domains) {
   Object.keys(domains).forEach(function(key) {
     if (key === domain && domains[domain].nudge) {
       selectedSite = true
-      log(domain, key)
     }
   })
 
@@ -128,8 +144,6 @@ function loadFavicon(id, domain) {
   updateFavicon()
 }
 
-// FIXME: need to move towards defining sites as an array....................
-
 // Adding a new domain
 el("js-add").addEventListener("keydown", function(event) {
   if (event.key === "Enter") {
@@ -145,12 +159,12 @@ el("js-add").addEventListener("keydown", function(event) {
       Object.keys(settingsLocal.domains).forEach(function(key) {
         if (newDomain == key) {
           isInDomainList = true
+          log(settingsLocal)
           nudge = settingsLocal.domains[key].nudge
           newDomain = key
         }
       })
       if (isInDomainList && nudge) {
-        console.log("in domain list and is nudge")
         var listElements = document.getElementsByTagName("li")
         for (var i = 0; i < listElements.length; i++) {
           if (listElements[i].innerHTML === newDomain) {
@@ -160,14 +174,14 @@ el("js-add").addEventListener("keydown", function(event) {
         }
         newDomainInput.value = ""
       } else if (isInDomainList && !nudge) {
-        console.log("in domain list and is not nudge")
         addTag(newDomain, domainList, domainTagHandler)
         changeSettingRequest(true, "domains", newDomain, "nudge")
+        domainRecSelectToggle(newDomain)
         newDomainInput.value = ""
       } else if (!isInDomainList) {
-        console.log("not in domain list")
         addTag(newDomain, domainList, domainTagHandler)
         changeSettingRequest(true, "domains", newDomain, "add")
+        domainRecSelectToggle(newDomain)
         newDomainInput.value = ""
       }
     }
@@ -178,44 +192,46 @@ el("js-add").addEventListener("keydown", function(event) {
 el("js-whitelistadd").addEventListener("keydown", function(event) {
   if (event.key === "Enter") {
     var newDomain = el("js-whitelistadd").value
-
-    var isInDomainList = false
-    var nudge = true
-    // Check
-    if (domainTest.test(newDomain)) {
-      // Check isInDomainlist
-      Object.keys(settingsLocal.domains).forEach(function(key) {
-        if (newDomain == key) {
-          isInDomainList = true
-          nudge = settingsLocal.domains[key].nudge
-          newDomain = key
-        }
-      })
-      if (isInDomainList && nudge) {
-        console.log("in domain list and is nudge")
-        var listElements = document.getElementsByTagName("li")
-        for (var i = 0; i < listElements.length; i++) {
-          if (listElements[i].innerHTML === newDomain) {
-            toggleClass(listElements[i], "tag-flash")
-            break
-          }
-        }
-        el("js-add").value = ""
-      } else if (isInDomainList && !nudge) {
-        console.log("in domain list and is not nudge")
-        addTag(newDomain, el("js-domainlist"), domainTagHandler)
-        changeSettingRequest(true, "domains", newDomain, "nudge")
-        el("js-add").value = ""
-      } else if (!isInDomainList) {
-        console.log("not in domain list")
-        addTag(newDomain, el("js-domainlist"), domainTagHandler)
-        changeSettingRequest(true, "domains", newDomain, "add")
-        el("js-add").value = ""
+    // FIXME: test if already on whitelist
+    if (whitelistTest.test(newDomain)) {
+      if (settingsLocal.whitelist.includes(newDomain)) {
+        log("Already exists in whitelist")
+      } else {
+        addTag(newDomain, el("js-whitelist"), whitelistTagHandler)
+        settingsLocal.whitelist.push(newDomain)
+        changeSettingRequest(settingsLocal.whitelist, "whitelist")
+        el("js-whitelistadd").value = ""
       }
     }
   }
 })
 
+let showHiddenSections = false
 el("js-whitelist-toggle").onclick = function() {
   toggleClass(el("js-whitelist-container"), "display-none")
+
+  if (showHiddenSections) {
+    showHiddenSections = false
+    el("js-whitelist-toggle").innerHTML = "Choose whitelist sites"
+  } else {
+    showHiddenSections = true
+    el("js-whitelist-toggle").innerHTML = "Hide whitelist sites"
+  }
+}
+
+function domainRecSelectToggle(domain) {
+  var lists = [
+    "toplist",
+    "sociallist",
+    "newslist",
+    "messaginglist",
+    "shoppinglist"
+  ]
+  lists.forEach(function(list) {
+    el(`js-${list}`).childNodes.forEach(function(node) {
+      if (node.innerText === domain) {
+        toggleClass(node, "selected-tag")
+      }
+    })
+  })
 }
