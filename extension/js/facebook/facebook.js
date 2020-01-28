@@ -100,29 +100,6 @@ function execSettings(settings) {
     doAtEarliest(function() {
       addCSS("nudge-facebook-dialog", "css/injected/facebook.css")
     })
-    // Load all the assets you'll need to show the Nudge dialog box on top of pagelet_composer
-    sendHTMLRequest(getUrl("html/injected/facebook/intro.html"), storeForUse)
-    sendHTMLRequest(
-      getUrl("html/injected/facebook/confirm_content.html"),
-      storeForUse
-    )
-    sendHTMLRequest(
-      getUrl("html/injected/facebook/run_content.html"),
-      storeForUse
-    )
-    sendHTMLRequest(
-      getUrl("html/injected/facebook/share_content.html"),
-      storeForUse
-    )
-    sendHTMLRequest(
-      getUrl("html/injected/facebook/share_bottom.html"),
-      storeForUse
-    )
-    sendHTMLRequest(getUrl("html/injected/facebook/share.html"), storeForUse)
-    sendHTMLRequest(
-      getUrl("html/injected/facebook/more_content.html"),
-      storeForUse
-    )
     // Function to load HTML and configure UX into Nudge dialog box
     function loadUx(uxUrl, uxFunc) {
       doAtEarliest(function() {
@@ -130,10 +107,10 @@ function execSettings(settings) {
           if (!document.getElementById("nudge-dialog")) {
             docReady(function() {
               // log(keyDefined(storage, uxUrl));
-              if (keyDefined(storage, uxUrl)) {
+              if (keyDefined(nudgeStorage, uxUrl)) {
                 // only do this EVER if it's prepped:
                 if (!document.getElementById("nudge-dialog")) {
-                  appendHtml(element, storage[uxUrl], function() {
+                  appendHtml(element, nudgeStorage[uxUrl], function() {
                     uxFunc()
                     protectFeatures(settings)
                   })
@@ -509,7 +486,7 @@ function friendAndPageToggler(option) {
                 }
                 var bottom = document.querySelector(".facebook-bottom-text")
                 if (bottom) {
-                  bottom.innerHTML = storage["share_bottom.html"]
+                  bottom.innerHTML = nudgeStorage["share_bottom.html"]
                   shareBottomLinks()
                 }
               }, 2000)
@@ -687,14 +664,14 @@ function moreLink(intro) {
   var container = document.querySelector(".facebook-container")
   var link_to_more = document.getElementById("link_to_more")
   link_to_more.onclick = function() {
-    container.innerHTML = storage["more_content.html"]
+    container.innerHTML = nudgeStorage["more_content.html"]
     var back_to_share = document.getElementById("back_to_share")
     back_to_share.onclick = function() {
       if (intro) {
-        container.innerHTML = storage["intro.html"]
+        container.innerHTML = nudgeStorage["intro.html"]
         intro()
       } else {
-        container.innerHTML = storage["share_content.html"]
+        container.innerHTML = nudgeStorage["share_content.html"]
         shareUx()
       }
     }
@@ -722,7 +699,7 @@ function introUx(element) {
   }
   var unfollowButton = el("js-unfollow")
   unfollowButton.onclick = function() {
-    container.innerHTML = storage["confirm_content.html"]
+    container.innerHTML = nudgeStorage["confirm_content.html"]
     eventLogSender("fb_unfollow_intro_button", {})
     confirmUx()
   }
@@ -745,7 +722,7 @@ function confirmUx() {
   var container = document.querySelector(".facebook-container")
   button.onclick = function() {
     cancelOperation = false
-    container.innerHTML = storage["run_content.html"]
+    container.innerHTML = nudgeStorage["run_content.html"]
     eventLogSender("fb_unfollow_confirm_button", {})
     if (profilesLoaded && !currentlyUnfollowing) {
       friendAndPageToggler(unfollow)
