@@ -102,7 +102,7 @@ function cornerInit(totalSeconds, totalVisits, domain) {
 
 function insertCorner(domain, off_by_default) {
   var cornerContainer = createEl(document.body, "div", "nudge")
-  appendHtml(cornerContainer, storage["corner.html"])
+  appendHtml(cornerContainer, nudgeStorage["corner.html"])
   // Remove
   var remove = document.getElementById("js-hide")
   remove.onclick = function hideBanner() {

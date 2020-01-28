@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "version": "1.0.46",
+  "version": "1.0.47",
   "name": "Nudge",
   "permissions": [
     "idle",
@@ -72,6 +72,7 @@
         "js/vars/vars.js",
         "js/vars/divs.js",
         "js/helpers.js",
+        "js/content/snippets.js",
         "js/content/controller.js",
         "js/content/time.js",
         "js/content/scroll.js",

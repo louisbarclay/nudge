@@ -14,10 +14,7 @@ imgSrcToDataURL(chrome.runtime.getURL("img/favicon/blankfavicon.png"), function(
   console.log(blankFaviconString)
 })
 
-sendHTMLRequest(getUrl("html/pages/welcome.html"), function(url, response) {
-  storeForUse(url, response)
-  getSettings(execSettings)
-})
+getSettings(execSettings)
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.type === "send_settingsLocal") {
@@ -42,7 +39,7 @@ function execSettings(settings) {
   // changeSettingRequest(0, "show_intro");
   console.log(settingsLocal.show_intro)
   if (settingsLocal.show_intro < 2) {
-    el("welcome").innerHTML = localStorage["welcome.html"]
+    el("welcome").innerHTML = nudgeStorage["welcome.html"]
     handleWelcomeBoolean(settings)
     var increaseCounter = settingsLocal.show_intro + 1
     changeSettingRequest(increaseCounter, "show_intro")
@@ -57,7 +54,7 @@ function updateLocalSettings(settings) {
 function populateDomains(domains) {
   Object.keys(domains).forEach(function(key) {
     if (domains[key].nudge) {
-      addLi(key, domainTags, tagHandler)
+      addLi(key, domainTags, domainTagsHandler)
     } else {
       console.log(key)
     }
@@ -65,7 +62,7 @@ function populateDomains(domains) {
 }
 
 // Handle domain tag if you click remove
-function tagHandler(li, domain) {
+function domainTagsHandler(li, domain) {
   loadFavicon(li.id, domain)
   // remove
   li.onclick = function() {
@@ -93,7 +90,7 @@ function populateBooleans(settings) {
       handleBoolean(item.id)
       // If not already on the right setting, change it
       if (!settings[item.id]) {
-        handleToggle(item.id)
+        toggleBoolean(item.id)
       }
     }
   })
@@ -103,26 +100,26 @@ function handleBoolean(id) {
   var div = document.getElementById(id)
   var button = div.childNodes[1]
   button.onclick = function() {
-    handleToggle(id)
+    toggleBoolean(id)
     changeSettingRequest("toggle", id)
   }
 }
 
 function handleWelcomeBoolean(settings) {
   if (!settings["share_data"]) {
-    handleToggle("share_data2")
+    toggleBoolean("share_data2")
   }
   var welcomeBoolean = el("share_data2")
   console.log(welcomeBoolean)
   var button = welcomeBoolean.childNodes[1]
   button.onclick = function() {
-    handleToggle("share_data2")
-    handleToggle("share_data")
+    toggleBoolean("share_data2")
+    toggleBoolean("share_data")
     changeSettingRequest("toggle", "share_data")
   }
 }
 
-function handleToggle(id) {
+function toggleBoolean(id) {
   var div = document.getElementById(id)
   var button = div.childNodes[1]
   var left = button.childNodes[0]
@@ -173,12 +170,12 @@ addDomain.addEventListener("keydown", function(event) {
         addDomain.value = ""
       } else if (isInDomainList && !nudge) {
         console.log("in domain list and is not nudge")
-        addLi(newDomain, domainTags, tagHandler)
+        addLi(newDomain, domainTags, domainTagsHandler)
         changeSettingRequest(true, "domains", newDomain, "nudge")
         addDomain.value = ""
       } else if (!isInDomainList) {
         console.log("not in domain list")
-        addLi(newDomain, domainTags, tagHandler)
+        addLi(newDomain, domainTags, domainTagsHandler)
         changeSettingRequest(true, "domains", newDomain, "add")
         addDomain.value = ""
       }
@@ -192,6 +189,12 @@ function addLi(domain, element, callback) {
   li.id = "li" + getRandomInt(1000, 10000000000000)
   element.appendChild(li)
   callback(li, domain)
+}
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min)
+  max = Math.floor(max)
+  return Math.floor(Math.random() * (max - min)) + min //The maximum is exclusive and the minimum is inclusive
 }
 
 var items = domainTags.getElementsByTagName("li")
