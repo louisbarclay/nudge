@@ -68,18 +68,25 @@ if (el("js-onboarding-skip")) {
 ;(async () => {
   var settings = await loadSettings()
   var contents = document.getElementsByClassName("contents")[0]
-  var setting = contents.id
+  // var setting = contents.id
   // Find any main toggles and set correct value + handle click
   Array.from(document.getElementsByClassName("toggle")).forEach(function(
     element
   ) {
+    // This will only work if the parentNode of the element has an id that's a valid setting string
+    var setting = element.parentNode.id
     var left = element.childNodes[0]
     var currentVal = !left.className.includes("on")
-    element.onclick = function() {
+
+    element.addEventListener("click", function(e) {
+      // e.stopPropagation()
+      // e.stopImmediatePropagation()
+      e.preventDefault()
       handleToggle(element, function handleSettingChange(value) {
         changeSettingRequest(value, setting)
       })
-    }
+    })
+
     if (currentVal !== settings[setting]) {
       handleToggle(element, null)
     }
@@ -89,7 +96,6 @@ if (el("js-onboarding-skip")) {
     element
   ) {
     var subSetting = element.childNodes[0].id
-    log(subSetting)
     var checkbox = element.childNodes[0]
     // Set current setting
     if (settings[subSetting]) {
@@ -102,6 +108,9 @@ if (el("js-onboarding-skip")) {
   })
   if (window.location.href.includes("sites")) {
     runSites(settings)
+  }
+  if (window.location.href.includes("hider")) {
+    runHider(settings)
   }
 })()
 
