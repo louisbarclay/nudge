@@ -686,6 +686,11 @@ function changeSettingRequest(newVal, setting, domain, domainSetting) {
   })
 }
 
+const objectWithoutKey = (object, key) => {
+  const {[key]: deletedKey, ...otherKeys} = object;
+  return otherKeys;
+}
+
 function imgSrcToDataURL(src, callback, outputFormat) {
   var img = new Image()
   img.crossOrigin = "Anonymous"
