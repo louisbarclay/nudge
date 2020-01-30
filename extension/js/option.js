@@ -90,7 +90,7 @@ for (var i = 0; i < optionsIndex.length; i++) {
   }
 }
 
-function handleToggle(element, callback, override) {
+function handleToggle(element, callback, override, onFirstClick) {
   var left = element.childNodes[0]
   var newVal = left.className.includes("on")
   var right = element.childNodes[1]
@@ -102,6 +102,12 @@ function handleToggle(element, callback, override) {
   } else {
     toggleClass(left, "on")
     toggleClass(right, "on")
+    if (newVal && onFirstClick) {
+      if (el("js-onboarding-enable")) {
+        el("js-onboarding-enable").parentNode.style.display = "none"
+        el("js-next").parentNode.style.display = "flex"
+      }
+    }
   }
   if (callback) {
     callback(newVal)
@@ -131,13 +137,21 @@ if (el("js-onboarding-skip")) {
     var left = element.childNodes[0]
     var currentVal = !left.className.includes("on")
 
+    // Only change the onboarding thing on the very first click
+    let onFirstClick = true
     element.addEventListener("click", function(e) {
       // e.stopPropagation()
       // e.stopImmediatePropagation()
       e.preventDefault()
-      handleToggle(element, function handleSettingChange(value) {
-        changeSettingRequest(value, setting)
-      })
+      handleToggle(
+        element,
+        function handleSettingChange(value) {
+          changeSettingRequest(value, setting)
+        },
+        null,
+        onFirstClick
+      )
+      onFirstClick = false
     })
 
     if (currentVal !== settings[setting]) {
@@ -175,7 +189,6 @@ if (el("js-onboarding-skip")) {
 function handleOnboardingClick(element, changeSetting) {
   var parent = element.parentNode
   var setting = parent.parentNode.parentNode.id
-  log(setting)
   if (changeSetting) {
     var toggle = document.getElementsByClassName("toggle")[0]
     handleToggle(toggle, null, true)
