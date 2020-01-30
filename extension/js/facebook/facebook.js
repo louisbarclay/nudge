@@ -50,10 +50,10 @@ function getFacebookCreds(callback) {
 function execSettings(settings) {
   // Manually set domain
   domain = "facebook.com"
-  // For interventions, always need to check this
-  if (!settings.domains[domain].nudge) {
-    return
-  }
+  // No longer checking if facebook.com is off
+  // if (!settings.domains[domain] || !settings.domains[domain].nudge) {
+  //   return
+  // }
 
   // Check for snooze
   if (settings.snooze.all > +Date.now()) {
@@ -82,20 +82,9 @@ function execSettings(settings) {
     autoUnfollow = true
     eventLogSender("fb_unfollow_autounfollow", {})
   }
-  // If the ratio has never been set, send through Xhr requests to find out what it is
-  if (ratio === false) {
-    docReady(function() {
-      getFacebookCreds(function() {
-        // Running one instance of friendAndPageListGenerator with second parameter at 'true' will
-        // find no. of unfollowable profiles and no. of refollowable profiles
-        friendAndPageListGenerator(unfollow, true)
-      })
-    })
-    return
-  }
 
   // Only show the Nudge dialog box if user has this setting true
-  if (settings.fb_show_unfollow) {
+  if (settings.fb_auto_unfollow) {
     // Cover the pagelet_composer element with a white pseudo-element
     doAtEarliest(function() {
       addCSS("nudge-facebook-dialog", "css/injected/facebook.css")
@@ -123,31 +112,20 @@ function execSettings(settings) {
     }
     // If the user has unfollowed nearly all of their friends, show 'Share' dialog box, not
     // 'Delete your News Feed' dialog box
-    if (ratio <= 0.1) {
-      loadUx("share.html", shareUx)
-      docReady(function() {
-        getFacebookCreds(function() {
-          // If we should be executing an unfollow, e.g. in case of autoUnfollow being on, go ahead and do it
-          if (executeUnfollow) {
-            friendAndPageListGenerator(unfollow, false, function() {
-              executeUnfollow = false
-            })
-          } else {
-            // Otherwise, load all profiles
-            friendAndPageListGenerator(unfollow, false)
-          }
-        })
-      })
-    } else {
-      // If user has unfollowed very few friends, show 'Delete your News Feed' dialog
-      loadUx("intro.html", introUx)
-      docReady(function() {
-        getFacebookCreds(function() {
-          // And load all profiles
+    loadUx("run.html", runUx)
+    docReady(function() {
+      getFacebookCreds(function() {
+        // If we should be executing an unfollow, e.g. in case of autoUnfollow being on, go ahead and do it
+        if (executeUnfollow) {
+          friendAndPageListGenerator(unfollow, false, function() {
+            executeUnfollow = false
+          })
+        } else {
+          // Otherwise, load all profiles
           friendAndPageListGenerator(unfollow, false)
-        })
+        }
       })
-    }
+    })
   }
 }
 
@@ -259,9 +237,11 @@ function friendAndPageListGenerator(option, oneOff, callback) {
       var loadedAll = !hasMoreData
 
       // Log progress
-      progressLogger(
-        `Preparing to unfollow: ${option.profiles.length} loaded out of ${option.totalProfiles}`
-      )
+      if (!cancelOperation) {
+        progressLogger(
+          `Preparing to unfollow: ${option.profiles.length} loaded out of ${option.totalProfiles}`
+        )
+      }
 
       // If loadedAll - i.e. no more profile data to get - or oneOff - i.e. we only ran this as a one off to get ratio - execute callback
 
@@ -321,9 +301,11 @@ function friendAndPageToggler(option) {
   // Check if just starting
   if (option.profileCounter === 0) {
     // Log that you are starting
-    headlineLogger(
-      `${option.profileCounter} of ${option.totalProfiles} friends, pages, and groups unfollowed`
-    )
+    if (!cancelOperation) {
+      headlineLogger(
+        `${option.profileCounter} of ${option.totalProfiles} friends, pages, and groups unfollowed`
+      )
+    }
     debugLogger("startUnfollow", { totalProfiles: option.totalProfiles })
     progressLogger(`Preparing to unfollow: 100% of profiles loaded`)
     // Make clear that you are currently unfollowing
@@ -332,6 +314,10 @@ function friendAndPageToggler(option) {
   // Check if there are profiles to toggle
   if (option.profiles.length === 0) {
     progressLogger(`You have no profiles to unfollow`)
+    headlineLogger(`You're 100% unfollowed`)
+    if (el("facebook-button")) {
+      el("facebook-button").innerHTML = "Switch off Facebook Unfollower"
+    }
     debugLogger("noProfilesToUnfollow")
     return
   }
@@ -431,9 +417,9 @@ function friendAndPageToggler(option) {
               executedProfilesLength: option.executedProfiles.length,
               profilesLength: option.profiles.length
             })
-            headlineLogger(
-              `${option.profileCounter} of ${option.totalProfiles} friends, pages, and groups unfollowed`
-            )
+            // headlineLogger(
+            //   `${option.profileCounter} of ${option.totalProfiles} friends, pages, and groups unfollowed`
+            // )
           } else {
             // Logging stuff
             progressLogger(`Unfollowed ${name}`)
@@ -738,6 +724,15 @@ function runUx() {
   var container = document.querySelector(".facebook-container")
   var text = document.querySelector(".facebook-text")
   buttonInit()
+  var close = document.querySelector(".facebook-close")
+  close.onclick = function() {
+    deleteEl(container)
+    deleteEl(close)
+    stopInit()
+    styleAdder("#pagelet_composer::before", "{ content: none !important; }")
+    var dialog = document.getElementById("facebook-nudge-dialog")
+    deleteEl(dialog)
+  }
 }
 
 // UX for stopping unfollowing
@@ -745,7 +740,10 @@ function buttonInit() {
   var button = el("facebook-button")
   button.onclick = function() {
     eventLogSender("fb_unfollow_cancel", {})
-    progressLogger(`Stopped unfollowing`)
+    progressLogger(
+      `If you leave this page, switch the Unfollower back on in Nudge Options`
+    )
+    headlineLogger(`Unfollowing has been stopped`)
     stopInit()
     // TODO: add feel free to move to another tab. this process will continue
   }
@@ -754,15 +752,20 @@ function buttonInit() {
 // UX for having hit stop
 function stopInit() {
   var button = el("facebook-button")
-  button.innerHTML = "Resume unfollowing"
   cancelOperation = true
-  button.onclick = function() {
-    cancelOperation = false
-    friendAndPageToggler(unfollow)
-    button.innerHTML = "Stop unfollowing"
-    progressLogger(`Resuming...`)
-    eventLogSender("fb_unfollow_resume", {})
-    buttonInit()
+  changeSettingRequest(false, "fb_auto_unfollow")
+  if (button) {
+    button.innerHTML = "Switch the Unfollower back on"
+    button.onclick = function() {
+      cancelOperation = false
+      friendAndPageToggler(unfollow)
+      button.innerHTML = "Switch the Unfollower off"
+      progressLogger(`Resuming...`)
+      headlineLogger(`Starting to unfollow again`)
+      changeSettingRequest(true, "fb_auto_unfollow")
+      eventLogSender("fb_unfollow_resume", {})
+      buttonInit()
+    }
   }
 }
 
