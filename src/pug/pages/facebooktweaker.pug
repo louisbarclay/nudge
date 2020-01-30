@@ -1,6 +1,6 @@
 html
   head
-    title Defaulter
+    title Facebook Greyifyer
     link(rel="stylesheet" href="../../css/pages/onboarding.css")
     link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
     meta(charset="UTF-8")
@@ -10,28 +10,27 @@ html
       div.logo-small
       div.forward
     .horizontal.centered
-      #off_by_default.contents.headspace
-        h1 Defaulter
+      #fb_grey.contents.headspace
+        h1 Facebook Greyifyer
         button.toggle.spacing
           div.left.on
           div.right
-        p The Defaulter turns your Nudge sites off by default, so that instead of visiting out of habit, you get to decide whether you want to visit at all.
-        p To visit the site, you have to drag the slider across.
-        h3 Options:
+        p The Facebook Greyifyer turns your Facebook menu bar to grey, making Facebook less appealing.
+        h3 Bonus feature:
         .horizontal.spacing
           .form-checkbox
-            input#get_stickier(type="checkbox")
-            label(for="get_stickier") Make slider harder to drag across each time
-        .horizontal.onboarding-bar.spacing.full-width
-          button.primary#js-onboarding-enable Enable the Defaulter
-          button.secondary#js-onboarding-skip Skip this feature
-        .horizontal.onboarding-bar.spacing.full-width(style="display:none")
-          button.primary.pink#js-next Next: Hider
-        //- button.popup-button Turn the Defaulter on
+            input#fb_hide_notifications(type="checkbox")
+            label(for="fb_hide_notifications") Remove notifications from your Facebook menu bar
+        #js-onboarding.full-width
+          .horizontal.onboarding-bar.spacing.full-width
+            button.primary#js-onboarding-enable Enable the Facebook Greyifyer
+            button.secondary#js-onboarding-skip Skip this feature
+          .horizontal.onboarding-bar.spacing.full-width(style="display:none")
+            button.primary.pink#js-next Next: Hider
     .horizontal.centered.onboarding-preview
       .left
       .center
-        img(src="../../img/preview/defaulter2.gif").preview-image
+        img(src="../../img/preview/greyify.png").preview-image
       .right
 
 

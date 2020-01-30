@@ -1,17 +1,17 @@
 html
   head
     title
-    link(rel="stylesheet", href="/css/pages/popup.css")
+    link(rel="stylesheet" href="/css/pages/popup.css")
   body.popup-body
     div.popup-container
       div.time-headline#time-headline
       div#logo.hide
       div#domain-line
         div#on on
-        div.domain#domain facebook.com
+        div.domain#domain
         div#today today
       div#button-container
-        button.popup-button#snooze Snooze Nudge for 
+        button.popup-button#snooze Snooze for 
           span#snooze-time
           span  minutes  
         div#notice
@@ -23,5 +23,6 @@ html
     script(src="../../config.js")
     script(src="../../js/helpers.js")
     script(src="../../js/vars/divs.js")
+    script(src="../../js/vars/vars.js")
     script(src="../../js/vendor/moment.min.js")    
     script(src="../../js/popup.js")

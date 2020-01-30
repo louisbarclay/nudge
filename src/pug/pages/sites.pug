@@ -11,8 +11,11 @@ html
       div.forward
     .horizontal.centered
       #off_by_default.contents.headspace
-        h1.spacing Choose sites
-        p Choose sites you'd like Nudge to work on.
+        h1.spacing Choose your Nudge sites
+        p Choose the sites you'd like Nudge to work on.
+        p The features that you enable will run on all of these sites, except for the Unfollower and the Facebook Greyifyer which both work only on facebook.com.
+        .p-highlight.spacing
+          p 💡 Tip: don't go crazy – stick to the sites that suck you in the most.
         input#js-add(type='text' placeholder="Add a site...").spacing-small
         div.spacing-small
           span.tooltip  (In format 
@@ -24,7 +27,6 @@ html
             | )
         ul.tags#js-domainlist.spacing
         .sites-empty-state.spacing(style="display: none")#js-empty-state No Nudge sites yet – add some above
-        p 💡 Tip: don't go crazy – stick to the sites that suck you in the most.
         //- a.spacing.sublink Remove all sites
         a.spacing-small.sublink#js-whitelist-toggle Choose whitelist sites
         .vertical#js-whitelist-container.display-none
@@ -47,9 +49,9 @@ html
               span.highlight site.com/that/page
               | )
           ul.tags.spacing#js-whitelist
-        .horizontal.onboarding-bar.spacing.full-width
-          button.primary.pink#js-next Next: Choose Features
-        //- button.popup-button Turn the Defaulter on
+        #js-onboarding.full-width  
+          .horizontal.onboarding-bar.spacing.full-width
+            button.primary.pink#js-next Next: Choose Features
     .horizontal.centered.onboarding-preview
       .left
       .center.contents

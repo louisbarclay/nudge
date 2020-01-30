@@ -16,18 +16,19 @@ html
           div.left.on
           div.right
         p The Defaulter turns your Nudge sites off by default, so that instead of visiting out of habit, you get to decide whether you want to visit at all.
-        p To visit the site, you have to drag the slider across.
+        .p-highlight
+          p ⭐ To visit the site, you have to drag the slider across.
         h3 Options:
         .horizontal.spacing
           .form-checkbox
             input#get_stickier(type="checkbox")
             label(for="get_stickier") Make slider harder to drag across each time
-        .horizontal.onboarding-bar.spacing.full-width
-          button.primary#js-onboarding-enable Enable the Defaulter
-          button.secondary#js-onboarding-skip Skip this feature
-        .horizontal.onboarding-bar.spacing.full-width(style="display:none")
-          button.primary.pink#js-next Next: Hider
-        //- button.popup-button Turn the Defaulter on
+        #js-onboarding.full-width
+          .horizontal.onboarding-bar.spacing.full-width
+            button.primary#js-onboarding-enable Enable the Defaulter
+            button.secondary#js-onboarding-skip Skip this feature
+          .horizontal.onboarding-bar.spacing.full-width(style="display:none")
+            button.primary.pink#js-next Next: Hider
     .horizontal.centered.onboarding-preview
       .left
       .center

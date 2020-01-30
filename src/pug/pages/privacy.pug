@@ -1,0 +1,33 @@
+html
+  head
+    title Nudge and privacy
+    link(rel="stylesheet" href="../../css/pages/onboarding.css")
+    link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
+    meta(charset="UTF-8")
+  body
+    .header.horizontal
+      a.back#js-back
+      div.logo-small
+      div.forward
+    .horizontal.centered
+      .contents.headspace
+        h1.spacing Nudge and privacy
+        p Nudge collects limited anonymised data on your usage, because it's crucial for helping make Nudge better.
+        .p-highlight
+          p ⭐ For instance, it helps us answer questions like 'does this feature actually reduce the time spent on facebook.com?'
+        p Nudge never tracks any full URLs that you visit, and only tracks domains that you add to your Nudge sites. We track this data against an anonymised ID (more detail in our 
+          a(href="https://github.com/lgwb89/nudge/blob/master/PRIVACYPOLICY.md" target="_blank") privacy policy
+          | ).
+        p We hope that's OK. But if it's not, simply untick this box:
+        .horizontal.spacing
+          .form-checkbox
+            input#share_data(type="checkbox")
+            label(for="share_data") Share data with Nudge
+        .horizontal.onboarding-bar.spacing-small.full-width
+          a.full-width(href="sites.html")
+            button.primary.pink Next: choose your Nudge sites
+  script(src="../../config.js")
+  script(src="../../js/background/storage.js")
+  script(src="../../js/helpers.js")
+  script(src="../../js/vars/vars.js")
+  script(src="../../js/option.js")

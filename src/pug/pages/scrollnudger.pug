@@ -1,6 +1,6 @@
 html
   head
-    title Defaulter
+    title Scroll Nudger
     link(rel="stylesheet" href="../../css/pages/onboarding.css")
     link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
     meta(charset="UTF-8")
@@ -10,28 +10,25 @@ html
       div.logo-small
       div.forward
     .horizontal.centered
-      #off_by_default.contents.headspace
-        h1 Defaulter
+      #scroll_nudge.contents.headspace
+        h1 Scroll Nudger
         button.toggle.spacing
           div.left.on
           div.right
-        p The Defaulter turns your Nudge sites off by default, so that instead of visiting out of habit, you get to decide whether you want to visit at all.
-        p To visit the site, you have to drag the slider across.
-        h3 Options:
-        .horizontal.spacing
-          .form-checkbox
-            input#get_stickier(type="checkbox")
-            label(for="get_stickier") Make slider harder to drag across each time
-        .horizontal.onboarding-bar.spacing.full-width
-          button.primary#js-onboarding-enable Enable the Defaulter
-          button.secondary#js-onboarding-skip Skip this feature
-        .horizontal.onboarding-bar.spacing.full-width(style="display:none")
-          button.primary.pink#js-next Next: Hider
-        //- button.popup-button Turn the Defaulter on
+        p The Scroll Nudger is a subtle notification that appears in the middle of your window every time you scroll down ten screens’ worth.
+        p It helps you see when you’re on an infinite scroll binge, without disrupting you too much.
+        .p-highlight.spacing
+          p ⭐ The Scroll Nudger is transparent and doesn't stop you from using the site in any way.
+        #js-onboarding.full-width
+          .horizontal.onboarding-bar.spacing.full-width
+            button.primary#js-onboarding-enable Enable the Scroll Nudger
+            button.secondary#js-onboarding-skip Skip this feature
+          .horizontal.onboarding-bar.spacing.full-width(style="display:none")
+            button.primary.pink#js-next Next: Hider
     .horizontal.centered.onboarding-preview
       .left
       .center
-        img(src="../../img/preview/defaulter2.gif").preview-image
+        img(src=`../../img/preview/scrollnudger.gif`).preview-image
       .right
 
 
