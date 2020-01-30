@@ -10,7 +10,7 @@ var config = {
 if (!chrome.runtime.getManifest().update_url) {
   console.log("Env: dev")
   config.debug = true
-  config.offByDefault = false
+  config.offByDefault = true
   config.resetDivSettings = false
   config.fastTimer = false
   config.timelineTest = false
