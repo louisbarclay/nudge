@@ -1,37 +1,92 @@
+var hash = window.location.hash.substr(1)
+
+// Hide onboarding if coming from options home
+if (hash === "options") {
+  toggleClass(el("js-onboarding"), "display-none")
+}
+
 var optionsIndex = [
+  { page: "start.html", name: "Welcome to Nudge" },
+  { page: "set_up.html", name: "Setting up Nudge" },
+  { page: "privacy.html", name: "Nudge and privacy" },
   { page: "sites.html", name: "Choose Sites" },
   {
     page: "defaulter.html",
     name: "Defaulter"
   },
   { page: "hider.html", name: "Hider" },
-  { page: "rainbowtimer.html", name: "Rainbow Timer" }
+  {
+    page: "rainbowtimer.html",
+    name: "Rainbow Timer"
+  },
+  {
+    page: "scrollnudger.html",
+    name: "Scroll Nudger"
+  },
+  {
+    page: "unfollower.html",
+    name: "Unfollower"
+  },
+  {
+    page: "facebooktweaker.html",
+    name: "Facebook Greyifyer"
+  },
+  {
+    page: "options_home.html#onboarding",
+    name: "your Options"
+  }
 ]
 
 for (var i = 0; i < optionsIndex.length; i++) {
   if (window.location.href.includes(optionsIndex[i].page)) {
-    log(i)
-    try {
-      // Catch possible error on Change Site page
-      if (optionsIndex[i - 1]) {
-        log(optionsIndex[i - 1].name)
-        // Set up back link
-        el("js-back").innerHTML = `🠐 ${optionsIndex[i - 1].name}`
-        el("js-back").onclick = function() {
-          window.location = `./${optionsIndex[i - 1].page}`
-        }
+    if (hash === "options") {
+      el("js-back").innerHTML = `🠐 Options`
+      el("js-back").onclick = function() {
+        window.location = `./options_home.html`
       }
-    } catch (e) {
-      log(e)
-    }
-    try {
-      // Set up next link
-      el("js-next").innerHTML = `Next: ${optionsIndex[i + 1].name}`
+    } else if (hash === "unfollower") {
+      el("js-back").innerHTML = `🠐 Welcome to Nudge`
+      el("js-back").onclick = function() {
+        window.location = `./start.html`
+      }
+      el("js-onboarding-skip").innerHTML = "No, thanks"
+      el("js-next").innerHTML = "Check out Nudge's other features"
       el("js-next").onclick = function() {
-        window.location = `./${optionsIndex[i + 1].page}`
+        window.location = `./options_home.html`
       }
-    } catch (e) {}
-    break
+    } else if (
+      window.location.href.includes("options_home.html") &&
+      hash != "onboarding"
+    ) {
+      el("js-back").innerHTML = ``
+    } else {
+      try {
+        // Catch possible error on Change Site page
+        if (optionsIndex[i - 1]) {
+          // Set up back link
+          el("js-back").innerHTML = `🠐 ${optionsIndex[i - 1].name}`
+          el("js-back").onclick = function() {
+            window.location = `./${optionsIndex[i - 1].page}`
+          }
+        }
+      } catch (e) {
+        log(e)
+      }
+      try {
+        // Set up next link
+        if (window.location.href.includes("sites.html")) {
+          el(
+            "js-next"
+          ).innerHTML = `Next: choose which of Nudge's features to enable`
+        } else {
+          el("js-next").innerHTML = `Next: ${optionsIndex[i + 1].name}`
+        }
+        el("js-next").onclick = function() {
+          window.location = `./${optionsIndex[i + 1].page}`
+        }
+      } catch (e) {}
+      break
+    }
   }
 }
 
@@ -61,14 +116,12 @@ if (el("js-onboarding-enable")) {
 
 if (el("js-onboarding-skip")) {
   el("js-onboarding-skip").onclick = function() {
-    handleOnboardingClick(this, true)
+    handleOnboardingClick(this, false)
   }
 }
 
 ;(async () => {
   var settings = await loadSettings()
-  var contents = document.getElementsByClassName("contents")[0]
-  // var setting = contents.id
   // Find any main toggles and set correct value + handle click
   Array.from(document.getElementsByClassName("toggle")).forEach(function(
     element
@@ -112,11 +165,16 @@ if (el("js-onboarding-skip")) {
   if (window.location.href.includes("hider")) {
     runHider(settings)
   }
+  // Plug in Nudge ID if we have it
+  var nudgeId = el("js-nudge-id")
+  if (nudgeId) {
+    nudgeId.innerHTML = settings.userId
+  }
 })()
 
 function handleOnboardingClick(element, changeSetting) {
   var parent = element.parentNode
-  var setting = parent.parentNode.id
+  var setting = parent.parentNode.parentNode.id
   log(setting)
   if (changeSetting) {
     var toggle = document.getElementsByClassName("toggle")[0]
