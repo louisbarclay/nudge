@@ -2,15 +2,26 @@
   min-height: 50px
   border-bottom: $border-primary
   border-color: $nudge-grey-lightest
-  justify-content: space-between
+  justify-content: space-evenly
   padding: 1em 0
   position: fixed
-  width: 100%
+  width: 100vw
   z-index: 1
   background: rgba(255,255,255,0.9)
   align-items: center
   .back
-    margin-left: $spacing
+    padding-left: $spacing
+    font-size: 18px
+    flex-grow: 0.5
+    width: 100px
+  .logo-small
+    flex-grow: 2
+  .forward
+    flex-grow: 0.5
+    width: 100px
+
+html
+  overflow-y: overlay
 
 .vertical
   display: flex
@@ -34,6 +45,9 @@
 
 .spacing-small
   margin-bottom: $spacing /2 !important
+
+.spacing-m
+  margin-bottom: $spacing !important
 
 .spacing-xsmall
   margin-bottom: $spacing /4 !important

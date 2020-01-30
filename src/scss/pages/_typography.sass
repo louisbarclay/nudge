@@ -9,7 +9,7 @@ h1, h2, h3
   font-weight: 700
 
 p
-  margin-bottom: $spacing
+  margin-bottom: $spacing / 2
   line-height: 1.6em
 
 h1
@@ -19,20 +19,23 @@ h1
 
 h2
   font-size: 20px
-  margin-bottom: 0.5em
+  margin-bottom: $spacing / 2
   margin-top: 1.5em
 
 h3
+  margin-top: 1.4em
   font-size: 16px
-  font-family: 'Open Sans'
   font-weight: 700
 
 *
-  font-size: 16px
-  color: $primary
+  font-size: 15px
+  color: $nudge-grey-dark
   &::selection
     background: $nudge-pink
     color: $white
+
+a
+  color: darken($nudge-grey-dark, 5%)
 
 .tooltip
   font-size: 12px
@@ -48,3 +51,6 @@ h3
   color: $nudge-grey-medium
   ::hover
     color: $nudge-pink
+
+.link
+  text-decoration: underline

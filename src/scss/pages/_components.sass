@@ -1,7 +1,7 @@
 button
   @extend %button
   +border($style: none)
-  font-size: 18/16 * 1em
+  font-size: 18px
   padding: 0.5em 1em 0.5em 1em
   background: $nudge-grey-lightest
   color: $nudge-grey-medium
@@ -11,6 +11,8 @@ button
   &:hover
     background: darken($nudge-grey-lightest, 2%)  
     color: $nudge-grey-medium
+  span
+    font-family: inherit
   
 .back
   align-items: center
@@ -73,23 +75,21 @@ input[type="checkbox"]
 
 .label-inactive
   color: $nudge-grey-medium
+  cursor: not-allowed
+  pointer-events: none
   &:before
     background: $nudge-grey-lightest
 
 .arrow
-  border-left: 1px solid #a9a9a9
-  border-top: 1px solid #a9a9a9
+  border-left: 3px solid $nudge-grey-medium
+  border-top: 3px solid $nudge-grey-medium
+  margin-bottom: 10px
   cursor: pointer
-  display: inline-block
-  font-size: 12px
-  height: 4em
-  left: 20px
-  margin-top: -2em
+  height: 1em
   overflow: hidden
-  position: absolute
   top: 50%
   transform: rotate(-135deg)
-  width: 4em
+  width: 1em
 
 .call-out
   @extend %reset
@@ -188,6 +188,7 @@ input[type="text"]
 
 .tags
   min-height: $spacing * 4
+  width: 100%
   li
     +border($style: none)
     +left-icon($size: ((16 / 12) * 1em))
@@ -200,7 +201,7 @@ input[type="text"]
     color: $primary
     font-size: 1em
     background-color: $nudge-grey-lightest
-    margin-right: .5em
+    margin-right: 0.8em
     margin-bottom: .8em
     overflow: hidden
     position: relative
@@ -262,22 +263,22 @@ input[type="text"]
         content: 'Remove'
 
 .card
-  a
-    width: 100%
-    display: flex
-    flex-direction: row
-    align-items: center
+  width: 100%
+  display: flex
+  flex-direction: row
+  align-items: center
   
-  margin-bottom: $spacing * 1.5
-  box-shadow: 2px 2px 10px 2px (rgba(0,0,0,0.1))
+  margin-bottom: $spacing
+  box-shadow: 2px 2px 15px 1px (rgba(0,0,0,0.1))
   
   .main
     width: 75%
     height: 100%
+    padding: $spacing
   .image
     width: 25%
+    padding: $spacing
   border-radius: 8px
-  padding: $spacing
   h2
     margin-top: 0
   width: 100%
@@ -285,18 +286,20 @@ input[type="text"]
     border-radius: 8px
     width: 100%
   
-.card-highlight
+.card.card-highlight
   border-style: none
-  background: lighten($nudge-blue,5%)
-  a
-    .main
-      h2,p
-        color: $white
-      h2
-        font-size: 1.5em
-        font-weight: 500
-      p
-        margin-bottom: 0
+  box-shadow: none
+  width: 100%
+  background: $nudge-grey-lightest
+  .main
+    width: 100%
+    // h2,p
+    //   color: $white
+    h2
+      font-size: 1.5em
+      font-weight: 500
+    p
+      margin-bottom: 0
 
 .sites-empty-state
   background: repeating-linear-gradient(45deg,$nudge-grey-lightest,$nudge-grey-lightest 10px,lighten($nudge-grey-lightest,2%) 10px,lighten($nudge-grey-lightest,2%) 20px)
@@ -309,6 +312,35 @@ input[type="text"]
   border-radius: 8px
 
 .p-highlight
-  background: $nudge-grey-lightest
-  padding: $spacing / 2
+  background: lighten($nudge-grey-lightest,3%)
+  width: 100%
   border-radius: 8px
+  margin-bottom: $spacing / 2
+  p
+    margin: $spacing / 2
+
+.dropdown-highlight
+  background: lighten($nudge-grey-lightest,3%)
+  width: 100%
+  border-radius: 8px
+  display: flex
+  flex-direction: column
+  h2
+    width: auto
+    margin-top: 0
+    margin-bottom: 0
+    color: $nudge-grey-medium
+  .dropdown-button
+    flex-direction: row
+    user-select: none
+    justify-content: space-between
+    display: flex
+    cursor: pointer
+    padding: $spacing / 2 $spacing * 0.75 $spacing / 2 $spacing / 2
+  .dropdown-button.expanded
+    .arrow
+      transform: rotate(45deg)
+      margin-bottom: 0
+      margin-top: 10px
+  .dropdown-contents
+    padding: $spacing / 2
