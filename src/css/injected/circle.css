@@ -51,6 +51,7 @@
   line-height: normal; }
 
 .circle-container a {
+  cursor: pointer;
   text-decoration: none;
   color: initial; }
   .circle-container a:hover {

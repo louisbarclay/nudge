@@ -13,13 +13,16 @@ function createSettings() {
 function defaultDomainPopulate(domainsArray) {
   var object = {}
   for (var i = 0; i < domainsArray.length; i++) {
-    object[domainsArray[i]] = defaultDomainInfo
+    object[domainsArray[i]] = {
+      nudge: true,
+      off: false
+    }
   }
   return object
 }
 
 function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
-  // log(newVal, setting, domain, domainSetting)
+  log(newVal, setting, domain, domainSetting)
   // Set up Amplitude identify
   var identify = new amplitude.Identify()
   // For event logging
@@ -59,7 +62,10 @@ function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
     } else if (domain && domainSetting) {
       // Add
       if (domainSetting === "add") {
-        settingsLocal.domains[domain] = defaultDomainInfo
+        settingsLocal.domains[domain] = {
+          nudge: true,
+          off: false
+        }
 
         // Change domains info into an array for Amplitude
         var nudgeDomains = domainsSettingToAmplitude(settingsLocal, "nudge")

@@ -1,0 +1,46 @@
+html
+  head
+    title Hider
+    link(rel="stylesheet" href="../../css/pages/onboarding.css")
+    link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
+    meta(charset="UTF-8")
+  body
+    .header.horizontal
+      a.back#js-back 🠐 Choose Sites
+      div.logo-small
+      div.forward
+    .horizontal.centered
+      #div_hider.contents.headspace
+        h1 Hider
+        button.toggle.spacing
+          div.left.on
+          div.right
+        p The Hider replaces addictive sections of sites with the Nudge logo.
+        p It’s like ad blocking, except it hides things like YouTube recommended videos that are designed to keep you on the site for longer.
+        .p-highlight
+          p ⭐ A menu below the logo lets you easily show the hidden section when you need it
+        .p-highlight#js-hider-warning(style="display: none")
+          p ⚠️ Warning: currently the Hider won't work for you even if enabled because none of the sites that the Hider works for are in your Nudge sites. You can see which sites those are below.
+        .spacing
+        a.spacing-small.sublink#js-hidden-sections-toggle Show the sections that Nudge hides
+        #js-hiddensections.vertical.full-width.spacing.display-none
+        #js-onboarding.full-width
+          .horizontal.onboarding-bar.spacing.full-width
+            button.primary#js-onboarding-enable Enable the Hider
+            button.secondary#js-onboarding-skip Skip this feature
+          .horizontal.onboarding-bar.spacing.full-width(style="display:none")
+            button.primary.pink#js-next Next: Hider
+    .horizontal.centered.onboarding-preview
+      .left
+      .center
+        img(src="../../img/preview/hider.gif").preview-image
+      .right
+
+
+  script(src="../../config.js")
+  script(src="../../js/background/storage.js")
+  script(src="../../js/helpers.js")
+  script(src="../../js/vars/vars.js")
+  script(src="../../js/vars/divs.js")
+  script(src="../../js/hider.js")
+  script(src="../../js/option.js")

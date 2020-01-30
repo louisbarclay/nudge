@@ -1,9 +1,10 @@
 @font-face {
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
   src: local("Open Sans Regular"), local("OpenSans-Regular"), url("chrome-extension://__MSG_@@extension_id__/fonts/OpenSans.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215; }
+
 @keyframes background-move {
   0% {
     background-position: 17% 0%; }
@@ -11,6 +12,7 @@
     background-position: 84% 100%; }
   100% {
     background-position: 17% 0%; } }
+
 .facebook-container * {
   border: 0;
   bottom: initial;
@@ -43,11 +45,13 @@
     display: initial; }
 
 .facebook-container * {
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   line-height: normal; }
+
 .facebook-container a {
+  cursor: pointer;
   text-decoration: none;
   color: initial; }
   .facebook-container a:hover {
@@ -62,7 +66,7 @@
   color: #bdbdbd;
   border: 1px solid #bdbdbd;
   border-radius: 4px;
-  padding: 0.3333333333em 0.8333333333em 0.3333333333em 0.8333333333em; }
+  padding: 0.33333em 0.83333em 0.33333em 0.83333em; }
   .facebook-button:hover, .facebook-button-small:hover, .facebook-button-blue:hover {
     box-shadow: none;
     color: #ffffff;
@@ -77,6 +81,7 @@
     box-shadow: 0 0 5px 10px rgba(255, 255, 255, 0); }
   100% {
     box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+
 @keyframes pulse-shadow--collection {
   0% {
     box-shadow: 0 0; }
@@ -84,6 +89,7 @@
     box-shadow: 0 0 5px 10px rgba(255, 255, 255, 0); }
   100% {
     box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+
 @keyframes pulse-shadow--onboarding {
   0% {
     box-shadow: 0 0 0 0 #61a7ff; }
@@ -93,6 +99,7 @@
     box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0); }
   100% {
     box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+
 @keyframes fade-in-left {
   from {
     opacity: 0;
@@ -100,16 +107,19 @@
   to {
     opacity: 1;
     transform: none; } }
+
 @keyframes fade-in {
   from {
     opacity: 0; }
   to {
     opacity: 1; } }
+
 @keyframes fade-out {
   from {
     opacity: 1; }
   to {
     opacity: 0; } }
+
 .facebook-playground-container {
   width: 100%;
   display: flex;
@@ -140,9 +150,11 @@
   .facebook-container > * {
     color: #6d6d6d;
     font-size: 20px;
-    font-family: "Open Sans"; }
+    font-family: 'Open Sans'; }
+
 .facebook-strike {
   text-decoration: line-through; }
+
 .facebook-bottom-text {
   font-size: 12px;
   text-align: center;
@@ -153,13 +165,16 @@
     color: #bdbdbd; }
     .facebook-bottom-text a:hover {
       color: #ff61a7; }
+
 .facebook-bold-text {
   color: #ff61a7; }
+
 .facebook-text {
   font-size: 13px;
   text-align: center;
   line-height: 1.5em;
   color: #4f4f4f; }
+
 .facebook-alt-headline {
   font-size: 14px;
   color: #6d6d6d;
@@ -168,20 +183,25 @@
     color: #6d6d6d;
     text-align: center;
     line-height: 1.7em;
-    letter-spacing: 0.01em; }
+    letter-spacing: 0.010em; }
+
 .facebook-tweaker {
   margin-top: 8px; }
+
 .facebook-tweaker2 a {
   color: #bdbdbd; }
   .facebook-tweaker2 a:hover {
     color: #ff61a7; }
+
 .facebook-text-larger {
   font-size: 14px; }
+
 .facebook-small-text {
   font-size: 12px;
   color: #bdbdbd; }
   .facebook-small-text a {
     color: #bdbdbd; }
+
 .facebook-button {
   border: 1px none #bdbdbd;
   border-radius: 4px;
@@ -190,15 +210,18 @@
   background: #ff61a7; }
   .facebook-button:hover {
     background: #ff2e8b; }
+
 .facebook-bottom-container {
   display: flex;
   justify-content: space-between; }
+
 .facebook-button-small {
   border: 1px none #bdbdbd;
   border-radius: 4px;
   font-size: 12px;
   background: #61a7ff;
   color: #ffffff; }
+
 .facebook-button-blue {
   border: 1px none #bdbdbd;
   border-radius: 4px;
@@ -207,6 +230,7 @@
   background: #61a7ff; }
   .facebook-button-blue:hover {
     background: #2e8bff; }
+
 .facebook-button-large {
   font-size: 18px;
   border: 1px none #bdbdbd;
@@ -215,19 +239,22 @@
   background: #ff61a7; }
   .facebook-button-large:hover {
     background: #ff2e8b; }
+
 .facebook-headline {
   font-size: 30px;
   font-weight: 400;
   margin-bottom: 10px;
   color: #ff61a7;
-  font-family: "Open Sans"; }
+  font-family: 'Open Sans'; }
+
 .facebook-small-headline {
   font-size: 14px;
   font-weight: 400;
   text-align: center;
   margin-top: 10px;
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   color: #4f4f4f; }
+
 .facebook-close {
   width: 20px;
   height: 20px;
@@ -242,14 +269,17 @@
   background: url("chrome-extension://__MSG_@@extension_id__/img/icon/closegrey.svg") center center/12px no-repeat; }
   .facebook-close:hover {
     opacity: 1; }
+
 .facebook-logo {
   width: 30px;
   height: 30px;
   background: url("chrome-extension://__MSG_@@extension_id__/img/icon/logo-color.svg") center/30px no-repeat; }
+
 .facebook-logo-large {
   width: 40px;
   height: 40px;
   background: url("chrome-extension://__MSG_@@extension_id__/img/icon/logo-color.svg") center center/40px no-repeat; }
+
 .facebook-logo-corner {
   width: 20px;
   height: 20px;
@@ -267,7 +297,7 @@
   opacity: 1;
   text-align: center;
   vertical-align: middle;
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   color: #6d6d6d;
   font-size: 18px;
   content: "";

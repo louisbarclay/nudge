@@ -1,0 +1,74 @@
+html
+  head
+    title Unfollower
+    link(rel="stylesheet" href="../../css/pages/onboarding.css")
+    link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
+    meta(charset="UTF-8")
+  body
+    .header.horizontal
+      a.back#js-back 🠐 Choose Sites
+      div.logo-small
+      div.forward
+    .horizontal.centered
+      #fb_auto_unfollow.contents.headspace
+        h1 Unfollower
+        button.toggle.spacing
+          div.left.on
+          div.right
+        p The Unfollower automatically unfollows every friend, page and group that you follow on Facebook.
+        p Once it's enabled, all you need to do is go to 
+          span
+            a(href="https://www.facebook.com" target="_blank") facebook.com
+          | , and log in. You will see the Unfollower start running once you get there.
+        p If you want to unfollow everything as fast as possible, just leave that Facebook page open. You can carry on browsing in other tabs.
+        p Feel free to read 'Frequently asked questions' below to understand the Unfollower in more detail before trying it.
+        .p-highlight.spacing
+          p 💡 Tip: after you've unfollowed everything fully for the first time, the Unfollower will continue checking for new profiles to unfollow each time you are on Facebook, for instance if you add new friends.
+        .dropdown-highlight.spacing
+          .dropdown-button#js-dropdown-button
+            h2 Frequently asked questions
+            .arrow
+          .dropdown-contents.display-none#js-dropdown-contents
+            h3 Can I undo unfollowing?
+            p Not with Nudge. But you can refollow manually by going to Facebook's 
+              a(href="https://www.facebook.com/help/371675846332829" target="_blank") News Feed Preferences
+              | .
+            h3 How long does unfollowing take?
+            p It takes around 1-3 seconds per unfollow so that Facebook's anti-unfollowing protections don't get triggered (a little longer on slow connections).
+            p So if, for example, you are currently following 1,000 friends, pages and groups, unfollowing could take around 35 minutes.
+            h3 Won't people notice that I'm not friends with them any more?
+            p No. Unfollowing is not the same as deleting someone as a Facebook friend.
+            p If you unfollow someone, you will still be their friend, but their posts will no longer appear in your News Feed. You'll still be able to see all their posts simply by going directly to their profile.
+            h3 Isn't this the same as News Feed Eradicator and other similar tools?
+            p No. The Unfollower actually changes your Facebook account so that you no longer have a News Feed, which means it works across all devices that you use Facebook on, including your phone.
+            h3 What information do you use from my Facebook to do this?
+            p Nudge has to temporarily scrape information about your friends, pages and groups to unfollow on your behalf.
+            p This data is not sent to Nudge's analytics platform. It gets deleted after you leave Facebook.
+            p If you have enabled data sharing on Nudge, the only information related to your Facebook that Nudge will receive is the progress of your unfollowing.
+            p Specifically, the number of friends, pages and groups you have unfollowed, and the percentage of your friends, pages and groups that you have unfollowed.
+            p This data is anonymised, so there's no way I can tell who you are.
+            h3 Is there something I can read about why I should unfollow my Facebook News Feed?
+            p Yes, 
+              a(href="https://extranewsfeed.com/11-reasons-to-delete-your-news-feed-400427b9315e?gi=6f0dac67168b" target="_blank") this article
+              | .
+            h3 Can I ask you something else?
+            p Get in touch: unfollower@nudgeware.io.
+        #js-onboarding.full-width
+          .horizontal.onboarding-bar.spacing.full-width
+            button.primary#js-onboarding-enable Enable the Unfollower
+            button.secondary#js-onboarding-skip Skip this feature
+          .horizontal.onboarding-bar.spacing.full-width(style="display:none")
+            button.primary.pink#js-next Next: Hider
+    .horizontal.centered.onboarding-preview
+      .left
+      .center
+        img(src="../../img/preview/unfollower.gif").preview-image
+      .right
+
+
+  script(src="../../config.js")
+  script(src="../../js/background/storage.js")
+  script(src="../../js/helpers.js")
+  script(src="../../js/vars/vars.js")
+  script(src="../../js/option.js")
+  script(src="../../js/unfollower.js")

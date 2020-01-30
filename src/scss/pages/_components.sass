@@ -1,17 +1,95 @@
+button
+  @extend %button
+  +border($style: none)
+  font-size: 18px
+  padding: 0.5em 1em 0.5em 1em
+  background: $nudge-grey-lightest
+  color: $nudge-grey-medium
+  font-family: 'Roboto', sans-serif
+  margin-bottom: none
+  user-select: none
+  &:hover
+    background: darken($nudge-grey-lightest, 2%)  
+    color: $nudge-grey-medium
+  span
+    font-family: inherit
+  
+.back
+  align-items: center
+  user-select: none
+
+.onboarding-bar
+  justify-content: stretch
+  flex: 0 1 50px
+  white-space: nowrap
+  .primary,.secondary
+    height: 3em
+    border-radius: 8px
+  .primary
+    margin-right: $spacing/2
+    background: $nudge-blue
+    color: $white
+    width: 100%
+    &:hover
+      background: darken($nudge-blue, 2%)
+  .secondary
+    width: 50%
+  .pink
+    background: $nudge-pink
+    margin-right: 0
+    &:hover
+      background: darken($nudge-pink, 2%)
+
+
+// Variables
+$checkbox-width: 24px
+$checkbox-color: $nudge-blue
+
+// Checkboxes
+input[type="checkbox"]
+  display: none
+
+  & + label
+    display: flex
+    line-height: 1.8em
+    cursor: pointer
+    user-select: none
+
+    // Default State
+    &:before
+      display: block
+      +border
+      content: ""
+      align-self: center
+      left: 0
+      margin-right: 0.5em
+      width: $checkbox-width
+      height: $checkbox-width
+
+  // Checked State
+  &:checked + label
+    &:before
+      +border($color: $checkbox-color)
+      background: url('chrome-extension://__MSG_@@extension_id__/img/icon/checkbox.svg') center center/14px no-repeat $checkbox-color
+
+
+.label-inactive
+  color: $nudge-grey-medium
+  cursor: not-allowed
+  pointer-events: none
+  &:before
+    background: $nudge-grey-lightest
+
 .arrow
-  border-left: 1px solid #a9a9a9
-  border-top: 1px solid #a9a9a9
+  border-left: 3px solid $nudge-grey-medium
+  border-top: 3px solid $nudge-grey-medium
+  margin-bottom: 10px
   cursor: pointer
-  display: inline-block
-  font-size: 12px
-  height: 4em
-  left: 20px
-  margin-top: -2em
+  height: 1em
   overflow: hidden
-  position: absolute
   top: 50%
   transform: rotate(-135deg)
-  width: 4em
+  width: 1em
 
 .call-out
   @extend %reset
@@ -20,3 +98,249 @@
   +padding
   +arrow
   width: 500px
+
+.logo-small
+  +logo-color(3em)
+
+.toggle
+  background: none
+  cursor: pointer
+  margin: 0
+  min-height: 0.8em
+  outline: none
+  box-shadow: none
+  color: $primary
+  // +border($color: $toggle-fill)
+  +border($style: none)
+  display: flex
+  background: $nudge-grey-lightest
+  padding: 0 !important
+  font-size: (12 / 13) * 1em
+
+  .left
+    +padding
+    color: inherit
+    min-width: 1.6em
+    min-height: inherit
+
+  .right
+    +padding
+    color: inherit
+    min-width: 1.6em
+    min-height: inherit
+
+  .on
+    +border($style: none)
+    background: $nudge-blue
+    background-clip: border-box
+    color: $white
+
+  .left.on
+      background: $nudge-grey-light
+
+  &:hover
+    background: inherit
+    box-shadow: none
+    background: darken($nudge-grey-lightest, 2%)
+    box-shadow: none    
+
+    .on
+      background: darken($nudge-grey-light, 2%)
+      color: $white
+
+    .right.on
+      background: darken($nudge-blue, 2%)
+
+.onboarding-preview
+  padding-top: 40px
+  padding-bottom: 40px
+  background: $nudge-grey-lightest
+  height: auto
+  .center
+    width: $page-width
+    .preview-image
+      width: 100%
+      height: auto
+      border: 0
+      border-radius: 8px
+
+input[type="text"]
+  caret-color: $primary
+  border-bottom: $border-primary
+  border-bottom-color: $nudge-grey-light
+  border-bottom-width: 1px
+  // font-size: 16px
+  left: 0
+  list-style: none
+  margin: 0
+  padding-bottom: 0.4em
+  padding-top: 0.2em
+  position: relative
+  width: 100%
+
+  &::placeholder
+    color: $nudge-grey-light
+
+  &:focus
+    border-bottom: $border-primary
+    border-bottom-color: $nudge-grey-medium
+    color: $primary
+
+.tags
+  min-height: $spacing * 4
+  width: 100%
+  li
+    +border($style: none)
+    +left-icon($size: ((16 / 12) * 1em))
+    display: flex
+    padding-right: 1em
+    float: left
+    height: 2em
+    line-height: 1.9em
+    position: relative
+    color: $primary
+    font-size: 1em
+    background-color: $nudge-grey-lightest
+    margin-right: 0.8em
+    margin-bottom: .8em
+    overflow: hidden
+    position: relative
+    
+    &::before
+      opacity: 1
+      +size(10px)
+      border-radius: 2px
+      margin-right: 0.5em
+      margin-left: 0.5em
+      will-change: transform
+      background:
+        repeat: no-repeat
+        position: center center
+        size: 10px
+
+    &:hover
+      background: none
+      cursor: pointer
+
+      &::after
+        +pseudo
+        background-color: $nudge-blue
+        border-color: transparent
+        border-radius: inherit
+        color: $light
+        content: 'Remove'
+        height: 100%
+        left: 0
+        text-align: center
+        top: 0
+        width: 100%
+        z-index: 1
+    
+  .tag-flash
+    background-color: lighten($nudge-pink, 25%)
+
+.inverted
+  li
+    background: $white
+    padding-right: 0.5em
+    
+    &:hover
+      &::after
+        background-color: $nudge-pink
+        content: 'Add'
+    
+  .selected-tag
+    justify-content: baseline
+    align-items: center
+    .checkmark
+      +size(14px)
+      margin-left: 0.5em
+      border-radius: 10px
+      background: url('chrome-extension://__MSG_@@extension_id__/img/icon/checkbox.svg') center center/8px no-repeat $nudge-pink
+
+    &:hover
+      &::after
+        content: 'Remove'
+
+.card
+  width: 100%
+  display: flex
+  flex-direction: row
+  align-items: center
+  
+  margin-bottom: $spacing
+  box-shadow: 2px 2px 15px 1px (rgba(0,0,0,0.1))
+  
+  .main
+    width: 75%
+    height: 100%
+    padding: $spacing
+  .image
+    width: 25%
+    padding: $spacing
+  border-radius: 8px
+  h2
+    margin-top: 0
+  width: 100%
+  img
+    border-radius: 8px
+    width: 100%
+  
+.card.card-highlight
+  border-style: none
+  box-shadow: none
+  width: 100%
+  background: $nudge-grey-lightest
+  .main
+    width: 100%
+    // h2,p
+    //   color: $white
+    h2
+      font-size: 1.5em
+      font-weight: 500
+    p
+      margin-bottom: 0
+
+.sites-empty-state
+  background: repeating-linear-gradient(45deg,$nudge-grey-lightest,$nudge-grey-lightest 10px,lighten($nudge-grey-lightest,2%) 10px,lighten($nudge-grey-lightest,2%) 20px)
+  display: flex
+  min-height: $spacing * 4
+  align-items: center
+  justify-content: center
+  width: 100%
+  color: $nudge-grey-medium
+  border-radius: 8px
+
+.p-highlight
+  background: lighten($nudge-grey-lightest,3%)
+  width: 100%
+  border-radius: 8px
+  margin-bottom: $spacing / 2
+  p
+    margin: $spacing / 2
+
+.dropdown-highlight
+  background: lighten($nudge-grey-lightest,3%)
+  width: 100%
+  border-radius: 8px
+  display: flex
+  flex-direction: column
+  h2
+    width: auto
+    margin-top: 0
+    margin-bottom: 0
+    color: $nudge-grey-medium
+  .dropdown-button
+    flex-direction: row
+    user-select: none
+    justify-content: space-between
+    display: flex
+    cursor: pointer
+    padding: $spacing / 2 $spacing * 0.75 $spacing / 2 $spacing / 2
+  .dropdown-button.expanded
+    .arrow
+      transform: rotate(45deg)
+      margin-bottom: 0
+      margin-top: 10px
+  .dropdown-contents
+    padding: $spacing / 2

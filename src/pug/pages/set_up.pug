@@ -1,0 +1,26 @@
+html
+  head
+    title Setting up Nudge
+    link(rel="stylesheet" href="../../css/pages/onboarding.css")
+    link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
+    meta(charset="UTF-8")
+  body
+    .header.horizontal
+      a.back#js-back
+      div.logo-small
+      div.forward
+    .horizontal.centered
+      .contents.headspace
+        h1.spacing Setting up Nudge
+        p Setting up Nudge takes five minutes. First, you choose your privacy setting. Next, you choose sites you want Nudge to work on.
+        p Finally, you go on a tour of Nudge's features, to choose which ones to enable and which ones to skip.
+        .p-highlight.spacing
+          p ⭐ Nudge comes with a blank slate, so you only get nudged by features you opted in for.
+        .horizontal.onboarding-bar.spacing-small.full-width
+          a.full-width(href="privacy.html")
+            button.primary.pink Sounds good
+  script(src="../../config.js")
+  script(src="../../js/background/storage.js")
+  script(src="../../js/helpers.js")
+  script(src="../../js/vars/vars.js")
+  script(src="../../js/option.js")

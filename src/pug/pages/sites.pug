@@ -1,0 +1,82 @@
+html
+  head
+    title Choose sites
+    link(rel="stylesheet" href="../../css/pages/onboarding.css")
+    link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
+    meta(charset="UTF-8")
+  body
+    .header.horizontal
+      a.back#js-back 🠐 Choose sites
+      div.logo-small
+      div.forward
+    .horizontal.centered
+      #off_by_default.contents.headspace
+        h1.spacing Choose your Nudge sites
+        p Choose the sites you'd like Nudge to work on.
+        p The features that you enable will run on all of these sites, except for the Unfollower and the Facebook Greyifyer which both work only on facebook.com.
+        .p-highlight.spacing
+          p 💡 Tip: don't go crazy – stick to the sites that suck you in the most.
+        input#js-add(type='text' placeholder="Add a site...").spacing-small
+        div.spacing-small
+          span.tooltip  (In format 
+            span.highlight site.com
+            | , 
+            span.highlight  partof.site.com
+            |  or 
+            span.highlight site.com/page
+            | )
+        ul.tags#js-domainlist.spacing
+        .sites-empty-state.spacing(style="display: none")#js-empty-state No Nudge sites yet – add some above
+        //- a.spacing.sublink Remove all sites
+        a.spacing-small.sublink#js-whitelist-toggle Choose whitelist sites
+        .vertical#js-whitelist-container.display-none
+          h2 Whitelist sites
+          p Choose sites you'd like Nudge to ignore.
+          p Nudge's default whitelist includes Facebook, Google, Twitter and Yahoo sign in pages.
+          input#js-whitelistadd(type='text' placeholder="Add a whitelist site...").spacing-small
+          div.spacing-small
+            span.tooltip  (In format 
+              span.highlight site.com
+              | , 
+              span.highlight  partof.site.com
+              |  or 
+              span.highlight site.com/page
+              | . You can use * to represent any part of a URL, e.g. 
+              span.highlight site.com/*/page
+              |  will match 
+              span.highlight site.com/this/page
+              |  and 
+              span.highlight site.com/that/page
+              | )
+          ul.tags.spacing#js-whitelist
+        #js-onboarding.full-width  
+          .horizontal.onboarding-bar.spacing.full-width
+            button.primary.pink#js-next Next: Choose Features
+    .horizontal.centered.onboarding-preview
+      .left
+      .center.contents
+        h1 Recommended sites
+        div
+          h2 Top 10 sites:
+          ul.tags.inverted#js-toplist
+        div
+          h2 Social sites:
+          ul.tags.inverted#js-sociallist
+        div
+          h2 Email and messaging sites:
+          ul.tags.inverted#js-messaginglist
+        div
+          h2 News sites:
+          ul.tags.inverted#js-newslist
+        div
+          h2 Shopping sites:
+          ul.tags.inverted#js-shoppinglist
+      .right
+
+
+  script(src="../../config.js")
+  script(src="../../js/background/storage.js")
+  script(src="../../js/helpers.js")
+  script(src="../../js/vars/vars.js")
+  script(src="../../js/option.js")
+  script(src="../../js/sites.js")

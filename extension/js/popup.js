@@ -233,6 +233,7 @@ function execSettings(settings) {
           }
         } else {
           el("dont-nudge").innerHTML = ``
+          el("on").innerHTML = ``
         }
 
         // if (!timeToday.classList.toString().includes('hide')) {

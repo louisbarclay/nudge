@@ -1,2 +1,56 @@
+$primary: #000000
+
 body
   @extend %typography
+
+h1, h2, h3
+  color: $primary
+  font-family: 'Roboto', sans-serif
+  font-weight: 700
+
+p
+  margin-bottom: $spacing / 2
+  line-height: 1.6em
+
+h1
+  font-size: 30px
+  margin-bottom: 0.5em
+  margin-top: 1.5em
+
+h2
+  font-size: 20px
+  margin-bottom: $spacing / 2
+  margin-top: 1.5em
+
+h3
+  margin-top: 1.4em
+  font-size: 16px
+  font-weight: 700
+
+*
+  font-size: 15px
+  color: $nudge-grey-dark
+  &::selection
+    background: $nudge-pink
+    color: $white
+
+a
+  color: darken($nudge-grey-dark, 5%)
+
+.tooltip
+  font-size: 12px
+  color: $nudge-grey-light
+  .highlight
+    font-size: inherit
+    color: $nudge-grey-medium
+  
+.sublink
+  user-select: none
+  text-decoration: underline
+  font-size: 14px
+  color: $nudge-grey-medium
+  ::hover
+    color: $nudge-pink
+
+.link
+  text-decoration: underline

@@ -97,6 +97,7 @@
   line-height: normal; }
 
 #nudge-scroll .nudge-scroll-container a, #nudge .nudge-container a {
+  cursor: pointer;
   text-decoration: none;
   color: initial; }
   #nudge-scroll .nudge-scroll-container a:hover, #nudge .nudge-container a:hover {

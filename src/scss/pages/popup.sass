@@ -1,5 +1,5 @@
-@import 'variables'
-@import 'abstracts'
+@import '../shared/variables'
+@import '../shared/abstracts'
 @import 'components'
 @import 'layout'
 @import 'reset'
@@ -43,7 +43,7 @@ body
 .popup-button
   @extend %button
   +border($style: none)
-  font-size: 16/14 * $default-font-size
+  font-size: 18px
   padding: 0.5em 1em 0.5em 1em
   background: $nudge-grey-light
   color: $white

@@ -1,0 +1,57 @@
+html
+  head
+    title Options
+    link(rel="stylesheet" href="../../css/pages/onboarding.css")
+    link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
+    meta(charset="UTF-8")
+  body
+    .header.horizontal
+      a.back#js-back
+      div.logo-small
+      div.forward
+    .horizontal.centered
+      .contents.headspace
+        h1.spacing Options
+        p Manage your Nudge options here. You can find Options again by right-clicking the Nudge icon in the Chrome menu bar.
+        .p-highlight.full-width
+          p 💡 Tip: you can snooze Nudge for ten minutes at a time by left-clicking the Nudge icon in the Chrome menu.
+        h3 Privacy and Nudge
+        .horizontal.spacing-small
+          .form-checkbox
+            input#share_data(type="checkbox")
+            label(for="share_data") Share data with Nudge
+        p.spacing You can 
+          a(href="https://github.com/lgwb89/nudge/blob/master/PRIVACYPOLICY.md" target="_blank") read Nudge's privacy policy here
+          | .
+        a(href='./sites.html').full-width
+          .card.card-highlight
+            .main
+              h2 Choose Sites
+              p Manage the sites that Nudge works on
+        mixin card(id, title, desc, imgUrl, url)
+          a(href=url).card
+            .main(id=id)
+              h2=title
+              p=desc
+              button.toggle
+                div.left.on
+                div.right
+            .image
+              img(src=imgUrl)
+        +card(`off_by_default`, `Defaulter`, `Sites are off by default`, `../../img/preview/defaulter2.gif`, `./defaulter.html#options`)
+        +card(`div_hider`, `Hider`, `Addictive sections of sites are hidden`, `../../img/preview/hider.gif`, `./hider.html#options`)
+        +card(`time_nudge`, `Rainbow Timer`, `See how long you're spending on sites`, `../../img/preview/timenudger.png`, `./rainbowtimer.html#options`)
+        +card(`fb_auto_unfollow`, `Unfollower`, `Unfollow your Facebook News Feed`, `../../img/preview/unfollower.gif`, `./unfollower.html#options`)
+        +card(`scroll_nudge`, `Scroll Nudger`, `Get nudged as you scroll`, `../../img/preview/scrollnudger.gif`, `./scrollnudger.html#options`)
+        +card(`fb_grey`, `Facebook Greyifyer`, `Make Facebook more boring`, `../../img/preview/greyify.png`, `./facebooktweaker.html#options`)
+        .spacing-m
+        .horizontal.centered.full-width.spacing
+          p.tooltip Nudge ID: 
+            span.tooltip#js-nudge-id not valid
+            | .
+
+  script(src="../../config.js")
+  script(src="../../js/background/storage.js")
+  script(src="../../js/helpers.js")
+  script(src="../../js/vars/vars.js")
+  script(src="../../js/option.js")

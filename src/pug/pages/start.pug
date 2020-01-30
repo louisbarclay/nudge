@@ -1,0 +1,31 @@
+html
+  head
+    title Welcome to Nudge
+    link(rel="stylesheet" href="../../css/pages/onboarding.css")
+    link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
+    meta(charset="UTF-8")
+  body
+    .header.horizontal
+      a.back#js-back
+      div.logo-small
+      div.forward
+    .horizontal.centered
+      .contents.headspace
+        h1.spacing Thank you for installing Nudge
+        p Nudge makes the internet less addictive.
+        p It's different to other tools because we don't believe in blocking sites.
+        p Even the most addictive sites on the internet are not all bad. You need Facebook to message your friends. You want to play music on YouTube. You feel like browsing Reddit in your spare time.
+        .p-highlight
+          p ⭐ Nudge lets you set up the defaults of your browser better, in a way that works for you, so that bad choices are harder to make and addictive designs are easier to escape.
+        p.spacing You'll still use addictive sites, but now hopefully a little bit less, and in the way that you choose – not the way that the sites choose.
+        .horizontal.onboarding-bar.spacing-m.full-width
+          a.full-width(href="set_up.html")
+            button.primary.pink Get started
+        .full-width.centered.horizontal.spacing
+          a(href="unfollower.html#unfollower").link I'm mainly here to delete my Facebook News Feed
+        //- button.popup-button Turn the Defaulter on
+  script(src="../../config.js")
+  script(src="../../js/background/storage.js")
+  script(src="../../js/helpers.js")
+  script(src="../../js/vars/vars.js")
+  script(src="../../js/option.js")

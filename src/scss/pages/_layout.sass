@@ -1,34 +1,71 @@
 .header
+  min-height: 50px
   border-bottom: $border-primary
-
-.header-line
-    &::after
-      +pseudo
-      background: red
-      width: 10px
-      height: 10px
-      z-index: -1
-
-.leftPara
-  flex-basis: 50%
-  display: block
-  padding-right: 15px
-
-.rightImage
-  flex-basis: 50%
-  height: 200px
-  background: $nudge-grey-light
-
-.paraImage
-  border-bottom: solid 1px
-  height: 90vh
+  border-color: $nudge-grey-lightest
+  justify-content: space-evenly
+  padding: 1em 0
+  position: fixed
   width: 100vw
-  background-color: yellow
+  z-index: 1
+  background: rgba(255,255,255,0.9)
+  align-items: center
+  .back
+    padding-left: $spacing
+    font-size: 18px
+    flex-grow: 0.5
+    width: 100px
+  .logo-small
+    flex-grow: 2
+  .forward
+    flex-grow: 0.5
+    width: 100px
+
+html
+  overflow-y: overlay
+
+.vertical
+  display: flex
+  flex-direction: column
+
+.horizontal
+  display: flex
+  flex-direction: row
+
+.height-auto
+  height: auto
+
+.centered
+  justify-content: center
+
+.spacing
+  margin-bottom: $spacing * 2 !important
+
+.spacing-l
+  margin-bottom: $spacing * 4 !important
+
+.spacing-small
+  margin-bottom: $spacing /2 !important
+
+.spacing-m
+  margin-bottom: $spacing !important
+
+.spacing-xsmall
+  margin-bottom: $spacing /4 !important
+
+.stretch
+  align-items: initial
+
+.full-width
+  width: 100%
+
+.contents
   align-items: flex-start
+  display: flex
+  flex-direction: column
+  width: $page-width
+  margin-left: auto
+  margin-right: auto
+  height: auto
 
-.space-out
-  >*
-    margin-top: 100px
-
-.black-page
-  background-color: black
+.headspace
+  margin-top: 5em

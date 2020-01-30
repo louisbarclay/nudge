@@ -314,6 +314,13 @@ function badgeTime(time) {
   }
 }
 
+// Gets a random integer
+function getRandomInt(min, max) {
+  min = Math.ceil(min)
+  max = Math.floor(max)
+  return Math.floor(Math.random() * (max - min)) + min //The maximum is exclusive and the minimum is inclusive
+}
+
 // Adds together two numbers onto the second
 function addTogether(a, b) {
   if (!a || a == "undefined" || a == null) {
@@ -567,8 +574,8 @@ function domainCheck(url, settings) {
   // If it's some other random page. Could include ftp, and other protocols
   if (!domain) {
     domain = unknownPage
-    log(domainToCheck)
-    log(url)
+    // log(domainToCheck)
+    // log(url)
   }
 
   return domain
@@ -646,6 +653,15 @@ function getSettings(callback) {
   })
 }
 
+// New version of getSettings
+async function loadSettings() {
+  return new Promise(resolve => {
+    chrome.runtime.sendMessage({ type: "settings" }, function(response) {
+      resolve(response.settings)
+    })
+  })
+}
+
 function changeSettingRequest(newVal, setting, domain, domainSetting) {
   if (!domain) {
     domain = false
@@ -659,6 +675,11 @@ function changeSettingRequest(newVal, setting, domain, domainSetting) {
     domain,
     domainSetting
   })
+}
+
+const objectWithoutKey = (object, key) => {
+  const { [key]: deletedKey, ...otherKeys } = object
+  return otherKeys
 }
 
 function imgSrcToDataURL(src, callback, outputFormat) {
