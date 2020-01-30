@@ -71,17 +71,21 @@ async function loadSettingsAndAmplitude() {
 
     // Clean up deprecated settings
     if (
+      settingsLocal.domains[Object.keys(settingsLocal.domains)[0]] &&
       "faviconUrl" in
-      settingsLocal.domains[Object.keys(settingsLocal.domains)[0]]
+        settingsLocal.domains[Object.keys(settingsLocal.domains)[0]]
     ) {
       changeSetting(true, "domains", true, "removeFaviconUrl")
     }
 
     // Open options page if it's not been shown
     if (settingsLocal.show_update_article) {
+      // chrome.tabs.create({
+      //   url:
+      //     "https://medium.com/@louisbarclay/welcome-to-the-new-version-of-nudge-d65b2c0e56c8"
+      // })
       chrome.tabs.create({
-        url:
-          "https://medium.com/@louisbarclay/welcome-to-the-new-version-of-nudge-d65b2c0e56c8"
+        url: getUrl("html/pages/start.html")
       })
       changeSetting(false, "show_update_article")
     }
