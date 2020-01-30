@@ -574,8 +574,8 @@ function domainCheck(url, settings) {
   // If it's some other random page. Could include ftp, and other protocols
   if (!domain) {
     domain = unknownPage
-    log(domainToCheck)
-    log(url)
+    // log(domainToCheck)
+    // log(url)
   }
 
   return domain
@@ -678,8 +678,8 @@ function changeSettingRequest(newVal, setting, domain, domainSetting) {
 }
 
 const objectWithoutKey = (object, key) => {
-  const {[key]: deletedKey, ...otherKeys} = object;
-  return otherKeys;
+  const { [key]: deletedKey, ...otherKeys } = object
+  return otherKeys
 }
 
 function imgSrcToDataURL(src, callback, outputFormat) {
