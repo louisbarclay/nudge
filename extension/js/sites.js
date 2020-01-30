@@ -48,7 +48,6 @@ function populateRecommendations(domains) {
 }
 
 function populateWhitelist(domains) {
-  log(domains)
   domains.forEach(function(whitelistDomain) {
     addTag(whitelistDomain, el("js-whitelist"), whitelistTagHandler, domains)
   })
@@ -76,9 +75,7 @@ function addTag(domain, list, callback, domains) {
 function domainTagHandler(li) {
   li.onclick = function() {
     var domain = li.getAttribute("domain")
-    log(domain)
     deleteEl(li)
-    log("hjere")
     changeSettingRequest(false, "domains", domain, "nudge")
     domainRecSelectToggle(domain)
   }
@@ -122,7 +119,6 @@ function recommendationTagHandler(li, domain, domains) {
       changeSettingRequest(false, "domains", domain, "nudge")
     } else {
       if (domain in domains) {
-        log("has existed before")
         changeSettingRequest(true, "domains", domain, "nudge")
         addTag(domain, el("js-domainlist"), domainTagHandler)
       } else {
@@ -159,7 +155,6 @@ el("js-add").addEventListener("keydown", function(event) {
       Object.keys(settingsLocal.domains).forEach(function(key) {
         if (newDomain == key) {
           isInDomainList = true
-          log(settingsLocal)
           nudge = settingsLocal.domains[key].nudge
           newDomain = key
         }
@@ -192,10 +187,8 @@ el("js-add").addEventListener("keydown", function(event) {
 el("js-whitelistadd").addEventListener("keydown", function(event) {
   if (event.key === "Enter") {
     var newDomain = el("js-whitelistadd").value
-    // FIXME: test if already on whitelist
     if (whitelistTest.test(newDomain)) {
       if (settingsLocal.whitelist.includes(newDomain)) {
-        log("Already exists in whitelist")
       } else {
         addTag(newDomain, el("js-whitelist"), whitelistTagHandler)
         settingsLocal.whitelist.push(newDomain)
