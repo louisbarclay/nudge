@@ -6,6 +6,7 @@ const snippetsArray = [
   "extension/html/injected/facebook/intro.html",
   "extension/html/injected/facebook/confirm_content.html",
   "extension/html/injected/facebook/run_content.html",
+  "extension/html/injected/facebook/run.html",
   "extension/html/injected/facebook/share_content.html",
   "extension/html/injected/facebook/share_bottom.html",
   "extension/html/injected/facebook/share.html",
