@@ -159,9 +159,13 @@ function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
     }
 
     // Send the event
+    // ZIPPY
     eventLog("changeSetting", {
-      newVal,
-      previousVal,
+      newVal: typeof newVal === "object" ? JSON.stringify(newVal) : newVal,
+      previousVal:
+        typeof previousVal === "object"
+          ? JSON.stringify(previousVal)
+          : previousVal,
       setting,
       domain,
       domainSetting,
