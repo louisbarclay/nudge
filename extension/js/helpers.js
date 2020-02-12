@@ -363,7 +363,7 @@ function eventLogSender(eventType, detailsObj, time) {
     type: "event",
     eventType,
     detailsObj,
-    time: time ? time : moment()
+    time: time ? time : null
   })
 }
 

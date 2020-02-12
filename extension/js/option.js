@@ -1,5 +1,7 @@
 var hash = window.location.hash.substr(1)
 
+eventLogSender("optionsPage", { page: window.location.pathname.split("/")[3] })
+
 // Hide onboarding if coming from options home
 if (hash === "options") {
   toggleClass(el("js-onboarding"), "display-none")
