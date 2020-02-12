@@ -779,7 +779,7 @@ function shareUx() {
     styleAdder("#pagelet_composer::before", "{ content: none !important; }")
   }
   el("js-survey").onclick = function() {
-    eventLogSender("survey", { source: "fb_share" }, moment())
+    eventLogSender("survey", { source: "fb_share" })
   }
   // Old sharing function
   // el("nudge-share").onclick = function() {
