@@ -46,14 +46,6 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
   // Define previous and now, in
   var totalTimeToday = dateObj[domain].time
 
-  // Don't log allDomains_unsynced. The information is not helpful
-  // if (allDomainsReal - dateObj.$allDomains.time !== 0) {
-  //   eventLog("allDomains_unsynced", {
-  //     allDomainsReal,
-  //     allDomains: dateObj.$allDomains.time
-  //   })
-  // }
-
   // We assume it wasn't a shutdown
   var shutdown = false
 
