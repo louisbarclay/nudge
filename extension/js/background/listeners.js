@@ -56,7 +56,7 @@ function onTabIdle(status, domain) {
 // Check whether new version is installed
 chrome.runtime.onInstalled.addListener(function(details) {
   if (details.reason == "install") {
-    eventLog("install", {}, moment()) // seems weird
+    eventLog("install", {}, moment())
     // Show options page on install
     showOptionsPage = true
   } else if (details.reason == "update") {
