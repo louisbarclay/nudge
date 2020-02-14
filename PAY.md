@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "Nudge | Pay"
-permalink: /pay
+permalink: /pay/
 ---
 
 <!-- Load Stripe.js on your website. -->
