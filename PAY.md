@@ -1,6 +1,9 @@
+----
 layout: page
 title: "Nudge | Pay"
 permalink: /pay
+
+----
 
 <!-- Load Stripe.js on your website. -->
 <script src="https://js.stripe.com/v3"></script>
