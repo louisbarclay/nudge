@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: pay
 title: "Nudge | Pay"
 permalink: /pay/
 ---
