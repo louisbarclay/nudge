@@ -37,9 +37,9 @@
   var stripe = Stripe('pk_test_SjDVyLdDXVq9xe4YpYftOlIn00pHwEeqq4');
 
   var checkoutButton = document.getElementById('checkout-button-plan_GjY5nfag1CAxbz');
-  checkoutButton.addEventListener('click', function () {
-    // When the customer clicks on the button, redirect
-    // them to Checkout.
+//   checkoutButton.addEventListener('click', function () {
+//     // When the customer clicks on the button, redirect
+//     // them to Checkout.
     stripe.redirectToCheckout({
       items: [{plan: 'plan_GjY5nfag1CAxbz', quantity: 1}],
 
@@ -59,7 +59,7 @@
         displayError.textContent = result.error.message;
       }
     });
-  });
+//   });
 })();
 </script>
         
