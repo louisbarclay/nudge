@@ -48,8 +48,8 @@
       // a successful payment.
       // Instead use one of the strategies described in
       // https://stripe.com/docs/payments/checkout/fulfillment
-      successUrl: 'chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/html/pages/success',
-      cancelUrl: 'chrome-extension://dmhgdnbkjkejeddddlklojinngaideac/html/pages/cancel',
+      successUrl: 'https://nudgeware.io/success',
+      cancelUrl: 'https://nudgeware.io/cancel',
     })
     .then(function (result) {
       if (result.error) {
