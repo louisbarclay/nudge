@@ -5,38 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{site.title}}</title>
-
-{% seo %}
-    <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
     <link rel="shortcut icon" type="image/png" href="/docs/img/logo.png">
     <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
     <![endif]-->
     <script src="https://js.stripe.com/v3"></script>
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        {% if site.logo %}
-          <img class="logo" src="{{site.logo | relative_url}}" alt="Logo" />
-        {% endif %}
-       
-        <!-- Create a button that your customers click to complete their purchase. Customize the styling to suit your branding. -->
-<button
-  style="background-color:#6772E5;color:#FFF;padding:8px 12px;border:0;border-radius:4px;font-size:1em"
-  id="checkout-button-plan_GjY5nfag1CAxbz"
-  role="link"
->
-  Pay for Nudge
-</button>
-
-<div id="error-message"></div>
-
-<script>
+    <script>
 (function() {
   var stripe = Stripe('pk_test_SjDVyLdDXVq9xe4YpYftOlIn00pHwEeqq4');
-
-  var checkoutButton = document.getElementById('checkout-button-plan_GjY5nfag1CAxbz');
 //   checkoutButton.addEventListener('click', function () {
 //     // When the customer clicks on the button, redirect
 //     // them to Checkout.
@@ -62,30 +38,6 @@
 //   });
 })();
 </script>
-        
-      </header>
-      <section>
+  </head>
 
-      {{ content }}
-
-      </section>
-      <footer>
-        {% if site.github.is_project_page %}
-        <p>This project is maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></p>
-        {% endif %}
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
-    </div>
-    <script src="{{ "/assets/js/scale.fix.js" | relative_url }}"></script>
-    {% if site.google_analytics %}
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-      ga('create', '{{ site.google_analytics }}', 'auto');
-      ga('send', 'pageview');
-    </script>
-    {% endif %}
-  </body>
 </html>
