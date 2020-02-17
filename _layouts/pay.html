@@ -12,12 +12,12 @@
     <script src="https://js.stripe.com/v3"></script>
     <script>
 (function() {
-  var stripe = Stripe('pk_test_SjDVyLdDXVq9xe4YpYftOlIn00pHwEeqq4');
+  var stripe = Stripe('pk_live_4J17ORmcsWPEfKPdRot8NfFW00LUg9Pw7Z');
 //   checkoutButton.addEventListener('click', function () {
 //     // When the customer clicks on the button, redirect
 //     // them to Checkout.
     stripe.redirectToCheckout({
-      items: [{plan: 'plan_GjY5nfag1CAxbz', quantity: 1}],
+      items: [{plan: 'plan_GjYEKHvtayDteh', quantity: 1}],
 
       // Do not rely on the redirect to the successUrl for fulfilling
       // purchases, customers may not always reach the success_url after
