@@ -1,0 +1,39 @@
+html
+  head
+    title Please support Nudge
+    link(rel="stylesheet" href="../../css/pages/onboarding.css")
+    link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
+    meta(charset="UTF-8")
+  body
+    .header.horizontal
+      a.back#js-back
+      div.logo-small
+      div.forward
+    .horizontal.centered
+      .contents.headspace
+        h1.spacing Please support Nudge
+        p Hi! My name's Louis and I'm the founder of Nudge.
+        p Nudge is a solo effort. I made every part of it on my own over the last 3 years.
+        p.strong I'm now at a crunch point where I need your support to keep Nudge going.
+        p.spacing-m Please do one, or both, of these:
+        .horizontal.spacing-small
+          a.spacing-small(href="./share.html" target="_blank")
+            button.support-cta.support-cta-blue Share Nudge with 10 people
+          a.spacing-small(href="https://nudgeware.io/pay" target="_blank")#js-pay-button
+            button.support-cta.support-cta-blue Pay $3 a month for Nudge
+        p Perks:
+        ul.bullets
+          li Support banners will be hidden
+          li You'll be 
+            a(href="./coceo.html" target="_blank") appointed Co-CEO of Nudge
+        p.spacing Thank you so much.
+        .horizontal.spacing
+          .profile-picture.spacing-small
+          .vertical
+            p.br.strong Louis Barclay
+            p.br Founder of Nudge
+            p louis@nudgeware.io
+  script(src="../../config.js")
+  script(src="../../js/background/storage.js")
+  script(src="../../js/helpers.js")
+  script(src="../../js/support.js")
