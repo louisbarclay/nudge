@@ -24,8 +24,10 @@
       // a successful payment.
       // Instead use one of the strategies described in
       // https://stripe.com/docs/payments/checkout/fulfillment
-      successUrl: 'https://nudgeware.io/success',
-      cancelUrl: 'https://nudgeware.io/cancel',
+      successUrl: `https://nudgeware.io/success?id=${window.location.href.split('?id=')[1]
+}`,
+      cancelUrl: `https://nudgeware.io/cancel?id=${window.location.href.split('?id=')[1]
+}`,
     })
     .then(function (result) {
       if (result.error) {
