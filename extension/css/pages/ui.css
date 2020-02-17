@@ -99,5 +99,21 @@ a {
   .sublink ::hover {
     color: #ff61a7; }
 
+.br {
+  margin-bottom: 0; }
+
 .link {
   text-decoration: underline; }
+
+.bullets {
+  list-style-type: disc; }
+  .bullets li {
+    list-style-type: disc;
+    list-style-position: outside;
+    margin-left: 1.2em;
+    margin-bottom: 0.5em; }
+    .bullets li:last-child {
+      margin-bottom: 1em; }
+
+.strong {
+  font-weight: 700; }

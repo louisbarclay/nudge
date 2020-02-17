@@ -41,6 +41,12 @@ button
       background: darken($nudge-pink, 2%)
 
 
+.profile-picture
+  +size(75px)
+  border-radius: 50%
+  background: url('chrome-extension://__MSG_@@extension_id__/img/icon/profile.jpeg') center/100px
+  margin-right: 1em
+
 // Variables
 $checkbox-width: 24px
 $checkbox-color: $nudge-blue
@@ -164,6 +170,11 @@ input[type="checkbox"]
       border: 0
       border-radius: 8px
 
+.article-image
+      width: 100%
+      height: auto
+      border: 0
+
 input[type="text"]
   caret-color: $primary
   border-bottom: $border-primary
@@ -238,6 +249,19 @@ input[type="text"]
     
   .tag-flash
     background-color: lighten($nudge-pink, 25%)
+
+.support-cta
+  color: $white
+  background: $nudge-pink
+  margin-right: 1em
+  &:hover
+    color: $white
+    background: darken($nudge-pink, 5%)
+
+.support-cta-blue
+  background: $nudge-blue
+  &:hover
+    background: darken($nudge-blue, 5%)
 
 .inverted
   li

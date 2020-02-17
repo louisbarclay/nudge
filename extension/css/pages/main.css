@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto:500&display=swap");
-@import url("https://fonts.googleapis.com/css?family=Open+Sans&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap");
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
@@ -165,6 +165,44 @@ body {
   background-repeat: no-repeat; }
   .off-settings:hover {
     opacity: 1; }
+
+.off-banner {
+  position: absolute;
+  z-index: 2147483647;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  padding: 2em 0 1.5em 0;
+  background: repeating-linear-gradient(45deg, rgba(200, 200, 200, 0.9), rgba(200, 200, 200, 0.9) 10px, rgba(205, 205, 205, 0.9) 10px, rgba(205, 205, 205, 0.9) 20px);
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; }
+
+.off-banner-headline {
+  font-size: 20px;
+  user-select: none;
+  margin-bottom: 1em; }
+
+.off-banner-text {
+  font-size: 14px;
+  user-select: none; }
+
+.off-banner-button {
+  opacity: 1;
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 0.2em 0.5em 0.3em 0.5em;
+  margin: 0 0.2em;
+  white-space: nowrap; }
+  .off-banner-button:hover {
+    background-color: rgba(255, 255, 255, 0.2); }
+
+.off-banner-link {
+  text-decoration: underline; }
+  .off-banner-link:hover {
+    color: #f2f2f2; }
 
 .off-donate {
   bottom: 12px;
@@ -408,8 +446,5 @@ body {
     font-size: 36px; } }
 
 @media (max-height: 670px) {
-  .off-donate {
-    bottom: auto;
-    top: 12px; }
   .off-slider {
     margin-top: 0vh; } }
