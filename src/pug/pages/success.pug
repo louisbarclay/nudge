@@ -1,0 +1,31 @@
+html
+  head
+    title Thank you
+    link(rel="stylesheet" href="../../css/pages/onboarding.css")
+    link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
+    meta(charset="UTF-8")
+  body
+    .header.horizontal
+      a.back#js-back
+      div.logo-small
+      div.forward
+    .horizontal.centered
+      .contents.headspace
+        h1.spacing Thank you for supporting Nudge
+        p Seriously, I massively appreciate it. I quite literally couldn't do this without you.
+        .p-highlight
+          p ⭐ Payers: you can cancel your subscription at any time simply by emailing 
+            span.strong cancel@nudgeware.io
+            | , ideally from the email address with which you subscribed.
+        p The Support banners in Nudge will now be hidden (page refresh might be required).
+        p.spacing Any issues, get in touch.
+        .horizontal.spacing
+          .profile-picture.spacing-small
+          .vertical
+            p.br.strong Louis Barclay
+            p.br Founder of Nudge
+            p louis@nudgeware.io
+  script(src="../../config.js")
+  script(src="../../js/background/storage.js")
+  script(src="../../js/helpers.js")
+  script(src="../../js/success.js")
