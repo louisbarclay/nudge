@@ -89,6 +89,45 @@ body
     &:hover
       opacity: 1
 
+  &banner
+    position: absolute
+    z-index: $max-z
+    top: 0
+    left: 0
+    width: 100%
+    height: auto
+    padding: 2em 0 1.5em 0 
+    // background: rgba(255, 255, 255, 0.2)
+    // background: rgba(200, 200, 200, 0.8)
+    background: repeating-linear-gradient(45deg,rgba(200, 200, 200, 0.9),rgba(200, 200, 200, 0.9) 10px,lighten(rgba(200, 200, 200, 0.9),2%) 10px,lighten(rgba(200, 200, 200, 0.9),2%) 20px)
+    justify-content: center
+    align-items: center
+    flex-direction: column
+
+  &banner-headline
+    font-size: 20px
+    user-select: none
+    margin-bottom: 1em
+  
+  &banner-text
+    font-size: 14px
+    user-select: none
+
+  &banner-button
+    opacity: 1
+    +border($style: solid, $color: $white)
+    cursor: pointer
+    padding: 0.2em 0.5em 0.3em 0.5em
+    margin: 0 0.2em
+    white-space: nowrap
+    &:hover
+      background-color: rgba(255, 255, 255, 0.2) 
+
+  &banner-link
+    text-decoration: underline
+    &:hover
+      color: darken($white, 5%)
+
   &donate
     bottom: 12px
     font-size: 15px
@@ -191,6 +230,8 @@ body
     // margin-left: 0.3em
     margin-right: 0.3em
     white-space: nowrap
+
+
 
   &key
     +border($color: $white)
@@ -322,9 +363,6 @@ body
     font-size: 36px
 
 @media (max-height: 670px)
-  .off-donate
-    bottom: auto
-    top: 12px
   .off-slider
     margin-top: 0vh
 
