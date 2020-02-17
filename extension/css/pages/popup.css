@@ -116,6 +116,13 @@ button {
     .onboarding-bar .pink:hover {
       background: #ff57a1; }
 
+.profile-picture {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  background: url("chrome-extension://__MSG_@@extension_id__/img/icon/profile.jpeg") center/100px;
+  margin-right: 1em; }
+
 input[type="checkbox"] {
   display: none; }
   input[type="checkbox"] + label {
@@ -242,6 +249,11 @@ input[type="checkbox"] {
       border: 0;
       border-radius: 8px; }
 
+.article-image {
+  width: 100%;
+  height: auto;
+  border: 0; }
+
 input[type="text"] {
   caret-color: #bdbdbd;
   border-bottom: 1px solid #bdbdbd;
@@ -317,6 +329,19 @@ input[type="text"] {
         z-index: 1; }
   .tags .tag-flash {
     background-color: #ffe1ee; }
+
+.support-cta {
+  color: #ffffff;
+  background: #ff61a7;
+  margin-right: 1em; }
+  .support-cta:hover {
+    color: #ffffff;
+    background: #ff4899; }
+
+.support-cta-blue {
+  background: #61a7ff; }
+  .support-cta-blue:hover {
+    background: #4899ff; }
 
 .inverted li {
   background: #ffffff;

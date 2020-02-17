@@ -5,6 +5,7 @@ var hiderOff = false
 var mutationCounter = 0
 var documentObserverCounter = 0
 var nodeCache = []
+var circleHtml = "circle.html"
 
 // Reset div settings
 if (config.resetDivSettings) {
@@ -18,6 +19,9 @@ function divHider(settings, url, extractedDomain) {
   // Matters if it's in the div list
   doAtEarliest(function() {
     addCSS("nudge-circle", "css/injected/circle.css")
+    if (!settings.paid) {
+      circleHtml = "circle_alt.html"
+    }
   })
 
   var observerOn = false
@@ -141,14 +145,12 @@ function addCircle(element, domain, div, randomiser, unhiddenDivs) {
     element.childNodes[0].className != "circle-container"
   ) {
     try {
-      // log(storage["circle.html"])
       if (
-        nudgeStorage["circle.html"] &&
-        nudgeStorage["circle.html"].includes("circle-container")
+        nudgeStorage[circleHtml] &&
+        nudgeStorage[circleHtml].includes("circle-container")
       ) {
-        appendHtml(element, nudgeStorage["circle.html"])
+        appendHtml(element, nudgeStorage[circleHtml])
       } else {
-        // log("Need to reload circle.html")
       }
       circleHandler(element, domain, div, randomiser, unhiddenDivs)
     } catch (e) {
@@ -161,6 +163,13 @@ function circleHandler(element, domain, div, randomiser, unhiddenDivs) {
   // Find the container of the links
   var container = element.childNodes[0]
   var dropdown = container.firstChild.firstChild.firstChild
+  var supportButtonContainer = container.childNodes[1]
+
+  if (supportButtonContainer) {
+    supportButtonContainer.childNodes[0].href = getUrl(
+      "html/pages/support.html"
+    )
+  }
 
   // Set div info which will be used to find the original div should we need to
   var divInfo = `#${div.id}`
@@ -176,10 +185,6 @@ function circleHandler(element, domain, div, randomiser, unhiddenDivs) {
   // This is quite hard-coded, beware
   var showOnceLink = dropdown.childNodes[1]
   var showAlwaysLink = dropdown.childNodes[2]
-  var shareLink = dropdown.childNodes[3]
-  shareLink.onclick = function() {
-    eventLogSender("share_link", { location: div, domain })
-  }
 
   showOnceLink.onclick = function() {
     unHide(container, element, false)
@@ -305,200 +310,201 @@ function documentObserver(divs, domain, divsUnhidden) {
   // Log whatever the current URL is. We'll use this to make sure we exclude certain URLs
   // log(documentObserverCounter)
 
-  var observer = new MutationObserver(
-    throttle(function(mutations) {
-      mutations.forEach(
-        throttle(function(mutation) {
-          mutationCounter++
-          // log(mutationCounter)
+  var observer = new MutationObserver(function(mutations) {
+    debounce(
+      mutations.forEach(function(mutation) {
+        mutationCounter++
+        // log(mutationCounter)
 
-          // Identify any change in URL
-          if (window.location.href != currentUrl || currentUrl == false) {
-            // The URL has changed
-            currentUrl = window.location.href
+        // Identify any change in URL
+        if (window.location.href != currentUrl || currentUrl == false) {
+          // The URL has changed
+          currentUrl = window.location.href
 
-            if (checkList(domain, currentUrl)) {
-              // If the URL is in the whitelist, temporarily turn off all the hide styles on divs and opacity hide styles
-              turnOffHider()
-              hiderOff = true
-              // log("Won't hide on this site")
-            } else {
-              if (hiderOff) {
-                turnOnHider()
-              }
-              // log("Can hide on this site")
-              hiderOff = false
+          if (checkList(domain, currentUrl)) {
+            // If the URL is in the whitelist, temporarily turn off all the hide styles on divs and opacity hide styles
+            turnOffHider()
+            hiderOff = true
+            // log("Won't hide on this site")
+          } else {
+            if (hiderOff) {
+              turnOnHider()
             }
+            // log("Can hide on this site")
+            hiderOff = false
           }
+        }
 
-          // Don't care about looking up divs if there were no new addedNodes!
-          // FIXME: also, if none of the added Nodes are interesting
-          if (mutation.addedNodes.length > 0) {
-            // Cycle through divs and get elements that match their class, id, or both
-            // This is completely unrelated to the div that was just added in the mutation
-            // Which seems inefficient but I think is more accurate because the mutations sometimes aren't correct...
-            // ...at the point of happening
-            divs.forEach(function(div) {
-              if (divsUnhiddenLocal.some(u => isEquivalent(u, div))) {
-                // log("Unhidden - will ignore")
-              } else {
-                if ("id" in div && "className" in div) {
-                  // Search for brand new ones
-                  Array.from(
-                    document.getElementsByClassName(div.className)
-                  ).forEach(function(node) {
-                    if (node.id === div.id) {
-                      processNode(
-                        node,
-                        div,
-                        domain,
-                        null,
-                        "matched div id and class"
-                      )
-                    }
-                  })
-                } else if ("id" in div) {
-                  var node = document.getElementById(div.id)
-                  if (node) {
-                    processNode(node, div, domain, null, "matched div id")
+        // Don't care about looking up divs if there were no new addedNodes!
+        // FIXME: also, if none of the added Nodes are interesting
+        if (mutation.addedNodes.length > 0) {
+          // Cycle through divs and get elements that match their class, id, or both
+          // This is completely unrelated to the div that was just added in the mutation
+          // Which seems inefficient but I think is more accurate because the mutations sometimes aren't correct...
+          // ...at the point of happening
+          divs.forEach(function(div) {
+            if (divsUnhiddenLocal.some(u => isEquivalent(u, div))) {
+              // log("Unhidden - will ignore")
+            } else {
+              if ("id" in div && "className" in div) {
+                // Search for brand new ones
+                Array.from(
+                  document.getElementsByClassName(div.className)
+                ).forEach(function(node) {
+                  if (node.id === div.id) {
+                    processNode(
+                      node,
+                      div,
+                      domain,
+                      null,
+                      "matched div id and class"
+                    )
                   }
-                } else if ("className" in div) {
-                  Array.from(
-                    document.getElementsByClassName(div.className)
-                  ).forEach(function(node) {
-                    processNode(node, div, domain, null, "matched div class")
-                  })
+                })
+              } else if ("id" in div) {
+                var node = document.getElementById(div.id)
+                if (node) {
+                  processNode(node, div, domain, null, "matched div id")
                 }
+              } else if ("className" in div) {
+                Array.from(
+                  document.getElementsByClassName(div.className)
+                ).forEach(function(node) {
+                  processNode(node, div, domain, null, "matched div class")
+                })
               }
-            })
-          }
+            }
+          })
+        }
 
-          // Add a listener to anything removed to check for removed circles so you can put the circle back in
-          mutation.removedNodes.forEach(function(node) {
-            try {
-              // Stringify this because we got a weird SVG className value once which caused an error
-              if (JSON.stringify(node.className).includes("circle-container")) {
-                // log("Removed:", node, node.className)
-                var divInfo = node.getAttribute("nudge")
-                if (divInfo.includes("#") && divInfo.includes(".")) {
-                  var id = divInfo.match(/(?!#)(.*?)(?=\s\.)/g)[0]
-                  var className = divInfo
-                    .match(/(\..+)/g)[0]
-                    .substring(1)
-                    .replace(".", " ")
-                  // Find the div using divInfo
-                  divs.forEach(function(div) {
-                    if (
-                      div.id == id &&
-                      className.includes(div.className) &&
-                      !divsUnhiddenLocal.some(u => isEquivalent(u, div))
-                    ) {
-                      Array.from(
-                        document.getElementsByClassName(className)
-                      ).forEach(function(element) {
-                        if (element.id === id) {
-                          processNode(
-                            element,
-                            div,
-                            domain,
-                            true,
-                            "removedNodes id and class"
-                          )
-                        }
-                      })
-                    }
-                  })
-                } else if (divInfo.includes("#")) {
-                  var id = divInfo.substring(1)
-
-                  // Find the div using divInfo
-                  divs.forEach(function(div) {
-                    if (
-                      div.id == id &&
-                      !divsUnhiddenLocal.some(u => isEquivalent(u, div))
-                    ) {
-                      var element = document.getElementById(id)
-                      processNode(element, div, domain, true, "removedNodes id")
-                    }
-                  })
-                } else if (divInfo.includes(".")) {
-                  var className = divInfo.substring(1).replace(".", " ")
-
-                  // Find the div using divInfo
-                  divs.forEach(function(div) {
-                    if (
-                      className.includes(div.className) &&
-                      !divsUnhiddenLocal.some(u => isEquivalent(u, div))
-                    ) {
-                      Array.from(
-                        document.getElementsByClassName(className)
-                      ).forEach(function(element) {
+        // Add a listener to anything removed to check for removed circles so you can put the circle back in
+        mutation.removedNodes.forEach(function(node) {
+          try {
+            // Stringify this because we got a weird SVG className value once which caused an error
+            if (JSON.stringify(node.className).includes("circle-container")) {
+              // log("Removed:", node, node.className)
+              var divInfo = node.getAttribute("nudge")
+              if (divInfo.includes("#") && divInfo.includes(".")) {
+                var id = divInfo.match(/(?!#)(.*?)(?=\s\.)/g)[0]
+                var className = divInfo
+                  .match(/(\..+)/g)[0]
+                  .substring(1)
+                  .replace(".", " ")
+                // Find the div using divInfo
+                divs.forEach(function(div) {
+                  if (
+                    div.id == id &&
+                    className.includes(div.className) &&
+                    !divsUnhiddenLocal.some(u => isEquivalent(u, div))
+                  ) {
+                    Array.from(
+                      document.getElementsByClassName(className)
+                    ).forEach(function(element) {
+                      if (element.id === id) {
                         processNode(
                           element,
                           div,
                           domain,
                           true,
-                          "removedNodes class"
+                          "removedNodes id and class"
                         )
-                      })
-                    }
-                  })
-                }
+                      }
+                    })
+                  }
+                })
+              } else if (divInfo.includes("#")) {
+                var id = divInfo.substring(1)
+
+                // Find the div using divInfo
+                divs.forEach(function(div) {
+                  if (
+                    div.id == id &&
+                    !divsUnhiddenLocal.some(u => isEquivalent(u, div))
+                  ) {
+                    var element = document.getElementById(id)
+                    processNode(element, div, domain, true, "removedNodes id")
+                  }
+                })
+              } else if (divInfo.includes(".")) {
+                var className = divInfo.substring(1).replace(".", " ")
+
+                // Find the div using divInfo
+                divs.forEach(function(div) {
+                  if (
+                    className.includes(div.className) &&
+                    !divsUnhiddenLocal.some(u => isEquivalent(u, div))
+                  ) {
+                    Array.from(
+                      document.getElementsByClassName(className)
+                    ).forEach(function(element) {
+                      processNode(
+                        element,
+                        div,
+                        domain,
+                        true,
+                        "removedNodes class"
+                      )
+                    })
+                  }
+                })
               }
-            } catch (e) {
-              // console.log(e)
             }
-          })
+          } catch (e) {
+            // console.log(e)
+          }
+        })
 
-          // Process any node that's a match
-          function processNode(node, div, domain, fromRemoved, source) {
-            // Don't hide if hider is off, e.g. whitelisted URL
-            if (hiderOff) {
-              return
-            }
+        // Process any node that's a match
+        function processNode(node, div, domain, fromRemoved, source) {
+          // Don't hide if hider is off, e.g. whitelisted URL
+          if (hiderOff) {
+            return
+          }
 
-            let randomiser = false
+          let randomiser = false
 
-            // Assign new randomiser or get previous
-            if (!node.className.includes("nudge")) {
-              randomiser = getUserId()
-              // log("processNode(new)", randomiser.substring(0, 8))
+          // Assign new randomiser or get previous
+          if (!node.className.includes("nudge")) {
+            randomiser = getUserId()
+            // log("processNode(new)", randomiser.substring(0, 8))
+          } else {
+            randomiser = node.className.substring(
+              node.className.indexOf("nudge-") + 6
+            )
+            // log("processNode", randomiser.substring(0, 8))
+          }
+
+          // Check the node's state (if node is valid)
+          // TODO: neither of these conditions actually do anything, as far as I can tell
+          if (node) {
+            if (divsHidden[randomiser] && divsHidden[randomiser].pending) {
+              // log("Skip pending")
             } else {
-              randomiser = node.className.substring(
-                node.className.indexOf("nudge-") + 6
-              )
-              // log("processNode", randomiser.substring(0, 8))
-            }
-
-            // Check the node's state (if node is valid)
-            // TODO: neither of these conditions actually do anything, as far as I can tell
-            if (node) {
-              if (divsHidden[randomiser] && divsHidden[randomiser].pending) {
-                // log("Skip pending")
+              if (nodeCache.includes(node)) {
+                // log("Skip double-checking")
               } else {
-                if (nodeCache.includes(node)) {
-                  // log("Skip double-checking")
-                } else {
-                  nodeCache.push(node)
-                }
-
-                processForCircle(
-                  node,
-                  div,
-                  domain,
-                  divsUnhidden,
-                  randomiser,
-                  fromRemoved,
-                  source
-                )
+                nodeCache.push(node)
               }
+
+              processForCircle(
+                node,
+                div,
+                domain,
+                divsUnhidden,
+                randomiser,
+                fromRemoved,
+                source
+              )
             }
           }
-          // Throttle parameter. Crazy to have it here, I know
-        }, 100)
-      )
-    }, 100)
-  )
+        }
+        // Throttle/debounce parameter. Crazy to have it here, I know
+      }),
+      100,
+      true
+    )
+    // Debounce here
+  })
 
   // Have to observe entire document really. Which is very inefficient
   observer.observe(document, {

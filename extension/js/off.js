@@ -84,6 +84,15 @@ function getLocalStorage() {
     var date = moment().format("YYYY-MM-DD")
     localStorage = response.localStorage
     var settingsLocal = response.settingsLocal
+
+    // If not paid, show the ad
+    if (!settingsLocal.paid) {
+      el("js-payment").style.display = "flex"
+      el(
+        "js-pay-button"
+      ).href = `https://nudgeware.io/pay/?id=${settingsLocal.userId}`
+    }
+
     getStickier = settingsLocal.get_stickier
     // Get domain today
     var domainToday = JSON.parse(localStorage[date])[domain]
@@ -194,8 +203,7 @@ if (signupMode) {
   }
   el("mce-EMAIL").onblur = function() {
     el("js-signup-prompt").style.visibility = "hidden"
-    el("mce-EMAIL").placeholder =
-      "First 7 billion newsletter subscribers get Nudge for free"
+    el("mce-EMAIL").placeholder = "Get Nudge updates"
   }
 }
 

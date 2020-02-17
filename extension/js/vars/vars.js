@@ -121,7 +121,8 @@ var defaultSettings = {
   get_stickier: false,
   show_update_article: true,
   updated_divs: true,
-  unhidden_divs: {}
+  unhidden_divs: {},
+  paid: false
 }
 
 var unfollow = {

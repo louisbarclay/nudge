@@ -107,6 +107,7 @@
   width: 100% !important;
   position: static !important;
   margin-top: 5px !important;
+  flex-direction: column !important;
   top: 0 !important;
   display: flex !important;
   font-family: initial !important;
@@ -118,7 +119,6 @@
   overflow: visible !important;
   top: 0 !important;
   width: 100% !important;
-  height: 100px !important;
   z-index: 3 !important;
   border: 1px none #bdbdbd !important;
   border-radius: 4px !important;
@@ -126,26 +126,53 @@
   font-size: 12px !important; }
 
 .circle-dropdown-content {
-  display: flex !important;
+  display: none !important;
   border: 1px none #bdbdbd !important;
   border-radius: 4px !important;
   border-radius: 30px !important;
   width: 90px !important;
   margin-left: auto !important;
   margin-right: auto !important;
+  height: 80px !important;
   opacity: 0 !important;
   visibility: hidden !important;
   background: #ffffff !important;
-  height: 100px !important;
   overflow: visible !important;
   transition: opacity 0.3s !important;
-  padding-bottom: 1em !important;
+  padding-bottom: 1.5em !important;
   flex-direction: column !important;
   align-items: center !important;
   justify-content: space-between !important; }
   .circle-dropdown-content > div {
     margin-right: 0.5em !important;
     margin-left: 0.5em !important; }
+
+.circle-button-container {
+  width: 100% !important;
+  display: flex !important;
+  justify-content: center !important; }
+  .circle-button-container a {
+    color: #ffffff !important; }
+    .circle-button-container a:hover {
+      color: #ffffff !important; }
+
+.circle-button {
+  background: #61a7ff !important;
+  display: flex !important;
+  cursor: pointer !important;
+  letter-spacing: 0.02em !important;
+  animation: fade-in 0.3s;
+  font-size: 13px !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+  color: #ffffff !important;
+  border: 1px none #bdbdbd !important;
+  border-radius: 4px !important;
+  padding: 0.2em 0.4em 0.2em 0.4em !important;
+  width: auto !important;
+  margin-top: 0.5em !important; }
+  .circle-button:hover {
+    background: #4899ff !important; }
 
 .circle-content {
   visibility: visible !important;
@@ -155,6 +182,8 @@
   margin: 0 !important;
   opacity: 1 !important;
   pointer-events: auto !important;
+  width: 40px !important;
+  height: 40px !important;
   transform: translateZ(0) !important;
   width: auto !important;
   transition: top 0.3s !important;
@@ -166,6 +195,8 @@
       opacity: 1 !important;
       visibility: visible !important;
       display: flex !important; }
+    .circle-content:hover + .circle-button-container {
+      display: none !important; }
 
 .circle-text {
   color: #6d6d6d !important;
@@ -173,7 +204,7 @@
   user-select: none !important;
   line-height: 1.3em !important;
   margin-top: 1em !important;
-  margin-bottom: 0.2em !important; }
+  margin-bottom: 0.4em !important; }
 
 .circle-share {
   cursor: pointer !important;

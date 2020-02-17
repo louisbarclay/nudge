@@ -107,6 +107,7 @@
   width: 100%;
   position: static;
   margin-top: 5px;
+  flex-direction: column;
   top: 0;
   display: flex;
   font-family: initial;
@@ -118,7 +119,6 @@
   overflow: visible;
   top: 0;
   width: 100%;
-  height: 100px;
   z-index: 3;
   border: 1px none #bdbdbd;
   border-radius: 4px;
@@ -126,26 +126,53 @@
   font-size: 12px; }
 
 .circle-dropdown-content {
-  display: flex;
+  display: none;
   border: 1px none #bdbdbd;
   border-radius: 4px;
   border-radius: 30px;
   width: 90px;
   margin-left: auto;
   margin-right: auto;
+  height: 80px;
   opacity: 0;
   visibility: hidden;
   background: #ffffff;
-  height: 100px;
   overflow: visible;
   transition: opacity 0.3s;
-  padding-bottom: 1em;
+  padding-bottom: 1.5em;
   flex-direction: column;
   align-items: center;
   justify-content: space-between; }
   .circle-dropdown-content > div {
     margin-right: 0.5em;
     margin-left: 0.5em; }
+
+.circle-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: center; }
+  .circle-button-container a {
+    color: #ffffff; }
+    .circle-button-container a:hover {
+      color: #ffffff; }
+
+.circle-button {
+  background: #61a7ff;
+  display: flex;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  animation: fade-in 0.3s;
+  font-size: 13px;
+  pointer-events: auto;
+  visibility: visible;
+  color: #ffffff;
+  border: 1px none #bdbdbd;
+  border-radius: 4px;
+  padding: 0.2em 0.4em 0.2em 0.4em;
+  width: auto;
+  margin-top: 0.5em; }
+  .circle-button:hover {
+    background: #4899ff; }
 
 .circle-content {
   visibility: visible;
@@ -155,6 +182,8 @@
   margin: 0;
   opacity: 1;
   pointer-events: auto;
+  width: 40px;
+  height: 40px;
   transform: translateZ(0);
   width: auto;
   transition: top 0.3s;
@@ -166,6 +195,8 @@
       opacity: 1;
       visibility: visible;
       display: flex; }
+    .circle-content:hover + .circle-button-container {
+      display: none; }
 
 .circle-text {
   color: #6d6d6d;
@@ -173,7 +204,7 @@
   user-select: none;
   line-height: 1.3em;
   margin-top: 1em;
-  margin-bottom: 0.2em; }
+  margin-bottom: 0.4em; }
 
 .circle-share {
   cursor: pointer;
