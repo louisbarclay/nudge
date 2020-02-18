@@ -12,9 +12,9 @@ Nudge makes the internet less addictive by removing addictive features, putting 
 
 Nudge never blocks. It just nudges. If you like the sound of that, download link or more about Nudge's features below. You choose which features you want enabled.
 
-[Download Nudge for Google Chrome](https://bit.ly/2q7VE0K)
-⭐⭐⭐⭐⭐
-4.8 stars on Chrome Web Store from 54 reviews
+[Download Nudge for Google Chrome](https://bit.ly/2q7VE0K)  
+⭐⭐⭐⭐⭐  
+4.8 stars on Chrome Web Store from 54 reviews  
 Download Nudge
 
 
