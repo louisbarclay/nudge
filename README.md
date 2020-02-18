@@ -15,8 +15,6 @@ Nudge never blocks. It just nudges. If you like the sound of that, download link
 [Download Nudge for Google Chrome](https://bit.ly/2q7VE0K)  
 ⭐⭐⭐⭐⭐  
 4.8 stars on Chrome Web Store from 54 reviews  
-Download Nudge
-
 
 # 🚷 Defaulter
 
