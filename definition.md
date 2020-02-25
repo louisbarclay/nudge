@@ -6,7 +6,7 @@ permalink: /definition/
 
 # What is Nudgeware?
 
-**Nudgeware** (n.) is software that changes our default environment to help us live better lives.
+**Nudgeware** (n.) is software that changes our default environment to help us use technology better.
 
 Nudgeware is inspired by the concept of a [nudge](https://en.wikipedia.org/wiki/Nudge_theory) in behavioral economics.
 
