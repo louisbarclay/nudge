@@ -27,5 +27,5 @@ Nudgeware helps us:
 
 Examples of nudgeware that already exist are:
 - Ad blockers like [AdBlock](https://getadblock.com/)
-- Self control apps like [RescueTime](https://www.rescuetime.com/)
+- Self-control apps like [RescueTime](https://www.rescuetime.com/)
 - Anti-distraction extensions like [Nudge](http://nudgeware.io/)
