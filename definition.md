@@ -4,7 +4,7 @@ title: "What is Nudgeware?"
 permalink: /definition/
 ---
 
-### What is Nudgeware?
+# What is Nudgeware?
 
 **Nudgeware** (n.) is software that changes our default environment to help us live better lives.
 
