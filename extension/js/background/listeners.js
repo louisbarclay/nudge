@@ -57,8 +57,11 @@ function onTabIdle(status, domain) {
 chrome.runtime.onInstalled.addListener(function(details) {
   if (details.reason == "install") {
     eventLog("install", {}, moment())
+    // FIXME: This is a bit rubbish because it will interrupt the user
+    chrome.tabs.create({
+      url: getUrl("html/pages/start.html")
+    })
     // Show options page on install
-    showOptionsPage = true
   } else if (details.reason == "update") {
     var thisVersion = chrome.runtime.getManifest().version
     eventLog(
@@ -69,8 +72,9 @@ chrome.runtime.onInstalled.addListener(function(details) {
       },
       moment()
     )
-    // Show options page on install
-    showOptionsPage = true
+    chrome.tabs.create({
+      url: getUrl("html/pages/update.html")
+    })
   }
 })
 
