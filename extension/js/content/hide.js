@@ -500,7 +500,7 @@ function documentObserver(divs, domain, divsUnhidden) {
         }
         // Throttle/debounce parameter. Crazy to have it here, I know
       }),
-      100,
+      10,
       true
     )
     // Debounce here
