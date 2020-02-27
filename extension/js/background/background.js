@@ -78,18 +78,6 @@ async function loadSettingsAndAmplitude() {
       changeSetting(true, "domains", true, "removeFaviconUrl")
     }
 
-    // Open options page if it's not been shown
-    if (settingsLocal.show_update_article) {
-      // chrome.tabs.create({
-      //   url:
-      //     "https://medium.com/@louisbarclay/welcome-to-the-new-version-of-nudge-d65b2c0e56c8"
-      // })
-      chrome.tabs.create({
-        url: getUrl("html/pages/start.html")
-      })
-      changeSetting(false, "show_update_article")
-    }
-
     // Set all domains off by default
     if (settingsLocal.off_by_default) {
       toggleOffByDefault(settingsLocal.off_by_default)
