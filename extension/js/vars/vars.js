@@ -12,9 +12,6 @@ var nudgePage = "$nudgePage"
 // Catch all domain
 var allDomains = "$allDomains"
 
-// Do we show the options page on init?
-var showOptionsPage = false
-
 // Quick access to settings
 var settingsLocal = {}
 
@@ -119,7 +116,6 @@ var defaultSettings = {
   bg_image: false,
   snooze: { all: 0 },
   get_stickier: false,
-  show_update_article: true,
   updated_divs: true,
   unhidden_divs: {},
   paid: false
