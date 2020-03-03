@@ -109,3 +109,5 @@ It's for situations where you need a break; maybe because you need to get into a
 - 🌼 Add Whitelist sites that you don't ever want to nudge
 - ✂️ Remove Facebook's notifications
 - ☁️ Change the colour of Facebook's top bar from blue to grey
+
+Want to make changes to the GitHub repository? Read how [here](https://github.com/lgwb89/nudge/blob/master/instructions.md).
