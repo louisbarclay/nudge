@@ -56,8 +56,9 @@ function execSettings(settings) {
   // }
 
   // Check for snooze
-  if (settings.snooze.all > +Date.now()) {
-    log("Snoozed")
+  let dontNudge = checkSnoozeAndSchedule(settings)
+  if (dontNudge) {
+    log("Won't Nudge")
     return
   }
 
