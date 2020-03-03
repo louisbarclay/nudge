@@ -13,6 +13,7 @@ html
       .contents.headspace
         h1.spacing Your Nudge schedule
         p Choose the days and times that you want Nudge to work.
+        p If you don't specify any schedule here, Nudge will always be on.
         .p-highlight
           p ⭐ Start time can be after end time, e.g. if you want Nudge to work from 18:00 to 09:00
         h2 Active times
@@ -42,10 +43,14 @@ html
         .form-checkbox.spacing
           input#Sun(type="checkbox" checked="true")
           label(for="Sun") Sunday
-        button#reset Reset schedule
+        a.sublink.spacing-small#reset Reset schedule
+        #js-onboarding.full-width  
+          .horizontal.onboarding-bar.spacing.full-width
+            button.primary.pink#js-next Next: Choose Features
   script(src="../../config.js")
   script(src="../../js/background/storage.js")
   script(src="../../js/helpers.js")
   script(src="../../js/vars/vars.js")
   script(src="../../js/vendor/notie.js")
+  script(src="../../js/option.js")
   script(src="../../js/scheduler.js")
