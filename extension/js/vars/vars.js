@@ -122,7 +122,8 @@ var defaultSettings = {
   show_update_article: true,
   updated_divs: true,
   unhidden_divs: {},
-  paid: false
+  paid: false,
+  schedule: false
 }
 
 var unfollow = {
