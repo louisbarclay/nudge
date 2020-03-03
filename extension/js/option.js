@@ -11,7 +11,8 @@ var optionsIndex = [
   { page: "start.html", name: "Welcome to Nudge" },
   { page: "set_up.html", name: "Setting up Nudge" },
   { page: "privacy.html", name: "Nudge and privacy" },
-  { page: "sites.html", name: "Choose Sites" },
+  { page: "sites.html", name: "Choose sites" },
+  { page: "scheduler.html", name: "Your Nudge schedule" },
   {
     page: "defaulter.html",
     name: "Defaulter"
@@ -76,7 +77,7 @@ for (var i = 0; i < optionsIndex.length; i++) {
       }
       try {
         // Set up next link
-        if (window.location.href.includes("sites.html")) {
+        if (window.location.href.includes("scheduler.html")) {
           el(
             "js-next"
           ).innerHTML = `Next: choose which of Nudge's features to enable`
@@ -167,7 +168,7 @@ if (el("js-onboarding-skip")) {
     var subSetting = element.childNodes[0].id
     var checkbox = element.childNodes[0]
     // Set current setting
-    if (settings[subSetting]) {
+    if (subSetting in settings && settings[subSetting]) {
       checkbox.checked = true
     }
     // Handle click

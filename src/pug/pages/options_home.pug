@@ -6,7 +6,7 @@ html
     meta(charset="UTF-8")
   body
     .header.horizontal
-      a.back#js-back
+      a.back
       div.logo-small
       div.forward
     .horizontal.centered
@@ -26,8 +26,13 @@ html
         a(href='./sites.html#options').full-width
           .card.card-highlight
             .main
-              h2 Choose Sites
+              h2 🌐 Choose sites
               p Manage the sites that Nudge works on
+        a(href='./scheduler.html#options').full-width
+          .card.card-highlight
+            .main
+              h2 ⏰ Your schedule
+              p Choose Nudge's active times and days
         mixin card(id, title, desc, imgUrl, url)
           a(href=url).card
             .main(id=id)
