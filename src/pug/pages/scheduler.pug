@@ -1,0 +1,51 @@
+html
+  head
+    title Your Nudge schedule
+    link(rel="stylesheet" href="../../css/pages/onboarding.css")
+    link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
+    meta(charset="UTF-8")
+  body
+    .header.horizontal
+      a.back#js-back
+      div.logo-small
+      div.forward
+    .horizontal.centered
+      .contents.headspace
+        h1.spacing Your Nudge schedule
+        p Choose the days and times that you want Nudge to work.
+        .p-highlight
+          p ⭐ Start time can be after end time, e.g. if you want Nudge to work from 18:00 to 09:00
+        h2 Active times
+        .vertical
+          input(type="text" value="00:00" maxlength="5")#start-time.spacing-small
+          p to
+          input(type="text" value="00:00" maxlength="5")#end-time.spacing-small
+        h2 Active days
+        .form-checkbox.spacing-small
+          input#Mon(type="checkbox" checked="true")
+          label(for="Mon") Monday
+        .form-checkbox.spacing-small
+          input#Tue(type="checkbox" checked="true")
+          label(for="Tue") Tuesday
+        .form-checkbox.spacing-small
+          input#Wed(type="checkbox" checked="true")
+          label(for="Wed") Wednesday
+        .form-checkbox.spacing-small
+          input#Thu(type="checkbox" checked="true")
+          label(for="Thu") Thursday
+        .form-checkbox.spacing-small
+          input#Fri(type="checkbox" checked="true")
+          label(for="Fri") Friday
+        .form-checkbox.spacing-small
+          input#Sat(type="checkbox" checked="true")
+          label(for="Sat") Saturday
+        .form-checkbox.spacing
+          input#Sun(type="checkbox" checked="true")
+          label(for="Sun") Sunday
+        button#reset Reset schedule
+  script(src="../../config.js")
+  script(src="../../js/background/storage.js")
+  script(src="../../js/helpers.js")
+  script(src="../../js/vars/vars.js")
+  script(src="../../js/vendor/notie.js")
+  script(src="../../js/scheduler.js")
