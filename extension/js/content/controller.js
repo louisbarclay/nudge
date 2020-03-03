@@ -19,7 +19,8 @@ function execSettings(settings) {
   }
 
   // Init div hider
-  if (settings.div_hider) {
+  log(domain)
+  if (settings.div_hider && isNudgeDomain(domain)) {
     var extractedDomain = extractDomain(url)
     settings.whitelist.forEach(function(whitelistDomain) {
       // log(whitelistDomain)
