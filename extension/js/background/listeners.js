@@ -146,12 +146,13 @@ chrome.webNavigation.onBeforeNavigate.addListener(function runOnBeforeNavigate(
     if (details.parentFrameId === -1 && config.offByDefault) {
       try {
         var domain = domainCheck(details.url, settingsLocal)
+        let dontNudge = checkSnoozeAndSchedule(settingsLocal)
         // Check for domain we care about, that's off, and for snoozing
         if (
           isNudgeDomain(domain) &&
           settingsLocal.domains[domain] &&
           settingsLocal.domains[domain].off &&
-          !(settingsLocal.snooze.all > +Date.now())
+          !dontNudge
         ) {
           if (settingsLocal.off_by_default) {
             switchOff(domain, details.url, details.tabId, "bydefault")
@@ -234,13 +235,14 @@ chrome.windows.onFocusChanged.addListener(function windowOnFocusChanged() {
           log("Couldn't evaluate domainCheck")
         }
 
+        let dontNudge = checkSnoozeAndSchedule(settingsLocal)
         if (
           // Check if the domain would have just been redirected to off page
           !(
             isNudgeDomain(domain) &&
             settingsLocal.domains[domain] &&
             settingsLocal.domains[domain].off &&
-            !(settingsLocal.snooze.all > +Date.now())
+            !dontNudge
           )
         ) {
           timeline(domain, "windows.onFocusChanged")
@@ -277,13 +279,14 @@ chrome.tabs.onUpdated.addListener(function findUpdatedTab(
   if (tab.active === true) {
     try {
       chrome.windows.get(tab.windowId, function(window) {
+        let dontNudge = checkSnoozeAndSchedule(settingsLocal)
         if (
           window.focused &&
           !(
             isNudgeDomain(domain) &&
             settingsLocal.domains[domain] &&
             settingsLocal.domains[domain].off &&
-            !(settingsLocal.snooze.all > +Date.now())
+            !dontNudge
           )
         ) {
           timeline(domain, "tabs.onUpdated")
