@@ -124,7 +124,8 @@ var defaultSettings = {
   unhidden_divs: {},
   paid: false,
   schedule: false,
-  daily_goal: false
+  daily_goal: false,
+  stop_autoplay: false
 }
 
 var unfollow = {
