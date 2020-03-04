@@ -35,6 +35,10 @@ var optionsIndex = [
     name: "Facebook Greyifyer"
   },
   {
+    page: "youtubeautoplaystopper.html",
+    name: "YouTube Autoplay Stopper"
+  },
+  {
     page: "options_home.html#onboarding",
     name: "your Options"
   }
