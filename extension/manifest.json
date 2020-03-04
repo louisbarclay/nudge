@@ -52,8 +52,7 @@
       "js/background/recorder.js",
       "js/background/switch.js",
       "js/background/background.js",
-      "js/background/tests.js",
-      "js/background/stopautoplay.js"
+      "js/background/tests.js"
     ]
   },
   "content_scripts": [
