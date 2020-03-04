@@ -18,7 +18,11 @@ function getUrl(path) {
 }
 
 function checkSnoozeAndSchedule(settings) {
-  if (settings.snooze.all > +Date.now()) {
+  if (
+    settings.snooze &&
+    "all" in settings.snooze &&
+    settings.snooze.all > +Date.now()
+  ) {
     return true
   }
   if (settings.schedule) {

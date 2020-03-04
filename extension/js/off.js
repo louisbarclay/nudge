@@ -25,6 +25,132 @@ Array.from(settings).forEach(function(element) {
   }
 })
 
+el("js-time").innerHTML = moment().format("h:mma")
+
+setInterval(updateTimer, 1000)
+
+function updateTimer() {
+  if (el("js-time").innerHTML !== moment().format("h:mma")) {
+    el("js-time").innerHTML = moment().format("h:mma")
+  }
+}
+
+function goalInit(dailyGoal) {
+  var goal = el("js-goal")
+  var hasSaved = false
+  var today = moment().format("YYYY-MM-DD")
+  var goalCheck = el("goal-check")
+
+  docReady(function() {
+    goal.style.opacity = 1
+  })
+
+  if (dailyGoal && dailyGoal.substring(0, 10) === today) {
+    hasSaved === true
+    goal.value = dailyGoal.substring(11)
+    if (dailyGoal[10] === "T") {
+      goalCheck.checked = true
+      goal.style.textDecoration = "line-through"
+    }
+    goal.style.transition = "width 0s"
+    goalActive(dailyGoal.substring(11))
+  }
+
+  goal.oninput = function() {
+    log("asdf")
+    if (hasSaved) {
+      var goalShadow = el("js-width-test")
+      goalShadow.innerHTML = goal.value
+      goal.style.transition = "width 0s"
+      goal.style.width = goalShadow.clientWidth + 21 + "px"
+      changeSettingRequest(
+        `${today}${goalCheck.checked ? "T" : "F"}${goal.value}`,
+        "daily_goal"
+      )
+    }
+  }
+
+  var escBlur = false
+
+  goal.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+      if (goal.value === "") {
+        goalReset()
+        goal.blur()
+      } else {
+        // Cancel the default action, if needed
+        goalActive(goal.value)
+        changeSettingRequest(
+          `${today}${goalCheck.checked ? "T" : "F"}${goal.value}`,
+          "daily_goal"
+        )
+      }
+    }
+    if (event.keyCode === 27) {
+      goalReset()
+      goal.value = ""
+      goal.blur()
+      escBlur = true
+    }
+  })
+
+  function goalActive(dailyGoal) {
+    var goalShadow = el("js-width-test")
+    goalShadow.innerHTML = dailyGoal
+    log(goalShadow.clientWidth)
+    docReady(function() {
+      goal.style.width = goalShadow.clientWidth + 21 + "px"
+    })
+    hasSaved = true
+    el("js-today-label").style.opacity = 1
+    setTimeout(showCheckbox, 200)
+    function showCheckbox() {
+      el("js-checkbox").style.display = "block"
+    }
+  }
+
+  goal.onblur = function() {
+    if (escBlur) {
+      escBlur = false
+    } else {
+      if (goal.value === "") {
+        goalReset()
+      } else {
+        goalActive(goal.value)
+        changeSettingRequest(
+          `${today}${goalCheck.checked ? "T" : "F"}${goal.value}`,
+          "daily_goal"
+        )
+      }
+    }
+  }
+
+  function goalReset() {
+    goal.style.width = "15.5em"
+    hasSaved = false
+    el("js-checkbox").style.display = "none"
+    el("js-today-label").style.opacity = 0
+    goal.style.transition = "width 0.2s"
+    goalCheck.checked = false
+    goal.style.textDecoration = "none"
+    changeSettingRequest(false, "daily_goal")
+  }
+
+  goalCheck.onclick = function() {
+    if (goalCheck.checked) {
+      goal.style.textDecoration = "line-through"
+    } else {
+      goal.style.textDecoration = "none"
+    }
+    if (goal.value !== "") {
+      changeSettingRequest(
+        `${today}${goalCheck.checked ? "T" : "F"}${goal.value}`,
+        "daily_goal"
+      )
+    }
+  }
+}
+
 // FIXME: this is a bit of a kludge
 function highlightify(text) {
   return `<span class='off-highlight'>${text}</span>`
@@ -84,6 +210,7 @@ function getLocalStorage() {
     var date = moment().format("YYYY-MM-DD")
     localStorage = response.localStorage
     var settingsLocal = response.settingsLocal
+    goalInit(settingsLocal.daily_goal)
 
     // If not paid, show the ad
     if (!settingsLocal.paid) {
@@ -123,45 +250,60 @@ function getLocalStorage() {
     // Update it in headline
 
     try {
-      moment.locale("en", {
-        calendar: {
-          lastDay: "[yesterday at] h:mma",
-          sameDay: "[today at] h:mma",
-          nextDay: "[tomorrow at] h:mma",
-          lastWeek: "[last] dddd [at] h:mma",
-          nextWeek: "dddd [at] h:mma",
-          sameElse: "LL"
-        }
-      })
+      //   moment.locale("en", {
+      //     calendar: {
+      //       lastDay: "[yesterday at] h:mma",
+      //       sameDay: "[today at] h:mma",
+      //       nextDay: "[tomorrow at] h:mma",
+      //       lastWeek: "[last] dddd [at] h:mma",
+      //       nextWeek: "dddd [at] h:mma",
+      //       sameElse: "LL"
+      //     }
+      //   })
 
-      if (!(domain in status)) {
-        if (lastVisitEnd) {
-          log("a")
-          el(
-            "js-stats"
-          ).innerHTML = `Your last visit to ${domain} ended ${moment(
-            lastVisitEnd
-          ).calendar()}.`
-        } else {
-          log("b")
-          el(
-            "js-stats"
-          ).innerHTML = `You haven't been on this site recently, as far as Nudge can tell. Nice one!`
-        }
+      //   if (!(domain in status)) {
+      //     if (lastVisitEnd) {
+      //       log("a")
+      //       el(
+      //         "js-stats"
+      //       ).innerHTML = `Your last visit to ${domain} ended ${moment(
+      //         lastVisitEnd
+      //       ).calendar()}.`
+      //     } else {
+      //       log("b")
+      //       el(
+      //         "js-stats"
+      //       ).innerHTML = `You haven't been on this site recently, as far as Nudge can tell. Nice one!`
+      //     }
+      //   } else {
+      //     if (domainToday) {
+      //       el(
+      //         "js-stats"
+      //       ).innerHTML = `Your last visit to ${domain} ended ${moment(
+      //         lastVisitEnd
+      //       ).calendar()}.`
+      //     } else {
+      //       el(
+      //         "js-stats"
+      //       ).innerHTML = `Your last visit to ${domain} ended ${moment(
+      //         lastVisitEnd
+      //       ).calendar()}.`
+      //     }
+      //   }
+
+      const stats = el("js-stats")
+      if (
+        domainToday &&
+        !isNaN(domainToday.sessions) &&
+        !isNaN(domainToday.time)
+      ) {
+        stats.innerHTML = `${domain} today: ${
+          domainToday.sessions > 1
+            ? `${domainToday.sessions} visits`
+            : `${domainToday.sessions} visit`
+        }, ${msToDuration(domainToday.time)}`
       } else {
-        if (domainToday) {
-          el(
-            "js-stats"
-          ).innerHTML = `Your last visit to ${domain} ended ${moment(
-            lastVisitEnd
-          ).calendar()}.`
-        } else {
-          el(
-            "js-stats"
-          ).innerHTML = `Your last visit to ${domain} ended ${moment(
-            lastVisitEnd
-          ).calendar()}.`
-        }
+        stats.innerHTML = `You haven't visited ${domain} yet today. Nice one!`
       }
     } catch (e) {}
 
