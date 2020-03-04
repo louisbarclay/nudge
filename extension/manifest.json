@@ -17,7 +17,7 @@
     "clipboardRead",
     "clipboardWrite"
   ],
-  "incognito": "split",
+  "incognito": "spanning",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgH4rfKJ3fys5vEjI9bl8eXew3SdQeTbs8IOuITsRDzEik97iZb5cBB2Gg6G9n9wtg73qhvZaRFOX0FEfOmIG6Qw3g4dxFZn2+gESbEY2fFnMnF8Std0yJ/qqAMARpTqeKrzYd4h6mkC4A5Rt7bhaAmeUFdjjBaMvTLTZo3kgtXuIXRyxX3U+Y7N5b2kYC4X+fZ30iuFeKEn7Hega/QbEuTgEiIRfNMe3gvQ7vqmJkByXfZWZexODaOwJmG9SF/+Ijj7QsNyfBzWDuwFsfJwYD43+jVZfIfYOEGYSqFu51ZyT8JjHFz9HSQHErNNNPNrGjfmSdavKgb7lE2UnGAzhAQIDAQAB",
   "description": "Make the internet less addictive with nudges that help you avoid getting sucked in",
   "icons": {
