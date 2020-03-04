@@ -22,7 +22,7 @@ function defaultDomainPopulate(domainsArray) {
 }
 
 function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
-  log(newVal, setting, domain, domainSetting)
+  // log(newVal, setting, domain, domainSetting)
   // Set up Amplitude identify
   var identify = new amplitude.Identify()
   // For event logging
