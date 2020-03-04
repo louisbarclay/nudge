@@ -123,7 +123,8 @@ var defaultSettings = {
   updated_divs: true,
   unhidden_divs: {},
   paid: false,
-  schedule: false
+  schedule: false,
+  daily_goal: false
 }
 
 var unfollow = {
