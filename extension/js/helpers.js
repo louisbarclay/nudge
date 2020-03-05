@@ -47,9 +47,6 @@ function checkSnoozeAndSchedule(settings) {
     if (settings.schedule.substring(5, 10) === "00:00") {
       endTime.setHours(23, 59, 59)
     }
-    log(startTime)
-    log(endTime)
-    log(nowTime)
     if (startTime < endTime) {
       if (
         !(
