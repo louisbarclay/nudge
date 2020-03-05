@@ -18,20 +18,10 @@ html
   +b.BODY.text_globals.body(style="user-select:none")
     +b.settings#js-settings
     +b.banner(style="display: none;")#js-payment
-      +b.banner-headline Please 
-        a(href="./share.html" target="_blank")
-          +b.SPAN.banner-button share Nudge with 10 people
-        |  or 
-        a(href="https://nudgeware.io/pay" target="_blank")#js-pay-button
-          +b.SPAN.banner-button pay $3 a month
-        //- | . 
-        //- a Here's why.
-      +b.banner-text (
-        | I 
-        +b.A.banner-link(href="./support.html" target="_blank") need your support
-        |  to keep Nudge going. In return, you'll 
-        +b.A.banner-link(href="./coceo.html" target="_blank") be appointed Co-CEO of Nudge
-        |  and this banner will be hidden.)
+      +b.banner-headline
+        a(href="./support.html" target="_blank")
+          +b.SPAN.banner-button Become Co-CEO of Nudge
+      +b.banner-text Help keep Nudge going: join the senior leadership team for just $3 a month. Responsibilities: none. Perks: banners like this will be hidden.
       #error-message
     +b.donate
       +b.donate-container
@@ -59,7 +49,7 @@ html
     +b.container
       +b.logo-time-container
         +b.logo
-        +b.H1.h1#js-time.text_shadow
+        +b.H1.h1#js-time
       +b.goal
         +b.P.text_paragraph.text_shadow(style="opacity:0")#js-today-label Today:
         +b.horizontal(style="justify-content: flex-start; align-items: center")

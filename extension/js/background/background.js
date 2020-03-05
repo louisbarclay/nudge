@@ -64,30 +64,15 @@ async function loadSettingsAndAmplitude() {
         changeSetting(defaultSettings[key], key)
       }
     })
-    if (!settingsLocal.updated_divs) {
-      changeSetting(divs, "divs")
-      changeSetting(true, "updated_divs")
-    }
 
-    // Clean up deprecated settings
-    if (
-      settingsLocal.domains[Object.keys(settingsLocal.domains)[0]] &&
-      "faviconUrl" in
-        settingsLocal.domains[Object.keys(settingsLocal.domains)[0]]
-    ) {
-      changeSetting(true, "domains", true, "removeFaviconUrl")
-    }
-
-    // Open options page if it's not been shown
-    if (settingsLocal.show_update_article) {
-      // chrome.tabs.create({
-      //   url:
-      //     "https://medium.com/@louisbarclay/welcome-to-the-new-version-of-nudge-d65b2c0e56c8"
-      // })
+    // Show update article on startup if it hasn't been shown since the update
+    // For this to work, there must be changeSetting to get show_update_article
+    // to be false on the Chrome update
+    if (!settingsLocal.show_update_article) {
       chrome.tabs.create({
-        url: getUrl("html/pages/start.html")
+        url: getUrl(`html/pages/update53.html`)
       })
-      changeSetting(false, "show_update_article")
+      changeSetting(true, "show_update_article")
     }
 
     // Set all domains off by default

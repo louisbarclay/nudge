@@ -215,9 +215,9 @@ function getLocalStorage() {
     // If not paid, show the ad
     if (!settingsLocal.paid) {
       el("js-payment").style.display = "flex"
-      el(
-        "js-pay-button"
-      ).href = `https://nudgeware.io/pay/?id=${settingsLocal.userId}`
+      // el(
+      //   "js-pay-button"
+      // ).href = `https://nudgeware.io/pay/?id=${settingsLocal.userId}`
     }
 
     getStickier = settingsLocal.get_stickier

@@ -57,8 +57,10 @@ function onTabIdle(status, domain) {
 chrome.runtime.onInstalled.addListener(function(details) {
   if (details.reason == "install") {
     eventLog("install", {}, moment())
-    // Show options page on install
-    showOptionsPage = true
+    // Start onboarding on install
+    chrome.tabs.create({
+      url: getUrl("html/pages/start.html")
+    })
   } else if (details.reason == "update") {
     var thisVersion = chrome.runtime.getManifest().version
     eventLog(
@@ -69,8 +71,8 @@ chrome.runtime.onInstalled.addListener(function(details) {
       },
       moment()
     )
-    // Show options page on install
-    showOptionsPage = true
+    // Change show_update_article to false, i.e. allow showing an update article
+    changeSetting(false, "show_update_article")
   }
 })
 

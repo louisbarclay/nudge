@@ -82,7 +82,9 @@ h3 {
     color: #ffffff; }
 
 a {
-  color: #424242; }
+  color: #004294 !important; }
+  a:hover {
+    color: #ff61a7 !important; }
 
 .tooltip {
   font-size: 12px;
