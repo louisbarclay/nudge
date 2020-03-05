@@ -286,7 +286,9 @@ h3 {
     color: #ffffff; }
 
 a {
-  color: #424242; }
+  color: #004294 !important; }
+  a:hover {
+    color: #ff61a7 !important; }
 
 .tooltip {
   font-size: 12px;
@@ -491,11 +493,12 @@ input[type="checkbox"] {
   height: auto; }
   .onboarding-preview .center {
     width: 660px; }
-    .onboarding-preview .center .preview-image {
-      width: 100%;
-      height: auto;
-      border: 0;
-      border-radius: 8px; }
+
+.preview-image {
+  width: 100%;
+  height: auto;
+  border: 0;
+  border-radius: 8px; }
 
 .article-image {
   width: 100%;
@@ -703,7 +706,8 @@ input[type="text"] {
     padding-left: 24px;
     font-size: 18px;
     flex-grow: 0.5;
-    width: 100px; }
+    width: 100px;
+    color: #000000 !important; }
   .header .logo-small {
     flex-grow: 2; }
   .header .forward {
