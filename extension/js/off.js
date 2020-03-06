@@ -211,11 +211,12 @@ function getLocalStorage() {
     goalInit(settingsLocal.daily_goal)
 
     // If not paid, show the ad
-    if (!settingsLocal.paid) {
+    if (
+      !settingsLocal.paid &&
+      (!settingsLocal.install_date ||
+        moment().diff(moment(settingsLocal.install_date), "days") > 7)
+    ) {
       el("js-payment").style.display = "flex"
-      // el(
-      //   "js-pay-button"
-      // ).href = `https://nudgeware.io/pay/?id=${settingsLocal.userId}`
     }
 
     getStickier = settingsLocal.get_stickier

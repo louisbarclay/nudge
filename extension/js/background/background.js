@@ -73,6 +73,13 @@ async function loadSettingsAndAmplitude() {
       showUpdateArticle = false
     }
 
+    // Log install event
+    if (logInstall) {
+      changeSetting(moment().format(), "install_date")
+      amplitudeHttpEvent("install", { time: moment(), dev: config.dev })
+      logInstall = false
+    }
+
     if (settingsLocal.off_by_default) {
       // Set all domains off by default
       toggleOffByDefault(settingsLocal.off_by_default)
