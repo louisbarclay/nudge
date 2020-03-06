@@ -3,7 +3,7 @@ function everySecond() {
   domainCurrentTimeUpdater()
   // Install tracking event
   if (!settingsLocal.install_date) {
-    changeSetting(moment(), "install_date")
+    changeSetting(moment().format(), "install_date")
     amplitudeHttpEvent("install", { time: moment(), dev: config.dev })
   }
   // DAU-tracking event
