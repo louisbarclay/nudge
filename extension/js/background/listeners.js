@@ -1,6 +1,26 @@
 function everySecond() {
   // Run the counter on the current domain
   domainCurrentTimeUpdater()
+  // Install tracking event
+  if (!settingsLocal.install_date) {
+    changeSetting(moment(), "install_date")
+    amplitudeHttpEvent("install", { time: moment(), dev: config.dev })
+  }
+  // DAU-tracking event
+  if (
+    !settingsLocal.last_seen_day ||
+    settingsLocal.last_seen_day !== moment().format("YYYY-MM-DD")
+  ) {
+    changeSetting(moment().format("YYYY-MM-DD"), "last_seen_day")
+    // changeSetting will update Amplitude for data sharers
+    // But we need to update Amplitude for all users
+    amplitudeHttpEvent("active", {
+      time: moment(),
+      dev: config.dev,
+      share_data: settingsLocal.share_data
+    })
+  }
+
   // Don't do anything else if currently idle
   var currentState = checkCurrentState()
   if (currentState.domain === tabIdle || currentState.domain === chromeIdle) {
@@ -71,8 +91,9 @@ chrome.runtime.onInstalled.addListener(function(details) {
       },
       moment()
     )
-    // Change show_update_article to false, i.e. allow showing an update article
-    changeSetting(false, "show_update_article")
+    if (details.previousVersion !== thisVersion || config.dev) {
+      showUpdateArticle = true
+    }
   }
 })
 
