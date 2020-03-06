@@ -15,6 +15,9 @@ var allDomains = "$allDomains"
 // Quick access to settings
 var settingsLocal = {}
 
+// Log install variable
+var logInstall = false
+
 // Show update article variable
 var showUpdateArticle = false
 
