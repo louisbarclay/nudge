@@ -1,11 +1,6 @@
 function everySecond() {
   // Run the counter on the current domain
   domainCurrentTimeUpdater()
-  // Install tracking event
-  if (!settingsLocal.install_date) {
-    changeSetting(moment().format(), "install_date")
-    amplitudeHttpEvent("install", { time: moment(), dev: config.dev })
-  }
   // DAU-tracking event
   if (
     !settingsLocal.last_seen_day ||
@@ -81,6 +76,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
     chrome.tabs.create({
       url: getUrl("html/pages/start.html")
     })
+    logInstall = true
   } else if (details.reason == "update") {
     var thisVersion = chrome.runtime.getManifest().version
     eventLog(
