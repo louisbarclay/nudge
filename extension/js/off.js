@@ -57,7 +57,6 @@ function goalInit(dailyGoal) {
   }
 
   goal.oninput = function() {
-    log("asdf")
     if (hasSaved) {
       var goalShadow = el("js-width-test")
       goalShadow.innerHTML = goal.value
@@ -97,7 +96,6 @@ function goalInit(dailyGoal) {
   function goalActive(dailyGoal) {
     var goalShadow = el("js-width-test")
     goalShadow.innerHTML = dailyGoal
-    log(goalShadow.clientWidth)
     docReady(function() {
       goal.style.width = goalShadow.clientWidth + 21 + "px"
     })
