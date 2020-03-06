@@ -66,63 +66,35 @@ async function loadSettingsAndAmplitude() {
     })
 
     // Show update article on startup if it hasn't been shown since the update
-    // For this to work, there must be changeSetting to get show_update_article
-    // to be false on the Chrome update
-    if (!settingsLocal.show_update_article) {
+    if (showUpdateArticle) {
       chrome.tabs.create({
         url: getUrl(`html/pages/update53.html`)
       })
-      changeSetting(true, "show_update_article")
+      showUpdateArticle = false
     }
 
-    // Set all domains off by default
     if (settingsLocal.off_by_default) {
+      // Set all domains off by default
       toggleOffByDefault(settingsLocal.off_by_default)
     }
 
     // Analytics
     if (settingsLocal.share_data) {
       // Log startup event
-      amplitude
-        .getInstance()
-        .logEvent("startup", { share_data: settingsLocal.share_data })
+      amplitude.getInstance().logEvent("startup", {
+        share_data: settingsLocal.share_data,
+        dev: config.dev
+      })
       // Always sync all settings on startup, just to make sure they're in sync
       var identify = new amplitude.Identify()
       flushSettingsToAmplitude(settingsLocal, identify)
       amplitude.getInstance().identify(identify)
     } else {
       // Amplitude HTTP request for non-share data people
-      var url = "https://api.amplitude.com/2/httpapi"
-
-      var data = {
-        api_key: amplitudeCreds.apiKey,
-        events: [
-          {
-            user_id: settingsLocal.userId,
-            event_type: "startup",
-            event_properties: {
-              share_data: settingsLocal.share_data
-            }
-          }
-        ]
-      }
-
-      async function postData() {
-        try {
-          const response = await fetch(url, {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "*/*"
-            }
-          })
-          const json = await response.json()
-          // log("Success:", JSON.stringify(json))
-        } catch (error) {}
-      }
-
-      postData()
+      amplitudeHttpEvent("startup", {
+        dev: config.dev,
+        share_data: settingsLocal.share_data
+      })
     }
   })
 }
@@ -355,4 +327,35 @@ function timeline(domain, source, timeOverride) {
       }
     }
   }
+}
+
+const amplitudeHttpEvent = (eventType, eventProperties) => {
+  var url = "https://api.amplitude.com/2/httpapi"
+  var event = {
+    user_id: settingsLocal.userId,
+    event_type: eventType
+  }
+  if (eventProperties) {
+    event.event_properties = eventProperties
+  }
+
+  var data = {
+    api_key: amplitudeCreds.apiKey,
+    events: [event]
+  }
+
+  async function postData() {
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "*/*"
+        }
+      })
+    } catch (error) {}
+  }
+
+  postData()
 }
