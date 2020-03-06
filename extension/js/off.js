@@ -213,7 +213,8 @@ function getLocalStorage() {
     // If not paid, show the ad
     if (
       !settingsLocal.paid &&
-      moment().diff(moment(settingsLocal.install_date), "days") > 7
+      (!settingsLocal.install_date ||
+        moment().diff(moment(settingsLocal.install_date), "days") > 7)
     ) {
       el("js-payment").style.display = "flex"
     }
