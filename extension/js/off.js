@@ -233,63 +233,7 @@ function getLocalStorage() {
     setBackground(background, `${dir_small}${getBackgroundFile(index)}`)
     backgroundLoader(index)
 
-    // If false, use value 0 to grab image from array and set it
-    // If true, check what day you are on versus the first ever day, and use that value to get array
-    // Check if domain in status
-    // if (!(domain in status)) {
-    //   headline.innerHTML = `Nudge switches off${highlightify(domain)}by default`
-    // }
-
-    // Grab lastVisitEnd for updating the headline
-    var lastVisitEnd = status[domain] ? status[domain].lastVisitEnd : false
-    // Humanize it
-    var sinceLastVisitEnd = moment
-      .duration(moment().diff(moment(lastVisitEnd)))
-      .humanize()
-    // Update it in headline
-
     try {
-      //   moment.locale("en", {
-      //     calendar: {
-      //       lastDay: "[yesterday at] h:mma",
-      //       sameDay: "[today at] h:mma",
-      //       nextDay: "[tomorrow at] h:mma",
-      //       lastWeek: "[last] dddd [at] h:mma",
-      //       nextWeek: "dddd [at] h:mma",
-      //       sameElse: "LL"
-      //     }
-      //   })
-
-      //   if (!(domain in status)) {
-      //     if (lastVisitEnd) {
-      //       log("a")
-      //       el(
-      //         "js-stats"
-      //       ).innerHTML = `Your last visit to ${domain} ended ${moment(
-      //         lastVisitEnd
-      //       ).calendar()}.`
-      //     } else {
-      //       log("b")
-      //       el(
-      //         "js-stats"
-      //       ).innerHTML = `You haven't been on this site recently, as far as Nudge can tell. Nice one!`
-      //     }
-      //   } else {
-      //     if (domainToday) {
-      //       el(
-      //         "js-stats"
-      //       ).innerHTML = `Your last visit to ${domain} ended ${moment(
-      //         lastVisitEnd
-      //       ).calendar()}.`
-      //     } else {
-      //       el(
-      //         "js-stats"
-      //       ).innerHTML = `Your last visit to ${domain} ended ${moment(
-      //         lastVisitEnd
-      //       ).calendar()}.`
-      //     }
-      //   }
-
       const stats = el("js-stats")
       if (
         domainToday &&
