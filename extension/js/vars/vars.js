@@ -15,6 +15,9 @@ var allDomains = "$allDomains"
 // Quick access to settings
 var settingsLocal = {}
 
+// Show update article variable
+var showUpdateArticle = false
+
 // Default domain info
 var defaultDomainInfo = {
   nudge: true,
@@ -116,12 +119,13 @@ var defaultSettings = {
   bg_image: false,
   snooze: { all: 0 },
   get_stickier: false,
-  show_update_article: true,
   unhidden_divs: {},
   paid: false,
   schedule: false,
   daily_goal: false,
-  stop_autoplay: false
+  stop_autoplay: false,
+  last_seen_day: false,
+  install_date: false
 }
 
 var unfollow = {
