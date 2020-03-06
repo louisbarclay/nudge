@@ -6,7 +6,6 @@ function createSettings() {
   // Add new settings areas here!
   settings.userId = getUserId()
   settings.domains = {}
-  settings.divs = divs
   return settings
 }
 

@@ -3,12 +3,14 @@ var config = {
   offByDefault: true,
   resetDivSettings: false,
   fastTimer: false,
-  timelineTest: false
+  timelineTest: false,
+  dev: false
 }
 
 // Dev config variables
 if (!chrome.runtime.getManifest().update_url) {
   console.log("Env: dev")
+  config.dev = true
   config.debug = true
   config.offByDefault = true
   config.resetDivSettings = false
