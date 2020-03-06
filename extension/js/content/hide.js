@@ -19,7 +19,10 @@ function divHider(settings, url, extractedDomain) {
   // Matters if it's in the div list
   doAtEarliest(function() {
     addCSS("nudge-circle", "css/injected/circle.css")
-    if (!settings.paid) {
+    if (
+      !settings.paid &&
+      moment().diff(moment(settings.install_date), "days") > 7
+    ) {
       circleHtml = "circle_alt.html"
     }
   })
