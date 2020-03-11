@@ -3,8 +3,9 @@ getSettings(execSettings)
 
 function execSettings(settings) {
   // Check for snooze
-  if (settings.snooze.all > +Date.now()) {
-    log("Snoozed")
+  let dontNudge = checkSnoozeAndSchedule(settings)
+  if (dontNudge) {
+    log("Won't Nudge")
     return
   }
 
@@ -18,7 +19,7 @@ function execSettings(settings) {
   }
 
   // Init div hider
-  if (settings.div_hider) {
+  if (settings.div_hider && isNudgeDomain(domain)) {
     var extractedDomain = extractDomain(url)
     settings.whitelist.forEach(function(whitelistDomain) {
       // log(whitelistDomain)
@@ -73,7 +74,10 @@ function execSettings(settings) {
         request.type === "live_update" &&
         extractDomain(window.location.href).includes(request.domain)
       ) {
-        cornerInit(request.total, request.visits, request.domain)
+        // If in preview mode,
+        if (!config.previewMode) {
+          cornerInit(request.total, request.visits, request.domain)
+        }
       }
     })
   }

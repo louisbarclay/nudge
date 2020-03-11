@@ -25,6 +25,130 @@ Array.from(settings).forEach(function(element) {
   }
 })
 
+el("js-time").innerHTML = moment().format("h:mma")
+
+setInterval(updateTimer, 1000)
+
+function updateTimer() {
+  if (el("js-time").innerHTML !== moment().format("h:mma")) {
+    el("js-time").innerHTML = moment().format("h:mma")
+  }
+}
+
+function goalInit(dailyGoal) {
+  var goal = el("js-goal")
+  var hasSaved = false
+  var today = moment().format("YYYY-MM-DD")
+  var goalCheck = el("goal-check")
+
+  docReady(function() {
+    goal.style.opacity = 1
+  })
+
+  if (dailyGoal && dailyGoal.substring(0, 10) === today) {
+    hasSaved === true
+    goal.value = dailyGoal.substring(11)
+    if (dailyGoal[10] === "T") {
+      goalCheck.checked = true
+      goal.style.textDecoration = "line-through"
+    }
+    goal.style.transition = "width 0s"
+    goalActive(dailyGoal.substring(11))
+  }
+
+  goal.oninput = function() {
+    if (hasSaved) {
+      var goalShadow = el("js-width-test")
+      goalShadow.innerHTML = goal.value
+      goal.style.transition = "width 0s"
+      goal.style.width = goalShadow.clientWidth + 21 + "px"
+      changeSettingRequest(
+        `${today}${goalCheck.checked ? "T" : "F"}${goal.value}`,
+        "daily_goal"
+      )
+    }
+  }
+
+  var escBlur = false
+
+  goal.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+      if (goal.value === "") {
+        goalReset()
+        goal.blur()
+      } else {
+        // Cancel the default action, if needed
+        goalActive(goal.value)
+        changeSettingRequest(
+          `${today}${goalCheck.checked ? "T" : "F"}${goal.value}`,
+          "daily_goal"
+        )
+      }
+    }
+    if (event.keyCode === 27) {
+      goalReset()
+      goal.value = ""
+      goal.blur()
+      escBlur = true
+    }
+  })
+
+  function goalActive(dailyGoal) {
+    var goalShadow = el("js-width-test")
+    goalShadow.innerHTML = dailyGoal
+    docReady(function() {
+      goal.style.width = goalShadow.clientWidth + 21 + "px"
+    })
+    hasSaved = true
+    el("js-today-label").style.opacity = 1
+    setTimeout(showCheckbox, 200)
+    function showCheckbox() {
+      el("js-checkbox").style.display = "block"
+    }
+  }
+
+  goal.onblur = function() {
+    if (escBlur) {
+      escBlur = false
+    } else {
+      if (goal.value === "") {
+        goalReset()
+      } else {
+        goalActive(goal.value)
+        changeSettingRequest(
+          `${today}${goalCheck.checked ? "T" : "F"}${goal.value}`,
+          "daily_goal"
+        )
+      }
+    }
+  }
+
+  function goalReset() {
+    goal.style.width = "15.5em"
+    hasSaved = false
+    el("js-checkbox").style.display = "none"
+    el("js-today-label").style.opacity = 0
+    goal.style.transition = "width 0.2s"
+    goalCheck.checked = false
+    goal.style.textDecoration = "none"
+    changeSettingRequest(false, "daily_goal")
+  }
+
+  goalCheck.onclick = function() {
+    if (goalCheck.checked) {
+      goal.style.textDecoration = "line-through"
+    } else {
+      goal.style.textDecoration = "none"
+    }
+    if (goal.value !== "") {
+      changeSettingRequest(
+        `${today}${goalCheck.checked ? "T" : "F"}${goal.value}`,
+        "daily_goal"
+      )
+    }
+  }
+}
+
 // FIXME: this is a bit of a kludge
 function highlightify(text) {
   return `<span class='off-highlight'>${text}</span>`
@@ -84,13 +208,15 @@ function getLocalStorage() {
     var date = moment().format("YYYY-MM-DD")
     localStorage = response.localStorage
     var settingsLocal = response.settingsLocal
+    goalInit(settingsLocal.daily_goal)
 
     // If not paid, show the ad
-    if (!settingsLocal.paid) {
+    if (
+      !settingsLocal.paid &&
+      (!settingsLocal.install_date ||
+        moment().diff(moment(settingsLocal.install_date), "days") > 7)
+    ) {
       el("js-payment").style.display = "flex"
-      el(
-        "js-pay-button"
-      ).href = `https://nudgeware.io/pay/?id=${settingsLocal.userId}`
     }
 
     getStickier = settingsLocal.get_stickier
@@ -103,69 +229,25 @@ function getLocalStorage() {
     var diff = moment()
       .startOf("day")
       .diff(moment("2018-01-01T19:05:57.810Z").startOf("day"), "days")
+    // Tweak index here to choose a different background
     var index = diff % bgImages.length
     setBackground(background, `${dir_small}${getBackgroundFile(index)}`)
     backgroundLoader(index)
 
-    // If false, use value 0 to grab image from array and set it
-    // If true, check what day you are on versus the first ever day, and use that value to get array
-    // Check if domain in status
-    // if (!(domain in status)) {
-    //   headline.innerHTML = `Nudge switches off${highlightify(domain)}by default`
-    // }
-
-    // Grab lastVisitEnd for updating the headline
-    var lastVisitEnd = status[domain] ? status[domain].lastVisitEnd : false
-    // Humanize it
-    var sinceLastVisitEnd = moment
-      .duration(moment().diff(moment(lastVisitEnd)))
-      .humanize()
-    // Update it in headline
-
     try {
-      moment.locale("en", {
-        calendar: {
-          lastDay: "[yesterday at] h:mma",
-          sameDay: "[today at] h:mma",
-          nextDay: "[tomorrow at] h:mma",
-          lastWeek: "[last] dddd [at] h:mma",
-          nextWeek: "dddd [at] h:mma",
-          sameElse: "LL"
-        }
-      })
-
-      if (!(domain in status)) {
-        if (lastVisitEnd) {
-          log("a")
-          el(
-            "js-stats"
-          ).innerHTML = `Your last visit to ${domain} ended ${moment(
-            lastVisitEnd
-          ).calendar()}.`
-        } else {
-          log("b")
-          el(
-            "js-stats"
-          ).innerHTML = `You haven't been on this site recently, as far as Nudge can tell. Nice one!`
-        }
+      const stats = el("js-stats")
+      if (
+        domainToday &&
+        !isNaN(domainToday.sessions) &&
+        !isNaN(domainToday.time)
+      ) {
+        stats.innerHTML = `${domain} today: ${
+          domainToday.sessions > 1
+            ? `${domainToday.sessions} visits`
+            : `${domainToday.sessions} visit`
+        }, ${msToDuration(domainToday.time)}`
       } else {
-        if (domainToday) {
-          el("js-stats").innerHTML = `${msToDuration(
-            domainToday.time
-          )} today (${
-            !domainToday.sessions
-              ? "from a visit that started yesterday but ended today"
-              : domainToday.sessions === 1
-              ? `${domainToday.sessions} visit`
-              : `${domainToday.sessions} visits`
-          }). Last visit ended ${moment(lastVisitEnd).calendar()}.`
-        } else {
-          el(
-            "js-stats"
-          ).innerHTML = `Your last visit to ${domain} ended ${moment(
-            lastVisitEnd
-          ).calendar()}.`
-        }
+        stats.innerHTML = `You haven't visited ${domain} yet today. Nice one!`
       }
     } catch (e) {}
 
@@ -404,16 +486,18 @@ function backgroundLoader(index) {
   img.src = getUrl(`${dir}${getBackgroundFile(index)}`)
 }
 
-var backgroundNumber = 0
-
 // Keyboard shortcut to cycle through background images
 // function cycleThroughBackgrounds() {
 //   document.onkeyup = function(key) {
 //     if (key.altKey && key.keyCode == 39) {
-//       backgroundLoader(backgroundNumber)
 //       backgroundNumber++
+//       setBackground(
+//         background,
+//         `${dir_small}${getBackgroundFile(backgroundNumber)}`
+//       )
+//       backgroundLoader(backgroundNumber)
 //     }
 //   }
 // }
 
-// cycleThroughBackgrounds();
+// cycleThroughBackgrounds()

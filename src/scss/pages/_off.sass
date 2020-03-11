@@ -180,19 +180,25 @@ body
 
   &text_paragraph
     margin-top: 1em
+    margin-bottom: 0.5em
     font-size: 15px
+    transition: opacity 0.3s
 
   &logo
-    margin-top: 25vh
-    +size($width: 8em)
+    +size($width: 6em)
     &::before
       +pseudo
-      +logo-white($size: 8em)
-      opacity: 0.7
+      +logo-white($size: 6em)
+      opacity: 1
 
-  &headline
+  &h1
     margin-top: 10vh
-    font-size: 30px
+    margin-bottom: 0
+    font-size: 60px
+    user-select: none
+
+  &h2
+    font-size: 25px
     user-select: none
 
   &module
@@ -221,17 +227,22 @@ body
       height: 40px
 
   &highlight
-    opacity: 1
+    opacity: 0
     text-shadow: none
+    width: 15.5em
     background-color: rgba(255, 255, 255, 0.2)
     color: $white
     +border($style: none)
-    padding: 0em .3em .1em .3em
-    // margin-left: 0.3em
-    margin-right: 0.3em
+    padding: 0.2em .4em .3em .4em
     white-space: nowrap
-
-
+    transition: width 0.2s
+    transition-timing-function: ease-in-out
+    &::placeholder
+      color: $white
+    &:focus::placeholder
+      color: transparent
+    &::selection
+      background-color: $white
 
   &key
     +border($color: $white)
@@ -256,7 +267,7 @@ body
     width: 100%
     position: relative
     height: $slider-height
-    margin-top: 15vh
+    margin-top: 25vh
     border-radius: 6em
     text-align: center
     background-color: rgba(255, 255, 255, 0.2)
@@ -325,6 +336,9 @@ body
     user-select: none
     +hardware
 
+  &goal
+    flex-direction: column
+
   &button-centre
     opacity: $opacity-global
     position: relative
@@ -349,6 +363,10 @@ body
   &returning
     transition: all 0.2s ease
 
+  &logo-time-container
+    flex-direction: column
+    margin-top: 20vh
+
 @media (max-width: 1400px)
   .off-headline
     font-size: 26px
@@ -358,11 +376,77 @@ body
   .off-slider
     margin-top: 10vh
 
-@media (min-width: 1800px)
-  .off-headline
-    font-size: 36px
-
-@media (max-height: 670px)
+@media (max-height: 800px)
   .off-slider
-    margin-top: 0vh
+    margin-top: 20vh
+  .off-h1
+    margin: 0
+  // .off-goal
+  //   display: none !important
+  .off-logo-time-container
+    flex-direction: row
+    margin-top: 10em
+    align-items: center !important
+  .off-goal
+    margin-top: 10vh
 
+@media (max-height: 700px)
+  .off-slider
+    margin-top: 10vh
+  .off-logo-time-container
+    margin-top: 5em
+
+@media (max-height: 900px)
+  .off-slider
+    margin-top: 15vh
+
+@media (max-height: 500px)
+  .off-slider
+    margin-top: 5vh
+  .off-goal
+    margin-top: 5vh
+  .off-logo-time-container
+    margin-top: 5em
+  .off-donate
+    display: none
+
+// Variables
+$checkbox-width: 24px
+$checkbox-color: $nudge-blue
+
+.form-checkbox
+  opacity: 0
+
+// Checkboxes
+input[type="checkbox"]
+  display: none
+
+  & + label
+    display: flex
+    line-height: 1.8em
+    cursor: pointer
+    user-select: none
+
+    // Default State
+    &:before
+      display: block
+      margin-left: 0.5em
+      +border($width: 1.5px, $color: $white)
+      content: ""
+      align-self: center
+      margin: 0.5em
+      left: 0
+      width: $checkbox-width
+      height: $checkbox-width
+
+  // Checked State
+  &:checked + label
+    &:before
+      background: url('chrome-extension://__MSG_@@extension_id__/img/icon/checkbox.svg') center center/14px no-repeat
+
+.off-horizontal
+  align-self: initial !important
+  flex-direction: row
+  display: flex
+  &:hover .form-checkbox
+    opacity: 1

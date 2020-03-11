@@ -6,7 +6,7 @@ html
     meta(charset="UTF-8")
   body
     .header.horizontal
-      a.back#js-back
+      a.back
       div.logo-small
       div.forward
     .horizontal.centered
@@ -26,8 +26,13 @@ html
         a(href='./sites.html#options').full-width
           .card.card-highlight
             .main
-              h2 Choose Sites
+              h2 🌐 Choose sites
               p Manage the sites that Nudge works on
+        a(href='./scheduler.html#options').full-width
+          .card.card-highlight
+            .main
+              h2 ⏰ Your schedule
+              p Choose Nudge's active times and days
         mixin card(id, title, desc, imgUrl, url)
           a(href=url).card
             .main(id=id)
@@ -44,6 +49,7 @@ html
         +card(`fb_auto_unfollow`, `Unfollower`, `Unfollow your Facebook News Feed`, `../../img/preview/unfollower.gif`, `./unfollower.html#options`)
         +card(`scroll_nudge`, `Scroll Nudger`, `Get nudged as you scroll`, `../../img/preview/scrollnudger.gif`, `./scrollnudger.html#options`)
         +card(`fb_grey`, `Facebook Greyifyer`, `Make Facebook more boring`, `../../img/preview/greyify.png`, `./facebooktweaker.html#options`)
+        +card(`stop_autoplay`, `YouTube Autoplay Stopper`, `Stop autoplay on YouTube`, `../../img/preview/stop_autoplay.gif`, `./youtubeautoplaystopper.html#options`)
         .spacing-m
         .horizontal.centered.full-width.spacing
           p.tooltip Nudge ID: 

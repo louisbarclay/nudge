@@ -1,6 +1,21 @@
 function everySecond() {
   // Run the counter on the current domain
   domainCurrentTimeUpdater()
+  // DAU-tracking event
+  if (
+    !settingsLocal.last_seen_day ||
+    settingsLocal.last_seen_day !== moment().format("YYYY-MM-DD")
+  ) {
+    changeSetting(moment().format("YYYY-MM-DD"), "last_seen_day")
+    // changeSetting will update Amplitude for data sharers
+    // But we need to update Amplitude for all users
+    amplitudeHttpEvent("active", {
+      time: moment(),
+      dev: config.dev,
+      share_data: settingsLocal.share_data
+    })
+  }
+
   // Don't do anything else if currently idle
   var currentState = checkCurrentState()
   if (currentState.domain === tabIdle || currentState.domain === chromeIdle) {
@@ -57,11 +72,11 @@ function onTabIdle(status, domain) {
 chrome.runtime.onInstalled.addListener(function(details) {
   if (details.reason == "install") {
     eventLog("install", {}, moment())
-    // FIXME: This is a bit rubbish because it will interrupt the user
+    // Start onboarding on install
     chrome.tabs.create({
       url: getUrl("html/pages/start.html")
     })
-    // Show options page on install
+    logInstall = true
   } else if (details.reason == "update") {
     var thisVersion = chrome.runtime.getManifest().version
     eventLog(
@@ -72,9 +87,9 @@ chrome.runtime.onInstalled.addListener(function(details) {
       },
       moment()
     )
-    chrome.tabs.create({
-      url: getUrl("html/pages/update.html")
-    })
+    if (details.previousVersion !== thisVersion || config.dev) {
+      // showUpdateArticle = true
+    }
   }
 })
 
@@ -150,12 +165,13 @@ chrome.webNavigation.onBeforeNavigate.addListener(function runOnBeforeNavigate(
     if (details.parentFrameId === -1 && config.offByDefault) {
       try {
         var domain = domainCheck(details.url, settingsLocal)
+        let dontNudge = checkSnoozeAndSchedule(settingsLocal)
         // Check for domain we care about, that's off, and for snoozing
         if (
           isNudgeDomain(domain) &&
           settingsLocal.domains[domain] &&
           settingsLocal.domains[domain].off &&
-          !(settingsLocal.snooze.all > +Date.now())
+          !dontNudge
         ) {
           if (settingsLocal.off_by_default) {
             switchOff(domain, details.url, details.tabId, "bydefault")
@@ -238,13 +254,14 @@ chrome.windows.onFocusChanged.addListener(function windowOnFocusChanged() {
           log("Couldn't evaluate domainCheck")
         }
 
+        let dontNudge = checkSnoozeAndSchedule(settingsLocal)
         if (
           // Check if the domain would have just been redirected to off page
           !(
             isNudgeDomain(domain) &&
             settingsLocal.domains[domain] &&
             settingsLocal.domains[domain].off &&
-            !(settingsLocal.snooze.all > +Date.now())
+            !dontNudge
           )
         ) {
           timeline(domain, "windows.onFocusChanged")
@@ -253,6 +270,22 @@ chrome.windows.onFocusChanged.addListener(function windowOnFocusChanged() {
     }
   )
 })
+
+// Stop autoplay feature
+chrome.webRequest.onBeforeRequest.addListener(
+  function(request) {
+    if (settingsLocal.stop_autoplay) {
+      const cancel =
+        request.url.indexOf("watch_autoplayrenderer.js") !== -1 ||
+        request.url.indexOf("endscreen.js") !== -1
+      return { cancel }
+    }
+  },
+  {
+    urls: ["*://*.ytimg.com/yts/jsbin/*", "*://*.youtube.com/yts/jsbin/*"]
+  },
+  ["blocking"]
+)
 
 // Add to tabIdStorage onCreated
 chrome.tabs.onCreated.addListener(function findCreatedTab(tab) {
@@ -281,13 +314,14 @@ chrome.tabs.onUpdated.addListener(function findUpdatedTab(
   if (tab.active === true) {
     try {
       chrome.windows.get(tab.windowId, function(window) {
+        let dontNudge = checkSnoozeAndSchedule(settingsLocal)
         if (
           window.focused &&
           !(
             isNudgeDomain(domain) &&
             settingsLocal.domains[domain] &&
             settingsLocal.domains[domain].off &&
-            !(settingsLocal.snooze.all > +Date.now())
+            !dontNudge
           )
         ) {
           timeline(domain, "tabs.onUpdated")

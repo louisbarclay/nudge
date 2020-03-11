@@ -5,24 +5,12 @@ function createSettings() {
   // Add dynamic stuff
   // Add new settings areas here!
   settings.userId = getUserId()
-  settings.domains = defaultDomainPopulate(defaultDomains)
-  settings.divs = divs
+  settings.domains = {}
   return settings
 }
 
-function defaultDomainPopulate(domainsArray) {
-  var object = {}
-  for (var i = 0; i < domainsArray.length; i++) {
-    object[domainsArray[i]] = {
-      nudge: true,
-      off: false
-    }
-  }
-  return object
-}
-
 function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
-  log(newVal, setting, domain, domainSetting)
+  // log(newVal, setting, domain, domainSetting)
   // Set up Amplitude identify
   var identify = new amplitude.Identify()
   // For event logging
@@ -64,20 +52,19 @@ function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
       if (domainSetting === "add") {
         settingsLocal.domains[domain] = {
           nudge: true,
-          off: false
+          off: true
         }
-
         // Change domains info into an array for Amplitude
         var nudgeDomains = domainsSettingToAmplitude(settingsLocal, "nudge")
         identify.set("nudge_domains", nudgeDomains)
-        // Special once off
-      } else if (domainSetting === "removeFaviconUrl") {
-        Object.keys(settingsLocal[setting]).forEach(function(key) {
-          if ("faviconUrl" in settingsLocal[setting][key]) {
-            delete settingsLocal[setting][key].faviconUrl
-          }
-        })
+
         // Toggle
+      } else if (domainSetting === "nudge") {
+        settingsLocal.domains[domain].nudge = newVal
+        // Set domain to off immediately
+        settingsLocal.domains[domain].off = true
+        var nudgeDomains = domainsSettingToAmplitude(settingsLocal, "nudge")
+        identify.set("nudge_domains", nudgeDomains)
       } else if (newVal === "toggle") {
         // Set previousVal for log
         previousVal = settingsLocal[setting][domain][domainSetting]
@@ -91,9 +78,9 @@ function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
           domainSetting
         )
         if (domainSetting === "off") {
-          identify.set("on_domains", onDomains)
+          identify.set("on_domains", amplitudeDomains)
         } else if (domainSetting === "nudge") {
-          identify.set("nudge_domains", nudgeDomains)
+          identify.set("nudge_domains", amplitudeDomains)
         }
         // Off by default is a special case - we must update the settings for all domains
       } else {
@@ -158,19 +145,33 @@ function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
       amplitude.getInstance().identify(identify)
     }
 
-    // Send the event
-    // ZIPPY
-    eventLog("changeSetting", {
-      newVal: typeof newVal === "object" ? JSON.stringify(newVal) : newVal,
-      previousVal:
-        typeof previousVal === "object"
-          ? JSON.stringify(previousVal)
-          : previousVal,
-      setting,
-      domain,
-      domainSetting,
-      info
-    })
+    // Send the event unless it's a daily goal
+    if (setting !== "daily_goal") {
+      eventLog("changeSetting", {
+        newVal: typeof newVal === "object" ? JSON.stringify(newVal) : newVal,
+        previousVal:
+          typeof previousVal === "object"
+            ? JSON.stringify(previousVal)
+            : previousVal,
+        setting,
+        domain,
+        domainSetting,
+        info
+      })
+    } else {
+      // For daily goal, only send it once a day
+      var today = moment().format("YYYY-MM-DD")
+      if (!previousVal || previousVal.substring(0, 10) !== today) {
+        eventLog("changeSetting", {
+          newVal: "someDailyGoal",
+          previousVal: "somePreviousDailyGoal",
+          setting,
+          domain,
+          domainSetting,
+          info
+        })
+      }
+    }
   } catch (e) {
     log(e)
   }

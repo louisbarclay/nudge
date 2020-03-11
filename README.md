@@ -10,7 +10,11 @@ That’s why I made Nudge.
 
 Nudge makes the internet less addictive by removing addictive features, putting friction in the right places, and telling you how much time you’re spending.
 
-Nudge never blocks. It just nudges. If you like the sound of that, [download Nudge for Google Chrome (4.7 stars)](https://bit.ly/2q7VE0K), or read about Nudge's features below. You choose which features you want enabled.
+Nudge never blocks. It just nudges. If you like the sound of that, download link or more about Nudge's features below. You choose which features you want enabled.
+
+[Download Nudge for Google Chrome](https://bit.ly/2q7VE0K)  
+⭐⭐⭐⭐⭐  
+4.8 stars on Chrome Web Store from 54 reviews  
 
 # 🚷 Defaulter
 
@@ -105,3 +109,5 @@ It's for situations where you need a break; maybe because you need to get into a
 - 🌼 Add Whitelist sites that you don't ever want to nudge
 - ✂️ Remove Facebook's notifications
 - ☁️ Change the colour of Facebook's top bar from blue to grey
+
+Want to make changes to the GitHub repository? Read how [here](https://github.com/lgwb89/nudge/blob/master/instructions.md).

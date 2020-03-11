@@ -15,23 +15,13 @@ html
     link(href="../../img/icon/nudgeoff16.png" rel="icon" type="image/png" sizes="16x16")
     link(rel="stylesheet" href="../../css/pages/main.css")
     meta(charset="UTF-8")
-  +b.BODY.text_globals.body
+  +b.BODY.text_globals.body(style="user-select:none")
     +b.settings#js-settings
     +b.banner(style="display: none;")#js-payment
-      +b.banner-headline Please 
-        a(href="./share.html" target="_blank")
-          +b.SPAN.banner-button share Nudge with 10 people
-        |  or 
-        a(href="https://nudgeware.io/pay" target="_blank")#js-pay-button
-          +b.SPAN.banner-button pay $3 a month
-        //- | . 
-        //- a Here's why.
-      +b.banner-text (
-        | I 
-        +b.A.banner-link(href="./support.html" target="_blank") need your support
-        |  to keep Nudge going. In return, you'll 
-        +b.A.banner-link(href="./coceo.html" target="_blank") be appointed Co-CEO of Nudge
-        |  and this banner will be hidden.)
+      +b.banner-headline
+        a(href="./support.html" target="_blank")
+          +b.SPAN.banner-button Become Co-CEO of Nudge
+      +b.banner-text Help keep Nudge going: join the senior leadership team for just $3 a month. Responsibilities: none. Perks: banners like this will be hidden.
       #error-message
     +b.donate
       +b.donate-container
@@ -57,44 +47,21 @@ html
     +b.IMG.background-enhanced#js-bg-image
     +b.CANVAS.blur#js-blur
     +b.container
-      +b.logo 
-      +b.H1.headline.text_shadow
-        if normal
-          | Nice one! You switched
-          +b.SPAN.highlight.js-domain facebook.com
-          | off
-          +b.P.text_paragraph.text_shadow
-            | Tip: hit
-            +b.SPAN.key Alt
-            | +
-            +b.SPAN.key &darr;
-            | on Windows or
-            +b.SPAN.key &#8997
-            | +
-            +b.SPAN.key &darr;
-            | on Mac to switch off easily
-        else if compulsive
-          | You left
-          +b.SPAN.highlight.js-domain facebook.com
-          |  less than 
-          +b.SPAN.highlight.js-time 5 minutes
-          |  ago
-        else if bydefault
-          +b.SPAN#js-headline
-            +b.SPAN.highlight.js-domain facebook.com
-            | is off
-          //- +b.P.text_paragraph.text_shadow#js-tip
-          //-   | Go to Options 
-          //-   |   (
-          //-   +b.settings.cog-small#js-settings2
-          //-   | ) to remove 
-          //-   +b.SPAN.js-domain this site
-          //-   |  from your Nudge sites or change off by default
-          +b.P.text_paragraph.text_shadow#js-stats
+      +b.logo-time-container
+        +b.logo
+        +b.H1.h1#js-time
+      +b.goal
+        +b.P.text_paragraph.text_shadow(style="opacity:0")#js-today-label Today:
+        +b.horizontal(style="justify-content: flex-start; align-items: center")
+          +b.INPUT.h2(spellcheck="false" placeholder="What do you want to do today?" size="1").highlight#js-goal
+          .form-checkbox(style="display:none")#js-checkbox
+            input#goal-check(type="checkbox")
+            label(for="goal-check")
       +b.slider
         +b.button
           +b.button-centre
-        +b.slider-text Drag slider to switch on
+        +b.slider-text#js-stats Drag slider to switch on
+    +b#js-width-test.highlight.h2(style="width: auto; position:absolute; visibility:hidden; white-space: pre; height: 0; margin: 50; padding: 0; bottom:50px; left: 0")
     script(src="../../js/vendor/moment.min.js")
     script(src="../../config.js")
     script(src="../../js/helpers.js")

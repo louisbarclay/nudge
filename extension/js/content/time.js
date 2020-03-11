@@ -11,6 +11,21 @@ if (config.fastTimer) {
   minLevelMultiple = 1
 }
 
+// For preview mode
+function manualTimeControl() {
+  var totalSeconds = 0
+  document.onkeyup = function(key) {
+    if (key.altKey && key.keyCode == 39) {
+      totalSeconds = totalSeconds + 300
+      cornerInit(totalSeconds, false, "twitter.com")
+    }
+  }
+}
+
+if (config.previewMode) {
+  manualTimeControl()
+}
+
 function cornerInit(totalSeconds, totalVisits, domain) {
   // First the container must exist. This is handled by insertCorner
   // All this does is adds class 'nudge-container-reveal' to container,

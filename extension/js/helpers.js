@@ -17,6 +17,66 @@ function getUrl(path) {
   return chrome.extension.getURL(path)
 }
 
+function checkSnoozeAndSchedule(settings) {
+  if (
+    settings.snooze &&
+    "all" in settings.snooze &&
+    settings.snooze.all > +Date.now()
+  ) {
+    return true
+  }
+  if (settings.schedule) {
+    let nudgeTime = true
+    let nudgeDay = true
+    let nowTime = Date()
+    if (!settings.schedule.includes(nowTime.substring(0, 3))) {
+      nudgeDay = false
+    }
+    let startTime = new Date()
+    startTime.setHours(
+      settings.schedule.substring(0, 2),
+      settings.schedule.substring(3, 5),
+      0
+    )
+    let endTime = new Date()
+    endTime.setHours(
+      settings.schedule.substring(5, 7),
+      settings.schedule.substring(8, 10),
+      0
+    )
+    if (settings.schedule.substring(5, 10) === "00:00") {
+      endTime.setHours(23, 59, 59)
+    }
+    if (startTime < endTime) {
+      if (
+        !(
+          Date.parse(nowTime) > Date.parse(startTime) &&
+          Date.parse(nowTime) < Date.parse(endTime)
+        )
+      ) {
+        // Don't Nudge
+        nudgeTime = false
+      }
+    } else {
+      if (
+        !(
+          Date.parse(nowTime) > Date.parse(startTime) ||
+          Date.parse(nowTime) < Date.parse(endTime)
+        )
+      ) {
+        // Don't Nudge
+        nudgeTime = false
+      }
+    }
+    if (!(nudgeTime && nudgeDay)) {
+      return true
+    }
+  } else {
+    return false
+  }
+  return false
+}
+
 ;(function(funcName, baseObj) {
   // The public function name defaults to window.docReady
   // but you can pass in your own object and own function name and those will be used

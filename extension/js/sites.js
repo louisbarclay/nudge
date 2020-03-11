@@ -134,7 +134,7 @@ function recommendationTagHandler(li, domain, domains) {
 
 function loadFavicon(id, domain) {
   function updateFavicon() {
-    var bgStyle = `{ background-image: url("http://www.google.com/s2/favicons?domain=${domain}"); }`
+    var bgStyle = `{ background-image: url("https://www.google.com/s2/favicons?domain=${domain}"); }`
     styleAdder("#" + id + ":before", bgStyle)
   }
   updateFavicon()
