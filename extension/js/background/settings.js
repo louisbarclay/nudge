@@ -145,18 +145,33 @@ function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
       amplitude.getInstance().identify(identify)
     }
 
-    // Send the event
-    eventLog("changeSetting", {
-      newVal: typeof newVal === "object" ? JSON.stringify(newVal) : newVal,
-      previousVal:
-        typeof previousVal === "object"
-          ? JSON.stringify(previousVal)
-          : previousVal,
-      setting,
-      domain,
-      domainSetting,
-      info
-    })
+    // Send the event unless it's a daily goal
+    if (setting !== "daily_goal") {
+      eventLog("changeSetting", {
+        newVal: typeof newVal === "object" ? JSON.stringify(newVal) : newVal,
+        previousVal:
+          typeof previousVal === "object"
+            ? JSON.stringify(previousVal)
+            : previousVal,
+        setting,
+        domain,
+        domainSetting,
+        info
+      })
+    } else {
+      // For daily goal, only send it once a day
+      var today = moment().format("YYYY-MM-DD")
+      if (!previousVal || previousVal.substring(0, 10) !== today) {
+        eventLog("changeSetting", {
+          newVal: "someDailyGoal",
+          previousVal: "somePreviousDailyGoal",
+          setting,
+          domain,
+          domainSetting,
+          info
+        })
+      }
+    }
   } catch (e) {
     log(e)
   }
