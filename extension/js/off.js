@@ -229,6 +229,7 @@ function getLocalStorage() {
     var diff = moment()
       .startOf("day")
       .diff(moment("2018-01-01T19:05:57.810Z").startOf("day"), "days")
+    // Tweak index here to choose a different background
     var index = diff % bgImages.length
     setBackground(background, `${dir_small}${getBackgroundFile(index)}`)
     backgroundLoader(index)
@@ -485,16 +486,18 @@ function backgroundLoader(index) {
   img.src = getUrl(`${dir}${getBackgroundFile(index)}`)
 }
 
-var backgroundNumber = 0
-
 // Keyboard shortcut to cycle through background images
 // function cycleThroughBackgrounds() {
 //   document.onkeyup = function(key) {
 //     if (key.altKey && key.keyCode == 39) {
-//       backgroundLoader(backgroundNumber)
 //       backgroundNumber++
+//       setBackground(
+//         background,
+//         `${dir_small}${getBackgroundFile(backgroundNumber)}`
+//       )
+//       backgroundLoader(backgroundNumber)
 //     }
 //   }
 // }
 
-// cycleThroughBackgrounds();
+// cycleThroughBackgrounds()
