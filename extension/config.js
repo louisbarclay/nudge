@@ -4,7 +4,8 @@ var config = {
   resetDivSettings: false,
   fastTimer: false,
   timelineTest: false,
-  dev: false
+  dev: false,
+  previewMode: false
 }
 
 // Dev config variables
@@ -14,6 +15,7 @@ if (!chrome.runtime.getManifest().update_url) {
   config.debug = true
   config.offByDefault = true
   config.resetDivSettings = false
-  config.fastTimer = false
+  config.fastTimer = true
   config.timelineTest = false
+  config.previewMode = false
 }

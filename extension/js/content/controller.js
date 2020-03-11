@@ -74,7 +74,10 @@ function execSettings(settings) {
         request.type === "live_update" &&
         extractDomain(window.location.href).includes(request.domain)
       ) {
-        cornerInit(request.total, request.visits, request.domain)
+        // If in preview mode,
+        if (!config.previewMode) {
+          cornerInit(request.total, request.visits, request.domain)
+        }
       }
     })
   }
