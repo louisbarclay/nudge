@@ -88,7 +88,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
       moment()
     )
     if (details.previousVersion !== thisVersion || config.dev) {
-      showUpdateArticle = true
+      // showUpdateArticle = true
     }
   }
 })
