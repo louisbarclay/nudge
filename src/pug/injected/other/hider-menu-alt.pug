@@ -1,0 +1,17 @@
+include ../../../bemto/bemto.pug
+- 
+  set_bemto_settings({
+    prefix: {
+      '': 'hider-menu-',
+    }
+  })
+
++b.container
+  +b.content
+    +b.dropdown
+      +b.dropdown-content(style="display:none")
+        +b.logo
+        +b.link#bb-show-once Show once
+        +b.link#bb-show-always Show always
+  +b.button-container
+    +b.A.button(target="_blank") Become Co-CEO of Nudge
