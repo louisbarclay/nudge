@@ -1,0 +1,114 @@
+@import '../shared/variables'
+@import '../shared/abstracts'
+@import '../shared/animations'
+
+$prefix: hider-menu-
+
+.#{$prefix}
+  &container
+    @extend %reset
+    @extend %typography
+    width: 100%
+    position: static
+    margin-top: 5px
+    flex-direction: column
+    top: 0
+    display: flex
+    font-family: initial
+    justify-content: center
+    transform: translateZ(0)
+
+  &dropdown
+    margin: 0
+    overflow: visible
+    top: 0
+    width: 100%
+    z-index: 3
+    +border($style: none)
+    visibility: visible
+    font-size: 12px
+
+  &dropdown-content
+    +border($style: none)
+    border-radius: 30px
+    width: 90px
+    margin-left: auto
+    margin-right: auto
+    height: 80px
+    opacity: 0
+    visibility: hidden
+    background: $white
+    overflow: visible
+    transition: opacity 0.3s
+    padding-bottom: 1.5em
+    flex-direction: column
+    align-items: center
+    justify-content: space-between
+    >div
+      margin-right: 0.5em
+      margin-left: 0.5em
+
+  &button-container
+    width: 100%
+    display: flex
+    justify-content: center
+    a
+      color: $white
+      &:hover
+        color: $white
+
+  &button
+    background: $nudge-blue
+    display: flex
+    cursor: pointer
+    letter-spacing: 0.02em
+    animation: fade-in 0.3s
+    font-size: 13px
+    pointer-events: auto
+    visibility: visible
+    color: $white
+    +border($style: none)
+    padding: 0.2em 0.4em 0.2em 0.4em
+    width: auto
+    margin-top: 0.5em
+    &:hover
+      background: darken($nudge-blue,5%)
+
+  &content
+    visibility: visible
+    transition: all 1s
+    z-index: 18
+    top: 0
+    margin: 0
+    opacity: 1
+    pointer-events: auto
+    +size(40px)
+    transform: translateZ(0)
+    width: auto
+    transition: top 0.3s
+    animation: fade-in 0.3s
+    background: url('chrome-extension://__MSG_@@extension_id__/img/icon/newcirclewhite.svg') center 0px/40px no-repeat
+    &:hover
+      top: 5px
+      .#{$prefix}dropdown-content
+        opacity: 1
+        visibility: visible
+        display: flex
+      + .#{$prefix}button-container
+        display: none
+
+  &link
+    cursor: pointer
+    user-select: none
+    color: $nudge-grey-light
+    &:hover
+      color: $nudge-pink
+
+  &logo
+    margin-top: 0
+    transform: translateZ(0)
+    width: 40px
+    height: 40px
+    background:
+      image: url('chrome-extension://__MSG_@@extension_id__/img/icon/newcirclewhite.svg')
+      size: 40px
