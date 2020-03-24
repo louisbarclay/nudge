@@ -8,7 +8,6 @@ var profilesLoaded = false
 var fb_dtsg = ""
 var user_id = ""
 var currentlyUnfollowing = false
-var domain = "facebook.com"
 var retryUnfollowCount = 0
 
 // Get settings
@@ -48,12 +47,7 @@ function getFacebookCreds(callback) {
 
 // Execute after receiving settings from Chrome sync storage
 function execSettings(settings) {
-  // Manually set domain
-  domain = "facebook.com"
   // No longer checking if facebook.com is off
-  // if (!settings.domains[domain] || !settings.domains[domain].nudge) {
-  //   return
-  // }
 
   // Check for snooze
   let dontNudge = checkSnoozeAndSchedule(settings)
@@ -64,10 +58,8 @@ function execSettings(settings) {
 
   // Some Facebook-specific nudges
   // If user wants Facebook bar grey, set grey
-  if (domain) {
-    if (settings.fb_grey) {
-      addCSS("nudge-facebook-grey", "css/injected/grey.css")
-    }
+  if (settings.fb_grey) {
+    addCSS("nudge-facebook-grey", "css/injected/grey.css")
     // If user wants Facebook notifications hidden, hide them
     if (settings.fb_hide_notifications) {
       addCSS("nudge-facebook-notifications", "css/injected/notifications.css")
@@ -87,12 +79,12 @@ function execSettings(settings) {
   // Only show the Nudge dialog box if user has this setting true
   if (settings.fb_auto_unfollow) {
     // Cover the pagelet_composer element with a white pseudo-element
-    doAtEarliest(function() {
+    onDocHeadExists(function() {
       addCSS("nudge-facebook-dialog", "css/injected/facebook.css")
     })
     // Function to load HTML and configure UX into Nudge dialog box
     function loadUx(uxUrl, uxFunc) {
-      doAtEarliest(function() {
+      onDocHeadExists(function() {
         pageletInit(function(element) {
           if (!document.getElementById("nudge-dialog")) {
             docReady(function() {
