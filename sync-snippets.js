@@ -11,8 +11,8 @@ const snippetsArray = [
   "extension/html/injected/facebook/share_bottom.html",
   "extension/html/injected/facebook/share.html",
   "extension/html/injected/facebook/more_content.html",
-  "extension/html/injected/other/circle.html",
-  "extension/html/injected/other/circle_alt.html",
+  "extension/html/injected/other/hider-menu.html",
+  "extension/html/injected/other/hider-menu-alt.html",
   "extension/html/injected/nudge/corner.html",
   "extension/html/injected/nudge/scroll.html",
   "extension/html/pages/welcome.html"
