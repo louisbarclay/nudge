@@ -122,7 +122,7 @@ var defaultSettings = {
   bg_image: false,
   snooze: { all: 0 },
   get_stickier: false,
-  unhidden_divs: {},
+  unhidden_divs: [],
   paid: false,
   schedule: false,
   daily_goal: false,
