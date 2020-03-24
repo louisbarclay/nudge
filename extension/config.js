@@ -15,7 +15,7 @@ if (!chrome.runtime.getManifest().update_url) {
   config.debug = true
   config.offByDefault = true
   config.resetDivSettings = false
-  config.fastTimer = true
+  config.fastTimer = false
   config.timelineTest = false
   config.previewMode = false
 }
