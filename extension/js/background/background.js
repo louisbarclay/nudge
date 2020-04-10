@@ -80,6 +80,11 @@ async function loadSettingsAndAmplitude() {
       logInstall = false
     }
 
+    // Temporary migration for unhidden_divs to become an array
+    if (!Array.isArray(settingsLocal.unhidden_divs)) {
+      changeSetting([], "unhidden_divs")
+    }
+
     if (settingsLocal.off_by_default) {
       // Set all domains off by default
       toggleOffByDefault(settingsLocal.off_by_default)

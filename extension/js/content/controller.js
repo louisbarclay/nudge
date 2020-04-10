@@ -20,36 +20,44 @@ function execSettings(settings) {
 
   // Init div hider
   if (settings.div_hider && isNudgeDomain(domain)) {
-    var extractedDomain = extractDomain(url)
-    settings.whitelist.forEach(function(whitelistDomain) {
-      // log(whitelistDomain)
-      if (
-        extractedDomain &&
-        extractedDomain.includes(whitelistDomain.split("/")[0])
-      ) {
-        // log(whitelistDomain.split('/')[0]);
-        var match = true
-        for (var i = 0; i < whitelistDomain.split("*").length; i++) {
-          // log(url, whitelistDomain.split('*')[i])
-          if (!url.includes(whitelistDomain.split("*")[i])) {
-            match = false
-          }
-        }
-
-        if (match) {
-          // Whitelisted
-          extractedDomain = false
-        }
-      }
-    })
-    if (extractedDomain) {
-      // If we have a domain, pass that through. If not, pass through extractedDomain
-      divHider(settings, url, domain || extractedDomain)
+    // Choose paid or free menus
+    const menuPrefix = "hider-menu"
+    const menuFile = `${menuPrefix}.html`
+    if (
+      !settings.paid &&
+      (!settings.install_date ||
+        moment().diff(moment(settings.install_date), "days") > 7)
+    ) {
+      menuFile = `${menuPrefix}-alt.html`
     }
+    // Set menuHtmlString
+    const menuHtmlString = nudgeStorage[menuFile]
+    // Set menuClass
+    const menuClass = `${menuPrefix}-container`
+
+    hider(
+      {
+        log,
+        supportLink: getUrl("html/pages/support.html"),
+        hidees: hideesStore,
+        excludedHidees: settings.unhidden_divs,
+        menuHtmlString,
+        menuClass,
+        menuCss: "css/injected/hider-menu.css"
+      },
+      domain,
+      (hidee, domain) => {
+        eventLogSender("hide_show_once", { hidee, domain })
+      },
+      (hidee, domain) => {
+        changeSettingRequest(hidee.slug, "unhidden_divs_add")
+        eventLogSender("hide_show_always", { hidee, domain })
+      }
+    )
   }
 
   if (isNudgeDomain(domain)) {
-    doAtEarliest(function() {
+    onDocHeadExists(function() {
       addCSS("nudges", "css/injected/nudges.css")
       docReady(function() {
         if (settings.time_nudge) {

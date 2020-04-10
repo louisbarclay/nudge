@@ -13,7 +13,7 @@
   100% {
     background-position: 17% 0%; } }
 
-.circle-container * {
+.hider-menu-container * {
   border: 0 !important;
   bottom: initial !important;
   box-sizing: content-box !important;
@@ -28,7 +28,7 @@
   top: initial !important;
   vertical-align: baseline !important;
   display: initial !important; }
-  .circle-container * ::before, .circle-container * ::after {
+  .hider-menu-container * ::before, .hider-menu-container * ::after {
     border: 0 !important;
     bottom: initial !important;
     box-sizing: content-box !important;
@@ -44,17 +44,17 @@
     vertical-align: baseline !important;
     display: initial !important; }
 
-.circle-container * {
+.hider-menu-container * {
   font-family: 'Open Sans' !important;
   -webkit-font-smoothing: antialiased !important;
   text-rendering: optimizeLegibility !important;
   line-height: normal !important; }
 
-.circle-container a {
+.hider-menu-container a {
   cursor: pointer !important;
   text-decoration: none !important;
   color: initial !important; }
-  .circle-container a:hover {
+  .hider-menu-container a:hover {
     color: #ff61a7 !important; }
 
 @keyframes pulse-shadow {
@@ -103,7 +103,7 @@
   to {
     opacity: 0; } }
 
-.circle-container {
+.hider-menu-container {
   width: 100% !important;
   position: static !important;
   margin-top: 5px !important;
@@ -114,7 +114,7 @@
   justify-content: center !important;
   transform: translateZ(0) !important; }
 
-.circle-dropdown {
+.hider-menu-dropdown {
   margin: 0 !important;
   overflow: visible !important;
   top: 0 !important;
@@ -125,8 +125,7 @@
   visibility: visible !important;
   font-size: 12px !important; }
 
-.circle-dropdown-content {
-  display: none !important;
+.hider-menu-dropdown-content {
   border: 1px none #bdbdbd !important;
   border-radius: 4px !important;
   border-radius: 30px !important;
@@ -143,20 +142,20 @@
   flex-direction: column !important;
   align-items: center !important;
   justify-content: space-between !important; }
-  .circle-dropdown-content > div {
+  .hider-menu-dropdown-content > div {
     margin-right: 0.5em !important;
     margin-left: 0.5em !important; }
 
-.circle-button-container {
+.hider-menu-button-container {
   width: 100% !important;
   display: flex !important;
   justify-content: center !important; }
-  .circle-button-container a {
+  .hider-menu-button-container a {
     color: #ffffff !important; }
-    .circle-button-container a:hover {
+    .hider-menu-button-container a:hover {
       color: #ffffff !important; }
 
-.circle-button {
+.hider-menu-button {
   background: #61a7ff !important;
   display: flex !important;
   cursor: pointer !important;
@@ -171,10 +170,10 @@
   padding: 0.2em 0.4em 0.2em 0.4em !important;
   width: auto !important;
   margin-top: 0.5em !important; }
-  .circle-button:hover {
+  .hider-menu-button:hover {
     background: #4899ff !important; }
 
-.circle-content {
+.hider-menu-content {
   visibility: visible !important;
   transition: all 1s !important;
   z-index: 18 !important;
@@ -189,58 +188,23 @@
   transition: top 0.3s !important;
   animation: fade-in 0.3s;
   background: url("chrome-extension://__MSG_@@extension_id__/img/icon/newcirclewhite.svg") center 0px/40px no-repeat !important; }
-  .circle-content:hover {
+  .hider-menu-content:hover {
     top: 5px !important; }
-    .circle-content:hover .circle-dropdown-content {
+    .hider-menu-content:hover .hider-menu-dropdown-content {
       opacity: 1 !important;
       visibility: visible !important;
       display: flex !important; }
-    .circle-content:hover + .circle-button-container {
+    .hider-menu-content:hover + .hider-menu-button-container {
       display: none !important; }
 
-.circle-text {
-  color: #6d6d6d !important;
-  font-size: 13px !important;
-  user-select: none !important;
-  line-height: 1.3em !important;
-  margin-top: 1em !important;
-  margin-bottom: 0.4em !important; }
-
-.circle-share {
-  cursor: pointer !important;
-  margin-top: 0.2em !important;
-  opacity: 0.5 !important;
-  filter: grayscale(0.5) !important;
-  line-height: 18px !important;
-  width: auto !important; }
-  .circle-share:hover {
-    filter: grayscale(0) !important;
-    opacity: 1 !important; }
-
-.circle-show-once {
+.hider-menu-link {
   cursor: pointer !important;
   user-select: none !important;
   color: #bdbdbd !important; }
-  .circle-show-once:hover {
+  .hider-menu-link:hover {
     color: #ff61a7 !important; }
 
-.circle-show-always {
-  cursor: pointer !important;
-  user-select: none !important;
-  color: #bdbdbd !important; }
-  .circle-show-always:hover {
-    color: #ff61a7 !important; }
-
-.circle-reset-settings {
-  text-transform: uppercase !important;
-  margin-top: 2px !important;
-  font-size: 9px !important;
-  cursor: pointer !important;
-  color: #bdbdbd !important; }
-  .circle-reset-settings:hover {
-    color: #ff61a7 !important; }
-
-.circle-logo {
+.hider-menu-logo {
   margin-top: 0 !important;
   transform: translateZ(0) !important;
   width: 40px !important;

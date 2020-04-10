@@ -20,33 +20,9 @@ function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
   try {
     // If you are altering a specific domain's setting
     if (setting === "unhidden_divs_add") {
-      if (domain in settingsLocal.unhidden_divs) {
-        var foundDiv = false
-        // If the div is already unhidden, don't do it again
-        settingsLocal.unhidden_divs[domain].forEach(function(div) {
-          if (isEquivalent(div, newVal)) {
-            foundDiv = true
-          }
-        })
-        if (!foundDiv) {
-          settingsLocal.unhidden_divs[domain].push(newVal)
-          identify.set(
-            `unhidden_divs.${domain}`,
-            settingsLocal.unhidden_divs[domain]
-          )
-          info = "domain previously unhidden, div not unhidden"
-        } else {
-          info = "domain previously unhidden, div already unhidden"
-        }
-      } else {
-        settingsLocal.unhidden_divs[domain] = [newVal]
-        identify.set(
-          `unhidden_divs.${domain}`,
-          settingsLocal.unhidden_divs[domain]
-        )
-        info = "domain never unhidden"
+      if (!settingsLocal.unhidden_divs.includes(newVal)) {
+        settingsLocal.unhidden_divs.push(newVal)
       }
-      // Stuff related to tweaking a certain domain setting
     } else if (domain && domainSetting) {
       // Add
       if (domainSetting === "add") {

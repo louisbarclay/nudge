@@ -172,32 +172,6 @@ function isUndefined(x) {
   }
 }
 
-function isEquivalent(a, b) {
-  // Create arrays of property names
-  var aProps = Object.getOwnPropertyNames(a)
-  var bProps = Object.getOwnPropertyNames(b)
-
-  // If number of properties is different,
-  // objects are not equivalent
-  if (aProps.length != bProps.length) {
-    return false
-  }
-
-  for (var i = 0; i < aProps.length; i++) {
-    var propName = aProps[i]
-
-    // If values of same property are not equal,
-    // objects are not equivalent
-    if (a[propName] !== b[propName]) {
-      return false
-    }
-  }
-
-  // If we made it this far, objects
-  // are considered equivalent
-  return true
-}
-
 function popupCenter(url, title, w, h) {
   var dualScreenLeft =
     window.screenLeft != undefined ? window.screenLeft : screen.left
@@ -236,34 +210,6 @@ function popupCenter(url, title, w, h) {
   }
 }
 
-function sendHTMLRequest(url, callback, errorFunction) {
-  var request = new XMLHttpRequest()
-  request.open("GET", url, true)
-
-  request.onload = function() {
-    if (request.status >= 200 && request.status < 400) {
-      // Success!
-      var response = request.responseText
-      callback(url, response)
-    } else {
-      // We reached our target server, but it returned an error
-    }
-  }
-
-  request.onerror = function() {
-    // log("Error in HTML request");
-    if (errorFunction) {
-      errorFunction
-    }
-  }
-
-  request.send()
-}
-
-function append(parent, newChild) {
-  parent.appendChild(newChild)
-}
-
 function addCSS(cssId, nudgeUrl) {
   if (!document.getElementById(cssId)) {
     var head = document.getElementsByTagName("head")[0]
@@ -274,22 +220,6 @@ function addCSS(cssId, nudgeUrl) {
     link.href = chrome.extension.getURL(nudgeUrl)
     link.media = "all"
     head.appendChild(link)
-  }
-}
-
-function addScript(scriptId, nudgeUrl, dataObj) {
-  if (!document.getElementById(scriptId)) {
-    var head = document.getElementsByTagName("head")[0]
-    var script = document.createElement("script")
-    script.id = scriptId
-    script.type = "text/javascript"
-    script.src = chrome.extension.getURL(nudgeUrl)
-    if (dataObj) {
-      Object.keys(dataObj).forEach(function(key) {
-        script.dataset[key] = dataObj[key]
-      })
-    }
-    head.appendChild(script)
   }
 }
 
@@ -304,14 +234,6 @@ function getUserId() {
   }
   // E.g. db18458e2782b2b77e36769c569e263a53885a9944dd0a861e5064eac16f1a
   return hex
-}
-
-// Checks if object is empty
-function isEmpty(obj) {
-  for (var key in obj) {
-    if (obj.hasOwnProperty(key)) return false
-  }
-  return true
 }
 
 function createEl(parent, type, name) {
@@ -448,33 +370,7 @@ function toggleClass(el, className) {
   }
 }
 
-// Fade out
-function fadeOut(el) {
-  el.style.opacity = 1
-  ;(function fade() {
-    if ((el.style.opacity -= 0.1) < 0) {
-      el.style.display = "none"
-    } else {
-      requestAnimationFrame(fade)
-    }
-  })()
-}
-
-// Fade in
-
-function fadeIn(el, display) {
-  el.style.opacity = 0
-  el.style.display = display || "block"
-  ;(function fade() {
-    var val = parseFloat(el.style.opacity)
-    if (!((val += 0.1) > 1)) {
-      el.style.opacity = val
-      requestAnimationFrame(fade)
-    }
-  })()
-}
-
-function doAtEarliest(callback) {
+function onDocHeadExists(callback) {
   document.addEventListener("DOMSubtreeModified", runCallback, false)
   function runCallback() {
     if (document.head) {
@@ -496,25 +392,6 @@ function switchOffRequest(domain) {
 function el(id) {
   var element = document.getElementById(id)
   return element
-}
-
-// Helper function for chaining
-function classList(element) {
-  var list = element.classList
-  return {
-    toggle: function(c) {
-      list.toggle(c)
-      return this
-    },
-    add: function(c) {
-      list.add(c)
-      return this
-    },
-    remove: function(c) {
-      list.remove(c)
-      return this
-    }
-  }
 }
 
 function appendHtml(parent, childString, callback) {
@@ -761,12 +638,4 @@ function imgSrcToDataURL(src, callback, outputFormat) {
       "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
     img.src = src
   }
-}
-
-function printAllTabs() {
-  chrome.tabs.query({}, function(tabs) {
-    for (var i = 0; i < tabs.length; i++) {
-      log(tabs[i])
-    }
-  })
 }
