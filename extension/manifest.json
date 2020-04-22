@@ -80,7 +80,7 @@
         "*://facebook.com/*",
         "*://web.facebook.com/*"
       ],
-      "js": ["js/facebook/facebook.js"],
+      "js": ["js/facebook/unfollower.js"],
       "run_at": "document_start"
     }
   ]

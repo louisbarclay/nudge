@@ -137,11 +137,9 @@
   width: 90% !important;
   height: 135px !important;
   position: absolute !important;
-  opacity: 0 !important;
   top: 0 !important;
   margin-top: 12px !important;
   z-index: 1 !important;
-  animation: fade-in 2s forwards;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;

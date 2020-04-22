@@ -1,6 +1,6 @@
 // Log
 if (config.debug) var log = console.log.bind(window.console)
-else var log = function() {}
+else var log = function () {}
 
 // Extract core domain from URL you want to check
 function extractDomain(url) {
@@ -11,6 +11,15 @@ function extractDomain(url) {
   } else {
     return "empty.url/empty"
   }
+}
+
+// Load syncStorage
+const loadSyncStorage = async () => {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get(null, function (storage) {
+      resolve(storage)
+    })
+  })
 }
 
 function getUrl(path) {
@@ -77,7 +86,7 @@ function checkSnoozeAndSchedule(settings) {
   return false
 }
 
-;(function(funcName, baseObj) {
+;(function (funcName, baseObj) {
   // The public function name defaults to window.docReady
   // but you can pass in your own object and own function name and those will be used
   // if you want to put them in a different namespace
@@ -117,14 +126,14 @@ function checkSnoozeAndSchedule(settings) {
   // docReady(fn, context);
   // the context argument is optional - if present, it will be passed
   // as an argument to the callback
-  baseObj[funcName] = function(callback, context) {
+  baseObj[funcName] = function (callback, context) {
     if (typeof callback !== "function") {
       throw new TypeError("callback for docReady(fn) must be a function")
     }
     // if ready has already fired, then just schedule the callback
     // to fire asynchronously, but right away
     if (readyFired) {
-      setTimeout(function() {
+      setTimeout(function () {
         callback(context)
       }, 1)
       return
@@ -345,7 +354,7 @@ function eventLogSender(eventType, detailsObj, time) {
     type: "event",
     eventType,
     detailsObj,
-    time: time ? time : null
+    time: time ? time : null,
   })
 }
 
@@ -409,36 +418,6 @@ function randomTime(floor, variance) {
   return Math.floor(ms * (floor + Math.random() * variance))
 }
 
-// optimise mutationObserver https://stackoverflow.com/questions/31659567/performance-of-mutationobserver-to-detect-nodes-in-entire-dom
-// especially the point about using getElementById
-
-function fbTokenReady(name, callback) {
-  var found = false
-
-  var observer = new MutationObserver(function(mutations) {
-    mutations.forEach(function(mutation) {
-      for (var i = 0; i < mutation.addedNodes.length; i++) {
-        var node = document.getElementsByName(name)
-        node = node[0]
-        if (!found && notUndefined(node)) {
-          found = true
-          observer.disconnect()
-          if (callback) {
-            callback(node)
-          }
-        }
-      }
-    })
-  })
-
-  observer.observe(document, {
-    childList: true,
-    subtree: true,
-    attributes: false,
-    characterData: false
-  })
-}
-
 // Check if in domains setting
 function domainCheck(url, settings) {
   var domainToCheck = extractDomain(url)
@@ -457,7 +436,7 @@ function domainCheck(url, settings) {
   }
 
   // Check against Nudge domains
-  Object.keys(settings.domains).forEach(function(nudgeDomain) {
+  Object.keys(settings.domains).forEach(function (nudgeDomain) {
     if (
       domainToCheck.includes(nudgeDomain) &&
       settings.domains[nudgeDomain].nudge
@@ -469,7 +448,7 @@ function domainCheck(url, settings) {
   })
 
   // Check against the whitelist
-  settings.whitelist.forEach(function(whitelistDomain) {
+  settings.whitelist.forEach(function (whitelistDomain) {
     // log(whitelistDomain)
     if (domainToCheck.includes(whitelistDomain.split("/")[0])) {
       // log(whitelistDomain.split('/')[0]);
@@ -524,10 +503,10 @@ function domainCheck(url, settings) {
 // leading edge, instead of the trailing.
 function debounce(func, wait, immediate) {
   var timeout
-  return function() {
+  return function () {
     var context = this,
       args = arguments
-    var later = function() {
+    var later = function () {
       timeout = null
       if (!immediate) func.apply(context, args)
     }
@@ -541,7 +520,7 @@ function debounce(func, wait, immediate) {
 const throttle = (func, limit) => {
   let lastFunc
   let lastRan
-  return function() {
+  return function () {
     const context = this
     const args = arguments
     if (!lastRan) {
@@ -549,7 +528,7 @@ const throttle = (func, limit) => {
       lastRan = Date.now()
     } else {
       clearTimeout(lastFunc)
-      lastFunc = setTimeout(function() {
+      lastFunc = setTimeout(function () {
         if (Date.now() - lastRan >= limit) {
           func.apply(context, args)
           lastRan = Date.now()
@@ -576,7 +555,7 @@ function click(x, y) {
     bubbles: true,
     cancelable: true,
     screenX: x,
-    screenY: y
+    screenY: y,
   })
 
   var el = document.elementFromPoint(x, y)
@@ -585,15 +564,15 @@ function click(x, y) {
 }
 
 function getSettings(callback) {
-  chrome.runtime.sendMessage({ type: "settings" }, function(response) {
+  chrome.runtime.sendMessage({ type: "settings" }, function (response) {
     callback(response.settings)
   })
 }
 
 // New version of getSettings
 async function loadSettings() {
-  return new Promise(resolve => {
-    chrome.runtime.sendMessage({ type: "settings" }, function(response) {
+  return new Promise((resolve) => {
+    chrome.runtime.sendMessage({ type: "settings" }, function (response) {
       resolve(response.settings)
     })
   })
@@ -610,7 +589,7 @@ function changeSettingRequest(newVal, setting, domain, domainSetting) {
     newVal,
     setting,
     domain,
-    domainSetting
+    domainSetting,
   })
 }
 
@@ -622,7 +601,7 @@ const objectWithoutKey = (object, key) => {
 function imgSrcToDataURL(src, callback, outputFormat) {
   var img = new Image()
   img.crossOrigin = "Anonymous"
-  img.onload = function() {
+  img.onload = function () {
     var canvas = document.createElement("CANVAS")
     var ctx = canvas.getContext("2d")
     var dataURL
