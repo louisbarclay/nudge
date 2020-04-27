@@ -10,19 +10,19 @@ async function initialise() {
   const storage = await loadSyncStorage()
 
   if (!storage || !storage.settings || !storage.settings.userId) {
-    log("Startup: no user ID")
+    // log("Startup: no user ID")
     await setSyncStorage({ settings: createSettings() })
-    loadSettingsAndAmplitude()
+    loadSettingsAndAmplitude("newUser")
   } else {
-    log("Startup: user ID in syncstorage.settings")
+    // log("Startup: user ID in syncstorage.settings")
     // If items.settings and userId does exist, there is stuff there we need to grab
     // This will also add any new settings in
-    loadSettingsAndAmplitude()
+    loadSettingsAndAmplitude("existingUser")
   }
 }
 
 // Get settings from sync to settingsLocal, and run options page if asked for
-async function loadSettingsAndAmplitude() {
+async function loadSettingsAndAmplitude(userType) {
   // Get settings
   const settings = await loadSettings()
   // Update local settings
@@ -35,6 +35,7 @@ async function loadSettingsAndAmplitude() {
     amplitude.getInstance().setUserId(settingsLocal.userId)
   }
 
+  // Migrate settings
   if (!settings.settings_version || settings.settings_version !== 2) {
     settingsLocal = migrateSettings(settings)
     await setSyncStorage({ settings: settingsLocal })
@@ -53,6 +54,11 @@ async function loadSettingsAndAmplitude() {
     amplitude.getInstance().logEvent("startup", {
       share_data: settingsLocal.share_data,
       dev: config.dev,
+      userType,
+      settings:
+        userType === "existingUser"
+          ? JSON.stringify(settings)
+          : "defaultSettings",
     })
     // Always sync all settings on startup, just to make sure they're in sync
     var identify = new amplitude.Identify()
@@ -63,6 +69,7 @@ async function loadSettingsAndAmplitude() {
     amplitudeHttpEvent("startup", {
       dev: config.dev,
       share_data: settingsLocal.share_data,
+      userType,
     })
   }
 }
