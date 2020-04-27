@@ -2,25 +2,22 @@ var settingsLocal = {}
 
 function runSites(settings) {
   settingsLocal = settings
-  populateDomains(settings.domains)
-  populateRecommendations(settings.domains)
-  populateWhitelist(settings.whitelist)
-}
-
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if (request.type === "send_settingsLocal") {
-    settingsLocal = request.settingsLocal
+  if (
+    Array.isArray(settings.nudge_domains) &&
+    Array.isArray(settings.whitelist_domains)
+  ) {
+    populateDomains(settings.nudge_domains)
+    populateRecommendations(settings.nudge_domains)
+    populateWhitelist(settings.whitelist_domains)
   }
-})
+}
 
 function populateDomains(domains) {
   var domainsExist = false
-  Object.keys(domains).forEach(function(key) {
-    if (domains[key].nudge) {
-      addTag(key, el("js-domainlist"), domainTagHandler)
-      if (!domainsExist) {
-        domainsExist = true
-      }
+  domains.forEach(function (key) {
+    addTag(key, el("js-domainlist"), domainTagHandler)
+    if (!domainsExist) {
+      domainsExist = true
     }
   })
   if (!domainsExist) {
@@ -30,25 +27,25 @@ function populateDomains(domains) {
 }
 
 function populateRecommendations(domains) {
-  topRecommendations.forEach(function(domain) {
+  topRecommendations.forEach(function (domain) {
     addTag(domain, el("js-toplist"), recommendationTagHandler, domains)
   })
-  socialRecommendations.forEach(function(domain) {
+  socialRecommendations.forEach(function (domain) {
     addTag(domain, el("js-sociallist"), recommendationTagHandler, domains)
   })
-  newsRecommendations.forEach(function(domain) {
+  newsRecommendations.forEach(function (domain) {
     addTag(domain, el("js-newslist"), recommendationTagHandler, domains)
   })
-  messagingRecommendations.forEach(function(domain) {
+  messagingRecommendations.forEach(function (domain) {
     addTag(domain, el("js-messaginglist"), recommendationTagHandler, domains)
   })
-  shoppingRecommendations.forEach(function(domain) {
+  shoppingRecommendations.forEach(function (domain) {
     addTag(domain, el("js-shoppinglist"), recommendationTagHandler, domains)
   })
 }
 
 function populateWhitelist(domains) {
-  domains.forEach(function(whitelistDomain) {
+  domains.forEach(function (whitelistDomain) {
     addTag(whitelistDomain, el("js-whitelist"), whitelistTagHandler, domains)
   })
 }
@@ -73,22 +70,24 @@ function addTag(domain, list, callback, domains) {
 
 // Handle domain tag if you click remove
 function domainTagHandler(li) {
-  li.onclick = function() {
-    var domain = li.getAttribute("domain")
+  li.onclick = function () {
+    const domain = li.getAttribute("domain")
     deleteEl(li)
-    changeSettingRequest(false, "domains", domain, "nudge")
+    removeDomainFromSettings(domain)
     domainRecSelectToggle(domain)
   }
 }
 
 // Handle domain tag if you click remove
 function whitelistTagHandler(li, domain) {
-  li.onclick = function() {
+  li.onclick = function () {
     deleteEl(li)
-    settingsLocal.whitelist = settingsLocal.whitelist.filter(function(value) {
-      return value !== domain
-    })
-    changeSettingRequest(settingsLocal.whitelist, "whitelist")
+    settingsLocal.whitelist_domains = settingsLocal.whitelist_domains.filter(
+      function (value) {
+        return value !== domain
+      }
+    )
+    changeSettingRequest(settingsLocal.whitelist_domains, "whitelist_domains")
   }
 }
 
@@ -99,8 +98,8 @@ function recommendationTagHandler(li, domain, domains) {
   li.appendChild(checkmark)
   // Check if it's in the list above
   var selectedSite = false
-  Object.keys(domains).forEach(function(key) {
-    if (key === domain && domains[domain].nudge) {
+  domains.forEach(function (nudgeDomain) {
+    if (nudgeDomain === domain) {
       selectedSite = true
     }
   })
@@ -109,22 +108,22 @@ function recommendationTagHandler(li, domain, domains) {
     toggleClass(li, "selected-tag")
   }
 
-  li.onclick = function() {
+  li.onclick = function () {
     if (li.className.includes("selected-tag")) {
-      el("js-domainlist").childNodes.forEach(function(li) {
+      el("js-domainlist").childNodes.forEach(function (li) {
         if (li.getAttribute("domain") === domain) {
           deleteEl(li)
         }
       })
-      changeSettingRequest(false, "domains", domain, "nudge")
+      removeDomainFromSettings(domain)
     } else {
-      if (domain in domains) {
-        changeSettingRequest(true, "domains", domain, "nudge")
-        addTag(domain, el("js-domainlist"), domainTagHandler)
-      } else {
+      if (!settingsLocal.nudge_domains.includes(domain)) {
+        // Don't do anything!
         // Add for the first time
-        changeSettingRequest(true, "domains", domain, "add")
         addTag(domain, el("js-domainlist"), domainTagHandler)
+        el("js-empty-state").style.display = "none"
+        el("js-domainlist").style.display = "block"
+        addDomainToSettings(domain)
       }
     }
     toggleClass(li, "selected-tag")
@@ -141,58 +140,40 @@ function loadFavicon(id, domain) {
 }
 
 // Adding a new domain
-el("js-add").addEventListener("keydown", function(event) {
+el("js-add").addEventListener("keydown", function (event) {
   if (event.key === "Enter") {
     var newDomainInput = el("js-add")
     var newDomain = el("js-add").value
     var domainList = el("js-domainlist")
 
-    var isInDomainList = false
-    var nudge = true
     // Check
-    if (domainTest.test(newDomain)) {
-      // Check isInDomainlist
-      Object.keys(settingsLocal.domains).forEach(function(key) {
-        if (newDomain == key) {
-          isInDomainList = true
-          nudge = settingsLocal.domains[key].nudge
-          newDomain = key
-        }
-      })
-      if (isInDomainList && nudge) {
-        var listElements = document.getElementsByTagName("li")
-        for (var i = 0; i < listElements.length; i++) {
-          if (listElements[i].innerHTML === newDomain) {
-            toggleClass(listElements[i], "tag-flash")
-            break
-          }
-        }
-        newDomainInput.value = ""
-      } else if (isInDomainList && !nudge) {
-        addTag(newDomain, domainList, domainTagHandler)
-        changeSettingRequest(true, "domains", newDomain, "nudge")
-        domainRecSelectToggle(newDomain)
-        newDomainInput.value = ""
-      } else if (!isInDomainList) {
-        addTag(newDomain, domainList, domainTagHandler)
-        changeSettingRequest(true, "domains", newDomain, "add")
-        domainRecSelectToggle(newDomain)
-        newDomainInput.value = ""
-      }
+    if (
+      domainTest.test(newDomain) &&
+      !settingsLocal.nudge_domains.includes(newDomain)
+    ) {
+      addTag(newDomain, domainList, domainTagHandler)
+      addDomainToSettings(newDomain)
+      domainRecSelectToggle(newDomain)
+      newDomainInput.value = ""
     }
+    log(settingsLocal.nudge_domains)
   }
 })
 
 // Adding a new domain
-el("js-whitelistadd").addEventListener("keydown", function(event) {
+el("js-whitelistadd").addEventListener("keydown", function (event) {
   if (event.key === "Enter") {
     var newDomain = el("js-whitelistadd").value
     if (whitelistTest.test(newDomain)) {
-      if (settingsLocal.whitelist.includes(newDomain)) {
+      if (settingsLocal.whitelist_domains.includes(newDomain)) {
+        log(`Already exists, didn't add`)
       } else {
         addTag(newDomain, el("js-whitelist"), whitelistTagHandler)
-        settingsLocal.whitelist.push(newDomain)
-        changeSettingRequest(settingsLocal.whitelist, "whitelist")
+        settingsLocal.whitelist_domains.push(newDomain)
+        changeSettingRequest(
+          settingsLocal.whitelist_domains,
+          "whitelist_domains"
+        )
         el("js-whitelistadd").value = ""
       }
     }
@@ -200,7 +181,7 @@ el("js-whitelistadd").addEventListener("keydown", function(event) {
 })
 
 let showHiddenSections = false
-el("js-whitelist-toggle").onclick = function() {
+el("js-whitelist-toggle").onclick = function () {
   toggleClass(el("js-whitelist-container"), "display-none")
 
   if (showHiddenSections) {
@@ -218,13 +199,28 @@ function domainRecSelectToggle(domain) {
     "sociallist",
     "newslist",
     "messaginglist",
-    "shoppinglist"
+    "shoppinglist",
   ]
-  lists.forEach(function(list) {
-    el(`js-${list}`).childNodes.forEach(function(node) {
+  lists.forEach(function (list) {
+    el(`js-${list}`).childNodes.forEach(function (node) {
       if (node.innerText === domain) {
         toggleClass(node, "selected-tag")
       }
     })
   })
+}
+
+// Utils
+function removeDomainFromSettings(domain) {
+  settingsLocal.nudge_domains = settingsLocal.nudge_domains.filter(
+    (nudgeDomain) => {
+      return nudgeDomain !== domain
+    }
+  )
+  changeSettingRequest(settingsLocal.nudge_domains, "nudge_domains")
+}
+
+function addDomainToSettings(domain) {
+  settingsLocal.nudge_domains.push(domain)
+  changeSettingRequest(settingsLocal.nudge_domains, "nudge_domains")
 }
