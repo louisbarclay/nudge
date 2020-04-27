@@ -87,7 +87,7 @@ function eventLogReceiver(request) {
 
 // Log event
 function eventLog(eventType, detailsObj) {
-  // Define date and time
+  // Define date and time as a string
   let time = moment().format()
   // Log the event to console
   consoleLogger(eventType, detailsObj, time)
@@ -105,12 +105,13 @@ function amplitudeLogger(eventType, detailsObj, time) {
 function amplitudeLoggerFilter(settings, eventType, detailsObj) {
   if (AMPLITUDE_LOG) {
     if (settings.share_data) {
-      // If it's a visit, and it's not a Nudge domain or off page, don't send
+      // If it's a visit, and it's not a Nudge domain, off page, or Nudge page, don't send
       if (
         eventType === "visit" &&
         detailsObj.domain &&
         !isNudgeDomain(detailsObj.domain) &&
-        !detailsObj.domain.includes(offPage)
+        !detailsObj.domain.includes(offPage) &&
+        !detailsObj.domain.includes(nudgePage)
       ) {
         return false
       }
