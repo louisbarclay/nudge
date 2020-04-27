@@ -8,7 +8,6 @@ chrome.runtime.setUninstallURL("https://goo.gl/forms/YqSuCKMQhP3PcFz13")
 
 async function initialise() {
   const storage = await loadSyncStorage()
-  log(storage)
 
   if (!storage || !storage.settings || !storage.settings.userId) {
     log("Startup: no user ID")
@@ -38,20 +37,14 @@ async function loadSettingsAndAmplitude() {
 
   if (!settings.settings_version || settings.settings_version !== 2) {
     settingsLocal = migrateSettings(settings)
+    await setSyncStorage({ settings: settingsLocal })
   }
-
-  await setSyncStorage({ settings: settingsLocal })
 
   // Log install event
   if (logInstall) {
     changeSetting(moment().format(), "install_date")
     amplitudeHttpEvent("install", { time: moment(), dev: config.dev })
     logInstall = false
-  }
-
-  if (settingsLocal.off_by_default) {
-    // Set all domains off by default
-    toggleOffByDefault(settingsLocal.off_by_default)
   }
 
   // Analytics
@@ -63,7 +56,7 @@ async function loadSettingsAndAmplitude() {
     })
     // Always sync all settings on startup, just to make sure they're in sync
     var identify = new amplitude.Identify()
-    flushSettingsToAmplitude(settingsLocal, identify)
+    sendAllSettingsToAmplitude(settingsLocal, identify)
     amplitude.getInstance().identify(identify)
   } else {
     // Amplitude HTTP request for non-share data people
