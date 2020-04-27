@@ -71,7 +71,7 @@ function onTabIdle(status, domain) {
 // Check whether new version is installed
 chrome.runtime.onInstalled.addListener(function (details) {
   if (details.reason == "install") {
-    eventLog("install", {}, moment())
+    eventLog("install", {})
     // Start onboarding on install
     chrome.tabs.create({
       url: getUrl("html/pages/start.html"),
@@ -79,14 +79,10 @@ chrome.runtime.onInstalled.addListener(function (details) {
     logInstall = true
   } else if (details.reason == "update") {
     var thisVersion = chrome.runtime.getManifest().version
-    eventLog(
-      "update",
-      {
-        previousVersion: details.previousVersion,
-        thisVersion,
-      },
-      moment()
-    )
+    eventLog("update", {
+      previousVersion: details.previousVersion,
+      thisVersion,
+    })
     if (details.previousVersion !== thisVersion || config.dev) {
       // Can configure showing an update article here, for instance
       chrome.tabs.create({
@@ -126,7 +122,7 @@ chrome.tabs.onRemoved.addListener(function onRemoved(tabId) {
             removeDomainFromOnDomains(settingsLocal, domain)
           }
           close("status", statusObj, "status close in check off")
-          eventLog("shutdown", { domain }, moment())
+          eventLog("shutdown", { domain })
         }
       })
     } else {
