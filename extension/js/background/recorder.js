@@ -13,13 +13,6 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
   // Open date
   var date = moment(endTime).format("YYYY-MM-DD")
   var dateObj = open(date)
-  // var prevAllDomainsTime = false
-  // if (
-  //   typeof dateObj.$allDomains !== "undefined" &&
-  //   "time" in dateObj.$allDomains
-  // ) {
-  //   prevAllDomainsTime = dateObj.$allDomains.time
-  // }
 
   // If startOfDay exists already, check it's for the right day
   if ("startOfDay" in statusObj) {
@@ -51,7 +44,7 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
 
   // Now we identify as a shutdown if domain is true, and not a $ domain, and if there are not any tabs of that kind when visit is closed off
   if (isNudgeDomain(domain)) {
-    chrome.tabs.query({}, function(tabs) {
+    chrome.tabs.query({}, function (tabs) {
       // log(tabs)
       if (tabsChecker(tabs, domain)) {
         // This is the main place that switching off after closing all tabs of a domain happens
@@ -60,75 +53,74 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
         dataAdder(statusObj, domain, endTime, "lastShutdown")
         shutdown = true
 
-        // Shutdown happened so turn off site if off by default is on
-        if (settingsLocal.off_by_default) {
-          changeSetting(true, "domains", domain, "off")
-        }
+        // Shutdown happened so remove domain from on domains if it's there
+        removeDomainFromOnDomains(settingsLocal, domain)
 
         // log(tabs)
         close("status", statusObj, "status close in check off")
         // Find out whether the domain has been nudged recently
       }
-      eventLog(
-        "visit",
-        {
-          domain,
-          offDomain: domain.includes(offPage)
-            ? domain.split(`${offPage}/`)[1]
-            : domain,
-          startTime,
-          endTime,
-          duration,
-          totalTimeToday,
-          source,
-          shutdown,
-          allDomainsDiff: dateObj.$allDomains.time - allDomainsReal
-        },
-        endTime
-      )
     })
-  } else {
-    // TODO: duplicating this is awful
-    eventLog(
-      "visit",
-      {
+  }
+
+  // Log the visit
+  eventLog("visit", {
+    domain,
+    offDomain: domain.includes(offPage)
+      ? domain.split(`${offPage}/`)[1]
+      : domain,
+    startTime,
+    endTime,
+    duration,
+    totalTimeToday,
+    durationMins: parseFloat((duration / 1000 / 60).toFixed(3)),
+    totalTimeTodayMins: parseFloat((totalTimeToday / 1000 / 60).toFixed(3)),
+    source,
+    shutdown,
+  })
+
+  if (source.includes("newDay")) {
+    previousDayCleaner(endTime)
+  }
+}
+
+function previousDayCleaner(endTime) {
+  const dateCheck = new RegExp("[0-9]{4}-[0-9]{2}-[0-9]{2}")
+  for (var localStorageKey in localStorage) {
+    try {
+      if (
+        dateCheck.test(localStorageKey) &&
+        localStorageKey !== moment(endTime).format("YYYY-MM-DD")
+      ) {
+        // Now we are looping over every day that's not the current day
+        const previousDayObj = JSON.parse(localStorage[localStorageKey])
+        const previousDate = localStorageKey
+        previousDayLogger(previousDayObj, previousDate)
+        // We should now clean up by deleting the previous day objects
+        localStorage.removeItem(localStorageKey)
+      }
+    } catch (e) {}
+  }
+}
+
+function previousDayLogger(previousDayObj, previousDate) {
+  Object.keys(previousDayObj).forEach((dayKey) => {
+    if (previousDayObj[dayKey].time) {
+      const domain = dayKey
+      const domainObj = previousDayObj[domain]
+      const summaryObj = {
+        date: previousDate,
         domain,
         offDomain: domain.includes(offPage)
           ? domain.split(`${offPage}/`)[1]
           : domain,
-        startTime,
-        endTime,
-        duration,
-        totalTimeToday,
-        source,
-        shutdown,
-        allDomainsDiff: dateObj.$allDomains.time - allDomainsReal
-      },
-      endTime
-    )
-  }
-
-  if (source.includes("newDay")) {
-    console.log("New day so closing off keys that we dont need")
-    for (var key in localStorage) {
-      var dateCheck = new RegExp("[0-9]{4}-[0-9]{2}-[0-9]{2}")
-      if (dateCheck.test(key) && key !== moment(endTime).format("YYYY-MM-DD")) {
-        // Closes off any previous days and sends them to cloud storage
-        if (settingsLocal.share_data) {
-          var dayInfo = JSON.parse(localStorage[key])
-          dayInfo.settings = settingsLocal
-          // Take events out
-          delete dayInfo.events
-          // Used to send data here - not doing that any more
-          // Remove previous day to free up space
-          localStorage.removeItem(key)
-        } else {
-          // Remove previous day to free up space
-          localStorage.removeItem(key)
-        }
+        totalTimeTodayMins: parseFloat((domainObj.time / 1000 / 60).toFixed(3)),
+        totalSessionsToday: domainObj.sessions,
+        totalVisitsToday: domainObj.visits,
       }
+      eventLog("daySummary", summaryObj)
     }
-  }
+  })
 }
 
 // Runs within timeline adder if the new timeline event does not match the old one
@@ -148,7 +140,7 @@ function domainVisitUpdater(domain, time, source) {
       before: totalTimeToday / 1000,
       runningCounter: 0,
       total: totalTimeToday / 1000,
-      visits: totalVisits
+      visits: totalVisits,
     }
     liveUpdate(domain, liveUpdateObj)
   }
@@ -158,12 +150,20 @@ function domainVisitUpdater(domain, time, source) {
     statusObj[domain] = {}
   }
 
-  // If either the domain does not exist today yet or lastVisitEnd is not the same as lastShutdown, this is a new realVisit
+  // If either the domain does not exist today yet or lastVisitEnd is not the same as lastShutdown, this is a new session
+  //
+  // If there is no lastVisitEnd, and no lastShutdown
+  // OR
+  // lastShutdown is after lastVisitEnd
+  // OR
   if (
+    !dateObj[domain] ||
+    !dateObj[domain].sessions ||
     (!statusObj[domain].lastVisitEnd && !statusObj[domain].lastShutdown) ||
     statusObj[domain].lastShutdown >= statusObj[domain].lastVisitEnd
   ) {
     dataAdder(dateObj, domain, 1, "sessions", addTogether)
+    eventLog("session", { domain })
   }
 
   close(date, dateObj, "date close in visit updater")
@@ -209,7 +209,7 @@ function domainCurrentTimeUpdater() {
       before: time,
       runningCounter,
       total: totalTimeTemp,
-      visits: dateObj[domain].visits
+      visits: dateObj[domain].visits,
     }
     // if (totalTimeTemp % 10 === 0) {
     liveUpdate(domain, liveUpdateObj)
