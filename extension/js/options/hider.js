@@ -2,17 +2,17 @@ var settingsLocal = {}
 
 function runHider(settings) {
   settingsLocal = settings
-  let excludedHidees = settingsLocal.unhidden_divs
+  let excludedHidees = settingsLocal.unhidden_hidees
 
   let domains = []
-  hideesStore.forEach(hidee => {
+  hideesStore.forEach((hidee) => {
     if (!domains.includes(hidee.domain)) {
       domains.push(hidee.domain)
     }
   })
 
   let hideableDomains = false
-  domains.forEach(function(domain) {
+  domains.forEach((domain) => {
     var domainContainer = document.createElement("div")
     domainContainer.className = "vertical"
     var domainHeading = document.createElement("h2")
@@ -21,10 +21,10 @@ function runHider(settings) {
     domainContainer.appendChild(domainHeading)
 
     hideesStore
-      .filter(hidee => {
+      .filter((hidee) => {
         return hidee.domain === domain
       })
-      .forEach(hidee => {
+      .forEach((hidee) => {
         var hideeContainer = document.createElement("div")
         hideeContainer.className = "spacing-xsmall"
         var hideeCheckbox = document.createElement("input")
@@ -40,11 +40,11 @@ function runHider(settings) {
         hideeContainer.appendChild(hideeLabel)
 
         if (
-          !settingsLocal.domains[domain] ||
-          !settingsLocal.domains[domain].nudge
+          !settingsLocal.nudge_domains ||
+          !settingsLocal.nudge_domains.includes(domain)
         ) {
           hideeLabel.className = "label-inactive"
-        } else if (settingsLocal.domains[domain].nudge) {
+        } else if (settingsLocal.nudge_domains.includes(domain)) {
           if (!hideableDomains) {
             hideableDomains = true
           }
@@ -55,9 +55,9 @@ function runHider(settings) {
             hideeCheckbox.checked = true
           }
           // In all cases here, we want to handle the checkbox
-          hideeCheckbox.onclick = function() {
+          hideeCheckbox.onclick = function () {
             if (hideeCheckbox.checked) {
-              excludedHidees = excludedHidees.filter(excludedHidee => {
+              excludedHidees = excludedHidees.filter((excludedHidee) => {
                 return hidee.slug !== excludedHidee
               })
             } else {
@@ -66,19 +66,19 @@ function runHider(settings) {
               }
             }
 
-            changeSettingRequest(excludedHidees, "unhidden_divs")
+            changeSettingRequest(excludedHidees, "unhidden_hidees")
           }
         }
       })
 
     if (
-      !settingsLocal.domains[domain] ||
-      !settingsLocal.domains[domain].nudge
+      !settingsLocal.nudge_domains ||
+      !settingsLocal.nudge_domains.includes(domain)
     ) {
       let domainWarning = document.createElement("p")
       domainWarning.className = "tooltip spacing-xsmall"
       domainWarning.innerHTML = `Add ${domain} to your Nudge sites to hide ${
-        hideesStore.filter(hidee => {
+        hideesStore.filter((hidee) => {
           return hidee.domain === domain
         }).length > 1
           ? "these sections"
@@ -97,7 +97,7 @@ var hiddenSections = el("js-hiddensections")
 var hiddenSectionsToggle = el("js-hidden-sections-toggle")
 
 let showHiddenSections = false
-hiddenSectionsToggle.onclick = function() {
+hiddenSectionsToggle.onclick = function () {
   toggleClass(hiddenSections, "display-none")
 
   if (showHiddenSections) {
