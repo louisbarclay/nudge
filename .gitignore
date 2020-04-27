@@ -4,3 +4,4 @@
 /.vscode
 /.deprecated
 credentials.js
+.env
