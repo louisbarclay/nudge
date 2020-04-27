@@ -3,50 +3,79 @@
 @import '../shared/animations'
 
 $prefix: hider-menu-
+$primary: #515151
 
 .#{$prefix}
   &container
     @extend %reset
     @extend %typography
     width: 100%
-    position: static
-    margin-top: 5px
     flex-direction: column
+    height: 0
     top: 0
     display: flex
     font-family: initial
-    justify-content: center
+    justify-content: start
     transform: translateZ(0)
+    z-index: 1
+
+  &content
+    visibility: visible
+    transition: all 1s
+    z-index: 18
+    top: 0
+    margin-top: 15px
+    display: flex
+    justify-content: center
+    opacity: 1
+    pointer-events: auto
+    height: auto
+    transform: translateZ(0)
+    width: auto
+    transition: top 0.3s
+    animation: fade-in 0.3s
 
   &dropdown
     margin: 0
     overflow: visible
     top: 0
-    width: 100%
+    width: auto
     z-index: 3
+    display: flex
+    transform: translateZ(0)
+    align-items: center
+    height: auto
+    flex-direction: column
     +border($style: none)
     visibility: visible
     font-size: 12px
 
   &dropdown-content
     +border($style: none)
-    border-radius: 30px
-    width: 90px
-    margin-left: auto
-    margin-right: auto
-    height: 80px
-    opacity: 0
-    visibility: hidden
-    background: $white
+    display: flex
+    border-radius: 6px
+    margin-top: 5px
+    width: auto
+    transform: translateZ(0)
+    height: auto
     overflow: visible
     transition: opacity 0.3s
-    padding-bottom: 1.5em
     flex-direction: column
     align-items: center
     justify-content: space-between
-    >div
-      margin-right: 0.5em
-      margin-left: 0.5em
+    &:hover
+      .#{$prefix}button-small  
+        // margin: 5px 5px 0 5px
+        background: $nudge-grey-lightest
+        box-shadow: none
+        &:hover
+          background: darken($nudge-grey-lightest, 5%)
+      .#{$prefix}link
+        display: flex
+      background: $white
+      margin-top: 0
+      padding: 5px 5px 0 5px
+      box-shadow: 0.5px 0.5px 1px 0.5px rgba(0,0,0,0.1)
 
   &button-container
     width: 100%
@@ -58,14 +87,11 @@ $prefix: hider-menu-
         color: $white
 
   &button
-    background: $nudge-blue
-    display: flex
+    background: $nudge-grey-lightest
     cursor: pointer
     letter-spacing: 0.02em
-    animation: fade-in 0.3s
     font-size: 13px
     pointer-events: auto
-    visibility: visible
     color: $white
     +border($style: none)
     padding: 0.2em 0.4em 0.2em 0.4em
@@ -74,41 +100,29 @@ $prefix: hider-menu-
     &:hover
       background: darken($nudge-blue,5%)
 
-  &content
-    visibility: visible
-    transition: all 1s
-    z-index: 18
-    top: 0
-    margin: 0
-    opacity: 1
-    pointer-events: auto
-    +size(40px)
+  &button-small
+    background: $white
+    cursor: pointer
+    user-select: none
+    letter-spacing: 0.02em
     transform: translateZ(0)
+    font-size: 13px
+    box-shadow: 0.5px 0.5px 1px 0.5px rgba(0,0,0,0.1)
+    pointer-events: auto
+    color: $nudge-grey-medium
+    +border($style: none)
+    padding: 0.2em 0.4em 0.2em 0.4em
     width: auto
-    transition: top 0.3s
-    animation: fade-in 0.3s
-    background: url('chrome-extension://__MSG_@@extension_id__/img/icon/newcirclewhite.svg') center 0px/40px no-repeat
-    &:hover
-      top: 5px
-      .#{$prefix}dropdown-content
-        opacity: 1
-        visibility: visible
-        display: flex
-      + .#{$prefix}button-container
-        display: none
 
   &link
     cursor: pointer
     user-select: none
-    color: $nudge-grey-light
-    &:hover
-      color: $nudge-pink
-
-  &logo
-    margin-top: 0
+    display: none
+    opacity: 0.7
     transform: translateZ(0)
-    width: 40px
-    height: 40px
-    background:
-      image: url('chrome-extension://__MSG_@@extension_id__/img/icon/newcirclewhite.svg')
-      size: 40px
+    filter: grayscale(1)
+    color: $nudge-grey-medium
+    margin-bottom: 1em
+    margin-top: 8px
+    &:hover
+      opacity: 1

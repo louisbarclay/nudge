@@ -105,21 +105,42 @@
 
 .hider-menu-container {
   width: 100%;
-  position: static;
-  margin-top: 5px;
   flex-direction: column;
+  height: 0;
   top: 0;
   display: flex;
   font-family: initial;
+  justify-content: start;
+  transform: translateZ(0);
+  z-index: 1; }
+
+.hider-menu-content {
+  visibility: visible;
+  transition: all 1s;
+  z-index: 18;
+  top: 0;
+  margin-top: 15px;
+  display: flex;
   justify-content: center;
-  transform: translateZ(0); }
+  opacity: 1;
+  pointer-events: auto;
+  height: auto;
+  transform: translateZ(0);
+  width: auto;
+  transition: top 0.3s;
+  animation: fade-in 0.3s; }
 
 .hider-menu-dropdown {
   margin: 0;
   overflow: visible;
   top: 0;
-  width: 100%;
+  width: auto;
   z-index: 3;
+  display: flex;
+  transform: translateZ(0);
+  align-items: center;
+  height: auto;
+  flex-direction: column;
   border: 1px none #bdbdbd;
   border-radius: 4px;
   visibility: visible;
@@ -128,23 +149,29 @@
 .hider-menu-dropdown-content {
   border: 1px none #bdbdbd;
   border-radius: 4px;
-  border-radius: 30px;
-  width: 90px;
-  margin-left: auto;
-  margin-right: auto;
-  height: 80px;
-  opacity: 0;
-  visibility: hidden;
-  background: #ffffff;
+  display: flex;
+  border-radius: 6px;
+  margin-top: 5px;
+  width: auto;
+  transform: translateZ(0);
+  height: auto;
   overflow: visible;
   transition: opacity 0.3s;
-  padding-bottom: 1.5em;
   flex-direction: column;
   align-items: center;
   justify-content: space-between; }
-  .hider-menu-dropdown-content > div {
-    margin-right: 0.5em;
-    margin-left: 0.5em; }
+  .hider-menu-dropdown-content:hover {
+    background: #ffffff;
+    margin-top: 0;
+    padding: 5px 5px 0 5px;
+    box-shadow: 0.5px 0.5px 1px 0.5px rgba(0, 0, 0, 0.1); }
+    .hider-menu-dropdown-content:hover .hider-menu-button-small {
+      background: #ededed;
+      box-shadow: none; }
+      .hider-menu-dropdown-content:hover .hider-menu-button-small:hover {
+        background: #e0e0e0; }
+    .hider-menu-dropdown-content:hover .hider-menu-link {
+      display: flex; }
 
 .hider-menu-button-container {
   width: 100%;
@@ -156,14 +183,11 @@
       color: #ffffff; }
 
 .hider-menu-button {
-  background: #61a7ff;
-  display: flex;
+  background: #ededed;
   cursor: pointer;
   letter-spacing: 0.02em;
-  animation: fade-in 0.3s;
   font-size: 13px;
   pointer-events: auto;
-  visibility: visible;
   color: #ffffff;
   border: 1px none #bdbdbd;
   border-radius: 4px;
@@ -173,41 +197,30 @@
   .hider-menu-button:hover {
     background: #4899ff; }
 
-.hider-menu-content {
-  visibility: visible;
-  transition: all 1s;
-  z-index: 18;
-  top: 0;
-  margin: 0;
-  opacity: 1;
-  pointer-events: auto;
-  width: 40px;
-  height: 40px;
+.hider-menu-button-small {
+  background: #ffffff;
+  cursor: pointer;
+  user-select: none;
+  letter-spacing: 0.02em;
   transform: translateZ(0);
-  width: auto;
-  transition: top 0.3s;
-  animation: fade-in 0.3s;
-  background: url("chrome-extension://__MSG_@@extension_id__/img/icon/newcirclewhite.svg") center 0px/40px no-repeat; }
-  .hider-menu-content:hover {
-    top: 5px; }
-    .hider-menu-content:hover .hider-menu-dropdown-content {
-      opacity: 1;
-      visibility: visible;
-      display: flex; }
-    .hider-menu-content:hover + .hider-menu-button-container {
-      display: none; }
+  font-size: 13px;
+  box-shadow: 0.5px 0.5px 1px 0.5px rgba(0, 0, 0, 0.1);
+  pointer-events: auto;
+  color: #6d6d6d;
+  border: 1px none #bdbdbd;
+  border-radius: 4px;
+  padding: 0.2em 0.4em 0.2em 0.4em;
+  width: auto; }
 
 .hider-menu-link {
   cursor: pointer;
   user-select: none;
-  color: #bdbdbd; }
-  .hider-menu-link:hover {
-    color: #ff61a7; }
-
-.hider-menu-logo {
-  margin-top: 0;
+  display: none;
+  opacity: 0.7;
   transform: translateZ(0);
-  width: 40px;
-  height: 40px;
-  background-image: url("chrome-extension://__MSG_@@extension_id__/img/icon/newcirclewhite.svg");
-  background-size: 40px; }
+  filter: grayscale(1);
+  color: #6d6d6d;
+  margin-bottom: 1em;
+  margin-top: 8px; }
+  .hider-menu-link:hover {
+    opacity: 1; }

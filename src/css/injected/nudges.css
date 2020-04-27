@@ -180,7 +180,7 @@
   display: block; }
   #nudge #nudge-quarter-21 {
     z-index: 0;
-    background: linear-gradient(145deg, #8099ed 0%, #61a7ff 16.66667%);
+    background: linear-gradient(145deg, #B282D1 0%, #61a7ff 33.33333%);
     width: 2100px;
     height: 2100px;
     opacity: 0;
@@ -188,11 +188,11 @@
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-21 {
     z-index: 0;
-    background-color: #8099ed;
+    background-color: #B282D1;
     right: 2104px; }
   #nudge #nudge-quarter-20 {
     z-index: 1;
-    background: linear-gradient(145deg, #ff61a7 0%, #61a7ff 50%);
+    background: linear-gradient(145deg, #998DDF 0%, #61a7ff 25%);
     width: 2000px;
     height: 2000px;
     opacity: 0;
@@ -200,11 +200,11 @@
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-20 {
     z-index: 1;
-    background-color: #ff61a7;
+    background-color: #998DDF;
     right: 2004px; }
   #nudge #nudge-quarter-19 {
     z-index: 2;
-    background: linear-gradient(145deg, #df6fb8 0%, #61a7ff 44.44444%);
+    background: linear-gradient(145deg, #8099ED 0%, #61a7ff 14.28571%);
     width: 1900px;
     height: 1900px;
     opacity: 0;
@@ -212,11 +212,11 @@
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-19 {
     z-index: 2;
-    background-color: #df6fb8;
+    background-color: #8099ED;
     right: 1904px; }
   #nudge #nudge-quarter-18 {
     z-index: 3;
-    background: linear-gradient(145deg, #bf7dca 0%, #61a7ff 37.5%);
+    background: linear-gradient(145deg, #FF61A7 0%, #61a7ff 50%);
     width: 1800px;
     height: 1800px;
     opacity: 0;
@@ -224,11 +224,11 @@
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-18 {
     z-index: 3;
-    background-color: #bf7dca;
+    background-color: #FF61A7;
     right: 1804px; }
   #nudge #nudge-quarter-17 {
     z-index: 4;
-    background: linear-gradient(145deg, #a08bdb 0%, #61a7ff 28.57143%);
+    background: linear-gradient(145deg, #E56CB5 0%, #61a7ff 45.45455%);
     width: 1700px;
     height: 1700px;
     opacity: 0;
@@ -236,11 +236,11 @@
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-17 {
     z-index: 4;
-    background-color: #a08bdb;
+    background-color: #E56CB5;
     right: 1704px; }
   #nudge #nudge-quarter-16 {
     z-index: 5;
-    background: linear-gradient(145deg, #8099ed 0%, #61a7ff 16.66667%);
+    background: linear-gradient(145deg, #CC77C3 0%, #61a7ff 40%);
     width: 1600px;
     height: 1600px;
     opacity: 0;
@@ -248,11 +248,11 @@
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-16 {
     z-index: 5;
-    background-color: #8099ed;
+    background-color: #CC77C3;
     right: 1604px; }
   #nudge #nudge-quarter-15 {
     z-index: 6;
-    background: linear-gradient(145deg, #ff61a7 0%, #61a7ff 50%);
+    background: linear-gradient(145deg, #B282D1 0%, #61a7ff 33.33333%);
     width: 1500px;
     height: 1500px;
     opacity: 0;
@@ -260,11 +260,11 @@
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-15 {
     z-index: 6;
-    background-color: #ff61a7;
+    background-color: #B282D1;
     right: 1504px; }
   #nudge #nudge-quarter-14 {
     z-index: 7;
-    background: linear-gradient(145deg, #df6fb8 0%, #61a7ff 44.44444%);
+    background: linear-gradient(145deg, #998DDF 0%, #61a7ff 25%);
     width: 1400px;
     height: 1400px;
     opacity: 0;
@@ -272,11 +272,11 @@
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-14 {
     z-index: 7;
-    background-color: #df6fb8;
+    background-color: #998DDF;
     right: 1404px; }
   #nudge #nudge-quarter-13 {
     z-index: 8;
-    background: linear-gradient(145deg, #bf7dca 0%, #61a7ff 37.5%);
+    background: linear-gradient(145deg, #8099ED 0%, #61a7ff 14.28571%);
     width: 1300px;
     height: 1300px;
     opacity: 0;
@@ -284,11 +284,11 @@
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-13 {
     z-index: 8;
-    background-color: #bf7dca;
+    background-color: #8099ED;
     right: 1304px; }
   #nudge #nudge-quarter-12 {
     z-index: 9;
-    background: linear-gradient(145deg, #a08bdb 0%, #61a7ff 28.57143%);
+    background: linear-gradient(145deg, #FF61A7 0%, #61a7ff 50%);
     width: 1200px;
     height: 1200px;
     opacity: 0;
@@ -296,11 +296,11 @@
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-12 {
     z-index: 9;
-    background-color: #a08bdb;
+    background-color: #FF61A7;
     right: 1204px; }
   #nudge #nudge-quarter-11 {
     z-index: 10;
-    background: linear-gradient(145deg, #8099ed 0%, #61a7ff 16.66667%);
+    background: linear-gradient(145deg, #E56CB5 0%, #61a7ff 45.45455%);
     width: 1100px;
     height: 1100px;
     opacity: 0;
@@ -308,11 +308,11 @@
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-11 {
     z-index: 10;
-    background-color: #8099ed;
+    background-color: #E56CB5;
     right: 1104px; }
   #nudge #nudge-quarter-10 {
     z-index: 11;
-    background: linear-gradient(145deg, #ff61a7 0%, #61a7ff 50%);
+    background: linear-gradient(145deg, #CC77C3 0%, #61a7ff 40%);
     width: 1000px;
     height: 1000px;
     opacity: 0;
@@ -320,11 +320,11 @@
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-10 {
     z-index: 11;
-    background-color: #ff61a7;
+    background-color: #CC77C3;
     right: 1004px; }
   #nudge #nudge-quarter-9 {
     z-index: 12;
-    background: linear-gradient(145deg, #df6fb8 0%, #61a7ff 44.44444%);
+    background: linear-gradient(145deg, #B282D1 0%, #61a7ff 33.33333%);
     width: 900px;
     height: 900px;
     opacity: 0;
@@ -332,11 +332,11 @@
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-9 {
     z-index: 12;
-    background-color: #df6fb8;
+    background-color: #B282D1;
     right: 904px; }
   #nudge #nudge-quarter-8 {
     z-index: 13;
-    background: linear-gradient(145deg, #bf7dca 0%, #61a7ff 37.5%);
+    background: linear-gradient(145deg, #998DDF 0%, #61a7ff 25%);
     width: 800px;
     height: 800px;
     opacity: 0;
@@ -344,11 +344,11 @@
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-8 {
     z-index: 13;
-    background-color: #bf7dca;
+    background-color: #998DDF;
     right: 804px; }
   #nudge #nudge-quarter-7 {
     z-index: 14;
-    background: linear-gradient(145deg, #a08bdb 0%, #61a7ff 28.57143%);
+    background: linear-gradient(145deg, #8099ED 0%, #61a7ff 14.28571%);
     width: 700px;
     height: 700px;
     opacity: 0;
@@ -356,11 +356,11 @@
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-7 {
     z-index: 14;
-    background-color: #a08bdb;
+    background-color: #8099ED;
     right: 704px; }
   #nudge #nudge-quarter-6 {
     z-index: 15;
-    background: linear-gradient(145deg, #8099ed 0%, #61a7ff 16.66667%);
+    background: linear-gradient(145deg, #FF61A7 0%, #61a7ff 100%);
     width: 600px;
     height: 600px;
     opacity: 0;
@@ -368,11 +368,11 @@
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-6 {
     z-index: 15;
-    background-color: #8099ed;
+    background-color: #FF61A7;
     right: 604px; }
   #nudge #nudge-quarter-5 {
     z-index: 16;
-    background: linear-gradient(145deg, #ff61a7 0%, #61a7ff 100%);
+    background: linear-gradient(145deg, #E56CB5 0%, #61a7ff 100%);
     width: 500px;
     height: 500px;
     opacity: 0;
@@ -380,11 +380,11 @@
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-5 {
     z-index: 16;
-    background-color: #ff61a7;
+    background-color: #E56CB5;
     right: 504px; }
   #nudge #nudge-quarter-4 {
     z-index: 17;
-    background: linear-gradient(145deg, #df6fb8 0%, #61a7ff 100%);
+    background: linear-gradient(145deg, #CC77C3 0%, #61a7ff 100%);
     width: 400px;
     height: 400px;
     opacity: 0;
@@ -392,11 +392,11 @@
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-4 {
     z-index: 17;
-    background-color: #df6fb8;
+    background-color: #CC77C3;
     right: 404px; }
   #nudge #nudge-quarter-3 {
     z-index: 18;
-    background: linear-gradient(145deg, #bf7dca 0%, #61a7ff 100%);
+    background: linear-gradient(145deg, #B282D1 0%, #61a7ff 100%);
     width: 300px;
     height: 300px;
     opacity: 0;
@@ -404,11 +404,11 @@
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-3 {
     z-index: 18;
-    background-color: #bf7dca;
+    background-color: #B282D1;
     right: 304px; }
   #nudge #nudge-quarter-2 {
     z-index: 19;
-    background: linear-gradient(145deg, #a08bdb 0%, #61a7ff 100%);
+    background: linear-gradient(145deg, #998DDF 0%, #61a7ff 100%);
     width: 200px;
     height: 200px;
     opacity: 0;
@@ -416,11 +416,11 @@
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-2 {
     z-index: 19;
-    background-color: #a08bdb;
+    background-color: #998DDF;
     right: 204px; }
   #nudge #nudge-quarter-1 {
     z-index: 20;
-    background: linear-gradient(145deg, #8099ed 0%, #61a7ff 100%);
+    background: linear-gradient(145deg, #8099ED 0%, #61a7ff 100%);
     width: 100px;
     height: 100px;
     opacity: 0;
@@ -428,7 +428,7 @@
     transition: opacity 30s; }
   #nudge #nudge-quarter-label-1 {
     z-index: 20;
-    background-color: #8099ed;
+    background-color: #8099ED;
     right: 104px; }
   #nudge .nudge-quarters {
     opacity: 0;
@@ -497,7 +497,7 @@
     position: relative;
     transition: opacity 6s;
     opacity: 0;
-    animation: fadeIn 4s forwards; }
+    animation: fadeIn 4s forwards !important; }
   #nudge .nudge-control_position {
     z-index: 2147483647;
     bottom: 0px;
