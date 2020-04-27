@@ -15,50 +15,50 @@ var optionsIndex = [
   { page: "scheduler.html", name: "Your Nudge schedule" },
   {
     page: "defaulter.html",
-    name: "Defaulter"
+    name: "Defaulter",
   },
   { page: "hider.html", name: "Hider" },
   {
     page: "rainbowtimer.html",
-    name: "Rainbow Timer"
+    name: "Rainbow Timer",
   },
   {
     page: "scrollnudger.html",
-    name: "Scroll Nudger"
+    name: "Scroll Nudger",
   },
-  {
-    page: "unfollower.html",
-    name: "Unfollower"
-  },
-  {
-    page: "facebooktweaker.html",
-    name: "Facebook Greyifyer"
-  },
+  // {
+  //   page: "unfollower.html",
+  //   name: "Unfollower",
+  // },
+  // {
+  //   page: "facebooktweaker.html",
+  //   name: "Facebook Greyifyer",
+  // },
   {
     page: "youtubeautoplaystopper.html",
-    name: "YouTube Autoplay Stopper"
+    name: "YouTube Autoplay Stopper",
   },
   {
-    page: "options_home.html#onboarding",
-    name: "your Options"
-  }
+    page: "done.html",
+    name: "done!",
+  },
 ]
 
 for (var i = 0; i < optionsIndex.length; i++) {
   if (window.location.href.includes(optionsIndex[i].page)) {
     if (hash === "options") {
       el("js-back").innerHTML = `🠐 Options`
-      el("js-back").onclick = function() {
+      el("js-back").onclick = function () {
         window.location = `./options_home.html`
       }
     } else if (hash === "unfollower") {
       el("js-back").innerHTML = `🠐 Welcome to Nudge`
-      el("js-back").onclick = function() {
+      el("js-back").onclick = function () {
         window.location = `./start.html`
       }
       el("js-onboarding-skip").innerHTML = "No, thanks"
       el("js-next").innerHTML = "Check out Nudge's other features"
-      el("js-next").onclick = function() {
+      el("js-next").onclick = function () {
         window.location = `./options_home.html`
       }
     } else if (
@@ -72,7 +72,7 @@ for (var i = 0; i < optionsIndex.length; i++) {
         if (optionsIndex[i - 1]) {
           // Set up back link
           el("js-back").innerHTML = `🠐 ${optionsIndex[i - 1].name}`
-          el("js-back").onclick = function() {
+          el("js-back").onclick = function () {
             window.location = `./${optionsIndex[i - 1].page}`
           }
         }
@@ -88,7 +88,7 @@ for (var i = 0; i < optionsIndex.length; i++) {
         } else {
           el("js-next").innerHTML = `Next: ${optionsIndex[i + 1].name}`
         }
-        el("js-next").onclick = function() {
+        el("js-next").onclick = function () {
           window.location = `./${optionsIndex[i + 1].page}`
         }
       } catch (e) {}
@@ -122,13 +122,13 @@ function handleToggle(element, callback, override, onFirstClick) {
 }
 
 if (el("js-onboarding-enable")) {
-  el("js-onboarding-enable").onclick = function() {
+  el("js-onboarding-enable").onclick = function () {
     handleOnboardingClick(this, true)
   }
 }
 
 if (el("js-onboarding-skip")) {
-  el("js-onboarding-skip").onclick = function() {
+  el("js-onboarding-skip").onclick = function () {
     handleOnboardingClick(this, false)
   }
 }
@@ -136,7 +136,7 @@ if (el("js-onboarding-skip")) {
 ;(async () => {
   var settings = await loadSettings()
   // Find any main toggles and set correct value + handle click
-  Array.from(document.getElementsByClassName("toggle")).forEach(function(
+  Array.from(document.getElementsByClassName("toggle")).forEach(function (
     element
   ) {
     // This will only work if the parentNode of the element has an id that's a valid setting string
@@ -146,7 +146,7 @@ if (el("js-onboarding-skip")) {
 
     // Only change the onboarding thing on the very first click
     let onFirstClick = true
-    element.addEventListener("click", function(e) {
+    element.addEventListener("click", function (e) {
       // e.stopPropagation()
       // e.stopImmediatePropagation()
       e.preventDefault()
@@ -166,20 +166,20 @@ if (el("js-onboarding-skip")) {
     }
   })
   // Find any subSetting checkboxes set correct value + handle click
-  Array.from(document.getElementsByClassName("form-checkbox")).forEach(function(
-    element
-  ) {
-    var subSetting = element.childNodes[0].id
-    var checkbox = element.childNodes[0]
-    // Set current setting
-    if (subSetting in settings && settings[subSetting]) {
-      checkbox.checked = true
+  Array.from(document.getElementsByClassName("form-checkbox")).forEach(
+    function (element) {
+      var subSetting = element.childNodes[0].id
+      var checkbox = element.childNodes[0]
+      // Set current setting
+      if (subSetting in settings && settings[subSetting]) {
+        checkbox.checked = true
+      }
+      // Handle click
+      checkbox.onclick = function () {
+        changeSettingRequest(checkbox.checked, subSetting)
+      }
     }
-    // Handle click
-    checkbox.onclick = function() {
-      changeSettingRequest(checkbox.checked, subSetting)
-    }
-  })
+  )
   if (window.location.href.includes("sites")) {
     runSites(settings)
   }

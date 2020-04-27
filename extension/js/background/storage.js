@@ -41,7 +41,7 @@ var tabIdStorage = {}
 
 // Initial storage of tab info
 function flushToTabIdStorage() {
-  chrome.tabs.query({}, function(tabs) {
+  chrome.tabs.query({}, function (tabs) {
     for (var i = 0; i < tabs.length; i++) {
       tabIdStorage[tabs[i].id] = tabs[i]
     }
@@ -50,7 +50,7 @@ function flushToTabIdStorage() {
 
 // Show local storage
 function s() {
-  chrome.storage.sync.get(null, function(object) {
+  chrome.storage.sync.get(null, function (object) {
     log(object)
   })
 }
@@ -71,12 +71,8 @@ function localStorageClear() {
 }
 
 // Set storage
-function storageSet(item, callback) {
-  chrome.storage.sync.set(item, function() {
-    if (callback) {
-      callback()
-    }
-  })
+function storageSet(item) {
+  chrome.storage.sync.set(item, function () {})
 }
 
 flushToTabIdStorage()

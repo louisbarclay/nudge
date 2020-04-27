@@ -66,9 +66,7 @@ function consoleLogger(eventType, detailsObj, time) {
       logWithColor(
         `${moment(detailsObj.time).format("HH:mm:ss")} ${eventType} ${
           detailsObj.setting
-        } ${JSON.stringify(detailsObj.newVal)} ${JSON.stringify(
-          detailsObj.domainSetting
-        )}`,
+        } ${JSON.stringify(detailsObj.newVal)}`,
         "magenta"
       )
       break
@@ -82,33 +80,60 @@ function consoleLogger(eventType, detailsObj, time) {
   }
 }
 
+// This takes event logs from elsewhere
 function eventLogReceiver(request) {
-  eventLog(request.eventType, request.detailsObj, request.time)
+  eventLog(request.eventType, request.detailsObj)
 }
 
-function eventLog(eventType, detailsObj, time) {
+// Log event
+function eventLog(eventType, detailsObj) {
   // Define date and time
-  if (!time) {
-    time = moment()
-  }
-  // Log the event
+  let time = moment().format()
+  // Log the event to console
   consoleLogger(eventType, detailsObj, time)
-
-  // Send the event to Amplitude only if user is not opted out
-  if (settingsLocal.share_data && AMPLITUDE_LOG) {
-    // Send event
-    amplitude.getInstance().logEvent(eventType, { time, ...detailsObj })
+  // Filter events to log to Amplitude
+  if (amplitudeLoggerFilter(settingsLocal, eventType, detailsObj)) {
+    amplitudeLogger(eventType, detailsObj, time)
   }
+}
 
-  // One special case - send an event for the user switching off share_data
-  // So we can understand why a user's data is no longer showing
-  if (!settingsLocal.share_data && AMPLITUDE_LOG) {
-    if (
-      eventType === "changeSetting" &&
-      detailsObj.setting === "share_data" &&
-      detailsObj.previousVal
-    ) {
-      amplitude.getInstance().logEvent(eventType, { time, ...detailsObj })
+// Utils
+function amplitudeLogger(eventType, detailsObj, time) {
+  amplitude.getInstance().logEvent(eventType, { time, ...detailsObj })
+}
+
+function amplitudeLoggerFilter(settings, eventType, detailsObj) {
+  if (AMPLITUDE_LOG) {
+    if (settings.share_data) {
+      // If it's a visit, and it's not a Nudge domain or off page, don't send
+      if (
+        eventType === "visit" &&
+        detailsObj.domain &&
+        !isNudgeDomain(detailsObj.domain) &&
+        !detailsObj.domain.includes(offPage)
+      ) {
+        return false
+      }
+      // If it's a daily_goal setting, only log it once a day
+      if (
+        eventType === "changeSetting" &&
+        detailsObj.setting === "daily_goal"
+      ) {
+        if (detailsObj.newVal && detailsObj.newVal === "updatedDailyGoal") {
+          return false
+        }
+      }
+      return true
+    }
+    // If share_data is off but it's a change of setting and it's for the share_data setting, send
+    if (!settings.share_data) {
+      if (
+        eventType === "changeSetting" &&
+        detailsObj.setting === "share_data" &&
+        detailsObj.previousVal
+      ) {
+        return true
+      }
     }
   }
 }

@@ -41,7 +41,7 @@ function scrollNudge(screens, domain) {
   eventLogSender("nudge_scroll", { screens, domain })
 
   // Hide the scroll nudge after a short time
-  setTimeout(function() {
+  setTimeout(function () {
     toggleClass(el("nudge-scroll-controller"), "nudge-scroll-show")
     toggleClass(el("nudge-scroll-controller"), "nudge-scroll-hide")
   }, 4000)
@@ -49,9 +49,9 @@ function scrollNudge(screens, domain) {
 
 function insertScroll(domain) {
   var scrollContainer = createEl(document.body, "div", "nudge-scroll")
-  appendHtml(scrollContainer, nudgeStorage["scroll.html"])
+  appendHtml(scrollContainer, extensionStorage["scroll.html"])
   // Start scroll checking
-  setInterval(function() {
+  setInterval(function () {
     scrollCheck(domain)
   }, 1000)
 }

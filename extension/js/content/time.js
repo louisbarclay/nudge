@@ -14,7 +14,7 @@ if (config.fastTimer) {
 // For preview mode
 function manualTimeControl() {
   var totalSeconds = 0
-  document.onkeyup = function(key) {
+  document.onkeyup = function (key) {
     if (key.altKey && key.keyCode == 39) {
       totalSeconds = totalSeconds + 300
       cornerInit(totalSeconds, false, "twitter.com")
@@ -39,7 +39,7 @@ function cornerInit(totalSeconds, totalVisits, domain) {
   var timeMins = logMinutesNoSeconds(totalSeconds)
 
   // Set domain in text
-  Array.from(document.getElementsByClassName("js-domain")).forEach(function(
+  Array.from(document.getElementsByClassName("js-domain")).forEach(function (
     element
   ) {
     // Don't change the domain if it's already fine!
@@ -95,7 +95,8 @@ function cornerInit(totalSeconds, totalVisits, domain) {
           eventLogSender("nudge_time", {
             currentLevel,
             totalSeconds,
-            fastTimer: config.fastTimer
+            domain,
+            fastTimer: config.fastTimer,
           })
         }
       }
@@ -117,7 +118,7 @@ function cornerInit(totalSeconds, totalVisits, domain) {
 
 function insertCorner(domain, off_by_default) {
   var cornerContainer = createEl(document.body, "div", "nudge")
-  appendHtml(cornerContainer, nudgeStorage["corner.html"])
+  appendHtml(cornerContainer, extensionStorage["corner.html"])
   // Remove
   var remove = document.getElementById("js-hide")
   remove.onclick = function hideBanner() {
@@ -136,8 +137,5 @@ function insertCorner(domain, off_by_default) {
   var closeTab = document.getElementById("js-close-tab")
   closeTab.onclick = function closeTabWithNudge() {
     sendMessage("close_all", { domain })
-    if (!off_by_default) {
-      switchOffRequest(domain)
-    }
   }
 }

@@ -2,218 +2,110 @@
 function createSettings() {
   // Add static stuff
   var settings = defaultSettings
-  // Add dynamic stuff
-  // Add new settings areas here!
+  // Create new user ID
   settings.userId = getUserId()
-  settings.domains = {}
+  // Mark as dev if dev
+  if (config.dev) {
+    settings.dev = true
+  }
   return settings
 }
 
-function changeSetting(newVal, setting, domain, domainSetting, senderTabId) {
-  // log(newVal, setting, domain, domainSetting)
-  // Set up Amplitude identify
-  var identify = new amplitude.Identify()
-  // For event logging
-  var previousVal = null
-  var info = null
-
+function changeSetting(newVal, setting) {
   try {
-    // If you are altering a specific domain's setting
-    if (setting === "unhidden_divs_add") {
-      if (!settingsLocal.unhidden_divs.includes(newVal)) {
-        settingsLocal.unhidden_divs.push(newVal)
-      }
-    } else if (domain && domainSetting) {
-      // Add
-      if (domainSetting === "add") {
-        settingsLocal.domains[domain] = {
-          nudge: true,
-          off: true
-        }
-        // Change domains info into an array for Amplitude
-        var nudgeDomains = domainsSettingToAmplitude(settingsLocal, "nudge")
-        identify.set("nudge_domains", nudgeDomains)
+    // Set up Amplitude identify
+    let identify = new amplitude.Identify()
+    // For event logging
+    let previousVal = settingsLocal[setting]
 
-        // Toggle
-      } else if (domainSetting === "nudge") {
-        settingsLocal.domains[domain].nudge = newVal
-        // Set domain to off immediately
-        settingsLocal.domains[domain].off = true
-        var nudgeDomains = domainsSettingToAmplitude(settingsLocal, "nudge")
-        identify.set("nudge_domains", nudgeDomains)
-      } else if (newVal === "toggle") {
-        // Set previousVal for log
-        previousVal = settingsLocal[setting][domain][domainSetting]
-        // Set value
-        settingsLocal[setting][domain][domainSetting] = !settingsLocal[setting][
-          domain
-        ][domainSetting]
-        // Change domains info into an array for Amplitude
-        var amplitudeDomains = domainsSettingToAmplitude(
-          settingsLocal,
-          domainSetting
-        )
-        if (domainSetting === "off") {
-          identify.set("on_domains", amplitudeDomains)
-        } else if (domainSetting === "nudge") {
-          identify.set("nudge_domains", amplitudeDomains)
-        }
-        // Off by default is a special case - we must update the settings for all domains
-      } else {
-        // Set previousVal for log
-        previousVal = settingsLocal[setting][domain][domainSetting]
-        // Set value
-        settingsLocal[setting][domain][domainSetting] = newVal
-        // Change domains info into an array for Amplitude
-        var amplitudeDomains = domainsSettingToAmplitude(
-          settingsLocal,
-          domainSetting
-        )
-        if (domainSetting === "off") {
-          identify.set("on_domains", amplitudeDomains)
-        } else if (domainSetting === "nudge") {
-          identify.set("nudge_domains", amplitudeDomains)
-        }
-      }
-    } else {
-      if (newVal === "toggle") {
-        // Set previousVal for log
-        previousVal = settingsLocal[setting]
-        // Set value
-        settingsLocal[setting] = !settingsLocal[setting]
-        // Set current value for identify...this tripped you up before!
-        identify.set(`${setting}`, settingsLocal[setting])
-      } else {
-        // Set previousVal for log
-        previousVal = settingsLocal[setting]
-        // Set value
-        settingsLocal[setting] = newVal
-        if (domainSetting && domainSetting === "off") {
-          var onDomains = domainsSettingToAmplitude(settingsLocal, "off")
-          identify.set("on_domains", amplitudeDomains)
-        } else {
-          identify.set(`${setting}`, newVal)
-        }
-      }
-    }
-    // Update settings in the cloud
+    // Set new value
+    settingsLocal[setting] = newVal
+    // Update syncStorage with new settings
     storageSet({ settings: settingsLocal })
-    // This is not the opposite toggle value because settingsLocal has just been set
-    if (setting === "off_by_default") {
-      toggleOffByDefault(settingsLocal.off_by_default)
-    }
+    // Set Amplitude identify
+    identify.set(`${setting}`, settingsLocal[setting])
 
-    // If the setting was share_data and it's now on, run a whole identify to update settings
-    if (setting === "share_data" && settingsLocal.share_data) {
-      // Start Amplitude
-      amplitude.getInstance().init(amplitudeCreds.apiKey)
-      // Set user ID
-      amplitude.getInstance().setUserId(settingsLocal.userId)
-      // Always sync all settings on re-sharing data, just to make sure they're in sync
-      flushSettingsToAmplitude(settingsLocal, identify)
-    }
-
-    // Sync settings with Amplitude
+    // Only share data if the user is sharing data
     if (settingsLocal.share_data) {
-      amplitude.getInstance().identify(identify)
-      // When share_data is off, only allow to sync share_data setting itself
-    } else if (setting === "share_data" && !settingsLocal.share_data) {
-      amplitude.getInstance().identify(identify)
-    }
-
-    // Send the event unless it's a daily goal
-    if (setting !== "daily_goal") {
-      eventLog("changeSetting", {
-        newVal: typeof newVal === "object" ? JSON.stringify(newVal) : newVal,
-        previousVal:
-          typeof previousVal === "object"
-            ? JSON.stringify(previousVal)
-            : previousVal,
-        setting,
-        domain,
-        domainSetting,
-        info
-      })
-    } else {
-      // For daily goal, only send it once a day
-      var today = moment().format("YYYY-MM-DD")
-      if (!previousVal || previousVal.substring(0, 10) !== today) {
-        eventLog("changeSetting", {
-          newVal: "someDailyGoal",
-          previousVal: "somePreviousDailyGoal",
-          setting,
-          domain,
-          domainSetting,
-          info
-        })
+      if (setting === "share_data") {
+        // If the setting that's just been changed is share_data, initialise Amplitude first
+        // And then flush all settings to Amplitude
+        initAmplitude(settingsLocal.userId)
+        sendAllSettingsToAmplitude(settingsLocal, identify)
+      } else {
+        // Otherwise, set just the one setting
+        amplitude.getInstance().identify(identify)
       }
     }
+    // Otherwise, only send the setting update to notify that share_data is now off
+    if (!settingsLocal.share_data) {
+      if (setting === "share_data") {
+        amplitude.getInstance().identify(identify)
+      }
+    }
+
+    // Now that you've set the settings, convert newVal and previousVal for arrays, and for daily_goal
+    const cleanedVals = cleanVals({ newVal, previousVal }, setting)
+    newVal = cleanedVals.newVal
+    previousVal = cleanedVals.previousVal
+
+    // Log the change of setting
+    eventLog("changeSetting", {
+      newVal,
+      previousVal,
+      setting,
+    })
   } catch (e) {
     log(e)
   }
-  // Instantly update the options page, and any other page that specifies its senderTabId
-  if (senderTabId) {
-    try {
-      chrome.tabs.sendMessage(senderTabId, {
-        type: "send_settingsLocal",
-        settingsLocal
-      })
-    } catch (e) {
-      log(e)
-    }
-  }
 }
 
-function toggleOffByDefault(newVal) {
-  var domainsTemp = settingsLocal.domains
-  Object.keys(domainsTemp).forEach(function(item) {
-    domainsTemp[item].off = newVal
-  })
-
-  // Adding the false parameter here so this evaluates as a regular settings change,
-  // and the 'off' so that this doesn't get sent to the cloud
-  changeSetting(domainsTemp, "domains", false, "off")
-  // log(`Switched 'off' for all domains to ${newVal}`)
+function cleanVals(valObject, setting) {
+  if (Array.isArray(valObject.newVal) && Array.isArray(valObject.previousVal)) {
+    if (valObject.newVal.length > valObject.previousVal.length) {
+      let difference = valObject.newVal.filter(
+        (newValValue) => !valObject.previousVal.includes(newValValue)
+      )
+      valObject.newVal = difference
+      valObject.previousVal = []
+      return valObject
+    } else {
+      let difference = valObject.previousVal.filter(
+        (previousValValue) => !valObject.newVal.includes(previousValValue)
+      )
+      valObject.previousVal = difference
+      valObject.newVal = []
+      return valObject
+    }
+  }
+  if (setting === "daily_goal") {
+    const today = moment().format("YYYY-MM-DD")
+    if (
+      valObject.previousVal &&
+      valObject.previousVal.substring(0, 10) === today
+    ) {
+      valObject.newVal = "updatedDailyGoal"
+      valObject.previousVal = "previousDailyGoal"
+    } else {
+      valObject.newVal = "newDailyGoal"
+      valObject.previousVal = "previousDailyGoal"
+    }
+    return valObject
+  }
+  return valObject
 }
 
 // This takes settings and an identify and flushes settings correctly
 // We use this to prevent domains settings creating tons of User Properties in Amplitude
-function flushSettingsToAmplitude(settings, identify) {
-  Object.keys(settings).forEach(function(key) {
-    if (key === "domains") {
-      var nudgeDomains = []
-      var onDomains = []
-      Object.keys(settings.domains).forEach(function(key) {
-        if (settings.domains[key].nudge) {
-          nudgeDomains.push(key)
-          if (!settings.domains[key].off) {
-            onDomains.push(key)
-          }
-        }
-      })
-      identify.set("on_domains", onDomains)
-      identify.set("nudge_domains", nudgeDomains)
-    } else {
-      identify.set(key, settings[key])
-    }
+function sendAllSettingsToAmplitude(settings, identify) {
+  Object.keys(settings).forEach(function (key) {
+    identify.set(key, settings[key])
   })
 }
 
-function domainsSettingToAmplitude(settings, setting) {
-  var nudgeDomains = []
-  var onDomains = []
-  Object.keys(settings.domains).forEach(function(key) {
-    if (settings.domains[key].nudge) {
-      nudgeDomains.push(key)
-      if (!settings.domains[key].off && setting === "off") {
-        onDomains.push(key)
-      }
-    }
-  })
-
-  if (setting === "off") {
-    return onDomains
-  } else if (setting === "nudge") {
-    return nudgeDomains
-  }
+function initAmplitude(userId) {
+  // Start Amplitude
+  amplitude.getInstance().init(amplitudeCreds.apiKey)
+  // Set user ID
+  amplitude.getInstance().setUserId(userId)
 }

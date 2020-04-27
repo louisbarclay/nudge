@@ -1,17 +1,16 @@
 // Add: refresh page to go snooze mode
-
 var snoozeTime = 10
 var lastRealDomain = false
 var snoozeMode = false
 var snoozeEnd = false
 
-// Variable for setInterval
+// Function for setInterval
 var timeUpdater = null
 
 var optionsLink = document.getElementById("options")
 var timeToday = document.querySelector(".time-headline")
 var domainEl = document.querySelector(".domain")
-var button = document.getElementById("snooze")
+var snoozeButton = document.getElementById("snooze")
 var dontNudge = document.getElementById("dont-nudge")
 
 // The point is that if you have a weird situation where currentDomain is false but currentTabDomain is all good,
@@ -23,32 +22,35 @@ var dontNudge = document.getElementById("dont-nudge")
 document.getElementById("snooze-time").innerHTML = snoozeTime
 
 // Set options link
-optionsLink.onclick = function() {
+optionsLink.onclick = function () {
   chrome.runtime.sendMessage({
-    type: "options"
+    type: "options",
   })
 }
 
 // You want to update certain things onload
-window.onload = function() {
+window.onload = function () {
   log("onload")
-  getSettings(execSettings)
+  execSettings()
 }
 
 // You want to update certain things onfocus
-window.onfocus = function() {
+window.onfocus = function () {
   log("onfocus")
-  getSettings(execSettings)
+  execSettings()
 }
 
-getSettings(execSettings)
+execSettings()
 
-function execSettings(settings) {
-  var domain = false
-  var url = false
-  var whitelist = false
+async function execSettings() {
+  const settings = await loadSettingsRequest()
+
+  let domain = false
+  let url = false
+  let whitelist = false
+  let newDomain = false
   // Find out what the current tab is
-  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     // Figure out the domain
     var currentTab = tabs[0]
 
@@ -56,8 +58,8 @@ function execSettings(settings) {
       currentTab.url.startsWith("chrome-extension://") &&
       currentTab.url.includes("html/pages/off")
     ) {
-      // Get stuff from the query string
-      var QueryString = (function() {
+      // Get URL from the query string
+      var QueryString = (function () {
         // This function is anonymous, is executed immediately and
         // the return value is assigned to QueryString!
         var query_string = {}
@@ -83,41 +85,20 @@ function execSettings(settings) {
     } else {
       url = currentTab.url
     }
-    var isInDomainList = false
-    var newDomain = false
 
     // Find domain
     try {
+      log(settings)
       domain = domainCheck(currentTab.url, settings)
       if (!isNudgeDomain(domain)) {
         domain = false
       }
-
-      // Quite inefficient, but still need to loop here
-      Object.keys(settings.domains).forEach(function(nudgeDomain) {
-        if (extractDomain(url).includes(nudgeDomain)) {
-          // If it's not being nudged, grab it for newDomain
-          if (!settings.domains[nudgeDomain].nudge) {
-            // Set newDomain here
-            newDomain = nudgeDomain
-            log(
-              `You're on ${nudgeDomain} but you're not nudging it at the moment`
-            )
-          } else if (!domain) {
-            // It is in there and it IS being nudge so...
-            // ...this must mean it's a whitelisted site
-            whitelist = true
-            // Tricky. Feels like overkill to allow un-whitelisting from popup
-          }
-          isInDomainList = true
-        }
-      })
     } catch (e) {
       log(e)
     }
 
     // Clean up URL for use in adding a domain
-    if (!isInDomainList) {
+    if (!domain) {
       newDomain = extractDomain(url).split("/")[0]
       newDomain.substring(0, 4) === "www." &&
         (newDomain = newDomain.substring(4))
@@ -127,7 +108,7 @@ function execSettings(settings) {
     var today = false
     var status = false
     // Get localStorage for the today stats
-    chrome.runtime.sendMessage({ type: "get_localStorage" }, function(
+    chrome.runtime.sendMessage({ type: "get_localStorage" }, function (
       response
     ) {
       var localStorage = response.localStorage
@@ -149,14 +130,14 @@ function execSettings(settings) {
       // Snooze function
       function setToSnooze() {
         function updateButtonText() {
-          button.innerHTML = `Stop snooze (${logMinutes(
+          snoozeButton.innerHTML = `Stop snooze (${logMinutes(
             Math.round(moment.unix(snoozeEnd / 1000).diff(moment()) / 1000)
           )})`
         }
         updateButtonText()
-        toggleClass(button, "popup-snooze-button")
+        toggleClass(snoozeButton, "popup-snooze-button")
 
-        timeUpdater = setInterval(function() {
+        timeUpdater = setInterval(function () {
           if (Math.round(moment.unix(snoozeEnd).diff(moment()) / 1000)) {
             updateButtonText()
           } else {
@@ -167,36 +148,26 @@ function execSettings(settings) {
 
       // Function to reset the button
       function resetButton() {
-        toggleClass(button, "popup-snooze-button")
-        button.innerHTML = `Snooze for ${snoozeTime} minutes`
+        toggleClass(snoozeButton, "popup-snooze-button")
+        snoozeButton.innerHTML = `Snooze for ${snoozeTime} minutes`
         clearInterval(timeUpdater)
         snoozeMode = false
       }
 
       // Set up the snooze button
-      button.onclick = function() {
+      snoozeButton.onclick = function () {
         if (snoozeMode) {
           resetButton()
           // FIXME: wrong
-          if (
-            !el("refresh")
-              .classList.toString()
-              .includes("hide")
-          ) {
+          if (!el("refresh").classList.toString().includes("hide")) {
             toggleClass(el("refresh"), "hide")
           }
           changeSettingRequest({ all: false }, "snooze")
         } else {
           snoozeMode = true
-          snoozeEnd = moment()
-            .add(snoozeTime, "minutes")
-            .valueOf()
+          snoozeEnd = moment().add(snoozeTime, "minutes").valueOf()
           changeSettingRequest({ all: snoozeEnd }, "snooze")
-          if (
-            !el("refresh")
-              .classList.toString()
-              .includes("hide")
-          ) {
+          if (!el("refresh").classList.toString().includes("hide")) {
             toggleClass(el("refresh"), "hide")
           }
           toggleClass(el("refresh"), "hide")
@@ -239,15 +210,11 @@ function execSettings(settings) {
         // if (!timeToday.classList.toString().includes('hide')) {
         //   toggleClass(timeToday, 'hide');
         // }
-        timeToday.innerHTML = ";)"
+        timeToday.innerHTML = ":)"
         if (!domainEl.classList.toString().includes("hide")) {
           toggleClass(domainEl, "hide")
         }
-        if (
-          !el("today")
-            .classList.toString()
-            .includes("hide")
-        ) {
+        if (!el("today").classList.toString().includes("hide")) {
           toggleClass(el("today"), "hide")
         }
         // if (el('logo').classList.toString().includes('hide')) {
@@ -257,38 +224,37 @@ function execSettings(settings) {
 
       // Set up 'dont Nudge'
       if (!whitelist) {
-        el("dont-nudge").onclick = function() {
-          log(url)
-          if (domain && url.startsWith("http")) {
+        el("dont-nudge").onclick = function () {
+          if (domain) {
+            settings.nudge_domains = settings.nudge_domains.filter(
+              (nudgeDomain) => {
+                return nudgeDomain !== domain
+              }
+            )
             el("dont-nudge").innerHTML = `Nudge ${domain}`
-            changeSettingRequest(false, "domains", domain, "nudge")
-            newDomain = domain
+            changeSettingRequest(settings.nudge_domains, "nudge_domains")
             domain = false
+            newDomain = domain
           } else {
-            // Need to figure out if it's in the list before toggling it
-            // For that, need to extract the raw domain first! Because currently you've just got 'false'
-            if (isInDomainList) {
-              log(newDomain)
-              domain = newDomain
-              changeSettingRequest(true, "domains", newDomain, "nudge")
-              el("dont-nudge").innerHTML = `Don't nudge ${domain}`
-            } else {
-              log(newDomain)
-              log("Not in domain list, adding fresh")
-              domain = newDomain
-              changeSettingRequest(true, "domains", newDomain, "add")
+            if (url.startsWith("http")) {
+              if (!settings.nudge_domains.includes(newDomain)) {
+                settings.nudge_domains.push(newDomain)
+                changeSettingRequest(settings.nudge_domains, "nudge_domains")
+                domain = newDomain
+                log("Not a current domain, adding fresh")
+              }
               el("dont-nudge").innerHTML = `Don't nudge ${domain}`
             }
           }
         }
       }
 
-      el("reset-hide").onclick = function() {
-        var unhiddenDivs = settings.unhidden_divs
-        const newUnhiddenDivs = unhiddenDivs.filter(div => {
+      el("reset-hide").onclick = function () {
+        var unhiddenHidees = settings.unhidden_hidees
+        const newUnhiddenHidees = unhiddenHidees.filter((div) => {
           return !div.includes(domain)
         })
-        changeSettingRequest(newUnhiddenDivs, "unhidden_divs")
+        changeSettingRequest(newUnhiddenHidees, "unhidden_hidees")
       }
     })
   })

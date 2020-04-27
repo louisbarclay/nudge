@@ -447,29 +447,23 @@ input[type="checkbox"] {
   background: none;
   cursor: pointer;
   margin: 0;
-  min-height: 0.8em;
+  height: 1.6em;
+  width: 3.2em;
   outline: none;
+  border-radius: 20px;
   box-shadow: none;
+  padding: 0.2em;
   color: #000000;
-  border: 1px none #bdbdbd;
-  border-radius: 4px;
   display: flex;
-  background: #ededed;
+  background: #e8e8e8;
   padding: 0 !important;
   font-size: 0.92308em; }
-  .toggle .left {
-    padding: 0.33333em 0.83333em 0.33333em 0.83333em;
+  .toggle .left, .toggle .right {
+    width: 1.6em;
     color: inherit;
-    min-width: 1.6em;
-    min-height: inherit; }
-  .toggle .right {
-    padding: 0.33333em 0.83333em 0.33333em 0.83333em;
-    color: inherit;
-    min-width: 1.6em;
-    min-height: inherit; }
+    border-radius: inherit;
+    height: inherit; }
   .toggle .on {
-    border: 1px none #bdbdbd;
-    border-radius: 4px;
     background: #61a7ff;
     background-clip: border-box;
     color: #ffffff; }

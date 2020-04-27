@@ -18,13 +18,12 @@ var settingsLocal = {}
 // Log install variable
 var logInstall = false
 
-// Show update article variable
-var showUpdateArticle = false
+// Log in general
 
 // Default domain info
 var defaultDomainInfo = {
   nudge: true,
-  off: false
+  off: false,
 }
 
 // Default domains
@@ -41,14 +40,14 @@ var topRecommendations = [
   "reddit.com",
   "linkedin.com",
   "tumblr.com",
-  "netflix.com"
+  "netflix.com",
 ]
 
 var shoppingRecommendations = [
   "amazon.com",
   "amazon.co.uk",
   "ebay.com",
-  "ebay.co.uk"
+  "ebay.co.uk",
 ]
 
 var socialRecommendations = [
@@ -61,7 +60,7 @@ var socialRecommendations = [
   "reddit.com",
   "twitter.com",
   "vk.com",
-  "youtube.com"
+  "youtube.com",
 ]
 
 var newsRecommendations = [
@@ -79,7 +78,7 @@ var newsRecommendations = [
   "telegraph.co.uk",
   "usatoday.com",
   "wsj.com",
-  "bbc.com"
+  "bbc.com",
 ]
 
 var messagingRecommendations = [
@@ -87,48 +86,52 @@ var messagingRecommendations = [
   "messenger.com",
   "slack.com",
   "mail.google.com",
-  "outlook.live.com"
+  "outlook.live.com",
 ]
 
 // Default non-domain settings
 var defaultSettings = {
-  scroll: 5,
-  time: 15,
-  compulsive: 10,
-  fb_profile_ratio: false,
-  fb_show_unfollow: true,
-  fb_auto_unfollow: false,
+  // Features
+  time_nudge: false,
+  div_hider: false,
   fb_grey: false,
   fb_hide_notifications: false,
-  div_hider: false,
-  constantise: true,
-  share_data: true,
-  time_nudge: false,
-  whitelist: [
+  fb_auto_unfollow: false,
+  off_by_default: false,
+  stop_autoplay: false,
+  scroll_nudge: false,
+  // Unfollow info
+  fb_profile_ratio: false,
+  // Domain lists
+  whitelist_domains: [
     "facebook.com/*/dialog/oauth",
     "api.twitter.com/oauth/authenticate",
     "accounts.google.com/signin/oauth",
     "login.yahoo.com/config/login",
     "business.facebook.com",
     "developers.facebook.com",
-    "developer.twitter.com"
+    "developer.twitter.com",
   ],
-  scroll_nudge: false,
-  compulsive_nudge: true,
-  show_intro: 0,
-  // New settings
-  show_switch: true,
-  off_by_default: false,
-  bg_image: false,
-  snooze: { all: 0 },
+  nudge_domains: [],
+  on_domains: [],
+  // Hider settings
+  unhidden_hidees: [],
+  // Defaulter settings
   get_stickier: false,
-  unhidden_divs: [],
-  paid: false,
-  schedule: false,
   daily_goal: false,
-  stop_autoplay: false,
+  // Snooze
+  snooze: { all: 0 },
+  // Paid
+  paid: false,
+  // Schedule
+  schedule: false,
+  // Lifecycle
+  install_date: false,
   last_seen_day: false,
-  install_date: false
+  // Share data
+  share_data: true,
+  settings_version: 2,
+  dev: false,
 }
 
 var unfollow = {
@@ -143,7 +146,7 @@ var unfollow = {
     empty: "No profiles to unfollow",
     start: "Trying to unfollow ",
     success: "Successfully unfollowed ",
-    fail: "Couldn't unfollow "
+    fail: "Couldn't unfollow ",
   },
   profileRequestCounter: 0,
   profileCounter: 0,
@@ -152,8 +155,8 @@ var unfollow = {
   timeStarted: false,
   verifText: {
     start: 'Arbiter.inform("UnfollowUser", {"profile_id":',
-    end: "});"
-  }
+    end: "});",
+  },
 }
 
 var refollow = {
@@ -168,7 +171,7 @@ var refollow = {
     empty: "No profiles to refollow",
     start: "Trying to refollow ",
     success: "Successfully refollowed ",
-    fail: "Couldn't refollow "
+    fail: "Couldn't refollow ",
   },
   profileRequestCounter: 0,
   profileCounter: 0,
@@ -177,8 +180,8 @@ var refollow = {
   timeStarted: false,
   verifText: {
     start: 'Arbiter.inform("FollowUser", {"profile_id":',
-    end: "});"
-  }
+    end: "});",
+  },
 }
 
 var domainTest = /^((([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\.)*([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\.[a-zA-Z]{2,3})(\/(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,200}[a-zA-Z0-9]))?)?(\/)?$/

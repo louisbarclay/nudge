@@ -1,5 +1,5 @@
 // URL receiver from content script and init options giver
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   // Avoid sending a message to a tab that is part of the extension
   var chromeTab = !sender.tab || sender.tab.url.includes("chrome-extension:")
   // Get settings
@@ -13,8 +13,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     changeSetting(
       request.newVal,
       request.setting,
-      request.domain,
-      request.domainSetting,
       // If sender.tab doesn't make sense, don't pass tab.id! e.g. popup.js message
       !sender.tab ? null : sender.tab.id
     )
@@ -22,17 +20,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.type === "event") {
     eventLogReceiver(request)
   }
-  if (request.type === "off") {
-    if (isNudgeDomain(domainCheck(sender.url, settingsLocal))) {
-      changeSetting(true, "domains", request.domain, "off")
-      switchOff(request.domain, sender.url, sender.tabId, "normal")
-    }
-  }
   if (request.type === "on") {
     if (request.domain) {
-      var url = request.url
-      changeSetting(false, "domains", request.domain, "off")
-      switchOn(request.domain, request.url, sender.tabId)
+      if (!settingsLocal.on_domains.includes(request.domain)) {
+        settingsLocal.on_domains.push(request.domain)
+      }
+      changeSettingRequest(settingsLocal.on_domains, "on_domains")
+      switchOn(request.url, sender.tabId)
     }
     // Register a new switch on
     var date = moment().format("YYYY-MM-DD")
@@ -55,16 +49,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.type === "options") {
     chrome.runtime.openOptionsPage()
   }
-  if (request.type === "close_one") {
-    try {
-      chrome.tabs.remove(sender.tab.id)
-    } catch (e) {
-      log(e)
-    }
-  }
-  if (request.type === "close_all") {
-    closeAll(request.domain)
-  }
   if (request.type === "inject_tabidler" && !chromeTab) {
     try {
       chrome.tabs.get(sender.tab.id, checkIfExists)
@@ -80,7 +64,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
           // Tab exists
           try {
             chrome.tabs.executeScript(sender.tab.id, {
-              file: "js/tabidler.js"
+              file: "js/tabidler.js",
             })
             sendResponse({ message: "tab idler injected" })
           } catch (e) {
@@ -93,7 +77,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     }
   }
   if (request.type === "tabIdle") {
-    chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(
+    chrome.tabs.query({ active: true, lastFocusedWindow: true }, function (
       tabs
     ) {
       if (typeof tabs[0] != "undefined" && tabs[0].id === sender.tab.id) {

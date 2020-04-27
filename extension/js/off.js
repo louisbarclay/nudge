@@ -10,7 +10,7 @@ var domainText = document.getElementsByClassName(`${js}domain`)
 var tagline = document.getElementById(`tagline`)
 var switch_ons = false
 var getStickier = true
-var settings = document.getElementsByClassName(`${off}settings`)
+var settingsLinks = document.getElementsByClassName(`${off}settings`)
 var settings2 = document.getElementById(`js-settings2`)
 var headline = document.getElementById(`js-headline`)
 
@@ -19,8 +19,8 @@ var signupMode = true
 var surveyMode = false
 
 // Settings click handlers
-Array.from(settings).forEach(function(element) {
-  element.onclick = function() {
+Array.from(settingsLinks).forEach(function (element) {
+  element.onclick = function () {
     chrome.runtime.openOptionsPage()
   }
 })
@@ -35,16 +35,18 @@ function updateTimer() {
   }
 }
 
-function goalInit(dailyGoal) {
+async function goalInit(dailyGoal) {
   var goal = el("js-goal")
   var hasSaved = false
   var today = moment().format("YYYY-MM-DD")
   var goalCheck = el("goal-check")
+  let currentGoal = dailyGoal
 
-  docReady(function() {
+  docReady(function () {
     goal.style.opacity = 1
   })
 
+  // Set the goal
   if (dailyGoal && dailyGoal.substring(0, 10) === today) {
     hasSaved === true
     goal.value = dailyGoal.substring(11)
@@ -56,22 +58,28 @@ function goalInit(dailyGoal) {
     goalActive(dailyGoal.substring(11))
   }
 
-  goal.oninput = function() {
+  goal.oninput = function () {
     if (hasSaved) {
       var goalShadow = el("js-width-test")
       goalShadow.innerHTML = goal.value
       goal.style.transition = "width 0s"
       goal.style.width = goalShadow.clientWidth + 21 + "px"
-      changeSettingRequest(
-        `${today}${goalCheck.checked ? "T" : "F"}${goal.value}`,
-        "daily_goal"
-      )
+      updateDailyGoal(goal.value, dailyGoal)
     }
+  }
+
+  function updateDailyGoal(value, dailyGoal) {
+    let newDailyGoal = `${today}${goalCheck.checked ? "T" : "F"}${value}`
+    if (newDailyGoal !== currentGoal) {
+      changeSettingRequest(newDailyGoal, "daily_goal")
+    }
+    currentGoal = newDailyGoal
   }
 
   var escBlur = false
 
-  goal.addEventListener("keyup", function(event) {
+  // Esc
+  goal.addEventListener("keyup", function (event) {
     if (event.keyCode === 13) {
       if (goal.value === "") {
         goalReset()
@@ -79,10 +87,7 @@ function goalInit(dailyGoal) {
       } else {
         // Cancel the default action, if needed
         goalActive(goal.value)
-        changeSettingRequest(
-          `${today}${goalCheck.checked ? "T" : "F"}${goal.value}`,
-          "daily_goal"
-        )
+        updateDailyGoal(goal.value, dailyGoal)
       }
     }
     if (event.keyCode === 27) {
@@ -96,7 +101,7 @@ function goalInit(dailyGoal) {
   function goalActive(dailyGoal) {
     var goalShadow = el("js-width-test")
     goalShadow.innerHTML = dailyGoal
-    docReady(function() {
+    docReady(function () {
       goal.style.width = goalShadow.clientWidth + 21 + "px"
     })
     hasSaved = true
@@ -107,7 +112,7 @@ function goalInit(dailyGoal) {
     }
   }
 
-  goal.onblur = function() {
+  goal.onblur = function () {
     if (escBlur) {
       escBlur = false
     } else {
@@ -115,36 +120,32 @@ function goalInit(dailyGoal) {
         goalReset()
       } else {
         goalActive(goal.value)
-        changeSettingRequest(
-          `${today}${goalCheck.checked ? "T" : "F"}${goal.value}`,
-          "daily_goal"
-        )
+        updateDailyGoal(goal.value, dailyGoal)
       }
     }
   }
 
   function goalReset() {
     goal.style.width = "15.5em"
-    hasSaved = false
     el("js-checkbox").style.display = "none"
     el("js-today-label").style.opacity = 0
     goal.style.transition = "width 0.2s"
     goalCheck.checked = false
     goal.style.textDecoration = "none"
-    changeSettingRequest(false, "daily_goal")
+    if (hasSaved) {
+      hasSaved = false
+      changeSettingRequest(false, "daily_goal")
+    }
   }
 
-  goalCheck.onclick = function() {
+  goalCheck.onclick = function () {
     if (goalCheck.checked) {
       goal.style.textDecoration = "line-through"
     } else {
       goal.style.textDecoration = "none"
     }
     if (goal.value !== "") {
-      changeSettingRequest(
-        `${today}${goalCheck.checked ? "T" : "F"}${goal.value}`,
-        "daily_goal"
-      )
+      updateDailyGoal(goal.value, dailyGoal)
     }
   }
 }
@@ -155,13 +156,13 @@ function highlightify(text) {
 }
 
 if (surveyMode) {
-  el("js-survey").onclick = function() {
-    eventLogSender("survey", { source: "off_page" }, moment())
+  el("js-survey").onclick = function () {
+    eventLogSender("survey", { source: "off_page" })
   }
 }
 
 // Get stuff from the query string
-var QueryString = (function() {
+var QueryString = (function () {
   // This function is anonymous, is executed immediately and
   // the return value is assigned to QueryString!
   var query_string = {}
@@ -189,7 +190,7 @@ var domain = false
 var url = false
 if ("domain" in QueryString) {
   domain = QueryString.domain
-  Array.from(domainText).forEach(function(element) {
+  Array.from(domainText).forEach(function (element) {
     element.innerHTML = domain
   })
 }
@@ -204,7 +205,7 @@ if ("url" in QueryString) {
 //
 
 function getLocalStorage() {
-  chrome.runtime.sendMessage({ type: "get_localStorage" }, function(response) {
+  chrome.runtime.sendMessage({ type: "get_localStorage" }, function (response) {
     var date = moment().format("YYYY-MM-DD")
     localStorage = response.localStorage
     var settingsLocal = response.settingsLocal
@@ -279,11 +280,11 @@ button.addEventListener("touchstart", sliderTouchdown, true)
 
 // Signup mode stuff
 if (signupMode) {
-  el("mce-EMAIL").onfocus = function() {
+  el("mce-EMAIL").onfocus = function () {
     el("js-signup-prompt").style.visibility = "visible"
     el("mce-EMAIL").placeholder = ""
   }
-  el("mce-EMAIL").onblur = function() {
+  el("mce-EMAIL").onblur = function () {
     el("js-signup-prompt").style.visibility = "hidden"
     el("mce-EMAIL").placeholder = "Get Nudge updates"
   }
@@ -409,7 +410,7 @@ function slidermove(e) {
 function slidermoveTouch(e) {
   // Difference between where mouse was on click, and where mouse is now
   var difference = 0
-  log(e.changedTouches[0].clientX - touchPosition)
+  // log(e.changedTouches[0].clientX - touchPosition)
   if (e.changedTouches[0].clientX - touchPosition > 0) {
     difference = Math.round(
       (e.changedTouches[0].clientX - touchPosition) / stickyMultiplier
@@ -449,13 +450,8 @@ var backgroundEnhanced = document.querySelector(`.${off}background-enhanced`)
 
 // Get the photos if exist in sync. Set them if not
 function initOn() {
-  eventLogSender("slide_on", { domain }, moment())
-  chrome.runtime.sendMessage({
-    type: "on",
-    url,
-    domain,
-    stickyMultiplier
-  })
+  sendMessage("on", { domain, url })
+  eventLogSender("slide_on", { domain })
 }
 
 function getBackgroundFile(index) {
@@ -470,11 +466,11 @@ function backgroundLoader(index) {
   // This was as follows, but changed to make it work: // window.onload = function loadStuff() {}
   img = new Image()
   // Assign an onload handler to the dummy image *before* assigning the src
-  img.onload = function() {
+  img.onload = function () {
     // log(getBackgroundFile(index), index);
     setBackground(backgroundEnhanced, getBackgroundFile(index))
     toggleClass(background, `${off}background_animation`)
-    setTimeout(function() {
+    setTimeout(function () {
       background.style.opacity = 0
       background.style.filter = "none"
       toggleClass(background, `${off}background_animation`)
