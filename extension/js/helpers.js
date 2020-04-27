@@ -1,6 +1,8 @@
 // Log
-if (config.debug) var log = console.log.bind(window.console)
-else var log = function() {}
+// Can activate this for users using a little code
+if (config.dev) {
+  var log = console.log.bind(window.console)
+} else var log = function () {}
 
 // Extract core domain from URL you want to check
 function extractDomain(url) {
@@ -77,7 +79,7 @@ function checkSnoozeAndSchedule(settings) {
   return false
 }
 
-;(function(funcName, baseObj) {
+;(function (funcName, baseObj) {
   // The public function name defaults to window.docReady
   // but you can pass in your own object and own function name and those will be used
   // if you want to put them in a different namespace
@@ -117,14 +119,14 @@ function checkSnoozeAndSchedule(settings) {
   // docReady(fn, context);
   // the context argument is optional - if present, it will be passed
   // as an argument to the callback
-  baseObj[funcName] = function(callback, context) {
+  baseObj[funcName] = function (callback, context) {
     if (typeof callback !== "function") {
       throw new TypeError("callback for docReady(fn) must be a function")
     }
     // if ready has already fired, then just schedule the callback
     // to fire asynchronously, but right away
     if (readyFired) {
-      setTimeout(function() {
+      setTimeout(function () {
         callback(context)
       }, 1)
       return
@@ -340,12 +342,11 @@ function liveUpdate(domain, liveUpdateObj) {
 }
 
 // Send event from content script
-function eventLogSender(eventType, detailsObj, time) {
+function eventLogSender(eventType, detailsObj) {
   chrome.runtime.sendMessage({
     type: "event",
     eventType,
     detailsObj,
-    time: time ? time : null
   })
 }
 
@@ -385,10 +386,6 @@ function sendMessage(type, object) {
   chrome.runtime.sendMessage(object)
 }
 
-function switchOffRequest(domain) {
-  sendMessage("off", { domain })
-}
-
 function el(id) {
   var element = document.getElementById(id)
   return element
@@ -415,8 +412,8 @@ function randomTime(floor, variance) {
 function fbTokenReady(name, callback) {
   var found = false
 
-  var observer = new MutationObserver(function(mutations) {
-    mutations.forEach(function(mutation) {
+  var observer = new MutationObserver(function (mutations) {
+    mutations.forEach(function (mutation) {
       for (var i = 0; i < mutation.addedNodes.length; i++) {
         var node = document.getElementsByName(name)
         node = node[0]
@@ -435,7 +432,7 @@ function fbTokenReady(name, callback) {
     childList: true,
     subtree: true,
     attributes: false,
-    characterData: false
+    characterData: false,
   })
 }
 
@@ -445,7 +442,7 @@ function domainCheck(url, settings) {
   var domain = false
 
   // Check if settings are undefined
-  if (typeof settings.domains == "undefined") {
+  if (!settings.nudge_domains || !settings.whitelist_domains) {
     log("Settings not yet defined so no point continuing")
     return notInChrome
   }
@@ -457,19 +454,15 @@ function domainCheck(url, settings) {
   }
 
   // Check against Nudge domains
-  Object.keys(settings.domains).forEach(function(nudgeDomain) {
-    if (
-      domainToCheck.includes(nudgeDomain) &&
-      settings.domains[nudgeDomain].nudge
-      // Worth noting this means that previously nudged but now nudge = off sites will be httpPages
-    ) {
+  settings.nudge_domains.forEach((nudgeDomain) => {
+    if (domainToCheck.includes(nudgeDomain)) {
       domain = nudgeDomain
       // Don't return here because you need to do a whitelist check
     }
   })
 
   // Check against the whitelist
-  settings.whitelist.forEach(function(whitelistDomain) {
+  settings.whitelist_domains.forEach(function (whitelistDomain) {
     // log(whitelistDomain)
     if (domainToCheck.includes(whitelistDomain.split("/")[0])) {
       // log(whitelistDomain.split('/')[0]);
@@ -503,7 +496,7 @@ function domainCheck(url, settings) {
     }
   }
 
-  // If it's a Chrome page
+  // If it's a Nudge page
   if (!domain && url.startsWith(getUrl("/"))) {
     domain = `${nudgePage}/${url.split(getUrl("/"))[1]}`
   }
@@ -524,10 +517,10 @@ function domainCheck(url, settings) {
 // leading edge, instead of the trailing.
 function debounce(func, wait, immediate) {
   var timeout
-  return function() {
+  return function () {
     var context = this,
       args = arguments
-    var later = function() {
+    var later = function () {
       timeout = null
       if (!immediate) func.apply(context, args)
     }
@@ -541,7 +534,7 @@ function debounce(func, wait, immediate) {
 const throttle = (func, limit) => {
   let lastFunc
   let lastRan
-  return function() {
+  return function () {
     const context = this
     const args = arguments
     if (!lastRan) {
@@ -549,7 +542,7 @@ const throttle = (func, limit) => {
       lastRan = Date.now()
     } else {
       clearTimeout(lastFunc)
-      lastFunc = setTimeout(function() {
+      lastFunc = setTimeout(function () {
         if (Date.now() - lastRan >= limit) {
           func.apply(context, args)
           lastRan = Date.now()
@@ -576,7 +569,7 @@ function click(x, y) {
     bubbles: true,
     cancelable: true,
     screenX: x,
-    screenY: y
+    screenY: y,
   })
 
   var el = document.elementFromPoint(x, y)
@@ -584,33 +577,65 @@ function click(x, y) {
   el.dispatchEvent(ev)
 }
 
-function getSettings(callback) {
-  chrome.runtime.sendMessage({ type: "settings" }, function(response) {
-    callback(response.settings)
+// Load syncStorage
+const loadSyncStorage = async () => {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get(null, function (storage) {
+      resolve(storage)
+    })
   })
 }
 
+function removeDomainFromOnDomains(settings, domain) {
+  log(settings.on_domains)
+  if (settings.on_domains) {
+    settings.on_domains = settings.on_domains.filter((onDomain) => {
+      return domain !== onDomain
+    })
+  } else {
+    settings.on_domains = []
+  }
+  changeSetting(settings.on_domains, "on_domains")
+}
+
+function addDomainToOnDomains(settings, domain) {
+  if (!settings.on_domains.includes(domain)) {
+    settings.on_domains.push(domain)
+  }
+  changeSetting(settings.on_domains, "on_domains")
+}
+
 // New version of getSettings
-async function loadSettings() {
-  return new Promise(resolve => {
-    chrome.runtime.sendMessage({ type: "settings" }, function(response) {
+async function loadSettingsRequest() {
+  return new Promise((resolve) => {
+    chrome.runtime.sendMessage({ type: "settings" }, function (response) {
       resolve(response.settings)
     })
   })
 }
 
-function changeSettingRequest(newVal, setting, domain, domainSetting) {
-  if (!domain) {
-    domain = false
-  }
-  if (!domainSetting) {
-    domainSetting = false
-  }
+// Set storage
+const setSyncStorage = async (item) => {
+  return new Promise((resolve) => {
+    chrome.storage.sync.set(item, () => {
+      resolve()
+    })
+  })
+}
+
+// Load syncStorage
+const loadSettings = async () => {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get(null, function (storage) {
+      resolve(storage.settings)
+    })
+  })
+}
+
+function changeSettingRequest(newVal, setting) {
   sendMessage("change_setting", {
     newVal,
     setting,
-    domain,
-    domainSetting
   })
 }
 
@@ -622,7 +647,7 @@ const objectWithoutKey = (object, key) => {
 function imgSrcToDataURL(src, callback, outputFormat) {
   var img = new Image()
   img.crossOrigin = "Anonymous"
-  img.onload = function() {
+  img.onload = function () {
     var canvas = document.createElement("CANVAS")
     var ctx = canvas.getContext("2d")
     var dataURL
