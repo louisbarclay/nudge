@@ -70,5 +70,9 @@ function migrateSettings(settings) {
   } else {
     newSettings.nudge_domains = []
   }
+  eventLog("migrateSettings", {
+    previousSettings: JSON.stringify(settings),
+    newSettings: JSON.stringify(newSettings),
+  })
   return newSettings
 }
