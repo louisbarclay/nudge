@@ -6,6 +6,7 @@ function migrateSettings(settings) {
   } else {
     newSettings.userId = getUserId()
   }
+  // Existing settings to try and find
   const boolean = [
     "time_nudge",
     "div_hider",
@@ -28,7 +29,9 @@ function migrateSettings(settings) {
     "install_date",
     "last_seen_day",
     "settings_version",
+    "dev",
   ]
+  // Migration functions
   boolean.forEach((setting) => {
     if (typeof settings[setting] === "boolean") {
       newSettings[setting] = settings[setting]
@@ -49,7 +52,7 @@ function migrateSettings(settings) {
     if (settings[setting]) {
       newSettings[setting] = settings[setting]
     } else {
-      newSettings[setting] = false
+      newSettings[setting] = defaultSettings[setting]
     }
   })
   if (
