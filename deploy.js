@@ -1,16 +1,14 @@
 // Utility script to deploy
-// Needs a credentials.js file to refer to (git ignored)
-// FIXME: use .env
-
+require("dotenv").config()
 var fs = require("fs")
 var zipFolder = require("zip-folder")
 var allowUpload = true
 var allowPublish = true
 const webStore = require("chrome-webstore-upload")({
-  extensionId: "dmhgdnbkjkejeddddlklojinngaideac",
-  clientId: credentials.id,
-  clientSecret: credentials.secret,
-  refreshToken: credentials.refreshToken,
+  extensionId: process.env.EXTENSION_ID,
+  clientId: process.env.GOOGLE_API_ID,
+  clientSecret: process.env.GOOGLE_API_SECRET,
+  refreshToken: process.env.GOOGLE_API_REFRESH_TOKEN,
 })
 
 // Useful: https://github.com/DrewML/chrome-webstore-upload/blob/master/How%20to%20generate%20Google%20API%20keys.md
