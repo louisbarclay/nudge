@@ -112,37 +112,32 @@ input[type="checkbox"]
   background: none
   cursor: pointer
   margin: 0
-  min-height: 0.8em
+  height: 1.6em
+  width: 3.2em
   outline: none
+  border-radius: 20px
   box-shadow: none
+  padding: 0.2em
   color: $primary
   // +border($color: $toggle-fill)
-  +border($style: none)
   display: flex
-  background: $nudge-grey-lightest
+  background: darken($nudge-grey-lightest,2%)
   padding: 0 !important
   font-size: (12 / 13) * 1em
 
-  .left
-    +padding
+  .left, .right
+    width: 1.6em
     color: inherit
-    min-width: 1.6em
-    min-height: inherit
-
-  .right
-    +padding
-    color: inherit
-    min-width: 1.6em
-    min-height: inherit
+    border-radius: inherit
+    height: inherit
 
   .on
-    +border($style: none)
     background: $nudge-blue
     background-clip: border-box
     color: $white
 
   .left.on
-      background: $nudge-grey-light
+    background: $nudge-grey-light
 
   &:hover
     background: inherit

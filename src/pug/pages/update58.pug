@@ -1,0 +1,70 @@
+html
+  head
+    title What's new in Nudge
+    link(rel="stylesheet" href="../../css/pages/onboarding.css")
+    link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
+    meta(charset="UTF-8")
+  body
+    .header.horizontal
+      a.back#js-back
+      div.logo-small
+      div.forward
+    .horizontal.centered
+      .contents.headspace
+        h1.spacing What's new in Nudge
+        h2 1. The Hider now hides more stuff, better
+        p I am expanding what the Hider hides, and now there's better coverage for Twitter, Facebook and Buzzfeed, as well as a bunch of new sites hidden such as Vox, CNN, dev.to, Amazon and Cracked, with plenty more on the way.
+        p You can check out the full list 
+          a(href="./hider.html#options" target="_blank") here
+          | . (Click 'Show the sections that Nudge hides'.)
+        p Sections being hidden are now replaced by a light rectangle, and have a button to show what's been hidden (e.g. Show Feed).
+        p This is so it's more obvious what Nudge has changed on the site, and so that you know what exact sections have been hidden.
+        p Here's what Twitter now looks like, for example:
+        p.spacing-m 
+        img(src="../../img/preview/twitter_new_hider.png").preview-image.spacing-m
+        p.spacing-m Don't forget that you need to 
+          a(href="./sites.html#options" target="_blank") add a site to your Nudge sites 
+          | so that the Hider will work on it.
+        h2 2. Nudge is the subject of academic research
+        p I've been working with the University of Neuchâtel in Switzerland to look into the effectiveness of Nudge's interventions.
+        p This has led to 
+          a(href="https://dl.acm.org/doi/abs/10.1145/3334480.3382810" target="_blank") a short paper 
+          | about Nudge by Aditya Kumar Purohit at the University of Neuchâtel being accepted to 
+          a(href="https://chi2020.acm.org/" target="_blank") CHI '20
+          | , one of the top-ranked conferences in computer science (thank you Aditya!).
+        p The paper writes:
+        p "Our results show that Nudge (1) helped users to become reflective of their social media usage, (2) possibly decreased their time spent, and (3) made the experience more pleasant."
+        p More research to follow, hopefully. Get in touch at my email address below if interested.
+        h2 3. The Unfollower and Facebook Greyifyer are temporarily out of action
+        p Facebook updated their site which means I have to figure out new ways of making these two features work.
+        p Sign up to the mailing list below to stay updated.
+        h2 4. Bug fixes, including one particularly bad one
+        p As usual, I've been squashing as many bugs as possible.
+        p For instance, a lot of people complained about their Nudge sites not saving, which is pretty terrible. Sorry about this. Hopefully the problem is now solved for good.
+        p.spacing If not, or if there's a different issue bothering you, please submit a bug 
+          a(href="https://github.com/lgwb89/nudge/issues" target="_blank") here on GitHub
+          | .
+        p ***
+        form#mc-embedded-subscribe-form.validate(action='https://nudgeware.us5.list-manage.com/subscribe/post?u=8b0fe4a0d9e0cb9ac0d96db09&id=d3b4c5f9ac' method='post' name='mc-embedded-subscribe-form' target='_blank' novalidate='')
+          #mc_embed_signup_scroll
+            .mc-field-group
+              input#mce-EMAIL.required.email(type='email' value='' name='EMAIL' placeholder='Type email and press enter to join mailing list' autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" size="40")
+            #mce-responses.clear
+              #mce-error-response.response(style='display:none')
+              #mce-success-response.response(style='display:none')
+            div(style='position: absolute; left: -5000px;' aria-hidden='true')
+              input(type='text' name='b_8b0fe4a0d9e0cb9ac0d96db09_d3b4c5f9ac' tabindex='-1' value='')
+            .clear.options-subscribe-button-container(style="visibility: hidden; height: 0; padding: 0; margin: 0")
+              input#mc-embedded-subscribe.options-subscribe-button.button(type='submit' value='Subscribe' name='subscribe')
+        p.spacing ***
+        p.spacing Thanks for reading!
+        .horizontal.spacing
+          .profile-picture.spacing-small
+          .vertical
+            p.br.strong Louis Barclay
+            p.br Founder of Nudge
+            p louis@nudgeware.io
+  script(src="../../config.js")
+  script(src="../../js/background/storage.js")
+  script(src="../../js/helpers.js")
+  script(src="../../js/support.js")

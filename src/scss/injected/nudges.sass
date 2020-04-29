@@ -39,8 +39,10 @@ $gradient-colors-2: #61A7FF, #719FF5, #8298EC, #9290E3, #A389D9, #B482D0, #C47AC
 $gradient-colors-3: $nudge-blue, $nudge-pink
 $gradient-colors-4: #61a7ff, #8099ed, #a08bdb, #bf7dca, #df6fb8, #ff61a7
 $gradient-colors-5: #8099ed, #a08bdb, #bf7dca, #df6fb8, #ff61a7
+$gradient-colors-6: #8099ED,#998DDF,#B282D1, #CC77C3, #E56CB5, #FF61A7
 
-$nudge-colors: $gradient-colors-5
+
+$nudge-colors: $gradient-colors-6
 $quarter-opacity: 0.4
 
 // For auto-generation
@@ -214,9 +216,6 @@ $n-z-index: 20
       +border($style: none)
       // background: $white
       position: fixed
-      // // Little animation
-      // animation-name: fadeInUp
-      // animation-duration: 0.5s
 
     &banner
       // Font size
@@ -235,7 +234,9 @@ $n-z-index: 20
       position: relative
       transition: opacity 6s
       opacity: 0
-      animation: fadeIn 4s forwards
+      // animation-name: fadeIn !important
+      // Need it to force Facebook to work properly
+      animation: fadeIn 4s forwards !important
 
     &control_position
       z-index: $max-z

@@ -2,5 +2,4 @@
 /releases
 /.sass-cache
 /.vscode
-/.deprecated
-credentials.js
+.env

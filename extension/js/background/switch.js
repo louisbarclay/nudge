@@ -1,6 +1,6 @@
 function switchOff(domain, url, tabId, option) {
   // log(tabId)
-  if (settingsLocal.domains[domain].nudge) {
+  if (settingsLocal.nudge_domains.includes(domain)) {
     url =
       chrome.extension.getURL(`html/pages/off_${option}.html`) +
       "?" +
@@ -12,38 +12,19 @@ function switchOff(domain, url, tabId, option) {
       "&" +
       "option=" +
       option
-    // if ( domain last nudged was within 1 minute,,, ,, , , , )
     eventLog("nudge_off", { domain })
-    settingsLocal.domains[domain].off = true
     try {
-      chrome.tabs.update(tabId, { url }, function() {})
+      chrome.tabs.update(tabId, { url }, function () {})
     } catch (e) {
       // log(e)
     }
   }
 }
 
-function switchOn(domain, url, tabId) {
-  settingsLocal.domains[domain].off = false
-  // url = decodeURIComponent(url); FIXME: test this. Don't think you need it
-  // missing any part about changing the settings
+function switchOn(url, tabId) {
   try {
-    chrome.tabs.update(tabId, { url }, function() {})
+    chrome.tabs.update(tabId, { url }, function () {})
   } catch (e) {
     log(e)
   }
-}
-
-function closeAll(domain) {
-  chrome.tabs.query({}, function(tabs) {
-    for (var i = 0; i < tabs.length; i++) {
-      if (domainCheck(tabs[i].url, settingsLocal) === domain) {
-        try {
-          chrome.tabs.remove(tabs[i].id)
-        } catch (e) {
-          log(e)
-        }
-      }
-    }
-  })
 }

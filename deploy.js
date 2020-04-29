@@ -1,16 +1,14 @@
 // Utility script to deploy
-// Needs a credentials.js file to refer to (git ignored)
-
+require("dotenv").config()
 var fs = require("fs")
 var zipFolder = require("zip-folder")
-var credentials = require("./credentials")
 var allowUpload = true
 var allowPublish = true
 const webStore = require("chrome-webstore-upload")({
-  extensionId: "dmhgdnbkjkejeddddlklojinngaideac",
-  clientId: credentials.id,
-  clientSecret: credentials.secret,
-  refreshToken: credentials.refreshToken
+  extensionId: process.env.EXTENSION_ID,
+  clientId: process.env.GOOGLE_API_ID,
+  clientSecret: process.env.GOOGLE_API_SECRET,
+  refreshToken: process.env.GOOGLE_API_REFRESH_TOKEN,
 })
 
 // Useful: https://github.com/DrewML/chrome-webstore-upload/blob/master/How%20to%20generate%20Google%20API%20keys.md
@@ -22,7 +20,7 @@ var previousVersion = manifest.version
 var folderName = "extension"
 var zipName = `releases/NudgeExtension_v${manifest.version}.zip`
 
-zipFolder(folderName, zipName, async function(err) {
+zipFolder(folderName, zipName, async function (err) {
   if (err) {
     console.log("oh no! ", err)
   } else {
@@ -48,7 +46,7 @@ zipFolder(folderName, zipName, async function(err) {
           var vArray = {
             vMajor: versionParts[0],
             vMinor: versionParts[1],
-            vPatch: versionParts[2]
+            vPatch: versionParts[2],
           }
           vArray.vPatch = parseFloat(vArray.vPatch) + 1
           var periodString = "."
@@ -63,7 +61,7 @@ zipFolder(folderName, zipName, async function(err) {
           fs.writeFile(
             manifestFileName,
             JSON.stringify(manifest, null, 2),
-            function(err) {
+            function (err) {
               if (err) return console.log(err)
               console.log(
                 `Bumped version from ${previousVersion} to ${manifest.version}`

@@ -12,7 +12,7 @@ function everySecond() {
     amplitudeHttpEvent("active", {
       time: moment(),
       dev: config.dev,
-      share_data: settingsLocal.share_data
+      share_data: settingsLocal.share_data,
     })
   }
 
@@ -22,7 +22,7 @@ function everySecond() {
     return
   }
   // Don't do anything if no windows exist
-  chrome.windows.getAll(null, function(windows) {
+  chrome.windows.getAll(null, function (windows) {
     if (windows.length === 0) {
       if (currentState.domain !== notInChrome) {
         timeline(notInChrome, "everySecond")
@@ -30,7 +30,7 @@ function everySecond() {
       }
     } else {
       // Find out if there are any windows active, and if so grab the active tab
-      chrome.windows.getLastFocused({ populate: true }, function(window) {
+      chrome.windows.getLastFocused({ populate: true }, function (window) {
         // If no windows are focused, check if notInChrome, and if not, add notInChrome to timeline
         if (!window.focused) {
           if (currentState.domain !== notInChrome) {
@@ -69,26 +69,25 @@ function onTabIdle(status, domain) {
 }
 
 // Check whether new version is installed
-chrome.runtime.onInstalled.addListener(function(details) {
+chrome.runtime.onInstalled.addListener(function (details) {
   if (details.reason == "install") {
-    eventLog("install", {}, moment())
+    eventLog("install", {})
     // Start onboarding on install
     chrome.tabs.create({
-      url: getUrl("html/pages/start.html")
+      url: getUrl("html/pages/start.html"),
     })
     logInstall = true
   } else if (details.reason == "update") {
     var thisVersion = chrome.runtime.getManifest().version
-    eventLog(
-      "update",
-      {
-        previousVersion: details.previousVersion,
-        thisVersion
-      },
-      moment()
-    )
+    eventLog("update", {
+      previousVersion: details.previousVersion,
+      thisVersion,
+    })
     if (details.previousVersion !== thisVersion || config.dev) {
-      // showUpdateArticle = true
+      // Can configure showing an update article here, for instance
+      // chrome.tabs.create({
+      //   url: getUrl("html/pages/update58.html"),
+      // })
     }
   }
 })
@@ -113,17 +112,17 @@ chrome.tabs.onRemoved.addListener(function onRemoved(tabId) {
     var statusObj = open("status")
     // If the domain of the closed tab is not the same as the domain of the current tab from currentState, and if we care about that tab
     if (statusObj.currentState.domain !== domain && isNudgeDomain(domain)) {
-      chrome.tabs.query({}, function(tabs) {
+      chrome.tabs.query({}, function (tabs) {
         // If no tabs with that domain now exist
         if (tabsChecker(tabs, domain)) {
           var statusObj = open("status")
           dataAdder(statusObj, domain, moment(), "lastShutdown")
           // Shutdown happened so turn off site if off by default is on, even if snooze is on
           if (settingsLocal.off_by_default) {
-            changeSetting(true, "domains", domain, "off")
+            removeDomainFromOnDomains(settingsLocal, domain)
           }
           close("status", statusObj, "status close in check off")
-          eventLog("shutdown", { domain }, moment())
+          eventLog("shutdown", { domain })
         }
       })
     } else {
@@ -147,8 +146,8 @@ function tabsChecker(tabs, domain) {
 }
 
 // When Chrome window closed
-chrome.windows.onRemoved.addListener(function(windowId) {
-  chrome.windows.getAll(null, function(windows) {
+chrome.windows.onRemoved.addListener(function (windowId) {
+  chrome.windows.getAll(null, function (windows) {
     if (windows.length === 0) {
       timeline(notInChrome, "chrome.windows.onRemoved")
     }
@@ -165,19 +164,12 @@ chrome.webNavigation.onBeforeNavigate.addListener(function runOnBeforeNavigate(
     if (details.parentFrameId === -1 && config.offByDefault) {
       try {
         var domain = domainCheck(details.url, settingsLocal)
-        let dontNudge = checkSnoozeAndSchedule(settingsLocal)
         // Check for domain we care about, that's off, and for snoozing
         if (
-          isNudgeDomain(domain) &&
-          settingsLocal.domains[domain] &&
-          settingsLocal.domains[domain].off &&
-          !dontNudge
+          settingsLocal.off_by_default &&
+          domainIsNotOnAndIsNudgeable(settingsLocal, domain)
         ) {
-          if (settingsLocal.off_by_default) {
-            switchOff(domain, details.url, details.tabId, "bydefault")
-          } else {
-            switchOff(domain, details.url, details.tabId, "normal")
-          }
+          switchOff(domain, details.url, details.tabId, "bydefault")
         }
       } catch (e) {
         // log(e)
@@ -254,16 +246,8 @@ chrome.windows.onFocusChanged.addListener(function windowOnFocusChanged() {
           log("Couldn't evaluate domainCheck")
         }
 
-        let dontNudge = checkSnoozeAndSchedule(settingsLocal)
-        if (
-          // Check if the domain would have just been redirected to off page
-          !(
-            isNudgeDomain(domain) &&
-            settingsLocal.domains[domain] &&
-            settingsLocal.domains[domain].off &&
-            !dontNudge
-          )
-        ) {
+        // Check if the domain would have just been redirected to off page
+        if (!domainIsNotOnAndIsNudgeable(settingsLocal, domain)) {
           timeline(domain, "windows.onFocusChanged")
         }
       }
@@ -273,7 +257,7 @@ chrome.windows.onFocusChanged.addListener(function windowOnFocusChanged() {
 
 // Stop autoplay feature
 chrome.webRequest.onBeforeRequest.addListener(
-  function(request) {
+  function (request) {
     if (settingsLocal.stop_autoplay) {
       const cancel =
         request.url.indexOf("watch_autoplayrenderer.js") !== -1 ||
@@ -282,7 +266,7 @@ chrome.webRequest.onBeforeRequest.addListener(
     }
   },
   {
-    urls: ["*://*.ytimg.com/yts/jsbin/*", "*://*.youtube.com/yts/jsbin/*"]
+    urls: ["*://*.ytimg.com/yts/jsbin/*", "*://*.youtube.com/yts/jsbin/*"],
   },
   ["blocking"]
 )
@@ -313,16 +297,10 @@ chrome.tabs.onUpdated.addListener(function findUpdatedTab(
 
   if (tab.active === true) {
     try {
-      chrome.windows.get(tab.windowId, function(window) {
-        let dontNudge = checkSnoozeAndSchedule(settingsLocal)
+      chrome.windows.get(tab.windowId, function (window) {
         if (
           window.focused &&
-          !(
-            isNudgeDomain(domain) &&
-            settingsLocal.domains[domain] &&
-            settingsLocal.domains[domain].off &&
-            !dontNudge
-          )
+          !domainIsNotOnAndIsNudgeable(settingsLocal, domain)
         ) {
           timeline(domain, "tabs.onUpdated")
         }
@@ -332,3 +310,16 @@ chrome.tabs.onUpdated.addListener(function findUpdatedTab(
     }
   }
 })
+
+// Utils
+function domainIsNotOnAndIsNudgeable(settings, domain) {
+  if (
+    isNudgeDomain(domain) &&
+    !checkSnoozeAndSchedule(settings) &&
+    !settings.on_domains.includes(domain)
+  ) {
+    return true
+  } else {
+    return false
+  }
+}

@@ -1,0 +1,14 @@
+include ../../bemto/bemto.pug
+- 
+  set_bemto_settings({
+    prefix: {
+      '': 'hider-menu-',
+    }
+  })
+
++b.container
+  +b.content
+    +b.dropdown
+      +b.dropdown-content(style="display:none")
+        +b.button-small#hider-show-once Show Section
+        +b.link#hider-show-always Always ⚠️

@@ -16,6 +16,8 @@ function debugLogger(eventType, detailsObj) {
   }
 }
 
+execSettings()
+
 // Get Facebook user_id and fb_dtsg token needed to send Xhr requests
 async function getFacebookCreds(callback) {
   // Get the fb_dtsg token that must be passed to get a successful response to an XMLHttpRequest from Facebook
@@ -52,6 +54,11 @@ async function getFacebookCreds(callback) {
     }
   }
 
+  // Prevent unfollower from running for now since it's broken
+  if (true) {
+    return
+  }
+
   // Set ratio, which is 0 if all friends, groups and pages unfollowed, 1 if none unfollowed, 0.5 if half unfollowed etc.
   var ratio = settings.fb_profile_ratio
   debugLogger("getRatio", { ratio })
@@ -75,7 +82,7 @@ async function getFacebookCreds(callback) {
           if (!document.getElementById("nudge-dialog")) {
             docReady(function () {
               // log(keyDefined(storage, uxUrl));
-              if (keyDefined(nudgeStorage, uxUrl)) {
+              if (keyDefined(extensionStorage, uxUrl)) {
                 // only do this EVER if it's prepped:
                 if (!document.getElementById("nudge-dialog")) {
                   appendHtml(element, nudgeStorage[uxUrl], function () {
@@ -450,7 +457,7 @@ function friendAndPageToggler(option) {
                 }
                 var bottom = document.querySelector(".facebook-bottom-text")
                 if (bottom) {
-                  bottom.innerHTML = nudgeStorage["share_bottom.html"]
+                  bottom.innerHTML = extensionStorage["share_bottom.html"]
                   shareBottomLinks()
                 }
               }, 2000)
@@ -564,10 +571,10 @@ function moreLink(intro) {
     var back_to_share = document.getElementById("back_to_share")
     back_to_share.onclick = function () {
       if (intro) {
-        container.innerHTML = nudgeStorage["intro.html"]
+        container.innerHTML = extensionStorage["intro.html"]
         intro()
       } else {
-        container.innerHTML = nudgeStorage["share_content.html"]
+        container.innerHTML = extensionStorage["share_content.html"]
         shareUx()
       }
     }
@@ -619,7 +626,7 @@ function confirmUx() {
   var container = document.querySelector(".facebook-container")
   button.onclick = function () {
     cancelOperation = false
-    container.innerHTML = nudgeStorage["run_content.html"]
+    container.innerHTML = extensionStorage["run_content.html"]
     eventLogSender("fb_unfollow_confirm_button", {})
     if (profilesLoaded && !currentlyUnfollowing) {
       friendAndPageToggler(unfollow)
@@ -692,10 +699,6 @@ function shareUx() {
   el("js-survey").onclick = function () {
     eventLogSender("survey", { source: "fb_share" })
   }
-  // Old sharing function
-  // el("nudge-share").onclick = function() {
-  //   eventLogSender("share_link", { location: "fb_ad", domain })
-  // }
   shareBottomLinks()
   // to refollow, go to // want to make clear where you go to refollow
 }

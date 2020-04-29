@@ -1,114 +1,77 @@
 var reload = false
 
-start()
+initialise()
 
 setInterval(everySecond, 1000)
 
 chrome.runtime.setUninstallURL("https://goo.gl/forms/YqSuCKMQhP3PcFz13")
 
-// Get things going
-function start() {
-  chrome.storage.sync.get(null, function(syncStorage) {
-    // If items.settings doesn't exist, the user is old school style
-    // This must hardly ever trigger!
-    if (typeof syncStorage == "undefined") {
-      log("Startup: no sync storage")
-      createNewInstance()
-    } else if (typeof syncStorage.settings == "undefined") {
-      log("Startup: no settings in sync storage")
-      createNewInstance()
-    } else if (typeof syncStorage.settings.userId == "undefined") {
-      log("Startup: no user ID in syncstorage.settings")
-      createNewInstance()
-    } else {
-      log("Startup: user ID in syncstorage.settings")
-      // If items.settings and userId does exist, there is stuff there we need to grab
-      // This will also add any new settings in
-      loadSettingsAndAmplitude()
-    }
+async function initialise() {
+  const storage = await loadSyncStorage()
 
-    // Clear local and sync storage and create settings for the first time
-    function createNewInstance() {
-      // Clear localStorage
-      localStorageClear()
-      // Clear syncStorage
-      syncStorageClear()
-      storageSet(
-        {
-          settings: createSettings()
-        },
-        loadSettingsAndAmplitude
-      )
-    }
-  })
+  if (!storage || !storage.settings || !storage.settings.userId) {
+    // log("Startup: no user ID")
+    await setSyncStorage({ settings: createSettings() })
+    loadSettingsAndAmplitude("newUser")
+  } else {
+    // log("Startup: user ID in syncstorage.settings")
+    // If items.settings and userId does exist, there is stuff there we need to grab
+    // This will also add any new settings in
+    loadSettingsAndAmplitude("existingUser")
+  }
 }
 
 // Get settings from sync to settingsLocal, and run options page if asked for
-async function loadSettingsAndAmplitude() {
+async function loadSettingsAndAmplitude(userType) {
   // Get settings
-  chrome.storage.sync.get("settings", function(item) {
-    // Get settings locally
-    settingsLocal = item.settings
+  const settings = await loadSettings()
+  // Update local settings
+  settingsLocal = settings
 
-    // Initialise Amplitude - must do it here, before any Amplitude events are sent
-    if (settingsLocal.share_data) {
-      amplitude.getInstance().init(amplitudeCreds.apiKey)
-      // Set user ID
-      amplitude.getInstance().setUserId(settingsLocal.userId)
-    }
+  // Initialise Amplitude
+  if (settingsLocal.share_data) {
+    amplitude.getInstance().init(amplitudeCreds.apiKey)
+    // Set user ID
+    amplitude.getInstance().setUserId(settingsLocal.userId)
+  }
 
-    // Add individual settings that don't exist
-    Object.keys(defaultSettings).forEach(function(key) {
-      if (isUndefined(item.settings[key])) {
-        console.log(`${key} not present in settings, will update with default`)
-        changeSetting(defaultSettings[key], key)
-      }
+  // Migrate settings
+  if (!settings.settings_version || settings.settings_version !== 2) {
+    settingsLocal = migrateSettings(settings)
+    await setSyncStorage({ settings: settingsLocal })
+  }
+
+  // Log install event
+  if (logInstall) {
+    changeSetting(moment().format(), "install_date")
+    amplitudeHttpEvent("install", { time: moment(), dev: config.dev })
+    logInstall = false
+  }
+
+  // Analytics
+  if (settingsLocal.share_data) {
+    // Log startup event
+    amplitude.getInstance().logEvent("startup", {
+      share_data: settingsLocal.share_data,
+      dev: config.dev,
+      userType,
+      settings:
+        userType === "existingUser"
+          ? JSON.stringify(settings)
+          : "defaultSettings",
     })
-
-    // Show update article on startup if it hasn't been shown since the update
-    if (showUpdateArticle) {
-      chrome.tabs.create({
-        url: getUrl(`html/pages/update53.html`)
-      })
-      showUpdateArticle = false
-    }
-
-    // Log install event
-    if (logInstall) {
-      changeSetting(moment().format(), "install_date")
-      amplitudeHttpEvent("install", { time: moment(), dev: config.dev })
-      logInstall = false
-    }
-
-    // Temporary migration for unhidden_divs to become an array
-    if (!Array.isArray(settingsLocal.unhidden_divs)) {
-      changeSetting([], "unhidden_divs")
-    }
-
-    if (settingsLocal.off_by_default) {
-      // Set all domains off by default
-      toggleOffByDefault(settingsLocal.off_by_default)
-    }
-
-    // Analytics
-    if (settingsLocal.share_data) {
-      // Log startup event
-      amplitude.getInstance().logEvent("startup", {
-        share_data: settingsLocal.share_data,
-        dev: config.dev
-      })
-      // Always sync all settings on startup, just to make sure they're in sync
-      var identify = new amplitude.Identify()
-      flushSettingsToAmplitude(settingsLocal, identify)
-      amplitude.getInstance().identify(identify)
-    } else {
-      // Amplitude HTTP request for non-share data people
-      amplitudeHttpEvent("startup", {
-        dev: config.dev,
-        share_data: settingsLocal.share_data
-      })
-    }
-  })
+    // Always sync all settings on startup, just to make sure they're in sync
+    var identify = new amplitude.Identify()
+    sendAllSettingsToAmplitude(settingsLocal, identify)
+    amplitude.getInstance().identify(identify)
+  } else {
+    // Amplitude HTTP request for non-share data people
+    amplitudeHttpEvent("startup", {
+      dev: config.dev,
+      share_data: settingsLocal.share_data,
+      userType,
+    })
+  }
 }
 
 // Set the initial currentState
@@ -118,7 +81,7 @@ function checkCurrentState() {
     source: "initial",
     time: moment(),
     lastEverySecond: moment(),
-    lastRealDomain: notInChrome
+    lastRealDomain: notInChrome,
   }
   var statusObj = open("status")
   // FIXME: sometimes lastEverySecond is not defined. This is a problem!
@@ -149,7 +112,7 @@ function timelineObject(domain, source, timeOverride, lastRealDomain) {
     domain,
     source: source,
     lastEverySecond: moment(),
-    lastRealDomain: isNudgeDomain(domain) ? domain : lastRealDomain
+    lastRealDomain: isNudgeDomain(domain) ? domain : lastRealDomain,
   }
 }
 
@@ -345,7 +308,7 @@ const amplitudeHttpEvent = (eventType, eventProperties) => {
   var url = "https://api.amplitude.com/2/httpapi"
   var event = {
     user_id: settingsLocal.userId,
-    event_type: eventType
+    event_type: eventType,
   }
   if (eventProperties) {
     event.event_properties = eventProperties
@@ -353,7 +316,7 @@ const amplitudeHttpEvent = (eventType, eventProperties) => {
 
   var data = {
     api_key: amplitudeCreds.apiKey,
-    events: [event]
+    events: [event],
   }
 
   async function postData() {
@@ -363,8 +326,8 @@ const amplitudeHttpEvent = (eventType, eventProperties) => {
         body: JSON.stringify(data),
         headers: {
           "Content-Type": "application/json",
-          Accept: "*/*"
-        }
+          Accept: "*/*",
+        },
       })
     } catch (error) {}
   }
