@@ -56,11 +56,6 @@ async function execSettings() {
     return
   }
 
-  // Prevent unfollower from running for now since it's broken
-  if (true) {
-    return
-  }
-
   // Some Facebook-specific nudges
   // If user wants Facebook bar grey, set grey
   if (settings.fb_grey) {
@@ -69,6 +64,11 @@ async function execSettings() {
     if (settings.fb_hide_notifications) {
       addCSS("nudge-facebook-notifications", "css/injected/notifications.css")
     }
+  }
+
+  // Prevent unfollower from running for now since it's broken
+  if (true) {
+    return
   }
 
   // Set ratio, which is 0 if all friends, groups and pages unfollowed, 1 if none unfollowed, 0.5 if half unfollowed etc.
