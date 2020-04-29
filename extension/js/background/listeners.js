@@ -85,9 +85,9 @@ chrome.runtime.onInstalled.addListener(function (details) {
     })
     if (details.previousVersion !== thisVersion || config.dev) {
       // Can configure showing an update article here, for instance
-      chrome.tabs.create({
-        url: getUrl("html/pages/update58.html"),
-      })
+      // chrome.tabs.create({
+      //   url: getUrl("html/pages/update58.html"),
+      // })
     }
   }
 })
