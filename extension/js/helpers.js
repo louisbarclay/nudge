@@ -390,6 +390,19 @@ function onDocHeadExists(callback) {
   }
 }
 
+// Async version
+async function docHeadExists() {
+  return new Promise((resolve) => {
+    document.addEventListener("DOMSubtreeModified", onLoad, false)
+    function onLoad() {
+      if (document.body) {
+        document.removeEventListener("DOMSubtreeModified", onLoad, false)
+        resolve(true)
+      }
+    }
+  })
+}
+
 function sendMessage(type, object) {
   object.type = type
   chrome.runtime.sendMessage(object)
@@ -554,15 +567,6 @@ function click(x, y) {
   var el = document.elementFromPoint(x, y)
 
   el.dispatchEvent(ev)
-}
-
-// Load syncStorage
-const loadSyncStorage = async () => {
-  return new Promise((resolve) => {
-    chrome.storage.sync.get(null, function (storage) {
-      resolve(storage)
-    })
-  })
 }
 
 function removeDomainFromOnDomains(settings, domain) {
