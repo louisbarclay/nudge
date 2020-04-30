@@ -16,8 +16,6 @@ function debugLogger(eventType, detailsObj) {
   }
 }
 
-log("asdfsadf")
-
 // Get Facebook user_id and fb_dtsg token needed to send Xhr requests
 async function getFacebookCreds() {
   // Get the fb_dtsg token that must be passed to get a successful response to an XMLHttpRequest from Facebook
@@ -73,10 +71,8 @@ async function getFacebookCreds() {
     addCSS("nudge-facebook-dialog", "css/injected/facebook.css")
     // Function to load HTML and configure UX into Nudge dialog box
     async function loadUx(uxUrl, uxFunc) {
-      log("go")
       await docHeadExists()
       const unfollowerContainer = await createUnfollowerContainer()
-      log(unfollowerContainer)
       if (keyDefined(extensionStorage, uxUrl)) {
         // only do this EVER if it's prepped:
         if (!document.getElementById("nudge-dialog")) {
@@ -591,9 +587,11 @@ function introUx(element) {
     eventLogSender("fb_unfollow_intro_button", {})
     confirmUx()
   }
-  el("js-survey").onclick = function () {
-    eventLogSender("survey", { source: "fb_intro" }, moment())
-  }
+  try {
+    el("js-survey").onclick = function () {
+      eventLogSender("survey", { source: "fb_intro" }, moment())
+    }
+  } catch (e) {}
   hideLink()
   close.onclick = function () {
     deleteEl(container)
@@ -681,9 +679,11 @@ function shareUx() {
     deleteEl(container)
     deleteEl(close)
   }
-  el("js-survey").onclick = function () {
-    eventLogSender("survey", { source: "fb_share" })
-  }
+  try {
+    el("js-survey").onclick = function () {
+      eventLogSender("survey", { source: "fb_share" })
+    }
+  } catch (e) {}
   shareBottomLinks()
   // to refollow, go to // want to make clear where you go to refollow
 }
