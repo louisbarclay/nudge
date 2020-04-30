@@ -9,7 +9,14 @@ async function execSettings() {
     return
   }
 
-  var url = window.location.href
+  const url = window.location.href
+
+  if (settings.stop_autoplay) {
+    const extractedDomain = extractDomain(url)
+    if (extractedDomain.includes("youtube.com")) {
+      autoplayStopper()
+    }
+  }
 
   // Find domain
   try {
