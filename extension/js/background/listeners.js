@@ -255,22 +255,6 @@ chrome.windows.onFocusChanged.addListener(function windowOnFocusChanged() {
   )
 })
 
-// Stop autoplay feature
-chrome.webRequest.onBeforeRequest.addListener(
-  function (request) {
-    if (settingsLocal.stop_autoplay) {
-      const cancel =
-        request.url.indexOf("watch_autoplayrenderer.js") !== -1 ||
-        request.url.indexOf("endscreen.js") !== -1
-      return { cancel }
-    }
-  },
-  {
-    urls: ["*://*.ytimg.com/yts/jsbin/*", "*://*.youtube.com/yts/jsbin/*"],
-  },
-  ["blocking"]
-)
-
 // Add to tabIdStorage onCreated
 chrome.tabs.onCreated.addListener(function findCreatedTab(tab) {
   // New record in tabIdStorage
