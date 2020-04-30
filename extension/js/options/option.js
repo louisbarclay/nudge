@@ -26,14 +26,14 @@ var optionsIndex = [
     page: "scrollnudger.html",
     name: "Scroll Nudger",
   },
-  // {
-  //   page: "unfollower.html",
-  //   name: "Unfollower",
-  // },
-  // {
-  //   page: "facebooktweaker.html",
-  //   name: "Facebook Greyifyer",
-  // },
+  {
+    page: "unfollower.html",
+    name: "Unfollower",
+  },
+  {
+    page: "facebooktweaker.html",
+    name: "Facebook Greyifyer",
+  },
   {
     page: "youtubeautoplaystopper.html",
     name: "YouTube Autoplay Stopper",
