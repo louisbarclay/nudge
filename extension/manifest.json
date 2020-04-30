@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "version": "1.0.60",
+  "version": "1.0.61",
   "name": "Nudge",
   "permissions": [
     "idle",
@@ -69,6 +69,7 @@
         "js/content/controller.js",
         "js/content/time.js",
         "js/content/scroll.js",
+        "js/content/autoplay_stopper.js",
         "js/content/cache.js",
         "js/content/hider.js"
       ],
