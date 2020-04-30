@@ -16,22 +16,25 @@ function debugLogger(eventType, detailsObj) {
   }
 }
 
-execSettings()
+log("asdfsadf")
 
 // Get Facebook user_id and fb_dtsg token needed to send Xhr requests
-async function getFacebookCreds(callback) {
+async function getFacebookCreds() {
   // Get the fb_dtsg token that must be passed to get a successful response to an XMLHttpRequest from Facebook
   try {
     // Get fb_dtsg
-    const fb_dtsg = await getFbToken()
+    fb_dtsg = await getFbToken()
     debugLogger("getFbDtsg", { length: fb_dtsg.length })
-    const user_id = getUserId()
+    user_id = getUserId()
     debugLogger("getUserId", { length: user_id.length })
     // Get user_id
   } catch (e) {
     debugLogger("failedCreds", { errorMessage: e })
     // Error catching
   }
+  return new Promise((resolve) => {
+    resolve()
+  })
 }
 
 ;(async function () {
@@ -54,11 +57,6 @@ async function getFacebookCreds(callback) {
     }
   }
 
-  // Prevent unfollower from running for now since it's broken
-  if (true) {
-    return
-  }
-
   // Set ratio, which is 0 if all friends, groups and pages unfollowed, 1 if none unfollowed, 0.5 if half unfollowed etc.
   var ratio = settings.fb_profile_ratio
   debugLogger("getRatio", { ratio })
@@ -71,46 +69,37 @@ async function getFacebookCreds(callback) {
 
   // Only show the Nudge dialog box if user has this setting true
   if (settings.fb_auto_unfollow) {
-    // Cover the pagelet_composer element with a white pseudo-element
-    onDocHeadExists(function () {
-      addCSS("nudge-facebook-dialog", "css/injected/facebook.css")
-    })
+    // Add the CSS for the dialog
+    addCSS("nudge-facebook-dialog", "css/injected/facebook.css")
     // Function to load HTML and configure UX into Nudge dialog box
-    function loadUx(uxUrl, uxFunc) {
-      onDocHeadExists(function () {
-        pageletInit(function (element) {
-          if (!document.getElementById("nudge-dialog")) {
-            docReady(function () {
-              // log(keyDefined(storage, uxUrl));
-              if (keyDefined(extensionStorage, uxUrl)) {
-                // only do this EVER if it's prepped:
-                if (!document.getElementById("nudge-dialog")) {
-                  appendHtml(element, nudgeStorage[uxUrl], function () {
-                    uxFunc()
-                  })
-                }
-              }
-            })
-          }
-        })
-      })
+    async function loadUx(uxUrl, uxFunc) {
+      log("go")
+      await docHeadExists()
+      const unfollowerContainer = await createUnfollowerContainer()
+      log(unfollowerContainer)
+      if (keyDefined(extensionStorage, uxUrl)) {
+        // only do this EVER if it's prepped:
+        if (!document.getElementById("nudge-dialog")) {
+          appendHtml(unfollowerContainer, extensionStorage[uxUrl], function () {
+            uxFunc()
+          })
+        }
+      }
     }
     // If the user has unfollowed nearly all of their friends, show 'Share' dialog box, not
     // 'Delete your News Feed' dialog box
     loadUx("run.html", runUx)
-    // docReady(function () {
-    //   getFacebookCreds(function () {
-    //     // If we should be executing an unfollow, e.g. in case of autoUnfollow being on, go ahead and do it
-    //     if (executeUnfollow) {
-    //       friendAndPageListGenerator(unfollow, false, function () {
-    //         executeUnfollow = false
-    //       })
-    //     } else {
-    //       // Otherwise, load all profiles
-    //       friendAndPageListGenerator(unfollow, false)
-    //     }
-    //   })
-    // })
+
+    await getFacebookCreds()
+    // If we should be executing an unfollow, e.g. in case of autoUnfollow being on, go ahead and do it
+    if (executeUnfollow) {
+      friendAndPageListGenerator(unfollow, false, function () {
+        executeUnfollow = false
+      })
+    } else {
+      // Otherwise, load all profiles
+      friendAndPageListGenerator(unfollow, false)
+    }
   }
 })()
 
@@ -484,18 +473,15 @@ function moveOnToNextProfile(option) {
 }
 
 // UX stuff
-function pageletInit(callback) {
-  var unfollowerContainer = createEl(
+async function createUnfollowerContainer() {
+  const unfollowerContainer = createEl(
     document.body,
     "div",
     "unfollower-container"
   )
-  unfollowerContainer.style.width = "100%"
-  unfollowerContainer.style.height = "500px"
-  unfollowerContainer.style.position = "fixed"
-  unfollowerContainer.style.bottom = "0"
-  unfollowerContainer.style.background = "white"
-  callback(unfollowerContainer)
+  return new Promise((resolve) => {
+    resolve(unfollowerContainer)
+  })
 }
 
 // UX helpers
@@ -504,7 +490,6 @@ function hideLink() {
   var close = document.querySelector(".facebook-close")
   var hide = document.getElementById("fb_show_unfollow")
   hide.onclick = function () {
-    changeSettingRequest("toggle", hide.id)
     deleteEl(container)
     deleteEl(close)
     styleAdder("#pagelet_composer::before", "{ content: none !important; }")
@@ -567,7 +552,7 @@ function moreLink(intro) {
   var container = document.querySelector(".facebook-container")
   var link_to_more = document.getElementById("link_to_more")
   link_to_more.onclick = function () {
-    container.innerHTML = nudgeStorage["more_content.html"]
+    container.innerHTML = extensionStorage["more_content.html"]
     var back_to_share = document.getElementById("back_to_share")
     back_to_share.onclick = function () {
       if (intro) {
@@ -602,7 +587,7 @@ function introUx(element) {
   }
   var unfollowButton = el("js-unfollow")
   unfollowButton.onclick = function () {
-    container.innerHTML = nudgeStorage["confirm_content.html"]
+    container.innerHTML = extensionStorage["confirm_content.html"]
     eventLogSender("fb_unfollow_intro_button", {})
     confirmUx()
   }
@@ -640,13 +625,14 @@ function confirmUx() {
 // UX for run.html
 function runUx() {
   var container = document.querySelector(".facebook-container")
+  var overallContainer = document.getElementById("unfollower-container")
   var text = document.querySelector(".facebook-text")
   buttonInit()
   var close = document.querySelector(".facebook-close")
   close.onclick = function () {
     deleteEl(container)
     deleteEl(close)
-    stopInit()
+    deleteEl(overallContainer)
     styleAdder("#pagelet_composer::before", "{ content: none !important; }")
     var dialog = document.getElementById("facebook-nudge-dialog")
     deleteEl(dialog)
@@ -694,7 +680,6 @@ function shareUx() {
   close.onclick = function () {
     deleteEl(container)
     deleteEl(close)
-    styleAdder("#pagelet_composer::before", "{ content: none !important; }")
   }
   el("js-survey").onclick = function () {
     eventLogSender("survey", { source: "fb_share" })
@@ -730,6 +715,13 @@ async function getFbToken() {
 
     // Start an observer to look at scripts
     const observer = new MutationObserver(() => {
+      // Other option goes here
+
+      if (document.getElementsByName("fb_dtsg").length > 0) {
+        const token = document.getElementsByName("fb_dtsg")[0].value
+        resolve(token)
+      }
+
       const scripts = document.getElementsByTagName("SCRIPT")
       Array.from(scripts).forEach((script) => {
         if (script.innerHTML.includes("fb_dtsg")) {
