@@ -12,43 +12,34 @@ var retryUnfollowCount = 0
 
 function debugLogger(eventType, detailsObj) {
   if (config.debug) {
-    // log(eventType, detailsObj)
+    log(eventType, detailsObj)
   }
 }
 
-execSettings()
+log("asdfsadf")
 
 // Get Facebook user_id and fb_dtsg token needed to send Xhr requests
-function getFacebookCreds(callback) {
+async function getFacebookCreds() {
   // Get the fb_dtsg token that must be passed to get a successful response to an XMLHttpRequest from Facebook
   try {
     // Get fb_dtsg
-    fbTokenReady("fb_dtsg", function (node) {
-      fb_dtsg = node.value
-      debugLogger("getFbDtsg", { length: fb_dtsg.length })
-      // Get user_id
-      if (document.cookie.match(/c_user=(\d+)/)) {
-        if (document.cookie.match(/c_user=(\d+)/)[1]) {
-          user_id = document.cookie.match(
-            document.cookie.match(/c_user=(\d+)/)[1]
-          )
-          user_id = user_id[0]
-          debugLogger("getUserId", { length: user_id.length })
-          callback()
-        }
-      }
-    })
+    fb_dtsg = await getFbToken()
+    debugLogger("getFbDtsg", { length: fb_dtsg.length })
+    user_id = getUserId()
+    debugLogger("getUserId", { length: user_id.length })
+    // Get user_id
   } catch (e) {
     debugLogger("failedCreds", { errorMessage: e })
     // Error catching
   }
+  return new Promise((resolve) => {
+    resolve()
+  })
 }
 
-// Execute after receiving settings from Chrome sync storage
-async function execSettings() {
-  let settings = await loadSettingsRequest()
-  // No longer checking if facebook.com is off
-
+;(async function () {
+  const syncStorage = await loadSyncStorage()
+  const settings = syncStorage.settings
   // Check for snooze
   let dontNudge = checkSnoozeAndSchedule(settings)
   if (dontNudge) {
@@ -66,11 +57,6 @@ async function execSettings() {
     }
   }
 
-  // Prevent unfollower from running for now since it's broken
-  if (true) {
-    return
-  }
-
   // Set ratio, which is 0 if all friends, groups and pages unfollowed, 1 if none unfollowed, 0.5 if half unfollowed etc.
   var ratio = settings.fb_profile_ratio
   debugLogger("getRatio", { ratio })
@@ -83,49 +69,39 @@ async function execSettings() {
 
   // Only show the Nudge dialog box if user has this setting true
   if (settings.fb_auto_unfollow) {
-    // Cover the pagelet_composer element with a white pseudo-element
-    onDocHeadExists(function () {
-      addCSS("nudge-facebook-dialog", "css/injected/facebook.css")
-    })
+    // Add the CSS for the dialog
+    addCSS("nudge-facebook-dialog", "css/injected/facebook.css")
     // Function to load HTML and configure UX into Nudge dialog box
-    function loadUx(uxUrl, uxFunc) {
-      onDocHeadExists(function () {
-        pageletInit(function (element) {
-          if (!document.getElementById("nudge-dialog")) {
-            docReady(function () {
-              // log(keyDefined(storage, uxUrl));
-              if (keyDefined(extensionStorage, uxUrl)) {
-                // only do this EVER if it's prepped:
-                if (!document.getElementById("nudge-dialog")) {
-                  appendHtml(element, extensionStorage[uxUrl], function () {
-                    uxFunc()
-                    protectFeatures(settings)
-                  })
-                }
-              }
-            })
-          }
-        })
-      })
+    async function loadUx(uxUrl, uxFunc) {
+      log("go")
+      await docHeadExists()
+      const unfollowerContainer = await createUnfollowerContainer()
+      log(unfollowerContainer)
+      if (keyDefined(extensionStorage, uxUrl)) {
+        // only do this EVER if it's prepped:
+        if (!document.getElementById("nudge-dialog")) {
+          appendHtml(unfollowerContainer, extensionStorage[uxUrl], function () {
+            uxFunc()
+          })
+        }
+      }
     }
     // If the user has unfollowed nearly all of their friends, show 'Share' dialog box, not
     // 'Delete your News Feed' dialog box
     loadUx("run.html", runUx)
-    docReady(function () {
-      getFacebookCreds(function () {
-        // If we should be executing an unfollow, e.g. in case of autoUnfollow being on, go ahead and do it
-        if (executeUnfollow) {
-          friendAndPageListGenerator(unfollow, false, function () {
-            executeUnfollow = false
-          })
-        } else {
-          // Otherwise, load all profiles
-          friendAndPageListGenerator(unfollow, false)
-        }
+
+    await getFacebookCreds()
+    // If we should be executing an unfollow, e.g. in case of autoUnfollow being on, go ahead and do it
+    if (executeUnfollow) {
+      friendAndPageListGenerator(unfollow, false, function () {
+        executeUnfollow = false
       })
-    })
+    } else {
+      // Otherwise, load all profiles
+      friendAndPageListGenerator(unfollow, false)
+    }
   }
-}
+})()
 
 // Send Xhr requests to get friend and page IDs
 // 'option' means 'unfollow' or 'refollow', because this function can get information either on
@@ -497,86 +473,15 @@ function moveOnToNextProfile(option) {
 }
 
 // UX stuff
-function pageletInit(callback) {
-  var pageletExists = false
-  var pagelet = document.getElementById("pagelet_composer")
-  if (pagelet) {
-    debugLogger("pagelet_composer exists from start")
-    callback(pagelet)
-    return
-  } else {
-    debugLogger("pagelet_composer does not exist right now")
-  }
-
-  var observer = new MutationObserver(function (mutations) {
-    mutations.forEach(function (mutation) {
-      for (var i = 0; i < mutation.addedNodes.length; i++) {
-        var pagelet = document.getElementById("pagelet_composer")
-        if (pagelet) {
-          if (pageletExists === false) {
-            debugLogger("pagelet_composer exists now")
-            pageletExists = true
-          }
-          callback(pagelet)
-          observer.disconnect()
-        }
-      }
-    })
+async function createUnfollowerContainer() {
+  const unfollowerContainer = createEl(
+    document.body,
+    "div",
+    "unfollower-container"
+  )
+  return new Promise((resolve) => {
+    resolve(unfollowerContainer)
   })
-
-  observer.observe(document, {
-    childList: true,
-    subtree: true,
-    attributes: false,
-    characterData: false,
-  })
-}
-
-function protectFeatures(settings) {
-  var observer = new MutationObserver(function (mutations) {
-    mutations.forEach(function (mutation) {
-      for (var i = 0; i < mutation.addedNodes.length; i++) {
-        checkOnMutation(settings)
-      }
-    })
-  })
-
-  observer.observe(document, {
-    childList: true,
-    subtree: true,
-    attributes: false,
-    characterData: false,
-  })
-}
-
-function checkOnMutation(settings) {
-  // Make sure if grey that always stays grey
-  if (settings.fb_grey) {
-    var grey = document.getElementById("nudge-facebook-grey")
-    if (!grey) {
-      addCSS("nudge-facebook-grey", "css/injected/grey.css")
-    }
-  }
-
-  // Make sure if hide notifs that they always stay hidden
-  if (settings.fb_hide_notifications) {
-    var notifications = document.getElementById("nudge-facebook-notifications")
-    if (!notifications) {
-      addCSS("nudge-facebook-notifications", "css/injected/notifications.css")
-    }
-  }
-
-  // Make sure pagelet never covered in white without dialog
-  var pagelet = document.getElementById("pagelet_composer")
-  if (pagelet) {
-    var dialog = document.getElementById("nudge-dialog")
-    var facebookCss = document.getElementById("nudge-facebook-dialog")
-    if (dialog && !facebookCss) {
-      addCSS("nudge-facebook-dialog", "css/injected/facebook.css")
-    } else if (!dialog && facebookCss) {
-      deleteEl(facebookCss)
-    }
-  }
 }
 
 // UX helpers
@@ -585,7 +490,6 @@ function hideLink() {
   var close = document.querySelector(".facebook-close")
   var hide = document.getElementById("fb_show_unfollow")
   hide.onclick = function () {
-    // FIXME: removed use of toggle
     deleteEl(container)
     deleteEl(close)
     styleAdder("#pagelet_composer::before", "{ content: none !important; }")
@@ -688,15 +592,16 @@ function introUx(element) {
     confirmUx()
   }
   el("js-survey").onclick = function () {
-    eventLogSender("survey", { source: "fb_intro" })
+    eventLogSender("survey", { source: "fb_intro" }, moment())
   }
   hideLink()
   close.onclick = function () {
     deleteEl(container)
     deleteEl(close)
-    styleAdder("#pagelet_composer::before", "{ content: none !important; }")
     var dialog = document.getElementById("facebook-nudge-dialog")
+    var overallContainer = document.getElementById("unfollower-container")
     deleteEl(dialog)
+    deleteEl(overallContainer)
   }
 }
 
@@ -720,13 +625,14 @@ function confirmUx() {
 // UX for run.html
 function runUx() {
   var container = document.querySelector(".facebook-container")
+  var overallContainer = document.getElementById("unfollower-container")
   var text = document.querySelector(".facebook-text")
   buttonInit()
   var close = document.querySelector(".facebook-close")
   close.onclick = function () {
     deleteEl(container)
     deleteEl(close)
-    stopInit()
+    deleteEl(overallContainer)
     styleAdder("#pagelet_composer::before", "{ content: none !important; }")
     var dialog = document.getElementById("facebook-nudge-dialog")
     deleteEl(dialog)
@@ -774,7 +680,6 @@ function shareUx() {
   close.onclick = function () {
     deleteEl(container)
     deleteEl(close)
-    styleAdder("#pagelet_composer::before", "{ content: none !important; }")
   }
   el("js-survey").onclick = function () {
     eventLogSender("survey", { source: "fb_share" })
@@ -800,5 +705,51 @@ function headlineLogger(message) {
   }
   if (getEl()) {
     getEl().innerHTML = message
+  }
+}
+
+// Utils
+async function getFbToken() {
+  return new Promise((resolve) => {
+    let token = false
+
+    // Start an observer to look at scripts
+    const observer = new MutationObserver(() => {
+      // Other option goes here
+
+      if (document.getElementsByName("fb_dtsg").length > 0) {
+        const token = document.getElementsByName("fb_dtsg")[0].value
+        resolve(token)
+      }
+
+      const scripts = document.getElementsByTagName("SCRIPT")
+      Array.from(scripts).forEach((script) => {
+        if (script.innerHTML.includes("fb_dtsg")) {
+          let tokenObject = script.innerHTML.match(/{.{8}fb_dtsg.+?}/g)[0]
+          token = JSON.parse(tokenObject).value
+          observer.disconnect()
+          resolve(token)
+        }
+      })
+    })
+
+    observer.observe(document, {
+      childList: true,
+      subtree: true,
+      attributes: false,
+      characterData: false,
+    })
+  })
+}
+
+function getUserId() {
+  if (document.cookie.match(/c_user=(\d+)/)) {
+    if (document.cookie.match(/c_user=(\d+)/)[1]) {
+      let user_id = document.cookie.match(
+        document.cookie.match(/c_user=(\d+)/)[1]
+      )
+      user_id = user_id[0]
+      return user_id
+    }
   }
 }

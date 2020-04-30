@@ -15,6 +15,15 @@ function extractDomain(url) {
   }
 }
 
+// Load syncStorage
+const loadSyncStorage = async () => {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get(null, function (storage) {
+      resolve(storage)
+    })
+  })
+}
+
 function getUrl(path) {
   return chrome.extension.getURL(path)
 }
@@ -381,6 +390,19 @@ function onDocHeadExists(callback) {
   }
 }
 
+// Async version
+async function docHeadExists() {
+  return new Promise((resolve) => {
+    document.addEventListener("DOMSubtreeModified", onLoad, false)
+    function onLoad() {
+      if (document.body) {
+        document.removeEventListener("DOMSubtreeModified", onLoad, false)
+        resolve(true)
+      }
+    }
+  })
+}
+
 function sendMessage(type, object) {
   object.type = type
   chrome.runtime.sendMessage(object)
@@ -404,36 +426,6 @@ function appendHtml(parent, childString, callback) {
 function randomTime(floor, variance) {
   var ms = 1000
   return Math.floor(ms * (floor + Math.random() * variance))
-}
-
-// optimise mutationObserver https://stackoverflow.com/questions/31659567/performance-of-mutationobserver-to-detect-nodes-in-entire-dom
-// especially the point about using getElementById
-
-function fbTokenReady(name, callback) {
-  var found = false
-
-  var observer = new MutationObserver(function (mutations) {
-    mutations.forEach(function (mutation) {
-      for (var i = 0; i < mutation.addedNodes.length; i++) {
-        var node = document.getElementsByName(name)
-        node = node[0]
-        if (!found && notUndefined(node)) {
-          found = true
-          observer.disconnect()
-          if (callback) {
-            callback(node)
-          }
-        }
-      }
-    })
-  })
-
-  observer.observe(document, {
-    childList: true,
-    subtree: true,
-    attributes: false,
-    characterData: false,
-  })
 }
 
 // Check if in domains setting
@@ -575,15 +567,6 @@ function click(x, y) {
   var el = document.elementFromPoint(x, y)
 
   el.dispatchEvent(ev)
-}
-
-// Load syncStorage
-const loadSyncStorage = async () => {
-  return new Promise((resolve) => {
-    chrome.storage.sync.get(null, function (storage) {
-      resolve(storage)
-    })
-  })
 }
 
 function removeDomainFromOnDomains(settings, domain) {

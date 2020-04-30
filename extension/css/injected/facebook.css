@@ -120,28 +120,25 @@
   to {
     opacity: 0; } }
 
-.facebook-playground-container {
+#unfollower-container {
   width: 100% !important;
+  height: 170px !important;
+  position: fixed !important;
+  bottom: 0px !important;
   display: flex !important;
-  margin: auto !important;
-  width: 502px !important;
-  height: 157px !important;
-  top: 0 !important;
-  left: 0 !important;
-  position: relative !important; }
+  justify-content: center !important; }
 
 .facebook-container {
   user-select: none !important;
-  left: 5% !important;
-  right: 5% !important;
-  width: 90% !important;
-  height: 135px !important;
+  width: 500px !important;
+  height: 150px !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  padding: 10px !important;
   position: absolute !important;
-  opacity: 0 !important;
-  top: 0 !important;
-  margin-top: 12px !important;
+  margin-bottom: 10px !important;
+  border-radius: 10px !important;
+  bottom: 10px !important;
   z-index: 1 !important;
-  animation: fade-in 2s forwards;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
@@ -291,26 +288,3 @@
   .facebook-logo-corner > div {
     display: block !important;
     position: static !important; }
-
-#pagelet_composer::before {
-  background: #ffffff !important;
-  opacity: 1 !important;
-  text-align: center !important;
-  vertical-align: middle !important;
-  font-family: 'Open Sans' !important;
-  color: #6d6d6d !important;
-  font-size: 18px !important;
-  content: "" !important;
-  display: block !important;
-  position: absolute !important;
-  z-index: 1 !important;
-  width: 100% !important;
-  height: 155px !important;
-  border: 1px solid !important;
-  border-color: #e5e6e9 #dfe0e4 #d0d1d5 !important;
-  border-radius: 4px !important;
-  top: -1px !important;
-  bottom: -1px !important;
-  left: -1px !important;
-  right: -1px !important;
-  transition: all 0.1s ease !important; }
