@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "version": "1.0.60",
+  "version": "1.0.61",
   "name": "Nudge",
   "permissions": [
     "idle",
@@ -34,7 +34,12 @@
     "open_in_tab": true
   },
   "options_page": "html/pages/options_home.html",
-  "web_accessible_resources": ["img/*", "fonts/*", "html/*", "css/*"],
+  "web_accessible_resources": [
+    "img/*",
+    "fonts/*",
+    "html/*",
+    "css/*"
+  ],
   "background": {
     "scripts": [
       "js/vendor/moment.min.js",
@@ -58,7 +63,9 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": [
+        "<all_urls>"
+      ],
       "js": [
         "js/vendor/moment.min.js",
         "config.js",
@@ -81,7 +88,9 @@
         "*://facebook.com/*",
         "*://web.facebook.com/*"
       ],
-      "js": ["js/facebook/unfollower.js"],
+      "js": [
+        "js/facebook/unfollower.js"
+      ],
       "run_at": "document_start"
     }
   ]
