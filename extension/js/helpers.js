@@ -598,7 +598,7 @@ async function loadSettingsRequest() {
 }
 
 // Set storage
-const setSyncStorage = async (item) => {
+async function setSyncStorage(item) {
   return new Promise((resolve) => {
     chrome.storage.sync.set(item, () => {
       resolve()
@@ -607,7 +607,7 @@ const setSyncStorage = async (item) => {
 }
 
 // Load syncStorage
-const loadSettings = async () => {
+async function loadSettings() {
   return new Promise((resolve) => {
     chrome.storage.sync.get(null, function (storage) {
       resolve(storage.settings)
