@@ -180,12 +180,6 @@ if (el("js-onboarding-skip")) {
       }
     }
   )
-  if (window.location.href.includes("sites")) {
-    runSites(settings)
-  }
-  if (window.location.href.includes("hider")) {
-    runHider(settings)
-  }
   // Plug in Nudge ID if we have it
   var nudgeId = el("js-nudge-id")
   if (nudgeId) {
