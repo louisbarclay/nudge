@@ -12,27 +12,25 @@ async function initialise() {
   if (!storage || !storage.settings || !storage.settings.userId) {
     // log("Startup: no user ID")
     await setSyncStorage({ settings: createSettings() })
-    loadSettingsAndAmplitude("newUser")
+    run("newUser")
   } else {
     // log("Startup: user ID in syncstorage.settings")
     // If items.settings and userId does exist, there is stuff there we need to grab
     // This will also add any new settings in
-    loadSettingsAndAmplitude("existingUser")
+    run("existingUser")
   }
 }
 
 // Get settings from sync to settingsLocal, and run options page if asked for
-async function loadSettingsAndAmplitude(userType) {
+async function run(userType) {
   // Get settings
   const settings = await loadSettings()
   // Update local settings
   settingsLocal = settings
 
-  // Initialise Amplitude
+  // First off, initialise Amplitude
   if (settingsLocal.share_data) {
-    amplitude.getInstance().init(amplitudeCreds.apiKey)
-    // Set user ID
-    amplitude.getInstance().setUserId(settingsLocal.userId)
+    await initAmplitude(settingsLocal.userId)
   }
 
   // Migrate settings
@@ -41,17 +39,10 @@ async function loadSettingsAndAmplitude(userType) {
     await setSyncStorage({ settings: settingsLocal })
   }
 
-  // Log install event
-  if (logInstall) {
-    changeSetting(moment().format(), "install_date")
-    amplitudeHttpEvent("install", { time: moment(), dev: config.dev })
-    logInstall = false
-  }
-
   // Analytics
   if (settingsLocal.share_data) {
     // Log startup event
-    amplitude.getInstance().logEvent("startup", {
+    eventLog("startup", {
       share_data: settingsLocal.share_data,
       dev: config.dev,
       userType,
@@ -61,9 +52,7 @@ async function loadSettingsAndAmplitude(userType) {
           : "defaultSettings",
     })
     // Always sync all settings on startup, just to make sure they're in sync
-    var identify = new amplitude.Identify()
-    sendAllSettingsToAmplitude(settingsLocal, identify)
-    amplitude.getInstance().identify(identify)
+    sendAllSettingsToAmplitude(settingsLocal)
   } else {
     // Amplitude HTTP request for non-share data people
     amplitudeHttpEvent("startup", {
@@ -71,6 +60,13 @@ async function loadSettingsAndAmplitude(userType) {
       share_data: settingsLocal.share_data,
       userType,
     })
+  }
+
+  // Log install event
+  if (logInstall) {
+    changeSetting(moment().format(), "install_date")
+    amplitudeHttpEvent("install", { time: moment(), dev: config.dev })
+    logInstall = false
   }
 }
 
@@ -302,35 +298,4 @@ function timeline(domain, source, timeOverride) {
       }
     }
   }
-}
-
-const amplitudeHttpEvent = (eventType, eventProperties) => {
-  var url = "https://api.amplitude.com/2/httpapi"
-  var event = {
-    user_id: settingsLocal.userId,
-    event_type: eventType,
-  }
-  if (eventProperties) {
-    event.event_properties = eventProperties
-  }
-
-  var data = {
-    api_key: amplitudeCreds.apiKey,
-    events: [event],
-  }
-
-  async function postData() {
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "*/*",
-        },
-      })
-    } catch (error) {}
-  }
-
-  postData()
 }
