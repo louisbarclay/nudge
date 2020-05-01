@@ -1,6 +1,8 @@
 var settingsLocal = {}
 
-function runSites(settings) {
+runSites()
+async function runSites() {
+  let settings = await loadSettingsRequest()
   settingsLocal = settings
   if (
     Array.isArray(settings.nudge_domains) &&
