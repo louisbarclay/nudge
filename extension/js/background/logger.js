@@ -1,7 +1,7 @@
 var CONSOLE_LOG = true
 var AMPLITUDE_LOG = true
 
-function consoleLogger(eventType, detailsObj, time) {
+function consoleLogger(eventType, detailsObj) {
   function logWithColor(message, color) {
     if (CONSOLE_LOG) {
       message = `%c${message}`
@@ -90,16 +90,11 @@ function eventLog(eventType, detailsObj) {
   // Define date and time as a string
   let time = moment().format()
   // Log the event to console
-  consoleLogger(eventType, detailsObj, time)
+  consoleLogger(eventType, detailsObj)
   // Filter events to log to Amplitude
   if (amplitudeLoggerFilter(settingsLocal, eventType, detailsObj)) {
     amplitudeLogger(eventType, detailsObj, time)
   }
-}
-
-// Utils
-function amplitudeLogger(eventType, detailsObj, time) {
-  amplitude.getInstance().logEvent(eventType, { time, ...detailsObj })
 }
 
 function amplitudeLoggerFilter(settings, eventType, detailsObj) {

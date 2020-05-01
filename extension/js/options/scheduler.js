@@ -1,7 +1,7 @@
 let validTime = /^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/
 
 ;(async () => {
-  const settings = await loadSettings()
+  const settings = await loadSettingsRequest()
   let schedule = settings.schedule
   log(schedule)
 
@@ -18,7 +18,7 @@ let validTime = /^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/
       endTime.value = "00:00"
     }
     Array.from(document.getElementsByClassName("form-checkbox")).forEach(
-      function(element) {
+      function (element) {
         var subSetting = element.childNodes[0].id
         var checkbox = element.childNodes[0]
         // Set current setting
@@ -31,12 +31,12 @@ let validTime = /^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/
         } else {
           checkbox.checked = true
         }
-        checkbox.onclick = function() {
+        checkbox.onclick = function () {
           changeSchedule()
         }
       }
     )
-    startTime.oninput = function() {
+    startTime.oninput = function () {
       if (!startTime.value) {
         startTime.value = "00:00"
       }
@@ -45,7 +45,7 @@ let validTime = /^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/
         startTime.focus()
       }
     }
-    startTime.onblur = function() {
+    startTime.onblur = function () {
       if (validTime.test(startTime.value)) {
       } else {
         if (schedule) {
@@ -57,11 +57,11 @@ let validTime = /^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/
           type: 3,
           text:
             "That's not a valid time format. Please put your time in format HH:MM.",
-          position: "bottom"
+          position: "bottom",
         })
       }
     }
-    endTime.oninput = function() {
+    endTime.oninput = function () {
       if (!endTime.value) {
         endTime.value = "00:00"
       }
@@ -70,7 +70,7 @@ let validTime = /^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/
         endTime.focus()
       }
     }
-    endTime.onblur = function() {
+    endTime.onblur = function () {
       if (validTime.test(endTime.value)) {
       } else {
         if (schedule) {
@@ -82,7 +82,7 @@ let validTime = /^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/
           type: 3,
           text:
             "That's not a valid time format. Please put your time in format HH:MM.",
-          position: "bottom"
+          position: "bottom",
         })
       }
     }
@@ -90,7 +90,7 @@ let validTime = /^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/
 
   initPage()
 
-  el("reset").onclick = function() {
+  el("reset").onclick = function () {
     changeSettingRequest(false, "schedule")
     schedule = false
     log(schedule)
@@ -98,14 +98,14 @@ let validTime = /^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/
     notie.alert({
       type: 1,
       text: "Schedule has been reset. Nudge will always be on.",
-      position: "bottom"
+      position: "bottom",
     })
   }
 
   function changeSchedule() {
     let newSchedule = `${startTime.value}${endTime.value}`
     Array.from(document.getElementsByClassName("form-checkbox")).forEach(
-      function(element) {
+      function (element) {
         var subSetting = element.childNodes[0].id
         var checkbox = element.childNodes[0]
         if (checkbox.checked) {
@@ -120,7 +120,7 @@ let validTime = /^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/
     notie.alert({
       type: 1,
       text: "Saved!",
-      position: "bottom"
+      position: "bottom",
     })
   }
 })()

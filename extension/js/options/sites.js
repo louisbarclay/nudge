@@ -64,7 +64,11 @@ function addTag(domain, list, callback, domains) {
     el("js-empty-state").style.display = "none"
     el("js-domainlist").style.display = "flex"
   }
-  loadFavicon(li.id, domain)
+  try {
+    loadFavicon(li.id, domain)
+  } catch (e) {
+    log(e)
+  }
   callback(li, domain, domains)
 }
 
@@ -129,14 +133,6 @@ function recommendationTagHandler(li, domain, domains) {
     toggleClass(li, "selected-tag")
     // Find the proper tag and remove it if necessary
   }
-}
-
-function loadFavicon(id, domain) {
-  function updateFavicon() {
-    var bgStyle = `{ background-image: url("https://www.google.com/s2/favicons?domain=${domain}"); }`
-    styleAdder("#" + id + ":before", bgStyle)
-  }
-  updateFavicon()
 }
 
 // Adding a new domain

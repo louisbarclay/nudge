@@ -134,7 +134,7 @@ if (el("js-onboarding-skip")) {
 }
 
 ;(async () => {
-  var settings = await loadSettings()
+  var settings = await loadSettingsRequest()
   // Find any main toggles and set correct value + handle click
   Array.from(document.getElementsByClassName("toggle")).forEach(function (
     element
