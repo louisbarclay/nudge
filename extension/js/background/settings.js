@@ -11,7 +11,7 @@ function createSettings() {
   return settings
 }
 
-function changeSetting(newVal, setting) {
+async function changeSetting(newVal, setting) {
   try {
     // Set up Amplitude identify
     let identify = new amplitude.Identify()
@@ -30,8 +30,8 @@ function changeSetting(newVal, setting) {
       if (setting === "share_data") {
         // If the setting that's just been changed is share_data, initialise Amplitude first
         // And then flush all settings to Amplitude
-        initAmplitude(settingsLocal.userId)
-        sendAllSettingsToAmplitude(settingsLocal, identify)
+        await initAmplitude(settingsLocal.userId)
+        sendAllSettingsToAmplitude(settingsLocal)
       } else {
         // Otherwise, set just the one setting
         amplitude.getInstance().identify(identify)
@@ -93,19 +93,4 @@ function cleanVals(valObject, setting) {
     return valObject
   }
   return valObject
-}
-
-// This takes settings and an identify and flushes settings correctly
-// We use this to prevent domains settings creating tons of User Properties in Amplitude
-function sendAllSettingsToAmplitude(settings, identify) {
-  Object.keys(settings).forEach(function (key) {
-    identify.set(key, settings[key])
-  })
-}
-
-function initAmplitude(userId) {
-  // Start Amplitude
-  amplitude.getInstance().init(amplitudeCreds.apiKey)
-  // Set user ID
-  amplitude.getInstance().setUserId(userId)
 }
