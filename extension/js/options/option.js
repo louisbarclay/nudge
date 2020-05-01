@@ -166,7 +166,7 @@ if (el("js-onboarding-skip")) {
     }
   })
   // Find any subSetting checkboxes set correct value + handle click
-  Array.from(document.getElementsByClassName("form-checkbox")).forEach(
+  Array.from(document.getElementsByClassName("checkbox-setting")).forEach(
     function (element) {
       var subSetting = element.childNodes[0].id
       var checkbox = element.childNodes[0]
