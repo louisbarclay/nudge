@@ -1,7 +1,8 @@
 var settingsLocal = {}
 
-function runHider(settings) {
-  settingsLocal = settings
+runHider()
+async function runHider() {
+  settingsLocal = await loadSettingsRequest()
   let excludedHidees = settingsLocal.unhidden_hidees
 
   let domains = []
