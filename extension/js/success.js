@@ -1,9 +1,9 @@
 ;(async () => {
-  const settings = await loadSettings()
+  const settings = await loadSettingsRequest()
   const id = window.location.href.split("?id=")[1]
   let valid = true
   const check = ["s", "h", "a", "r", "e"]
-  check.forEach(l => {
+  check.forEach((l) => {
     !id.includes(l) && (valid = false)
   })
 
