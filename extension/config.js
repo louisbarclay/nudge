@@ -5,7 +5,7 @@ var config = {
   fastTimer: false,
   timelineTest: false,
   dev: false,
-  previewMode: false
+  previewMode: false,
 }
 
 // Dev config variables
