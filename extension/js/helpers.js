@@ -570,7 +570,6 @@ function click(x, y) {
 }
 
 function removeDomainFromOnDomains(settings, domain) {
-  log(settings.on_domains)
   if (settings.on_domains) {
     settings.on_domains = settings.on_domains.filter((onDomain) => {
       return domain !== onDomain
@@ -595,6 +594,18 @@ async function loadSettingsRequest() {
       resolve(response.settings)
     })
   })
+}
+
+// Helper function to check if any tabs match domain
+// Returns true if there were NO OTHER TABS with that domain
+function tabsChecker(tabs, domain, settings) {
+  for (var i = 0; i < tabs.length; i++) {
+    var tabDomain = domainCheck(tabs[i].url, settings)
+    if (tabDomain === domain && tabs[i].id !== lastClosedTabId) {
+      return false
+    }
+  }
+  return true
 }
 
 // Set storage
