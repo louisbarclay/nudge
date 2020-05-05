@@ -15,10 +15,14 @@ var allDomains = "$allDomains"
 // Quick access to settings
 var settingsLocal = {}
 
-// Log install variable
-var logInstall = false
+// Log install/update variable
+let logInstall = false
+let logUpdate = false
 
 // Log in general
+
+// Last closed tabId
+let lastClosedTabId = false
 
 // Default domain info
 var defaultDomainInfo = {
