@@ -1,5 +1,4 @@
-// URL receiver from content script and init options giver
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+function messageReceiver(request, sender, sendResponse) {
   // Avoid sending a message to a tab that is part of the extension
   var chromeTab = !sender.tab || sender.tab.url.includes("chrome-extension:")
   // Get settings
@@ -10,12 +9,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     sendResponse({ localStorage, settingsLocal })
   }
   if (request.type === "change_setting") {
-    changeSetting(
-      request.newVal,
-      request.setting,
-      // If sender.tab doesn't make sense, don't pass tab.id! e.g. popup.js message
-      !sender.tab ? null : sender.tab.id
-    )
+    changeSetting(request.newVal, request.setting)
   }
   if (request.type === "event") {
     eventLogReceiver(request)
@@ -37,14 +31,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       dateObj.switch_ons++
     }
     close(date, dateObj, "close date in messager")
-  }
-  if (
-    request.type === "scroll" ||
-    request.type === "visit" ||
-    request.type === "compulsive" ||
-    request.type === "time"
-  ) {
-    // nudgeSender(request);
   }
   if (request.type === "options") {
     chrome.runtime.openOptionsPage()
@@ -86,4 +72,14 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       }
     })
   }
-})
+
+  // Utils
+  // Listener for tab idle
+  function onTabIdle(status, domain) {
+    if (status) {
+      timeline(tabIdle, "onTabIdle")
+    } else {
+      timeline(domain, "onTabIdle")
+    }
+  }
+}
