@@ -46,7 +46,7 @@ function domainTimeUpdater(domain, startTime, endTime, source) {
   if (isNudgeDomain(domain)) {
     chrome.tabs.query({}, function (tabs) {
       // log(tabs)
-      if (tabsChecker(tabs, domain)) {
+      if (tabsChecker(tabs, domain, settingsLocal)) {
         // This is the main place that switching off after closing all tabs of a domain happens
         // It doesn't check for snooze at all when doing this
 
@@ -109,7 +109,7 @@ function previousDayLogger(previousDayObj, previousDate) {
       const domain = dayKey
       const domainObj = previousDayObj[domain]
       const summaryObj = {
-        date: previousDate,
+        summaryDate: previousDate,
         domain,
         offDomain: domain.includes(offPage)
           ? domain.split(`${offPage}/`)[1]
