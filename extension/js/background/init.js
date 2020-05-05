@@ -2,8 +2,6 @@ var reload = false
 
 initialise()
 
-setInterval(everySecond, 1000)
-
 chrome.runtime.setUninstallURL("https://goo.gl/forms/YqSuCKMQhP3PcFz13")
 
 async function initialise() {
@@ -66,8 +64,16 @@ async function run(userType) {
   if (logInstall) {
     changeSetting(moment().format(), "install_date")
     amplitudeHttpEvent("install", { time: moment(), dev: config.dev })
+    eventLog("install", { time: moment(), dev: config.dev })
     logInstall = false
   }
+  if (logUpdate) {
+    amplitudeHttpEvent("update", logUpdate)
+    eventLog("update", logUpdate)
+    logUpdate = false
+  }
+
+  listen()
 }
 
 // Set the initial currentState
