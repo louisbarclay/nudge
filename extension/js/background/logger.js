@@ -100,6 +100,10 @@ function eventLog(eventType, detailsObj) {
 function amplitudeLoggerFilter(settings, eventType, detailsObj) {
   if (AMPLITUDE_LOG) {
     if (settings.share_data) {
+      // Don't log install or update since this is done directly by HTTP event
+      if (eventType === "install" || eventType === "update") {
+        return false
+      }
       // If it's a visit, and it's not a Nudge domain, off page, or Nudge page, don't send
       if (
         eventType === "visit" &&
@@ -129,6 +133,8 @@ function amplitudeLoggerFilter(settings, eventType, detailsObj) {
         detailsObj.previousVal
       ) {
         return true
+      } else {
+        return false
       }
     }
   }
