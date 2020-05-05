@@ -136,7 +136,6 @@ function listen() {
   // Add to timeline onStateChanged
   chrome.idle.onStateChanged.addListener(function idleHandler(newState) {
     if (newState !== "active") {
-      // switching this part off because onTabIdle can handle it on its own
       timeline(chromeIdle, "chrome.idle")
     }
     if (newState === "active") {
