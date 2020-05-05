@@ -109,7 +109,7 @@ function previousDayLogger(previousDayObj, previousDate) {
       const domain = dayKey
       const domainObj = previousDayObj[domain]
       const summaryObj = {
-        date: previousDate,
+        summaryDate: previousDate,
         domain,
         offDomain: domain.includes(offPage)
           ? domain.split(`${offPage}/`)[1]
