@@ -20,19 +20,35 @@ function hider(options, domain, onShowOnce, onShowAlways) {
     "flex-direction": "column",
   }
 
-  // Add the CSS that you will need as early as possible
-  onDocHeadExists(function () {
-    addCSS("hider-menu", options.menuCss)
-  })
-
   // Get only the hidees for this domain, without excluded ones
   const domainHidees = hidees.filter((hidee) => {
     return !excludedHidees.includes(hidee.slug) && hidee.domain.includes(domain)
   })
 
+  // Add the CSS that you will need as early as possible
+  onDocHeadExists(() => {
+    addCSS("hider-menu", options.menuCss)
+    if (domain === "youtube.com") {
+      domainHidees.forEach((hidee) => {
+        const hash = getUid()
+        addSelfStyles(hidee, hash)
+        // Need to apply child hidden styles too!
+        checkAndAddChildHiddenStyles(hash, hidee.id, hidee.className)
+        // Set hash
+        hidee.hash = hash
+      })
+    }
+  })
+
   // Observe the document if you have a valid domain and domainHidees is longer than zero
   if (domainHidees.length > 0) {
-    observeDoc()
+    if (domain === "youtube.com") {
+      setInterval(() => {
+        processHidees()
+      }, 1000)
+    } else {
+      observeDoc()
+    }
   }
 
   // Once we have an element, hide it and add circle
@@ -41,43 +57,55 @@ function hider(options, domain, onShowOnce, onShowAlways) {
     if (!hiddenNodes[hash]) {
       hiddenNodes[hash] = { slug: hidee.slug }
     }
-
     // 2. Does the hidee attribute exist?
     // You can get hash from class, and slug from hash (in hiddenNodes)
     // Note: this is just a safety check
     // The real job of checking for a hash and getting a hash is done in a separate function within processNode
-    if (node.getAttribute && node.attributes.hidee) {
+    if (!node.attributes || !node.attributes.hidee) {
       setNodeHash(node, hash)
     }
-
-    // 3. Is the hidee excluded?
-    // if (hidee.excluded) {
-    //   hidee.excluded = false
-    // }
-
     // For special cases where we need hidees to have different ids because they are only identified by class, we apply id
-    if (hidee.applyId) {
+    if (hidee.applyId && (!node.id || node.id.length === 0)) {
       node.id = hash
     }
-
     // 4. Does the node have a child element that's the hide-menu-container?
-    // setTimeout(() => {
-    if (
-      (node.childNodes.length === 0 ||
-        node.childNodes[0].className !== options.menuClass) &&
-      !hidee.noMenu
-    ) {
-      addMenu(node, domain, hidee, hash)
+    // Look for menu
+    const menu = [...node.children].find((node) => {
+      return node.className === options.menuClass
+    })
+    // If menu exists
+    if (menu) {
+      // Check whether you should check it
+      if (hidee.checkMenu) {
+        if (menu.outerHTML !== correctMenuHtml(hidee.shortName)) {
+          deleteEl(menu)
+        }
+      }
+      // Check whether you should check its position
+      if (hidee.checkMenuPosition) {
+        // Regular ordering
+        if (hidee.style.flexDirection !== "column-reverse") {
+          if (menu !== [...node.children][0]) {
+            deleteEl(menu)
+          }
+          // Flex-reverse ordering
+        } else {
+          if (menu !== [...node.children].slice(-1)[0]) {
+            deleteEl(menu)
+          }
+        }
+      }
+      // delete it. it will be re-added
+      // If it doesn't exist, check whether you should add it
+    } else {
+      if (!hidee.noMenu) {
+        addMenu(node, domain, hidee, hash)
+      }
     }
-    // }, 5000)
-
     // 5. Are there hidden styles on the element?
-    checkAndAddHiddenStyles(node, hash, hidee.style)
-
+    checkAndAddHiddenStyles(node, hash, hidee, hidee.style)
     // 6. Does the node have child hidden styles?
-    if (!el(`hidee-children-${hash}`) && !debugStyles) {
-      addChildHiddenStyles(node, hash)
-    }
+    checkAndAddChildHiddenStyles(hash, node.id, node.className)
   }
 
   showNode = (node, hash) => {
@@ -109,30 +137,60 @@ function hider(options, domain, onShowOnce, onShowAlways) {
     // 6
     childHiddenStyle && deleteEl(childHiddenStyle)
     // 2 is fine. Can leave it with hash
+
+    // Could be using the setIntervalMethod, in which case...
+    const selfHiddenStyle = el(`hidee-self-${hash}`)
+    // 6
+    selfHiddenStyle && deleteEl(selfHiddenStyle)
+    // 2 is fine. Can leave it with hash
   }
 
   // Utils
-
-  addChildHiddenStyles = (node, hash) => {
-    var childSelector = `${nodeSelector(node)} > :not(.${
-      options.menuClass
-    }) *, ${nodeSelector(node)} > :not(.${options.menuClass})`
-    styleAdder(
-      childSelector,
-      `{ opacity: 0 !important; } ${nodeSelector(
-        node
-      )}:after { display: none; } `,
-      `hidee-children-${hash}`
-    )
+  const correctMenuHtml = (shortName) => {
+    return options.menuHtmlString.replace("Show Section", `Show ${shortName}`)
   }
 
-  const nodeSelector = (node) => {
-    let selector = {}
-    if (node.className && node.className !== "") {
-      selector.className = node.className.trim().replace(/(^|\s+)/g, ".")
+  function checkAndAddChildHiddenStyles(hash, id, className) {
+    if (!el(`hidee-children-${hash}`)) {
+      addChildHiddenStyles(hash, id, className)
+    } else {
+      // We check that the existing hidden style is still doing its job
+      checkChildHiddenStyles(el(`hidee-children-${hash}`), id, className)
     }
-    if (typeof node.id != "undefined" && node.id.length !== 0) {
-      selector.id = `#${node.id}`
+  }
+
+  const addChildHiddenStyles = (hash, id, className) => {
+    const styleId = `hidee-children-${hash}`
+    styleAdder(createChildHiddenStyleInnerHtml(id, className), styleId)
+  }
+
+  const checkChildHiddenStyles = (existingChildHideStyle, id, className) => {
+    const correctInnerHtml = createChildHiddenStyleInnerHtml(id, className)
+    existingChildHideStyle.innerHTML !== correctInnerHtml &&
+      (existingChildHideStyle.innerHTML = correctInnerHtml)
+  }
+
+  const createChildHiddenStyleInnerHtml = (id, className) => {
+    var childSelector = `${selector(id, className)} > :not(.${
+      options.menuClass
+    }) *, ${selector(id, className)} > :not(.${options.menuClass})`
+    // styleInnerHtml
+    const styleInnerHtml = `${childSelector}{ opacity: 0 !important; } ${selector(
+      id,
+      className
+    )}:after { display: none; }`
+    // ^For dev.to which has an awkward after element
+    return styleInnerHtml
+  }
+
+  const selector = (id, className) => {
+    let selector = {}
+
+    if (className && className !== "") {
+      selector.className = className.trim().replace(/(^|\s+)/g, ".")
+    }
+    if (id && id.length !== 0) {
+      selector.id = `#${id}`
     }
     if (selector.id && selector.className) {
       return `${selector.id}${selector.className}`
@@ -143,34 +201,38 @@ function hider(options, domain, onShowOnce, onShowAlways) {
     }
   }
 
-  // FIXME: this is a bad name, because it also CHECKS for the styles
-  // FIXME: set all styles with !important......................AWFUL!!!!!!!!!!!!!!!!!!!!!!!
-  const checkAndAddHiddenStyles = (node, hash, styleObj) => {
-    // Grab previous style of now-hidden div
-
-    // This returns an array of styles that you want to change
-    const applyStyles = getApplyStyles(styleObj)
-    let prevStyle = {}
-    // Then loop over those to capture previous styles
-    Object.keys(applyStyles).forEach((applyStyle) => {
-      // Check if that style is applied on the node already anyway
-      if (node.style[applyStyle] != applyStyles[applyStyle]) {
-        // Store the current style in prevStyle
-        prevStyle[applyStyle] = node.style[applyStyle]
-        // Apply the new style, with an !important nuke
-        node.style.setProperty(applyStyle, applyStyles[applyStyle], "important")
+  const checkAndAddHiddenStyles = (node, hash, hidee, styleObj) => {
+    if (!hidee.setIntervalMethod) {
+      // Grab previous style of now-hidden div
+      // This returns an array of styles that you want to change
+      const applyStyles = getApplyStyles(styleObj)
+      let prevStyle = {}
+      // Then loop over those to capture previous styles
+      Object.keys(applyStyles).forEach((applyStyle) => {
+        // Check if that style is applied on the node already anyway
+        if (node.style[applyStyle] != applyStyles[applyStyle]) {
+          // Store the current style in prevStyle
+          prevStyle[applyStyle] = node.style[applyStyle]
+          // Apply the new style, with an !important nuke
+          node.style.setProperty(
+            applyStyle,
+            applyStyles[applyStyle],
+            "important"
+          )
+        }
+      })
+      // Add this new processed node to hiddenNodes, and store its previous styles for use in the future
+      // (Include any previous stuff from the object, i.e. slug)
+      hiddenNodes[hash] = { ...prevStyle, ...hiddenNodes[hash] }
+    } else {
+      if (!el(`hidee-self-${hash}`)) {
+        addSelfStyles(hidee, hash)
       }
-    })
-
-    // Add this new processed node to hiddenNodes, and store its previous styles for use in the future
-    // (Include any previous stuff from the object, i.e. slug)
-    hiddenNodes[hash] = { ...prevStyle, ...hiddenNodes[hash] }
+    }
   }
 
   // This is the place for rules about which styles will be applied
-  const getApplyStyles = (styleObj) => {
-    // If no styles are set, create a styleObj
-    !styleObj && (styleObj = {})
+  function getApplyStyles(styleObj) {
     // Create a new styles object
     let styles = {
       ...universalStyles,
@@ -185,21 +247,22 @@ function hider(options, domain, onShowOnce, onShowAlways) {
         "padding-top": "0px",
       })
 
-    // flexDirection specified in hidee
-    if (styleObj.flexDirection) {
-      styles["flex-direction"] = styleObj.flexDirection
-      styles = {
-        ...styles,
-        "justify-content": "space-between",
-      }
-    }
-
     // minHeight specified in hidee
     styleObj.minHeight &&
       (styles = {
         ...styles,
         "min-height": styleObj.minHeight,
       })
+
+    // flexDirection specified in hidee
+    if (styleObj.flexDirection) {
+      styles["flex-direction"] = styleObj.flexDirection
+      styles = {
+        ...styles,
+        // Previously we used space-between here, but flex-end appears to be better
+        "justify-content": "flex-end",
+      }
+    }
 
     // backgroundColor specified in hidee
     styleObj.backgroundColor &&
@@ -218,72 +281,53 @@ function hider(options, domain, onShowOnce, onShowAlways) {
         "border-radius": styleObj.borderRadius,
       })
 
-    // backgroundColor specified in hidee
+    // marginBottom specified in hidee
     styleObj.marginBottom &&
       (styles = {
         ...styles,
         "margin-bottom": styleObj.marginBottom,
       })
 
-    // No backgroundColor specified in hidee, or in debugMode
-    if (!styleObj.backgroundColor && !debugStyles) {
-      styles = {
-        ...styles,
-        visibility: "hidden",
-      }
-    }
-
     return styles
   }
 
   // Circle add function
   function addMenu(node, domain, hidee, hash) {
-    // See if there is already a menu in there...
-    if (
-      !node.children ||
-      ![...node.children].find((node) => {
-        return node.className === options.menuClass
-      })
-    ) {
-      try {
-        // Here we have the option to append HTML at the end of the div instead of the beginning
-        // Which covers an annoying edge case on Facebook
-        if (options.menuHtmlString.includes(options.menuClass)) {
-          appendHtml(
-            node,
-            options.menuHtmlString,
-            hidee.style.flexDirection === "column-reverse"
-          )
-        }
-        handleMenu(node, domain, hidee, hash)
-      } catch (e) {
-        // console.log(e)
+    try {
+      // Here we have the option to append HTML at the end of the div instead of the beginning
+      // Which covers an annoying edge case on Facebook
+      if (options.menuHtmlString.includes(options.menuClass)) {
+        appendHtml(
+          node,
+          correctMenuHtml(hidee.shortName),
+          hidee.style.flexDirection === "column-reverse"
+        )
       }
+      handleMenu(node, domain, hidee, hash)
+    } catch (e) {
+      // console.log(e)
     }
   }
 
   function handleMenu(node, domain, hidee, hash) {
-    // Find the container of the links
+    // Find the container of the link
     var menu = [...node.children].find((node) => {
       return node.className === options.menuClass
     })
     var dropdown = menu.firstChild.firstChild.firstChild
-    var supportButtonContainer = menu.childNodes[1]
+    var supportButtonContainer = menu.children[1]
 
     // Set up support button container link
     supportButtonContainer &&
-      (supportButtonContainer.childNodes[0].href = options.supportLink)
+      (supportButtonContainer.children[0].href = options.supportLink)
 
     // Access the show links relative to the tree structure
-    const showOnceLink = [...dropdown.childNodes].find((node) => {
+    const showOnceLink = [...dropdown.children].find((node) => {
       return node.id === "hider-show-once"
     })
-    const showAlwaysLink = [...dropdown.childNodes].find((node) => {
+    const showAlwaysLink = [...dropdown.children].find((node) => {
       return node.id === "hider-show-always"
     })
-
-    // Here we give our menu the unique CTA depending on the shortName of the hidee
-    showOnceLink.innerText = `Show ${hidee.shortName}`
 
     showOnceLink.onclick = function () {
       showNode(node, hash)
@@ -306,10 +350,9 @@ function hider(options, domain, onShowOnce, onShowAlways) {
       // we could only run if addedNode or removedNode > 0
       // But we don't use them, because it could be slower
       () => {
-        runOnMutation()
+        processHidees()
       }
     )
-
     // Observe entire document and childList to capture all mutations
     observer.observe(document, {
       childList: true,
@@ -319,7 +362,7 @@ function hider(options, domain, onShowOnce, onShowAlways) {
   }
 
   // This runs every mutation and triggers a check to see that the right nodes are hidden
-  const runOnMutation = () => {
+  const processHidees = () => {
     // Identify any change in URL
     let checkHideesOnUrlChange = false
     if (window.location.href != currentUrl || currentUrl == false) {
@@ -343,7 +386,6 @@ function hider(options, domain, onShowOnce, onShowAlways) {
       findHideeNodesInDoc(hidee).forEach((node) => {
         processNode(node, hidee, domain)
       })
-      // If currentUrl
     })
   }
 
@@ -441,14 +483,9 @@ function hider(options, domain, onShowOnce, onShowAlways) {
 
       // Child element option
       if (hidee.firstChildId || hidee.firstChildClassName) {
-        const childElements = [...node.childNodes].filter((node) => {
-          return node.nodeType === 1
-        })
-
         // Define the first child to compare against
         let firstChild = node.children[0]
         // If first child is the menu child, use next child
-        // FIXME: this option would not work with the flexDirection column-reverse option
         if (
           node.children[0] &&
           node.children[0].className === options.menuClass
@@ -481,40 +518,42 @@ function hider(options, domain, onShowOnce, onShowAlways) {
       return include
     })
 
-    // Option for finding a node by parent and childIndex
-    if (hidee.childIndex && filteredNodes[0]) {
-      // Search for an existing found node
-      // And check it has child nodes
-      if (filteredNodes[0] && filteredNodes[0].children) {
-        // Then replace the node with its child, specified by index
-        filteredNodes = [filteredNodes[0].children[hidee.childIndex]]
-      } else {
-        filteredNodes = []
+    // Move up or down the node tree to select a different node
+    filteredNodes = filteredNodes.map((filteredNode) => {
+      // Option for finding a node by parent and childIndex
+      if (hidee.childIndex) {
+        // Search for an existing found node
+        // And check it has child nodes
+        if (filteredNode && filteredNode.children) {
+          // Then replace the node with its child, specified by index
+          filteredNode = filteredNode.children[hidee.childIndex]
+        }
       }
-    }
 
-    // Go up to the level of a parent if this option is specified
-    // Only do this if we have a filtered node to use
-    if (hidee.parentLevels && filteredNodes[0]) {
-      let parentNode = filteredNodes[0]
-      for (let i = 0; i < hidee.parentLevels; i++) {
-        parentNode = parentNode.parentElement
+      // Go up to the level of a parent if this option is specified
+      // Only do this if we have a filtered node to use
+
+      if (hidee.parentLevels) {
+        let parentNode = filteredNode
+        for (let i = 0; i < hidee.parentLevels; i++) {
+          parentNode = parentNode.parentElement
+        }
+        filteredNode = parentNode
       }
-      filteredNodes = [parentNode]
-    }
 
-    // Closest parent option
-    if (hidee.closestParentClass && filteredNodes[0]) {
-      filteredNodes = [
-        filteredNodes[0].closest(`[class='${hidee.closestParentClass}']`),
-      ]
-    }
+      // Closest parent option
+      if (hidee.closestParentClass) {
+        filteredNode = filteredNode.closest(
+          `[class='${hidee.closestParentClass}']`
+        )
+      }
+
+      // Return the node after whichever transformation (if any)
+      return filteredNode
+    })
 
     if (filteredNodes.length > 1) {
-      log("MULTIPLE HIDE ALERT")
-      log(hidee)
-      log(nodes)
-      // TODO: Maybe make the thing light up in pink? As a util?
+      // log(`Multiple hider: ${hidee.slug}`)
     }
     // Return filtered nodes if there are any
     if (filteredNodes && filteredNodes[0]) {
@@ -525,7 +564,9 @@ function hider(options, domain, onShowOnce, onShowAlways) {
   // Get or create a node hash
   const getOrCreateNodeHash = (node, hidee) => {
     let hash = false
-    if (node.attributes && node.attributes.hidee) {
+    if (hidee.hash) {
+      hash = hidee.hash
+    } else if (node.attributes && node.attributes.hidee) {
       hash = node.attributes.hidee.value
     } else {
       let existingHash = Object.keys(hiddenNodes).find((hash) => {
@@ -545,6 +586,26 @@ function hider(options, domain, onShowOnce, onShowAlways) {
   }
 
   // Utils
+
+  function formatApplyStylesForStyle(applyStyles) {
+    let styleText = ""
+    Object.keys(applyStyles).forEach((applyStyle) => {
+      // Check if that style is applied on the node already anyway
+      styleText += `${applyStyle}: ${applyStyles[applyStyle]} !important;`
+    })
+    return styleText
+  }
+
+  function addSelfStyles(hidee, hash) {
+    const applyStyles = getApplyStyles(hidee.style)
+    const styleInnerHtml = `${selector(
+      hidee.id,
+      hidee.className
+    )} {${formatApplyStylesForStyle(applyStyles)}}`
+    // Create hash
+    styleAdder(styleInnerHtml, `hidee-self-${hash}`)
+  }
+
   // Generate userId
   function getUid() {
     // E.g. 8 * 32 = 256 bits token
@@ -584,15 +645,15 @@ function hider(options, domain, onShowOnce, onShowAlways) {
       }
     }
   }
-  function styleAdder(name, style, id) {
-    var styleText = name + style
-    style = document.createElement("style")
-    style.innerHTML = styleText
-    if (id) {
-      style.id = id
+  function styleAdder(styleInnerHtml, styleId) {
+    let style = document.createElement("style")
+    style.innerHTML = styleInnerHtml
+    if (styleId) {
+      style.id = styleId
     }
     document.head.appendChild(style)
   }
+
   function addCSS(cssId, url) {
     if (!document.getElementById(cssId)) {
       var head = document.getElementsByTagName("head")[0]
