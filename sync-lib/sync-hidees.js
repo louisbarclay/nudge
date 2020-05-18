@@ -39,6 +39,10 @@ function checkHidees() {
             }
           }
         })
+        // Make a hidee style object if there is none
+        if (!hidee.style) {
+          hidee.style = {}
+        }
         if (hidee.import) {
           delete hidee.import
           hidees.push(hidee)
