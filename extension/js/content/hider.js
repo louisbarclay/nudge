@@ -178,7 +178,8 @@ function hider(options, domain, onShowOnce, onShowAlways) {
     const styleInnerHtml = `${childSelector}{ opacity: 0 !important; } ${selector(
       id,
       className
-    )}:after { display: none; }`
+    )}:after { display: none; }
+    ${selector(id, className)}:before { display: none; }`
     // ^For dev.to which has an awkward after element
     return styleInnerHtml
   }
