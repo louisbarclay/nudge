@@ -16,25 +16,6 @@ function debugLogger(eventType, detailsObj) {
   }
 }
 
-// Get Facebook user_id and fb_dtsg token needed to send Xhr requests
-async function getFacebookCreds() {
-  // Get the fb_dtsg token that must be passed to get a successful response to an XMLHttpRequest from Facebook
-  try {
-    // Get fb_dtsg
-    fb_dtsg = await getFbToken()
-    debugLogger("getFbDtsg", { length: fb_dtsg.length })
-    user_id = getUserId()
-    debugLogger("getUserId", { length: user_id.length })
-    // Get user_id
-  } catch (e) {
-    debugLogger("failedCreds", { errorMessage: e })
-    // Error catching
-  }
-  return new Promise((resolve) => {
-    resolve()
-  })
-}
-
 ;(async function () {
   const syncStorage = await loadSyncStorage()
   const settings = syncStorage.settings
@@ -55,13 +36,8 @@ async function getFacebookCreds() {
     }
   }
 
-  // Set ratio, which is 0 if all friends, groups and pages unfollowed, 1 if none unfollowed, 0.5 if half unfollowed etc.
-  var ratio = settings.fb_profile_ratio
-  debugLogger("getRatio", { ratio })
   // If user has auto-unfollow on, set 2 variables to true to make it happen
   if (settings.fb_auto_unfollow) {
-    executeUnfollow = true
-    autoUnfollow = true
     eventLogSender("fb_unfollow_autounfollow", {})
   }
 
@@ -85,17 +61,6 @@ async function getFacebookCreds() {
     // If the user has unfollowed nearly all of their friends, show 'Share' dialog box, not
     // 'Delete your News Feed' dialog box
     loadUx("run.html", runUx)
-
-    await getFacebookCreds()
-    // If we should be executing an unfollow, e.g. in case of autoUnfollow being on, go ahead and do it
-    if (executeUnfollow) {
-      friendAndPageListGenerator(unfollow, false, function () {
-        executeUnfollow = false
-      })
-    } else {
-      // Otherwise, load all profiles
-      friendAndPageListGenerator(unfollow, false)
-    }
   }
 })()
 
@@ -641,51 +606,8 @@ function runUx() {
 function buttonInit() {
   var button = el("facebook-button")
   button.onclick = function () {
-    eventLogSender("fb_unfollow_cancel", {})
-    progressLogger(
-      `If you leave this page, switch the Unfollower back on in Nudge Options`
-    )
-    headlineLogger(`Unfollowing has been stopped`)
-    stopInit()
-    // TODO: add feel free to move to another tab. this process will continue
+    sendMessage("unfollow_everything", {})
   }
-}
-
-// UX for having hit stop
-function stopInit() {
-  var button = el("facebook-button")
-  cancelOperation = true
-  changeSettingRequest(false, "fb_auto_unfollow")
-  if (button) {
-    button.innerHTML = "Switch the Unfollower back on"
-    button.onclick = function () {
-      cancelOperation = false
-      friendAndPageToggler(unfollow)
-      button.innerHTML = "Switch the Unfollower off"
-      progressLogger(`Resuming...`)
-      headlineLogger(`Starting to unfollow again`)
-      changeSettingRequest(true, "fb_auto_unfollow")
-      eventLogSender("fb_unfollow_resume", {})
-      buttonInit()
-    }
-  }
-}
-
-// UX for share.html
-function shareUx() {
-  var container = document.querySelector(".facebook-container")
-  var close = document.querySelector(".facebook-close")
-  close.onclick = function () {
-    deleteEl(container)
-    deleteEl(close)
-  }
-  try {
-    el("js-survey").onclick = function () {
-      eventLogSender("survey", { source: "fb_share" })
-    }
-  } catch (e) {}
-  shareBottomLinks()
-  // to refollow, go to // want to make clear where you go to refollow
 }
 
 // Function for logging progress from inside unfollowing function (friendAndPageListToggle)

@@ -27,10 +27,6 @@ var optionsIndex = [
     name: "Scroll Nudger",
   },
   {
-    page: "unfollower.html",
-    name: "Unfollower",
-  },
-  {
     page: "facebooktweaker.html",
     name: "Facebook Greyifyer",
   },

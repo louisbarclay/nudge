@@ -35,6 +35,12 @@ function messageReceiver(request, sender, sendResponse) {
   if (request.type === "options") {
     chrome.runtime.openOptionsPage()
   }
+  if (request.type === "unfollow_everything") {
+    chrome.tabs.create({
+      url:
+        "https://chrome.google.com/webstore/detail/unfollow-everything-for-f/ohceakcebcalehmaliegoenkliddajoo/",
+    })
+  }
   if (request.type === "inject_tabidler" && !chromeTab) {
     try {
       chrome.tabs.get(sender.tab.id, checkIfExists)
