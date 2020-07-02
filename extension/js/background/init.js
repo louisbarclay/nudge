@@ -63,6 +63,10 @@ async function run(userType) {
   // Log install event
   if (logInstall) {
     changeSetting(moment().format(), "install_date")
+    changeSetting(
+      moment().startOf("isoWeek").format("YYYY-MM-DD"),
+      "install_week_date"
+    )
     amplitudeHttpEvent("install", { time: moment(), dev: config.dev })
     eventLog("install", { time: moment(), dev: config.dev })
     logInstall = false
