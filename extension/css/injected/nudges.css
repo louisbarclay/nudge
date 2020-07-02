@@ -496,7 +496,6 @@
     size: auto !important;
     position: relative !important;
     transition: opacity 6s !important;
-    opacity: 0 !important;
     animation: fadeIn 4s forwards !important; }
   #nudge .nudge-control_position {
     z-index: 2147483647 !important;
