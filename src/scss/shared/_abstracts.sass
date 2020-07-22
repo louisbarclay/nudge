@@ -24,7 +24,7 @@
   left: 50%
   transform: translate(-50%, 0%)
 
-@mixin background-gradient($first: $nudge-blue, $second: $nudge-pink)
+@mixin background-gradient($first: $brand-primary, $second: $brand-secondary)
   animation: background-move 15s ease infinite
   background: linear-gradient(145deg, $first, $second)
   background-size: 400% 400%
@@ -82,7 +82,7 @@
     text-decoration: none
     color: initial
     &:hover
-      color: $nudge-pink
+      color: $brand-secondary
 
 @mixin border($width: $border-width-primary, $style: $border-style-primary, $color: $border-color-primary)
   border: $width $style $color

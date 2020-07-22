@@ -63,15 +63,15 @@
   margin: 0 !important;
   outline: none !important;
   box-shadow: none !important;
-  color: #bdbdbd !important;
-  border: 1px solid #bdbdbd !important;
+  color: #4f4f4f !important;
+  border: 1px solid #4f4f4f !important;
   border-radius: 4px !important;
   padding: 0.33333em 0.83333em 0.33333em 0.83333em !important; }
   .facebook-button:hover, .facebook-button-small:hover, .facebook-button-blue:hover {
     box-shadow: none !important;
     color: #ffffff !important;
     border-color: transparent !important;
-    background: #bdbdbd !important;
+    background: #4f4f4f !important;
     box-shadow: none !important; }
 
 @keyframes pulse-shadow {
@@ -200,7 +200,7 @@
     color: #bdbdbd !important; }
 
 .facebook-button {
-  border: 1px none #bdbdbd !important;
+  border: 1px none #4f4f4f !important;
   border-radius: 4px !important;
   font-size: 14px !important;
   color: #ffffff !important;
@@ -213,14 +213,14 @@
   justify-content: space-between !important; }
 
 .facebook-button-small {
-  border: 1px none #bdbdbd !important;
+  border: 1px none #4f4f4f !important;
   border-radius: 4px !important;
   font-size: 12px !important;
   background: #61a7ff !important;
   color: #ffffff !important; }
 
 .facebook-button-blue {
-  border: 1px none #bdbdbd !important;
+  border: 1px none #4f4f4f !important;
   border-radius: 4px !important;
   font-size: 13px !important;
   color: #ffffff !important;
@@ -230,7 +230,7 @@
 
 .facebook-button-large {
   font-size: 18px !important;
-  border: 1px none #bdbdbd !important;
+  border: 1px none #4f4f4f !important;
   border-radius: 4px !important;
   color: #ffffff !important;
   background: #ff61a7 !important; }

@@ -456,7 +456,7 @@
     opacity: 1 !important;
     box-shadow: 0px 0px 16px 0.5px rgba(0, 0, 0, 0.14) !important; }
   #nudge .nudge-rounded_no_border {
-    border: 1px none #bdbdbd !important;
+    border: 1px none #4f4f4f !important;
     border-radius: 4px !important; }
   #nudge .nudge-transparent_grey {
     background: rgba(0, 0, 0, 0.1) !important; }
@@ -481,7 +481,7 @@
     padding: 0em .3em .3em .3em !important;
     color: #ffffff !important;
     opacity: 0 !important;
-    border: 1px none #bdbdbd !important;
+    border: 1px none #4f4f4f !important;
     border-radius: 4px !important;
     position: fixed !important; }
   #nudge .nudge-banner {
@@ -540,7 +540,7 @@
     pointer-events: auto !important;
     align-items: flex-end !important; }
   #nudge .nudge-menu_item {
-    border: 1px none #bdbdbd !important;
+    border: 1px none #4f4f4f !important;
     border-radius: 4px !important;
     background: #ffffff !important;
     opacity: 0.9 !important;
@@ -650,13 +650,13 @@
   #nudge .nudge-highlight {
     background: #bdbdbd !important;
     color: #ffffff !important;
-    border: 1px none #bdbdbd !important;
+    border: 1px none #4f4f4f !important;
     border-radius: 4px !important;
     padding: 0em .3em .1em .3em !important;
     align-self: center !important; }
   #nudge .nudge-small-highlight {
     background: #ededed !important;
-    border: 1px none #bdbdbd !important;
+    border: 1px none #4f4f4f !important;
     border-radius: 4px !important;
     padding: 0em .3em .1em .3em !important;
     margin-left: 0.3em !important;
@@ -682,7 +682,7 @@
     height: 32px !important;
     align-self: center !important;
     padding: 0 !important;
-    border: 1px none #bdbdbd !important;
+    border: 1px none #4f4f4f !important;
     border-radius: 4px !important;
     margin-left: 0.3em !important;
     margin-right: 0.3em !important; }
@@ -703,7 +703,7 @@
         background: blue !important;
         padding: 0.75em 0 0 0 !important;
         width: 1em !important;
-        border-bottom: 1px solid #bdbdbd !important; }
+        border-bottom: 1px solid #4f4f4f !important; }
       #nudge .nudge-scale li::after {
         content: "" !important;
         display: block !important;
@@ -712,4 +712,4 @@
         background: red !important;
         padding: 0.75em 0 0 0 !important;
         width: 0.25em !important;
-        border-bottom: 1px solid #bdbdbd !important; }
+        border-bottom: 1px solid #4f4f4f !important; }

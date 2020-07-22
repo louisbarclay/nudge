@@ -27,19 +27,38 @@ button
     border-radius: 8px
   .primary
     margin-right: $spacing/2
-    background: $nudge-blue
+    background: $brand-primary
     color: $white
     width: 100%
     &:hover
-      background: darken($nudge-blue, 2%)
+      background: darken($brand-primary, 2%)
   .secondary
     width: 50%
   .pink
-    background: $nudge-pink
+    background: $brand-secondary
     margin-right: 0
     &:hover
-      background: darken($nudge-pink, 2%)
+      background: darken($brand-secondary, 2%)
 
+.google-button
+  @extend %button
+  display: flex
+  +border($style: solid, $color: $brand-secondary)
+  align-items: center
+  justify-content: center
+  background: $white
+  user-select: none
+  span
+    margin-left: 1em
+    font-size: 18px
+    font-family: 'Roboto', sans-serif
+    font-weight: 500
+    color: $nudge-grey-dark
+  &:hover
+    +border($style: solid, $color: darken($brand-secondary,2%))
+    background: lighten($brand-secondary, 25%)
+    span
+      color: darken($nudge-grey-dark, 2%)
 
 .profile-picture
   +size(75px)
@@ -49,7 +68,7 @@ button
 
 // Variables
 $checkbox-width: 24px
-$checkbox-color: $nudge-blue
+$checkbox-color: $brand-primary
 
 // Checkboxes
 input[type="checkbox"]
@@ -76,7 +95,7 @@ input[type="checkbox"]
   &:checked + label
     &:before
       +border($color: $checkbox-color)
-      background: url('chrome-extension://__MSG_@@extension_id__/img/icon/checkbox.svg') center center/14px no-repeat $checkbox-color
+      background: url('chrome-extension://__MSG_@@extension_id__/img/checkbox.svg') center center/14px no-repeat $checkbox-color
 
 
 .label-inactive
@@ -132,7 +151,7 @@ input[type="checkbox"]
     height: inherit
 
   .on
-    background: $nudge-blue
+    background: $brand-primary
     background-clip: border-box
     color: $white
 
@@ -150,7 +169,7 @@ input[type="checkbox"]
       color: $white
 
     .right.on
-      background: darken($nudge-blue, 2%)
+      background: darken($brand-primary, 2%)
 
 .onboarding-preview
   padding-top: 40px
@@ -161,10 +180,11 @@ input[type="checkbox"]
     width: $page-width
 
 .preview-image
-  width: 100%
-  height: auto
+  width: 573px
+  height: 497px
   border: 0
   border-radius: 8px
+  box-shadow: 2px 2px 15px 1px rgba(0,0,0,0.1)
 
 .article-image
       width: 100%
@@ -173,24 +193,21 @@ input[type="checkbox"]
 
 input[type="text"]
   caret-color: $primary
-  border-bottom: $border-primary
-  border-bottom-color: $nudge-grey-light
-  border-bottom-width: 1px
+  border: solid $nudge-grey-light 1px
+  border-radius: 4px
   // font-size: 16px
   left: 0
   list-style: none
   margin: 0
-  padding-bottom: 0.4em
-  padding-top: 0.2em
+  padding: 0.4em
   position: relative
-  width: 100%
+  width: auto
 
   &::placeholder
     color: $nudge-grey-light
 
   &:focus
-    border-bottom: $border-primary
-    border-bottom-color: $nudge-grey-medium
+    border: solid $nudge-grey-medium 1px
     color: $primary
 
 .tags
@@ -231,7 +248,7 @@ input[type="text"]
 
       &::after
         +pseudo
-        background-color: $nudge-blue
+        background-color: $brand-primary
         border-color: transparent
         border-radius: inherit
         color: $light
@@ -244,20 +261,20 @@ input[type="text"]
         z-index: 1
     
   .tag-flash
-    background-color: lighten($nudge-pink, 25%)
+    background-color: lighten($brand-secondary, 25%)
 
 .support-cta
   color: $white
-  background: $nudge-pink
+  background: $brand-secondary
   margin-right: 1em
   &:hover
     color: $white
-    background: darken($nudge-pink, 5%)
+    background: darken($brand-secondary, 5%)
 
 .support-cta-blue
-  background: $nudge-blue
+  background: $brand-primary
   &:hover
-    background: darken($nudge-blue, 5%)
+    background: darken($brand-primary, 5%)
 
 .inverted
   li
@@ -266,7 +283,7 @@ input[type="text"]
     
     &:hover
       &::after
-        background-color: $nudge-pink
+        background-color: $brand-secondary
         content: 'Add'
     
   .selected-tag
@@ -276,7 +293,7 @@ input[type="text"]
       +size(14px)
       margin-left: 0.5em
       border-radius: 10px
-      background: url('chrome-extension://__MSG_@@extension_id__/img/icon/checkbox.svg') center center/8px no-repeat $nudge-pink
+      background: url('chrome-extension://__MSG_@@extension_id__/img/checkbox.svg') center center/8px no-repeat $brand-secondary
 
     &:hover
       &::after
@@ -287,6 +304,7 @@ input[type="text"]
   display: flex
   flex-direction: row
   align-items: center
+  justify-content: space-between
   
   margin-bottom: $spacing
   box-shadow: 2px 2px 15px 1px (rgba(0,0,0,0.1))
@@ -299,6 +317,8 @@ input[type="text"]
     width: 25%
     padding: $spacing
   border-radius: 8px
+  .button-container
+    padding: $spacing
   h2
     margin-top: 0
   width: 100%

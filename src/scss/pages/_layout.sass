@@ -15,11 +15,12 @@
     flex-grow: 0.5
     width: 100px
     color: $black !important
-  .logo-small
-    flex-grow: 2
   .forward
     flex-grow: 0.5
     width: 100px
+
+.relative
+  position: relative
 
 html
   overflow-y: overlay
@@ -37,6 +38,20 @@ html
 
 .centered
   justify-content: center
+
+.tour-container
+  justify-content: flex-start
+  height: 100%
+  flex-direction: column
+  display: flex
+
+.tour-contents
+  position: relative
+  height: 100%
+
+.hero-contents
+  position: relative
+  height: 100%
 
 .spacing
   margin-bottom: $spacing * 2 !important
@@ -59,6 +74,9 @@ html
 .full-width
   width: 100%
 
+.button-width
+  min-width: 300px
+
 .contents
   align-items: flex-start
   display: flex
@@ -67,6 +85,83 @@ html
   margin-left: auto
   margin-right: auto
   height: auto
+
+.progress
+  background: $white
+  bottom: 0
+  height: 100px
+  width: 100%
+  border-top: $border-primary
+  border-color: $nudge-grey-lightest
+  flex-direction: row
+  justify-content: center
+  align-items: center
+  display: flex
+  user-select: none
+
+.progress-stage
+  margin-left: 2em
+  margin-right: 2em
+  display: flex
+  align-items: center
+
+.progress-text
+  color: $nudge-grey-light
+
+$icon-size: 24px
+
+.progress-selected
+  .progress-text
+    color: $brand-primary
+  .icon-welcome
+    background: url('chrome-extension://__MSG_@@extension_id__/img/salute-blue.png') center/$icon-size
+  .icon-demo
+    background: url('chrome-extension://__MSG_@@extension_id__/img/screensharing-blue.png') center/$icon-size
+  .icon-customize
+    background: url('chrome-extension://__MSG_@@extension_id__/img/customize-view-blue.png') center/$icon-size
+  .icon-signin
+    background: url('chrome-extension://__MSG_@@extension_id__/img/verified-account-blue.png') center/$icon-size
+
+.progress-icon
+  height: $icon-size
+  width: $icon-size
+  margin-right: 1em
+
+.icon-welcome
+  background: url('chrome-extension://__MSG_@@extension_id__/img/salute.png') center/$icon-size
+
+.icon-demo
+  background: url('chrome-extension://__MSG_@@extension_id__/img/screensharing.png') center/$icon-size
+
+.icon-customize
+  background: url('chrome-extension://__MSG_@@extension_id__/img/customize-view.png') center/$icon-size
+
+.icon-signin
+  background: url('chrome-extension://__MSG_@@extension_id__/img/verified-account.png') center/$icon-size
+
+.grey-background
+  background-color: $nudge-grey-lightest
+
+.hero
+  display: flex
+  justify-content: center
+  align-items: center
+  flex-direction: column
+  width: 100%
+
+.tour
+  display: flex
+  justify-content: center
+  flex-direction: column
+  width: 100%
+  padding: 2em
+
+.tour-right
+  align-items: center
+
+.tour-left
+  padding: 6em
+  width: 50%
 
 .headspace
   margin-top: 5em
