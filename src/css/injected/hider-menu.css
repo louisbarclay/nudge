@@ -141,13 +141,13 @@
   align-items: center;
   height: auto;
   flex-direction: column;
-  border: 1px none #bdbdbd;
+  border: 1px none #4f4f4f;
   border-radius: 4px;
   visibility: visible;
   font-size: 12px; }
 
 .hider-menu-dropdown-content {
-  border: 1px none #bdbdbd;
+  border: 1px none #4f4f4f;
   border-radius: 4px;
   display: flex;
   border-radius: 6px;
@@ -189,7 +189,7 @@
   font-size: 13px;
   pointer-events: auto;
   color: #ffffff;
-  border: 1px none #bdbdbd;
+  border: 1px none #4f4f4f;
   border-radius: 4px;
   padding: 0.2em 0.4em 0.2em 0.4em;
   width: auto;
@@ -207,7 +207,7 @@
   box-shadow: 0.5px 0.5px 1px 0.5px rgba(0, 0, 0, 0.1);
   pointer-events: auto;
   color: #6d6d6d;
-  border: 1px none #bdbdbd;
+  border: 1px none #4f4f4f;
   border-radius: 4px;
   padding: 0.2em 0.4em 0.2em 0.4em;
   width: auto; }
