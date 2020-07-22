@@ -1,0 +1,33 @@
+html
+  head
+    title The Unfollower has moved
+    link(rel="stylesheet" href="../../css/pages/onboarding.css")
+    link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
+    meta(charset="UTF-8")
+  body.grey-background
+    .tour-container
+      .header.horizontal.relative
+        a.back#js-back
+        div.logo-small
+        div.forward
+      .horizontal.centered.tour-contents
+        .hero
+          h1.spacing Nudge's Facebook Unfollower tool has moved
+          p.spacing We've made a new Chrome extension for you if you only want to unfollow everything in your Facebook News Feed.
+          .horizontal.onboarding-bar.spacing-m
+            a.button-width(href="https://chrome.google.com/webstore/detail/unfollow-everything-for-f/ohceakcebcalehmaliegoenkliddajoo/")
+              button.primary Add Unfollow Everything to Chrome
+      .progress
+        .progress-stage.progress-selected
+          .progress-icon.icon-welcome
+          .progress-text Welcome
+        .progress-stage
+          .progress-icon.icon-demo
+          .progress-text Demo
+        .progress-stage
+          .progress-icon.icon-customize
+          .progress-text Customize
+        .progress-stage
+          .progress-icon.icon-signin
+          .progress-text Sign In
+  script(src="../../js/pages/log.js")
