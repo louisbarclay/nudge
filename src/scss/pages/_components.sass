@@ -95,7 +95,7 @@ input[type="checkbox"]
   &:checked + label
     &:before
       +border($color: $checkbox-color)
-      background: url('chrome-extension://__MSG_@@extension_id__/img/checkbox.svg') center center/14px no-repeat $checkbox-color
+      background: url('chrome-extension://__MSG_@@extension_id__/img/icon/checkbox.svg') center center/14px no-repeat $checkbox-color
 
 
 .label-inactive
@@ -180,8 +180,8 @@ input[type="checkbox"]
     width: $page-width
 
 .preview-image
-  width: 573px
-  height: 497px
+  width: 100%
+  height: auto
   border: 0
   border-radius: 8px
   box-shadow: 2px 2px 15px 1px rgba(0,0,0,0.1)
@@ -293,7 +293,7 @@ input[type="text"]
       +size(14px)
       margin-left: 0.5em
       border-radius: 10px
-      background: url('chrome-extension://__MSG_@@extension_id__/img/checkbox.svg') center center/8px no-repeat $brand-secondary
+      background: url('chrome-extension://__MSG_@@extension_id__/img/icon/checkbox.svg') center center/8px no-repeat $brand-secondary
 
     &:hover
       &::after
@@ -305,13 +305,10 @@ input[type="text"]
   flex-direction: row
   align-items: center
   justify-content: space-between
-  
   margin-bottom: $spacing
   box-shadow: 2px 2px 15px 1px (rgba(0,0,0,0.1))
-  
   .main
     width: 75%
-    height: 100%
     padding: $spacing
   .image
     width: 25%

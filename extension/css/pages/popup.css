@@ -164,7 +164,7 @@ input[type="checkbox"] {
   input[type="checkbox"]:checked + label:before {
     border: 1px solid #61a7ff;
     border-radius: 4px;
-    background: url("chrome-extension://__MSG_@@extension_id__/img/checkbox.svg") center center/14px no-repeat #61a7ff; }
+    background: url("chrome-extension://__MSG_@@extension_id__/img/icon/checkbox.svg") center center/14px no-repeat #61a7ff; }
 
 .label-inactive {
   color: #6d6d6d;
@@ -260,8 +260,8 @@ input[type="checkbox"] {
     width: 660px; }
 
 .preview-image {
-  width: 573px;
-  height: 497px;
+  width: 100%;
+  height: auto;
   border: 0;
   border-radius: 8px;
   box-shadow: 2px 2px 15px 1px rgba(0, 0, 0, 0.1); }
@@ -372,7 +372,7 @@ input[type="text"] {
     height: 14px;
     margin-left: 0.5em;
     border-radius: 10px;
-    background: url("chrome-extension://__MSG_@@extension_id__/img/checkbox.svg") center center/8px no-repeat #ff61a7; }
+    background: url("chrome-extension://__MSG_@@extension_id__/img/icon/checkbox.svg") center center/8px no-repeat #ff61a7; }
   .inverted .selected-tag:hover::after {
     content: 'Remove'; }
 
@@ -388,7 +388,6 @@ input[type="text"] {
   width: 100%; }
   .card .main {
     width: 75%;
-    height: 100%;
     padding: 24px; }
   .card .image {
     width: 25%;
