@@ -8,8 +8,8 @@
 $primary: lighten($nudge-grey-medium, 7%)
 $light-fill: lighten($nudge-grey-lightest, 4%)
 $secondary-text: $nudge-grey-light
-$toggle-fill: $nudge-blue
-$toggle-secondary: $nudge-blue
+$toggle-fill: $brand-primary
+$toggle-secondary: $brand-primary
 $toggle-fill-text: $primary
 $toggle-light-text: $white
 $toggle-white: $light-fill
@@ -33,7 +33,7 @@ body
   color: $nudge-grey-light
   margin-bottom: 1em
   &:hover
-    color: $nudge-pink
+    color: $brand-secondary
 
 #button-container
   flex-direction: column
@@ -52,9 +52,9 @@ body
     background: darken($nudge-grey-light, 10%)
 
 .popup-snooze-button
-  background: $nudge-pink
+  background: $brand-secondary
   &:hover
-    background: darken($nudge-pink, 10%)
+    background: darken($brand-secondary, 10%)
 
 #dont-nudge
   pointer: cursor
@@ -62,7 +62,7 @@ body
 #time-headline
   font-size: 18/14 * $default-font-size
   +size(4em)
-  background-color: $nudge-blue
+  background-color: $brand-primary
   align-items: center
   justify-content: center
   color: white
@@ -95,7 +95,7 @@ body
   margin-top: 0.5em
 
 #refresh
-  color: $nudge-pink
+  color: $brand-secondary
 
 // .domain
 //   +border($style: none)

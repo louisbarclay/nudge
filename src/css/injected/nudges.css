@@ -129,17 +129,18 @@
 #nudge-scroll {
   display: block; }
   #nudge-scroll .nudge-scroll-container {
-    opacity: 0;
-    display: flex;
+    display: none;
     position: fixed;
     flex-direction: row;
     align-items: baseline;
     justify-content: center;
     pointer-events: none; }
   #nudge-scroll .nudge-scroll-show {
-    animation: fadeIn 0.6s forwards; }
+    animation: fadeIn 0.6s forwards;
+    display: flex; }
   #nudge-scroll .nudge-scroll-hide {
-    animation: fadeOut 0.3s forwards; }
+    animation: fadeOut 0.3s forwards;
+    display: flex; }
   #nudge-scroll .nudge-scroll-show-display {
     display: flex; }
   #nudge-scroll .nudge-scroll-position {
@@ -456,7 +457,7 @@
     opacity: 1;
     box-shadow: 0px 0px 16px 0.5px rgba(0, 0, 0, 0.14); }
   #nudge .nudge-rounded_no_border {
-    border: 1px none #bdbdbd;
+    border: 1px none #4f4f4f;
     border-radius: 4px; }
   #nudge .nudge-transparent_grey {
     background: rgba(0, 0, 0, 0.1); }
@@ -481,7 +482,7 @@
     padding: 0em .3em .3em .3em;
     color: #ffffff;
     opacity: 0;
-    border: 1px none #bdbdbd;
+    border: 1px none #4f4f4f;
     border-radius: 4px;
     position: fixed; }
   #nudge .nudge-banner {
@@ -540,7 +541,7 @@
     pointer-events: auto;
     align-items: flex-end; }
   #nudge .nudge-menu_item {
-    border: 1px none #bdbdbd;
+    border: 1px none #4f4f4f;
     border-radius: 4px;
     background: #ffffff;
     opacity: 0.9;
@@ -650,13 +651,13 @@
   #nudge .nudge-highlight {
     background: #bdbdbd;
     color: #ffffff;
-    border: 1px none #bdbdbd;
+    border: 1px none #4f4f4f;
     border-radius: 4px;
     padding: 0em .3em .1em .3em;
     align-self: center; }
   #nudge .nudge-small-highlight {
     background: #ededed;
-    border: 1px none #bdbdbd;
+    border: 1px none #4f4f4f;
     border-radius: 4px;
     padding: 0em .3em .1em .3em;
     margin-left: 0.3em;
@@ -682,7 +683,7 @@
     height: 32px;
     align-self: center;
     padding: 0;
-    border: 1px none #bdbdbd;
+    border: 1px none #4f4f4f;
     border-radius: 4px;
     margin-left: 0.3em;
     margin-right: 0.3em; }
@@ -703,7 +704,7 @@
         background: blue;
         padding: 0.75em 0 0 0;
         width: 1em;
-        border-bottom: 1px solid #bdbdbd; }
+        border-bottom: 1px solid #4f4f4f; }
       #nudge .nudge-scale li::after {
         content: "";
         display: block;
@@ -712,4 +713,4 @@
         background: red;
         padding: 0.75em 0 0 0;
         width: 0.25em;
-        border-bottom: 1px solid #bdbdbd; }
+        border-bottom: 1px solid #4f4f4f; }

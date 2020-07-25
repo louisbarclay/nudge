@@ -1,0 +1,157 @@
+@import '../shared/variables'
+@import '../shared/abstracts'
+@import 'components'
+@import 'layout'
+@import 'reset'
+@import 'typography'
+
+// Options
+$primary: lighten($nudge-grey-medium, 7%)
+$light-fill: lighten($nudge-grey-lightest, 4%)
+$secondary-text: $nudge-grey-light
+$toggle-fill: $brand-primary
+$toggle-secondary: $brand-primary
+$toggle-fill-text: $primary
+$toggle-light-text: $white
+$toggle-white: $light-fill
+
+body
+  @extend %typography
+  width: 300px
+  height: auto
+  background: $white
+  display: flex
+  flex-direction: column
+  align-items: center
+  padding: 0
+
+.banner
+  display: flex
+  width: 100%
+  align-items: center
+  justify-content: center
+  background: $brand-secondary
+  &:hover
+    background: darken($brand-secondary, 2%)
+  .popup-link
+    color: $white !important
+    margin-bottom: 0.4em
+    margin-top: 0.2em
+
+.popup-link
+  color: $nudge-grey-light !important
+  font-size: 13px
+  margin-bottom: 0.5em
+
+#options, #dont-nudge, #reset-hide
+  color: $nudge-grey-light
+  margin-bottom: 1em
+  &:hover
+    color: $brand-secondary
+
+#button-container
+  flex-direction: column
+  margin-top: 1em
+  margin-bottom: 1em
+  align-items: center
+
+.popup-button-width
+  200px
+
+.switch-icon
+  width: 16px
+  height: 16px
+  background: url('chrome-extension://__MSG_@@extension_id__/img/on.png') center/12px no-repeat rgba(255,255,255,0.7)
+  border-radius: 50%
+
+.switch-button
+  @extend %button
+  display: flex
+  +border($style: none)
+  align-items: center
+  justify-content: left
+  background: lighten($brand-primary,2%)
+  user-select: none
+  padding: 0.6em 1em
+  width: 8.4em
+  span
+    color: $white
+    padding-top: 1px
+    margin-left: 0.5em
+    font-size: 18px
+    white-space: nowrap
+    font-family: 'Roboto', sans-serif
+    font-weight: 500
+  &:hover
+    background: $brand-primary
+
+.switch-button-off
+  background: $nudge-grey-light
+  &:hover
+    background: darken($nudge-grey-light, 2%)
+  .switch-icon
+    background: url('chrome-extension://__MSG_@@extension_id__/img/off.png') center/10px no-repeat rgba(255,255,255,0.7)
+
+.popup-snooze-button
+  background: $brand-secondary
+  &:hover
+    background: darken($brand-secondary, 10%)
+
+#dont-nudge
+  pointer: cursor
+
+#time-headline
+  font-size: 18/14 * $default-font-size
+  +size(4em)
+  background-color: $brand-primary
+  align-items: center
+  justify-content: center
+  color: white
+  border-radius: 50%
+  opacity: 0.8
+  pointer-events: none
+
+#logo
+  font-size: 18px
+  +logo-color(4em)
+
+#domain-line
+  justify-content: center
+  align-items: center
+  font-size: 16/14 * $default-font-size
+  color: $primary
+
+#extras-line
+  justify-content: center
+  align-items: center
+  flex-direction: column
+  display: flex
+
+#domain
+  margin-right: 0.25em
+  margin-left: 0.25em
+
+#notice
+  height: 1em
+  margin-top: 0.5em
+
+#refresh
+  color: $brand-secondary
+
+// .domain
+//   +border($style: none)
+//   display: flex
+//   padding-right: 1em
+//   padding-left: 1em
+//   float: left
+//   height: 2em
+//   line-height: 2em
+//   position: relative
+//   color: $primary
+//   font-size: (12 / 13) * 1em
+//   background-color: $nudge-grey-lightest
+//   margin-left: 0.5em
+//   margin-right: 0.5em
+
+.hide
+  display: none !important

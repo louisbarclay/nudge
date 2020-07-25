@@ -1,0 +1,32 @@
+html
+  head
+    title Welcome to the Nudge study
+    link(rel="stylesheet" href="../../css/pages/onboarding.css")
+    link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
+    meta(charset="UTF-8")
+  body.grey-background
+    .tour-container
+      .header.horizontal.relative
+        a.back#js-back
+        div.logo-small
+        div.forward
+      .horizontal.centered.tour-contents
+        .hero
+          h1.spacing Thank you for joining the Nudge study
+          p Important: please don't change ANY Nudge settings while the study is ongoing.
+          p You don't need to do anything else, and can close this window now.
+      //- .progress
+      //-   .progress-stage.progress-selected
+      //-     .progress-icon.icon-welcome
+      //-     .progress-text Welcome
+      //-   .progress-stage
+      //-     .progress-icon.icon-demo
+      //-     .progress-text Demo
+      //-   .progress-stage
+      //-     .progress-icon.icon-customize
+      //-     .progress-text Customize
+      //-   .progress-stage
+      //-     .progress-icon.icon-signin
+      //-     .progress-text Sign In
+  script(src="../../config.js")
+  script(src="../../js/helpers.js")

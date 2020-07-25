@@ -1,3 +1,13 @@
+@import 'webfonts'
+  
+@import '../shared/variables'
+
+@import '../shared/abstracts'
+
+@import '../shared/animations'
+
+@import 'reset'
+  
 // Specific to page or component
 $slider-height: 60px  
 $opacity-global: 0.7
@@ -6,8 +16,8 @@ $opacity-global: 0.7
 $primary: lighten($nudge-grey-medium, 7%)
 $light-fill: lighten($nudge-grey-lightest, 4%)
 $secondary-text: $nudge-grey-light
-$toggle-fill: $nudge-blue
-$toggle-secondary: $nudge-blue
+$toggle-fill: $brand-primary
+$toggle-secondary: $brand-primary
 $toggle-fill-text: $primary
 $toggle-light-text: $white
 $toggle-white: $light-fill
@@ -412,7 +422,7 @@ body
 
 // Variables
 $checkbox-width: 24px
-$checkbox-color: $nudge-blue
+$checkbox-color: $brand-primary
 
 .form-checkbox
   opacity: 0

@@ -36,7 +36,7 @@ $rainbow-violet: #d2b3ff
 $rainbow-colors: $rainbow-blue, $rainbow-green, $rainbow-yellow, $rainbow-orange, $rainbow-red, $rainbow-violet
 $gradient-colors: #61A7FF, #69A3FA, #719FF5, #799BF1, #8298EC, #8A94E7, #9290E3, #9B8DDE, #A389D9, #AB85D5, #B482D0, #BC7ECC, #C47AC7, #CD77C2, #D573BE, #DD6FB9, #E66CB4, #EE68B0, #F664AB, #FF61A7
 $gradient-colors-2: #61A7FF, #719FF5, #8298EC, #9290E3, #A389D9, #B482D0, #C47AC7, #D573BE, #E66CB4, #F664AB, #FF61A7
-$gradient-colors-3: $nudge-blue, $nudge-pink
+$gradient-colors-3: $brand-primary, $brand-secondary
 $gradient-colors-4: #61a7ff, #8099ed, #a08bdb, #bf7dca, #df6fb8, #ff61a7
 $gradient-colors-5: #8099ed, #a08bdb, #bf7dca, #df6fb8, #ff61a7
 $gradient-colors-6: #8099ED,#998DDF,#B282D1, #CC77C3, #E56CB5, #FF61A7
@@ -62,21 +62,21 @@ $n-z-index: 20
       // Typography
       @extend %typography
       // Existence
-      opacity: 0
-      display: flex
+      display: none
       position: fixed
       // Flex
       flex-direction: row
       align-items: baseline
       justify-content: center
       pointer-events: none
-      // transition: opacity 0.6s
 
     &show
       animation: fadeIn 0.6s forwards
+      display: flex
 
     &hide
       animation: fadeOut 0.3s forwards
+      display: flex
 
     &show-display
       display: flex
@@ -133,7 +133,7 @@ $n-z-index: 20
       // background-color: nth($nudge-colors, ($n % length($nudge-colors)) + 1)
       
       // New tweak
-      background: linear-gradient(145deg, nth($nudge-colors, ($n % length($nudge-colors)) + 1) 0%, $nudge-blue if(($n + 1 > length($nudge-colors)), percentage((($n % length($nudge-colors)) + 1)/(length($nudge-colors) + (($n % length($nudge-colors)) + 1))), 100%))
+      background: linear-gradient(145deg, nth($nudge-colors, ($n % length($nudge-colors)) + 1) 0%, $brand-primary if(($n + 1 > length($nudge-colors)), percentage((($n % length($nudge-colors)) + 1)/(length($nudge-colors) + (($n % length($nudge-colors)) + 1))), 100%))
 
       +size(unquote((($n + 1) * 100) + 'px'))
       // border-width: unquote(($n * 100) + 'px')
@@ -344,24 +344,24 @@ $n-z-index: 20
     &menu_close
       background: url('chrome-extension://__MSG_@@extension_id__/img/icon/logo-color.svg') center center/2em no-repeat $white
       &:hover
-        background: $nudge-pink url('chrome-extension://__MSG_@@extension_id__/img/icon/closewhite.svg') center center/2em no-repeat
+        background: $brand-secondary url('chrome-extension://__MSG_@@extension_id__/img/icon/closewhite.svg') center center/2em no-repeat
 
     &menu_hide
       background: url('chrome-extension://__MSG_@@extension_id__/img/icon/hidegreynew.svg') center center/2em no-repeat $white
       &:hover
-        background: $nudge-pink url('chrome-extension://__MSG_@@extension_id__/img/icon/hidewhitenew.svg') center center/2em no-repeat
+        background: $brand-secondary url('chrome-extension://__MSG_@@extension_id__/img/icon/hidewhitenew.svg') center center/2em no-repeat
 
     &menu_settings
       background: url('chrome-extension://__MSG_@@extension_id__/img/icon/newcoggrey.svg') center center/1.6em no-repeat $white
       &:hover
-        background: $nudge-pink url('chrome-extension://__MSG_@@extension_id__/img/icon/newcogwhite.svg') center center/1.6em no-repeat
+        background: $brand-secondary url('chrome-extension://__MSG_@@extension_id__/img/icon/newcogwhite.svg') center center/1.6em no-repeat
 
     &menu_time
       color: $white
       opacity: 0.8
       border-radius: 18px
       cursor: default
-      background: $nudge-blue
+      background: $brand-primary
 
     &corner
       // Display and position
@@ -413,7 +413,7 @@ $n-z-index: 20
     &switch
       opacity: 1
       +size(2.25em)
-      background: url('chrome-extension://__MSG_@@extension_id__/img/icon/offswitch.svg') center 0.25em / 1.5em no-repeat $nudge-pink
+      background: url('chrome-extension://__MSG_@@extension_id__/img/icon/offswitch.svg') center 0.25em / 1.5em no-repeat $brand-secondary
       border-radius: 3em
       position: absolute
       bottom: 5px
@@ -442,10 +442,10 @@ $n-z-index: 20
       align-self: center
     
     &pink
-      background: $nudge-pink
+      background: $brand-secondary
 
     &blue
-      background: $nudge-blue
+      background: $brand-primary
 
     &white
       background: rgba(255, 255, 255, 0.3)

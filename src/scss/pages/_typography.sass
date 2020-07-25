@@ -1,10 +1,10 @@
-$primary: #000000
+$text-primary: $black
 
 body
   @extend %typography
 
 h1, h2, h3
-  color: $primary
+  color: $text-primary
   font-family: 'Roboto', sans-serif
   font-weight: 700
 
@@ -31,13 +31,13 @@ h3
   font-size: 15px
   color: $nudge-grey-dark
   &::selection
-    background: $nudge-pink
+    background: $brand-secondary
     color: $white
 
 a
-  color: darken($nudge-blue, 40%) !important
+  color: darken($brand-primary, 40%) !important
   &:hover
-    color: $nudge-pink !important
+    color: $brand-secondary !important
 
 .tooltip
   font-size: 12px
@@ -52,13 +52,15 @@ a
   font-size: 14px
   color: $nudge-grey-medium
   ::hover
-    color: $nudge-pink
+    color: $brand-secondary
 
 .br
   margin-bottom: 0
 
 .link
   text-decoration: underline
+.link-subtle
+  color: $nudge-grey-light !important
 
 .bullets
   list-style-type: disc
@@ -72,3 +74,6 @@ a
 
 .strong
   font-weight: 700
+
+.centered-text
+  text-align: center

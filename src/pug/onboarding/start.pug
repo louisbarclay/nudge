@@ -1,0 +1,35 @@
+html
+  head
+    title Welcome to Nudge
+    link(rel="stylesheet" href="../../css/pages/onboarding.css")
+    link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
+    meta(charset="UTF-8")
+  body.grey-background
+    .tour-container
+      .header.horizontal.relative
+        a.back#js-back
+        div.logo-small
+        div.forward
+      .horizontal.centered.tour-contents
+        .hero
+          h1.spacing Nudge is installed!
+          p.spacing Take a minute to set up Nudge and learn about all its features.
+          .horizontal.onboarding-bar.spacing-m
+            a.button-width(href="tour1.html")
+              button.primary.pink Continue
+          a(href="unfollower.html").link.spacing-l I'm mainly here to delete my Facebook News Feed
+          a(href="study.html").link.link-subtle I'm part of the Nudge study
+      .progress
+        .progress-stage.progress-selected
+          .progress-icon.icon-welcome
+          .progress-text Welcome
+        .progress-stage
+          .progress-icon.icon-demo
+          .progress-text Demo
+        .progress-stage
+          .progress-icon.icon-customize
+          .progress-text Customize
+        .progress-stage
+          .progress-icon.icon-signin
+          .progress-text Sign In
+  script(src="../../js/pages/log.js")
