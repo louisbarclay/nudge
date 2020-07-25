@@ -1,15 +1,16 @@
 html
   head
     title
-    link(rel="stylesheet", href="../../css/injected/nudges.css")
+    link(rel="stylesheet" href="../../css/injected/nudges.css")
   body.body-reset
     div#buttons
       button#show Show or hide scroll nudge
       input#nudge-test-input
     div#nudge
       include ../injected/nudge/corner
+  script(src=".././../../config.js")
   script(src="../../js/helpers.js")
+  script(src="../../js/content/storage/html.js")
   script(src="../../js/content/time.js")
   script(src="../../js/content/scroll.js")
-  script(src="../../js/content/controller.js")
   script(src="../../js/content/ui.js")
