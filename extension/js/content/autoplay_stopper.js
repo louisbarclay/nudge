@@ -21,17 +21,40 @@ async function autoplayStopper() {
     // Check both of them
     const toggleArray = [toggleOriginal, toggleAlternative]
     toggleArray.forEach(async (toggle) => {
+      // Check that toggle exists
       if (toggle) {
         if (toggle.attributes.checked) {
           // That particular toggle exists and is checked
           // We change its value
+          eventLogSender("youtube_autoplay", {
+            type: "off_auto",
+            domain: "youtube.com",
+          })
           toggle.click()
           // log(`Clicked ${toggle.id}`)
           observe = false
         } else {
+          eventLogSender("youtube_autoplay", {
+            type: "already_off",
+            domain: "youtube.com",
+          })
           // The toggle exists and is not checked
           // We can stop observing
           observe = false
+        }
+        // Also attach an onclick to toggle
+        toggle.onclick = function () {
+          if (toggle.attributes.checked) {
+            eventLogSender("youtube_autoplay", {
+              type: "on_manual",
+              domain: "youtube.com",
+            })
+          } else {
+            eventLogSender("youtube_autoplay", {
+              type: "off_manual",
+              domain: "youtube.com",
+            })
+          }
         }
       }
     })
