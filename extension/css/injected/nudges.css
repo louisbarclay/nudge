@@ -129,17 +129,18 @@
 #nudge-scroll {
   display: block !important; }
   #nudge-scroll .nudge-scroll-container {
-    opacity: 0 !important;
-    display: flex !important;
+    display: none !important;
     position: fixed !important;
     flex-direction: row !important;
     align-items: baseline !important;
     justify-content: center !important;
     pointer-events: none !important; }
   #nudge-scroll .nudge-scroll-show {
-    animation: fadeIn 0.6s forwards; }
+    animation: fadeIn 0.6s forwards;
+    display: flex !important; }
   #nudge-scroll .nudge-scroll-hide {
-    animation: fadeOut 0.3s forwards; }
+    animation: fadeOut 0.3s forwards;
+    display: flex !important; }
   #nudge-scroll .nudge-scroll-show-display {
     display: flex !important; }
   #nudge-scroll .nudge-scroll-position {
