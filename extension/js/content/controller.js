@@ -54,7 +54,8 @@ async function execSettings() {
         settings.unhidden_hidees.push(hidee.slug)
         changeSettingRequest(settings.unhidden_hidees, "unhidden_hidees")
         eventLogSender("hide_show_always", { hidee: hidee.slug, domain })
-      }
+      },
+      "nudge"
     )
   }
 
