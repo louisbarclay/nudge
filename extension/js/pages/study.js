@@ -3,20 +3,20 @@ const button = el("js-submit")
 const warning = el("js-warning")
 
 // FIXME: group IDs to be supplied by Aditya and Kristoffer
-const groupA = '1'
-const groupB = '2'
-const groupC = '3'
-const groupD = '4'
+const groupA = "4xctadd3571k"
+const groupB = "4xctadd3572k"
+const groupC = "4xctadd3573k"
+const groupD = "4xctadd3574k"
 
 button.onclick = function () {
-  const value = input.value
+  const value = input.value.trim()
 
   if (checkValue(value)) {
     // Send to Amplitude
     changeSettingRequest(value, "study")
 
     // Get group ID
-    const groupId = value.split(1, 16) //FIXME:
+    const groupId = value.substring(0, 12)
 
     // And change settings depending on value
     if (groupId === groupA) {
@@ -38,15 +38,21 @@ button.onclick = function () {
 }
 
 function checkValue(value) {
-  const groupId = value.split(1, 16) // FIXME:
+  const groupId = value.substring(0, 12)
+  console.log(groupId)
   function checkGroupId(groupId) {
-    if (groupId === groupA || groupId === groupB || groupId === groupC || groupId === groupD) {
+    if (
+      groupId === groupA ||
+      groupId === groupB ||
+      groupId === groupC ||
+      groupId === groupD
+    ) {
       return true
     } else {
       return false
     }
   }
-  if (value.length === 16 && ) {
+  if (checkGroupId(groupId)) {
     return true
   } else {
     warning.style.display = "block"
@@ -95,7 +101,12 @@ var controlSettings = {
   dev: false,
 }
 
-// Go to default study settings first
-Object.keys(controlSettings).forEach((setting) => {
-  changeSettingRequest(controlSettings[setting], setting)
-})
+;(async () => {
+  var settings = await loadSettingsRequest()
+  if (!settings.study) {
+    // Go to default study settings first
+    Object.keys(controlSettings).forEach((setting) => {
+      changeSettingRequest(controlSettings[setting], setting)
+    })
+  }
+})()
