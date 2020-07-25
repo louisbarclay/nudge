@@ -1,4 +1,4 @@
-function hider(options, domain, onShowOnce, onShowAlways) {
+function hider(options, domain, onShowOnce, onShowAlways, extension) {
   // Disable logging unless log variable is present
   !options.log && (log = function () {})
   // Store hiddenNodes by hash
@@ -27,8 +27,9 @@ function hider(options, domain, onShowOnce, onShowAlways) {
 
   // Add the CSS that you will need as early as possible
   onDocHeadExists(() => {
-    addCSS("hider-menu", options.menuCss)
+    addCSS(`${extension}-hider-menu`, options.menuCss)
     if (domain === "youtube.com") {
+      log("Slow option")
       domainHidees.forEach((hidee) => {
         const hash = getUid()
         addSelfStyles(hidee, hash)
@@ -44,7 +45,11 @@ function hider(options, domain, onShowOnce, onShowAlways) {
   if (domainHidees.length > 0) {
     if (domain === "youtube.com") {
       setInterval(() => {
-        processHidees()
+        if (!el("hider-menu")) {
+          processHidees()
+        } else {
+          log("Activated this")
+        }
       }, 1000)
     } else {
       observeDoc()
@@ -352,6 +357,14 @@ function hider(options, domain, onShowOnce, onShowAlways) {
       // But we don't use them, because it could be slower
       () => {
         processHidees()
+
+        // Resolve conflict with Nudge
+        // Search for Nudge CSS injection
+        // FIXME: will need to be update in Nudge code with a toggle
+        if (el("unweb-hider-menu")) {
+          observer.disconnect()
+          log("Activated this")
+        }
       }
     )
     // Observe entire document and childList to capture all mutations
