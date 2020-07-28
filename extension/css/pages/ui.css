@@ -108,7 +108,8 @@ a {
   text-decoration: underline; }
 
 .link-subtle {
-  color: #bdbdbd !important; }
+  color: #bdbdbd !important;
+  font-size: 12px; }
 
 .bullets {
   list-style-type: disc; }

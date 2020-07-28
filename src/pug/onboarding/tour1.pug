@@ -1,0 +1,56 @@
+html
+  head
+    title Welcome to Unweb
+    link(rel="stylesheet" href="../../css/pages/onboarding.css")
+    link(href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap' rel='stylesheet')
+    meta(charset="UTF-8")
+  body
+    .tour-container
+      .header.horizontal.relative
+        a.back#js-back
+        div.logo-small
+        div.forward
+      .horizontal.tour-contents
+        .tour.grey-background.tour-left
+          h1.spacing Choose sites
+          p.spacing Choose the sites where you would like Nudge’s interventions to be active. We have gone ahead and added the most common sites to your list, but you can remove them if you want.
+          ul.tags#js-domainlist.spacing
+          .horizontal.onboarding-bar.spacing-m
+            a.button-width(href="tour2.html")
+              button.primary.pink Continue
+        .tour.tour-right
+          div
+            h2 Top 10 sites:
+            ul.tags.inverted#js-toplist
+          div
+            h2 Social sites:
+            ul.tags.inverted#js-sociallist
+          div
+            h2 Email and messaging sites:
+            ul.tags.inverted#js-messaginglist
+          div
+            h2 News sites:
+            ul.tags.inverted#js-newslist
+          div
+            h2 Shopping sites:
+            ul.tags.inverted#js-shoppinglist
+      .progress
+        .progress-stage
+          .progress-icon.icon-welcome
+          .progress-text Welcome
+        .progress-stage.progress-selected
+          .progress-icon.icon-demo
+          .progress-text Demo
+        .progress-stage
+          .progress-icon.icon-customize
+          .progress-text Customize
+        .progress-stage
+          .progress-icon.icon-signin
+          .progress-text Sign In
+  script(src="../../config.js")
+  script(src="../../js/background/storage.js")
+  script(src="../../js/helpers.js")
+  script(src="../../js/vars/vars.js")
+  script(src="../../js/options/favicon.js")
+  script(src="../../js/options/sites.js")
+  script(src="../../js/options/option.js")

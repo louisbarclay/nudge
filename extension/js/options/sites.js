@@ -60,6 +60,7 @@ function addTag(domain, list, callback, domains) {
   list.appendChild(li)
   // Adjust the placeholder
   if (
+    el("js-empty-state") &&
     list.id === "js-domainlist" &&
     el("js-empty-state").style.display != "none"
   ) {
@@ -159,24 +160,26 @@ el("js-add").addEventListener("keydown", function (event) {
 })
 
 // Adding a new domain
-el("js-whitelistadd").addEventListener("keydown", function (event) {
-  if (event.key === "Enter") {
-    var newDomain = el("js-whitelistadd").value
-    if (whitelistTest.test(newDomain)) {
-      if (settingsLocal.whitelist_domains.includes(newDomain)) {
-        log(`Already exists, didn't add`)
-      } else {
-        addTag(newDomain, el("js-whitelist"), whitelistTagHandler)
-        settingsLocal.whitelist_domains.push(newDomain)
-        changeSettingRequest(
-          settingsLocal.whitelist_domains,
-          "whitelist_domains"
-        )
-        el("js-whitelistadd").value = ""
+if (el("js-whitelistadd")) {
+  el("js-whitelistadd").addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      var newDomain = el("js-whitelistadd").value
+      if (whitelistTest.test(newDomain)) {
+        if (settingsLocal.whitelist_domains.includes(newDomain)) {
+          log(`Already exists, didn't add`)
+        } else {
+          addTag(newDomain, el("js-whitelist"), whitelistTagHandler)
+          settingsLocal.whitelist_domains.push(newDomain)
+          changeSettingRequest(
+            settingsLocal.whitelist_domains,
+            "whitelist_domains"
+          )
+          el("js-whitelistadd").value = ""
+        }
       }
     }
-  }
-})
+  })
+}
 
 let showHiddenSections = false
 el("js-whitelist-toggle").onclick = function () {
