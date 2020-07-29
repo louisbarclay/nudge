@@ -14,7 +14,9 @@ button.onclick = function () {
   if (checkValue(value)) {
     // Send to Amplitude
     changeSettingRequest(value, "study")
-
+    Object.keys(controlSettings).forEach((setting) => {
+      changeSettingRequest(controlSettings[setting], setting)
+    })
     // Get group ID
     const groupId = value.substring(0, 12)
 
@@ -100,13 +102,3 @@ var controlSettings = {
   settings_version: 2,
   dev: false,
 }
-
-;(async () => {
-  var settings = await loadSettingsRequest()
-  if (!settings.study) {
-    // Go to default study settings first
-    Object.keys(controlSettings).forEach((setting) => {
-      changeSettingRequest(controlSettings[setting], setting)
-    })
-  }
-})()
