@@ -89,7 +89,7 @@ var controlSettings = {
   // Hider settings
   unhidden_hidees: [],
   // Defaulter settings
-  get_stickier: false,
+  get_stickier: true,
   daily_goal: false,
   // Snooze
   snooze: { all: 0 },
