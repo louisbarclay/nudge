@@ -47,6 +47,6 @@
     "chrome-webstore-upload": "^0.2.2",
     "dotenv": "^8.2.0",
     "get-sheet-done": "^0.1.5",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.1"
   }
 }
