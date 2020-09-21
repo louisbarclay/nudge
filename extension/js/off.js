@@ -211,8 +211,9 @@ function getLocalStorage() {
     var settingsLocal = response.settingsLocal
     goalInit(settingsLocal.daily_goal)
 
-    // If not paid, show the ad
+    // If not paid, show the ad. CURRENTLY DISABLED
     if (
+      false &&
       !settingsLocal.paid &&
       (!settingsLocal.install_date ||
         moment().diff(moment(settingsLocal.install_date), "days") > 7)
