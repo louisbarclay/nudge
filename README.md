@@ -1,3 +1,5 @@
+[![Awesome Humane Tech](https://raw.githubusercontent.com/humanetech-community/awesome-humane-tech/main/humane-tech-badge.svg?sanitize=true)](https://github.com/humanetech-community/awesome-humane-tech)
+
 # Don't block the internet, Nudge it
 
 The biggest sites on the internet are designed to keep you addicted, with features like content feeds, related videos, and infinitely scrolling pages.
