@@ -72,14 +72,15 @@ function messageReceiver(request, sender, sendResponse) {
     }
   }
   if (request.type === "tabIdle") {
-    chrome.tabs.query({ active: true, lastFocusedWindow: true }, function (
-      tabs
-    ) {
-      if (typeof tabs[0] != "undefined" && tabs[0].id === sender.tab.id) {
-        var domain = domainCheck(sender.url, settingsLocal)
-        onTabIdle(request.status, domain)
+    chrome.tabs.query(
+      { active: true, lastFocusedWindow: true },
+      function (tabs) {
+        if (typeof tabs[0] != "undefined" && tabs[0].id === sender.tab.id) {
+          var domain = domainCheck(sender.url, settingsLocal)
+          onTabIdle(request.status, domain)
+        }
       }
-    })
+    )
   }
 
   // Utils
