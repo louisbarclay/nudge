@@ -591,7 +591,9 @@ function addDomainToOnDomains(settings, domain) {
 async function loadSettingsRequest() {
   return new Promise((resolve) => {
     chrome.runtime.sendMessage({ type: "settings" }, function (response) {
-      resolve(response.settings)
+      if (!chrome.runtime.lastError) {
+        resolve(response.settings)
+      }
     })
   })
 }
