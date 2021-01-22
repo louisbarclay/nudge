@@ -15,6 +15,9 @@ var allDomains = "$allDomains"
 // Quick access to settings
 var settingsLocal = {}
 
+// Hidees sync - try to update it!
+var hideesSync = false
+
 // Log install/update variable
 let logInstall = false
 let logUpdate = false
@@ -120,6 +123,7 @@ var defaultSettings = {
   on_domains: [],
   // Hider settings
   unhidden_hidees: [],
+  hider_invisibility: false,
   // Defaulter settings
   get_stickier: false,
   daily_goal: false,
