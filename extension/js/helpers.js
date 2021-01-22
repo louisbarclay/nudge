@@ -596,6 +596,15 @@ async function loadSettingsRequest() {
   })
 }
 
+// New version of getSettings
+async function loadHideesRequest() {
+  return new Promise((resolve) => {
+    chrome.runtime.sendMessage({ type: "hidees" }, function (response) {
+      resolve(response.hidees)
+    })
+  })
+}
+
 // Helper function to check if any tabs match domain
 // Returns true if there were NO OTHER TABS with that domain
 function tabsChecker(tabs, domain, settings) {
