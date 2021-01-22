@@ -2,6 +2,7 @@ execSettings()
 
 async function execSettings() {
   let settings = await loadSettingsRequest()
+  let hideesSync = await loadHideesRequest()
   // Check for snooze
   let dontNudge = checkSnoozeAndSchedule(settings)
   if (dontNudge) {
@@ -38,13 +39,14 @@ async function execSettings() {
       {
         log,
         // supportLink: getUrl("html/pages/support.html"),
-        hidees: hideesStore,
+        hidees: hideesSync || hideesStore,
         excludedHidees: settings.unhidden_hidees
           ? settings.unhidden_hidees
           : [],
         menuHtmlString,
         menuClass,
         menuCss: "css/injected/hider-menu.css",
+        hider_invisibility: settings.hider_invisibility,
       },
       domain,
       (hidee, domain) => {

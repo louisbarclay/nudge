@@ -21,7 +21,11 @@ html
           p ⭐ A menu below the logo lets you easily show the hidden section when you need it.
         .p-highlight#js-hider-warning(style="display: none")
           p ⚠️ Warning: currently the Hider won't work for you even if enabled because none of the sites that the Hider works for are in your Nudge sites. You can see which sites those are below.
-        .spacing
+        h3 Options:
+        .horizontal.spacing
+          .form-checkbox.checkbox-setting
+            input#hider_invisibility(type="checkbox")
+            label(for="hider_invisibility") Make hidden sections invisible (⚠️: You'll have to disable this option to see them again)
         a.spacing-small.sublink#js-hidden-sections-toggle Show the sections that Nudge hides
         #js-hiddensections.vertical.full-width.spacing.display-none
         #js-onboarding.full-width
