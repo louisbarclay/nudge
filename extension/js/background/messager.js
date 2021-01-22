@@ -5,6 +5,9 @@ function messageReceiver(request, sender, sendResponse) {
   if (request.type === "settings") {
     sendResponse({ settings: settingsLocal })
   }
+  if (request.type === "hidees") {
+    sendResponse({ hidees: hideesSync })
+  }
   if (request.type === "get_localStorage") {
     sendResponse({ localStorage, settingsLocal })
   }
