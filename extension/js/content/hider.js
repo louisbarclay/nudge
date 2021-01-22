@@ -103,7 +103,7 @@ function hider(options, domain, onShowOnce, onShowAlways, extension) {
       // delete it. it will be re-added
       // If it doesn't exist, check whether you should add it
     } else {
-      if (!hidee.noMenu) {
+      if (!hidee.noMenu && !options.hider_invisibility) {
         addMenu(node, domain, hidee, hash)
       }
     }
@@ -243,6 +243,13 @@ function hider(options, domain, onShowOnce, onShowAlways, extension) {
     let styles = {
       ...universalStyles,
     }
+
+    // Don't show the section at all if you have hider_invisibility
+    options.hider_invisibility &&
+      (styles = {
+        ...styles,
+        display: "none",
+      })
 
     // maxHeight specified in hidee
     styleObj.maxHeight &&
