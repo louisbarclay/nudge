@@ -30,23 +30,23 @@
   "dependencies": {
     "clx": "^1.0.0",
     "cpx": "^1.5.0",
-    "moment": "^2.20.1",
-    "node-sass": "^4.13.0",
-    "node-sass-json-importer": "^4.1.0",
+    "moment": "^2.29.1",
+    "node-sass": "^4.14.1",
+    "node-sass-json-importer": "^4.3.0",
     "npm-run-all": "^4.1.5",
-    "postcss": "^7.0.16",
-    "postcss-cli": "^6.1.2",
-    "postcss-safe-important": "^1.2.0",
-    "pug": "^2.0.3",
+    "postcss": "^7.0.36",
+    "postcss-cli": "^6.1.3",
+    "postcss-safe-important": "^1.2.1",
+    "pug": "^2.0.4",
     "pug-cli": "^1.0.0-alpha6",
-    "sharp": "^0.23.4",
+    "sharp": "^0.28.3",
     "zip-folder": "^1.0.0"
   },
   "devDependencies": {
-    "chokidar": "^3.3.1",
+    "chokidar": "^3.5.2",
     "chrome-webstore-upload": "^0.2.2",
-    "dotenv": "^8.2.0",
+    "dotenv": "^8.6.0",
     "get-sheet-done": "^0.1.5",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.1"
   }
 }
