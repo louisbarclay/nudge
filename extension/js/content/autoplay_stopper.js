@@ -23,11 +23,18 @@ async function autoplayStopper() {
       Array.from(document.getElementsByClassName("ytp-button")).find(
         (element) => {
           let label = element.getAttribute("aria-label");
-          if (label && label.toLowerCase().includes("auto-play")) {
+          if (
+            label &&
+            // For edge case
+            (label.toLowerCase().includes("auto-play") ||
+              label.toLowerCase().includes("autoplay"))
+          ) {
             return true;
           }
         }
       );
+
+    console.log(toggleNew);
 
     if (toggleNew) {
       // Check that toggle children exist
