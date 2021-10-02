@@ -1,6 +1,6 @@
 {
   "name": "nudge",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "sasslintConfig": ".vscode/.sass-lintrc",
   "description": "Nudge app",
   "main": "node.js",
@@ -14,6 +14,7 @@
     "build:o-important-injected": "postcss --use postcss-safe-important -d extension/css/injected src/css/injected/*  --w --no-map",
     "build:o-html-to-js": "node sync-lib/sync-html",
     "build:hidees": "node sync-lib/sync-hidees",
+    "build:export-env": "node sync-lib/export-environment",
     "dev": "npm-run-all -p build:*",
     "dev-offline": "npm-run-all -p build:o-*"
   },
@@ -30,6 +31,7 @@
   "dependencies": {
     "clx": "^1.0.0",
     "cpx": "^1.5.0",
+    "googleapis": "^88.2.0",
     "moment": "^2.29.1",
     "node-sass": "^4.14.1",
     "node-sass-json-importer": "^4.3.0",
@@ -46,7 +48,6 @@
     "chokidar": "^3.5.2",
     "chrome-webstore-upload": "^0.2.2",
     "dotenv": "^8.6.0",
-    "get-sheet-done": "^0.1.5",
     "node-fetch": "^2.6.1"
   }
 }

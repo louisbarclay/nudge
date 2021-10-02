@@ -11,7 +11,8 @@
     "http://*/*",
     "https://*/*",
     "storage",
-    "unlimitedStorage"
+    "unlimitedStorage",
+    "https://sheets.googleapis.com/*"
   ],
   "incognito": "split",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgH4rfKJ3fys5vEjI9bl8eXew3SdQeTbs8IOuITsRDzEik97iZb5cBB2Gg6G9n9wtg73qhvZaRFOX0FEfOmIG6Qw3g4dxFZn2+gESbEY2fFnMnF8Std0yJ/qqAMARpTqeKrzYd4h6mkC4A5Rt7bhaAmeUFdjjBaMvTLTZo3kgtXuIXRyxX3U+Y7N5b2kYC4X+fZ30iuFeKEn7Hega/QbEuTgEiIRfNMe3gvQ7vqmJkByXfZWZexODaOwJmG9SF/+Ijj7QsNyfBzWDuwFsfJwYD43+jVZfIfYOEGYSqFu51ZyT8JjHFz9HSQHErNNNPNrGjfmSdavKgb7lE2UnGAzhAQIDAQAB",
@@ -33,8 +34,8 @@
   "web_accessible_resources": ["img/*", "fonts/*", "html/*", "css/*"],
   "background": {
     "scripts": [
+      "js/background/env.js",
       "js/vendor/moment.min.js",
-      "js/vendor/GetSheetDone.js",
       "config.js",
       "js/vars/vars.js",
       "js/vars/hidees.js",
