@@ -16,6 +16,6 @@ fs.writeFile(
     `const NUDGE_ENV = ${JSON.stringify(envObject)}`,
     function (err) {
         if (err) return console.log(err)
-        console.log(`Saved new hidees from Google Sheet`)
+        console.log(`Exported environment keys ${keys.join(', ')} to the extension.`)
     }
 )
