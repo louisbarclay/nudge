@@ -1,13 +1,22 @@
-if (!NUDGE_ENV) {
-  log("warning: Google Sheet v4 API values are missing");
+let sheetURL;
+if (!NUDGE_ENV || !NUDGE_ENV.GOOGLE_API_KEY || !NUDGE_ENV.HIDEES_GOOGLE_SHEET) {
+  log("warning: Google Sheet v4 API values are missing. Not syncing hidees from the Google Sheet.");
+} else {
+  sheetURL = `https://sheets.googleapis.com/v4/spreadsheets/${NUDGE_ENV.HIDEES_GOOGLE_SHEET}/values/Hidden Sections?key=${NUDGE_ENV.GOOGLE_API_KEY}`
 }
-
-const url = `https://sheets.googleapis.com/v4/spreadsheets/${NUDGE_ENV.HIDEES_GOOGLE_SHEET}/values/Hidden Sections?key=${NUDGE_ENV.GOOGLE_API_KEY}`
 
 async function checkHidees() {
   return new Promise(async (resolve) => {
+    if (!sheetURL) {
+      resolve(false);
+      return;
+    }
+
     try {
-      const rows = await fetch(url).then(r => r.json()).then(obj => obj.values);
+      const rows = await fetch(sheetURL).then(
+        r => r.status === 200 ? 
+          r.json() : Promise.reject("Unexpected GAPI response")
+        ).then(obj => obj && obj.values);
       log("Connecting to Google Sheet")
       let hidees = []
       // Get row headers

@@ -11,7 +11,13 @@ const hideesLocation = "extension/js/vars/hidees.js"
 // This will make sure we do an initial check
 let currentHidees = false
 
-// Start checking
+// Check credentials
+if (!process.env.GOOGLE_API_KEY || !process.env.HIDEES_GOOGLE_SHEET) {
+  log("[node sync-lib] warning: Google Sheet v4 API values are missing. Not syncing hidees from the Google Sheet.");
+  process.exit(0);
+} 
+
+// Start checking for sheet updates
 log("Initialising Google Sheet checker")
 checkHidees()
 // setInterval(checkHidees, 60000)
