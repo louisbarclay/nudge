@@ -3,3 +3,4 @@
 /.sass-cache
 /.vscode
 .env
+extension/js/background/env.js
