@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/lgwb89/nudge#readme",
   "dependencies": {
+    "bemto.pug": "^2.1.0",
     "clx": "^1.0.0",
     "cpx": "^1.5.0",
     "googleapis": "^88.2.0",
