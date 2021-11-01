@@ -13,7 +13,7 @@
     "build:o-sass-injected": "node-sass --importer node_modules/node-sass-json-importer/dist/cli.js --watch src/scss/injected -o src/css/injected --sourcemap=none -r sass-json-vars",
     "build:o-important-injected": "postcss --use postcss-safe-important -d extension/css/injected src/css/injected/*  --w --no-map",
     "build:o-html-to-js": "node sync-lib/sync-html",
-    "build:hidees": "node sync-lib/sync-hidees",
+    "build:hidees": "node sync-lib/sync-hidees-dev",
     "build:export-env": "node sync-lib/export-environment",
     "dev": "npm-run-all -p build:*",
     "dev-offline": "npm-run-all -p build:o-*"
