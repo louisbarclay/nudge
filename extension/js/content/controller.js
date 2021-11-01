@@ -13,7 +13,6 @@ async function execSettings() {
   const url = window.location.href;
 
   if (settings.stop_autoplay) {
-    console.log("do it");
     const extractedDomain = extractDomain(url);
     if (extractedDomain.includes("youtube.com")) {
       autoplayStopper();
