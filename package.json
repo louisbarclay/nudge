@@ -42,7 +42,7 @@
     "postcss-safe-important": "^1.2.1",
     "pug": "^2.0.4",
     "pug-cli": "^1.0.0-alpha6",
-    "sharp": "^0.28.3",
+    "sharp": "^0.30.5",
     "zip-folder": "^1.0.0"
   },
   "devDependencies": {
