@@ -48,9 +48,9 @@ export class Hider {
 				hidee.domain.includes(this.domain),
 		);
 
-		this.observer = new MutationObserver(
-			debounce(() => this.processHidees(), 10),
-		);
+		this.observer = new MutationObserver(() => {
+			this.processHidees();
+		});
 		// Get things started straight away
 		this.onShowOnce = onShowOnce;
 		this.onShowAlways = onShowAlways;
@@ -162,9 +162,9 @@ export class Hider {
 
 		// 4. Does the node have a child element that's the hide-menu-container?
 		// Look for menu
-		this.handleMenu(node, hidee, hash);
 		this.applyHiddenStyles(node, hash, hidee);
 		this.checkAndAddChildHiddenStyles(hash, node.id, node.className);
+		this.handleMenu(node, hidee, hash);
 	}
 
 	private showNode(node: Element, hash: string): void {
