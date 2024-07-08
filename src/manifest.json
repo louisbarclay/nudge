@@ -1,0 +1,35 @@
+{
+	"name": "Hide Everything",
+	"version": "0.0.0",
+	"description": "An awesome new browser extension",
+	"homepage_url": "https://github.com/fregante/browser-extension-template",
+	"manifest_version": 3,
+	"minimum_chrome_version": "100",
+	"icons": {
+		"128": "icon.png"
+	},
+	"permissions": ["storage"],
+	"host_permissions": ["https://x.com/*"],
+	"web_accessible_resources": [
+		{
+			"resources": ["hider-menu.css"],
+			"matches": ["<all_urls>"]
+		}
+	],
+	"content_scripts": [
+		{
+			"matches": ["https://x.com/*"],
+			"js": ["content.ts"],
+			"css": ["content.css"],
+			"run_at": "document_start"
+		}
+	],
+	"options_ui": {
+		"browser_style": true,
+		"page": "options.html"
+	},
+	"background": {
+		"service_worker": "background.ts",
+		"type": "module"
+	}
+}

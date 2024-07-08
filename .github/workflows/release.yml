@@ -1,5 +1,5 @@
 env:
-  DIRECTORY: distribution
+  DIRECTORY: dist
   PROJECT_NAME: extension
 
 # FILE GENERATED WITH: npx ghat fregante/ghatemplates/webext
