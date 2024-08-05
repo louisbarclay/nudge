@@ -1,4 +1,5 @@
-import { debounce } from "lodash";
+import { debounce, throttle } from "lodash";
+import { Logger, ILogObj } from "tslog";
 
 import * as browser from "webextension-polyfill";
 
@@ -23,6 +24,7 @@ export class Hider {
 	private currentUrl: string | null = null;
 	private domainHidees: Hidee[];
 	private observer: MutationObserver;
+	private log: Logger<ILogObj> = new Logger();
 
 	// Define universal styles always applied to hidee nodes
 	private universalStyles: UniversalStyles = {
@@ -47,8 +49,10 @@ export class Hider {
 				!this.options.excludedHidees.includes(hidee.slug) &&
 				hidee.domain.includes(this.domain),
 		);
+		this.log.trace("Domain hidees", this.domainHidees);
 
 		this.observer = new MutationObserver(() => {
+			this.log.info("Mutation");
 			this.processHidees();
 		});
 		// Get things started straight away
@@ -63,7 +67,6 @@ export class Hider {
 	private init(): void {
 		// Observe the document if you have a valid domain and domainHidees is longer than zero
 		if (this.domainHidees.length > 0) {
-			console.log("yes");
 			// Special case for YouTube
 			if (this.domain === "youtube.com") {
 				this.observeYouTubeAtIntervals();
@@ -107,7 +110,7 @@ export class Hider {
 			if (!document.getElementById("hider-menu")) {
 				this.processHidees();
 			} else {
-				console.log("Activated this");
+				this.log.info("Activated this");
 			}
 		}, 1000);
 	}
@@ -126,9 +129,9 @@ export class Hider {
 					hidee.includePages,
 				);
 			}
-			this.findHideeNodesInDoc(hidee).forEach((node) =>
-				this.processNode(node, hidee),
-			);
+			this.findHideeNodesInDoc(hidee).forEach((node) => {
+				this.processNode(node, hidee);
+			});
 		});
 	};
 
@@ -404,6 +407,7 @@ export class Hider {
 		return false;
 	}
 
+	// First you need to 'sweep up' a few options, before discarding them below
 	private findHideeNodesInDoc(hidee: Hidee): Element[] {
 		let nodes: Element[] = [];
 
@@ -418,70 +422,146 @@ export class Hider {
 			nodes = Array.from(document.getElementsByClassName(hidee.className));
 		}
 
-		return nodes.filter((node) => this.nodeMatchesHideeConditions(node, hidee));
+		// Filter down using tons of rules
+		let filteredNodes = nodes.filter((node) =>
+			this.nodeMatchesHideeConditions(node, hidee),
+		);
+
+		this.log.info(
+			`${hidee.slug}: found ${filteredNodes.length} matching nodes`,
+			filteredNodes.map(
+				(node) =>
+					`Tag: ${node.tagName}, Class: ${node.className}, ID: ${node.id}`,
+			),
+		);
+
+		// Move up or down the node tree to select a different node
+		filteredNodes = filteredNodes.map((filteredNode) => {
+			// Option for finding a node by parent and childIndex
+			if (hidee.childIndex) {
+				// Search for an existing found node
+				// And check it has child nodes
+				if (filteredNode && filteredNode.children) {
+					// Then replace the node with its child, specified by index
+					filteredNode = filteredNode.children[hidee.childIndex];
+				}
+			}
+
+			// Go up to the level of a parent if this option is specified
+			// Only do this if we have a filtered node to use
+
+			if (hidee.parentLevels) {
+				let parentNode = filteredNode;
+				for (let i = 0; i < hidee.parentLevels; i++) {
+					parentNode = parentNode.parentElement ?? parentNode;
+				}
+				filteredNode = parentNode;
+			}
+
+			// Closest parent option
+			if (hidee.closestParentClass) {
+				filteredNode =
+					filteredNode.closest(`[class='${hidee.closestParentClass}']`) ??
+					filteredNode;
+			}
+
+			// Return the node after whichever transformation (if any)
+			return filteredNode;
+		});
+
+		if (filteredNodes.length > 1) {
+			// log(`Multiple hider: ${hidee.slug}`)
+		}
+		// Return filtered nodes if there are any
+		if (filteredNodes && filteredNodes[0]) {
+			return filteredNodes;
+		} else return [];
 	}
 
+	// This is where you discard options
 	private nodeMatchesHideeConditions(node: Element, hidee: Hidee): boolean {
-		if (
-			hidee.parentClassName &&
-			node.parentElement?.className !== hidee.parentClassName
-		) {
-			return false;
+		let include = true;
+
+		// Parent className option
+		if (hidee.parentClassName) {
+			!(hidee.parentClassName === node.parentElement?.className) &&
+				(include = false);
 		}
 
-		if (
-			hidee.parentParentClassName &&
-			node.parentElement?.parentElement?.className !==
-				hidee.parentParentClassName
-		) {
-			return false;
+		// Parent parent className option
+		if (hidee.parentParentClassName) {
+			!(
+				hidee.parentParentClassName ===
+				node.parentElement?.parentElement?.className
+			) && (include = false);
 		}
 
+		// Custom attribute option
 		if (hidee.customAttributeName && hidee.customAttributeValue) {
-			const attr = node.getAttribute(hidee.customAttributeName);
-			if (!attr || attr !== hidee.customAttributeValue) {
-				return false;
+			const nodeAttribute =
+				node.hasAttribute(hidee.customAttributeName) &&
+				node.getAttribute(hidee.customAttributeName);
+			if (nodeAttribute && nodeAttribute === hidee.customAttributeValue) {
+				// All good
+			} else {
+				include = false;
 			}
 		}
 
-		if (hidee.tagName && node.tagName !== hidee.tagName) {
-			return false;
+		// Tag name option
+		if (hidee.tagName) {
+			!(hidee.tagName === node.tagName) && (include = false);
 		}
 
-		if (hidee.classNameExactMatch && node.className !== hidee.className) {
-			return false;
+		// Exact match option
+		if (hidee.classNameExactMatch) {
+			!(hidee.className === node.className) && (include = false);
 		}
 
-		if (hidee.innerText && node.innerHTML.trim() !== hidee.innerText) {
-			return false;
+		// Inner text option
+		if (hidee.innerText) {
+			// Update here on 12-Jan-2024 to add the trim() function, which should probably be enabled behind a flag
+			// Doing this fixes an issue with LinkedIn feed hider
+			// But I can't see too much harm in including
+			// Seems like all other uses of innerText are compatible with trimming
+			!(hidee.innerText === node.innerHTML) && (include = false);
 		}
 
+		// Child element option
 		if (hidee.firstChildId || hidee.firstChildClassName) {
+			// Define the first child to compare against
 			let firstChild = node.children[0];
-			if (firstChild?.className === this.options.menuClass) {
-				firstChild = node.children[1];
+			// If first child is the menu child, use next child
+			if (
+				node.children[0] &&
+				node.children[0].className === this.options.menuClass
+			) {
+				if (node.children[1]) {
+					firstChild = node.children[1];
+				} else {
+					include = false;
+				}
 			}
 
-			if (!firstChild) return false;
-
-			if (hidee.firstChildId && hidee.firstChildClassName) {
-				if (
-					firstChild.id !== hidee.firstChildId ||
-					firstChild.className !== hidee.firstChildClassName
-				) {
-					return false;
+			// If you have a first child, compare against the hidee first child property
+			if (firstChild) {
+				if (hidee.firstChildId && hidee.firstChildClassName) {
+					!(
+						firstChild.id === hidee.firstChildId &&
+						firstChild.className === hidee.firstChildClassName
+					) && (include = false);
+				} else if (hidee.firstChildId) {
+					!(firstChild.id === hidee.firstChildId) && (include = false);
+				} else if (hidee.firstChildClassName) {
+					!(firstChild.className === hidee.firstChildClassName) &&
+						(include = false);
 				}
-			} else if (hidee.firstChildId && firstChild.id !== hidee.firstChildId) {
-				return false;
-			} else if (
-				hidee.firstChildClassName &&
-				firstChild.className !== hidee.firstChildClassName
-			) {
-				return false;
+			} else {
+				include = false;
 			}
 		}
 
-		return true;
+		return include;
 	}
 
 	private getOrCreateNodeHash(node: Element, hidee: Hidee): string {
