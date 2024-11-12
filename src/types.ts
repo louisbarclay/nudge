@@ -18,6 +18,7 @@ export interface Hidee {
 	shortName: string;
 	section?: string; // This is presumably in the spreadsheet but not used!
 	style: HideeStyle;
+	cssSelector?: string;
 	description?: string; // Not used by hider itself, just metadata
 	type?: string; // Not used by hider itself, just metadata
 	page?: string; // Hm, think this is deprecated...in favour of ignorePages and includePages
