@@ -49,10 +49,9 @@ export class Hider {
 				!this.options.excludedHidees.includes(hidee.slug) &&
 				hidee.domain.includes(this.domain),
 		);
-		this.log.trace("Domain hidees", this.domainHidees);
+		// this.log.trace("Domain hidees", this.domainHidees);
 
 		this.observer = new MutationObserver(() => {
-			this.log.info("Mutation");
 			this.processHidees();
 		});
 		// Get things started straight away
@@ -110,7 +109,6 @@ export class Hider {
 			if (!document.getElementById("hider-menu")) {
 				this.processHidees();
 			} else {
-				this.log.info("Activated this");
 			}
 		}, 1000);
 	}
@@ -427,13 +425,13 @@ export class Hider {
 			this.nodeMatchesHideeConditions(node, hidee),
 		);
 
-		this.log.info(
-			`${hidee.slug}: found ${filteredNodes.length} matching nodes`,
-			filteredNodes.map(
-				(node) =>
-					`Tag: ${node.tagName}, Class: ${node.className}, ID: ${node.id}`,
-			),
-		);
+		// this.log.info(
+		// 	`${hidee.slug}: found ${filteredNodes.length} matching nodes`,
+		// 	filteredNodes.map(
+		// 		(node) =>
+		// 			`Tag: ${node.tagName}, Class: ${node.className}, ID: ${node.id}`,
+		// 	),
+		// );
 
 		// Move up or down the node tree to select a different node
 		filteredNodes = filteredNodes.map((filteredNode) => {
@@ -611,7 +609,6 @@ export class Hider {
 
 	// Check if this is working
 	private addCSS(cssId: string, url: string): void {
-		console.log(url);
 		if (!document.getElementById(cssId)) {
 			const link = document.createElement("link");
 			link.id = cssId;
