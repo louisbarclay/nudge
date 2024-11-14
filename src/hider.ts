@@ -1,4 +1,3 @@
-import { debounce, throttle } from "lodash";
 import { Logger, ILogObj } from "tslog";
 
 import * as browser from "webextension-polyfill";
@@ -22,6 +21,7 @@ export class Hider {
 	private hiddenNodes: Record<string, any> = {};
 	// Track current URL
 	private currentUrl: string | null = null;
+	private isDocumentHeadLoaded = false;
 	private domainHidees: Hidee[];
 	private observer: MutationObserver;
 	private log: Logger<ILogObj> = new Logger();
@@ -32,6 +32,8 @@ export class Hider {
 		cursor: "default",
 		display: "flex",
 		flexDirection: "column",
+		border: "none",
+		boxShadow: "none",
 	};
 
 	constructor(
@@ -52,8 +54,13 @@ export class Hider {
 		// this.log.trace("Domain hidees", this.domainHidees);
 
 		this.observer = new MutationObserver(() => {
-			this.processHidees();
+			this.onMutation();
 		});
+
+		const onInterval = setInterval(() => {
+			this.onInterval();
+		}, 50);
+
 		// Get things started straight away
 		this.onShowOnce = onShowOnce;
 		this.onShowAlways = onShowAlways;
@@ -66,125 +73,148 @@ export class Hider {
 	private init(): void {
 		// Observe the document if you have a valid domain and domainHidees is longer than zero
 		if (this.domainHidees.length > 0) {
-			// Special case for YouTube
-			if (this.domain === "youtube.com") {
-				this.observeYouTubeAtIntervals();
-			} else {
-				// Observe the doc
-				this.observer.observe(document, {
-					childList: true,
-					subtree: true,
-					characterData: false,
-				});
-			}
+			// Observe the doc
+			this.observer.observe(document, {
+				childList: true,
+				subtree: true,
+				characterData: false,
+			});
 		}
-		// FIXME: trying to add the styles the second the document head exists
-		// Used to do this with a DOMSubtreeModified event and a check for existence of
-		// document.head, but that was going to be deprecated. So now doing this
-		// There may be a more efficient way using the mutation observer to be honest
-		const checkHeadExistence = setInterval(() => {
-			if (document.head) {
-				clearInterval(checkHeadExistence);
-				this.addCSS(`${this.extension}-hider-menu`, this.options.menuCss);
-				if (this.domain === "youtube.com") {
-					this.addYouTubeStyles();
-				}
-			}
-		}, 50);
 	}
 
-	private addYouTubeStyles(): void {
-		this.domainHidees.forEach((hidee) => {
-			const hash = this.getUid();
-			this.addSelfStyles(hidee, hash);
-			// Need to apply child hidden styles too!
-			this.checkAndAddChildHiddenStyles(hash, hidee.id, hidee.className);
-			// Set hash
-			hidee.hash = hash;
-		});
-	}
-
-	private observeYouTubeAtIntervals(): void {
-		setInterval(() => {
-			if (!document.getElementById("hider-menu")) {
-				this.processHidees();
-			} else {
+	private processHidee(hidee: Hidee): void {
+		if (this.isDocumentHeadLoaded) {
+			if (hidee.isOnExcludedPage || hidee.isShownByUser) {
+				this.showHidee(hidee);
+				return;
 			}
-		}, 1000);
+			this.hideHidee(hidee);
+		}
 	}
 
 	// This is the wrapper for processing every hidee for a match with the page
-	private processHidees = (): void => {
-		const newUrl = window.location.href;
-		const urlChanged = newUrl !== this.currentUrl || this.currentUrl === null;
-		this.currentUrl = newUrl;
+	// Probably useful to keep this logic
+	private onMutation = (): void => {
+		let runProcessHidee = false;
 
+		// Two things can cause us to runProcessHidee
+		// 1. A page change
+		const newUrl = window.location.href;
+		const isUrlChanged = newUrl !== this.currentUrl || this.currentUrl === null;
+		this.currentUrl = newUrl;
 		this.domainHidees.forEach((hidee) => {
-			if (urlChanged) {
-				hidee.ignored = this.isHideeIgnoredByUrl(
+			if (isUrlChanged) {
+				hidee.isOnExcludedPage = this.isHideeIgnoredByUrl(
 					this.currentUrl,
-					hidee.ignorePages,
-					hidee.includePages,
+					hidee.excludedPages,
+					hidee.includedPages,
 				);
+				runProcessHidee = true;
 			}
-			this.findHideeNodesInDoc(hidee).forEach((node) => {
-				this.processNode(node, hidee);
-			});
 		});
+
+		// 2. The initial page load
+		if (document.head && !this.isDocumentHeadLoaded) {
+			this.addCSS(`${this.extension}-hider-menu`, this.options.menuCss);
+			this.isDocumentHeadLoaded = true;
+			// This should only run once, hence including it in here
+			runProcessHidee = true;
+		}
+
+		// If either of those is true, let's run it!
+		if (runProcessHidee) {
+			this.domainHidees.map((hidee) => {
+				console.log(hidee);
+				this.processHidee(hidee);
+			});
+		}
 	};
 
-	private processNode(node: Element, hidee: Hidee): void {
-		if (hidee.excluded || hidee.ignored) {
-			this.showNode(node, this.getOrCreateNodeHash(node, hidee));
-			return;
-		}
-		this.hideNode(node, hidee, this.getOrCreateNodeHash(node, hidee));
-	}
-
-	// Once we have an element, hide it and add circle
-	private hideNode(node: Element, hidee: Hidee, hash: string): void {
-		// 1. Does the hash exist in hiddenNodes?
-		if (!this.hiddenNodes[hash]) {
-			this.hiddenNodes[hash] = { slug: hidee.slug };
-		}
-
-		// 2. Does the hidee attribute exist?
-		// You can get hash from class, and slug from hash (in hiddenNodes)
-		// Note: this is just a safety check
-		// The real job of checking for a hash and getting a hash is done in a separate function within processNode
-		if (!node.hasAttribute("hidee")) {
-			this.setNodeHash(node, hash);
-		}
-
-		// For special cases where we need hidees to have different ids because they are only identified by class, we apply id
-		if (hidee.applyId && (!node.id || node.id.length === 0)) {
-			node.id = hash;
-		}
-
-		// 4. Does the node have a child element that's the hide-menu-container?
-		// Look for menu
-		this.applyHiddenStyles(node, hash, hidee);
-		this.checkAndAddChildHiddenStyles(hash, node.id, node.className);
-		this.handleMenu(node, hidee, hash);
-	}
-
-	private showNode(node: Element, hash: string): void {
-		if (this.hiddenNodes[hash]) {
-			Object.entries(this.hiddenNodes[hash]).forEach(([property, value]) => {
-				if (property !== "slug") {
-					(node as HTMLElement).style[property as any] = value as string;
+	// Every 10ms
+	private onInterval = (): void => {
+		// Wait until document loaded
+		if (this.isDocumentHeadLoaded) {
+			this.domainHidees.map((hidee) => {
+				if (hidee.cssSelector) {
+					this.processHidee(hidee);
 				}
 			});
 		}
+	};
 
-		const menu = node.querySelector(`.${this.options.menuClass}`);
-		if (menu) menu.remove();
+	// Once we have an element, hide it and add circle
+	private hideHidee(hidee: Hidee, onLoad?: boolean): void {
+		// 1. Does the hidee already have a hash?
+		if (!hidee.hash) {
+			hidee.hash = this.getOrCreateAndSetNodeHash(hidee) as string;
+		}
 
-		const childHiddenStyle = document.getElementById(`hidee-children-${hash}`);
-		if (childHiddenStyle) childHiddenStyle.remove();
+		// 2. Do we have a cssSelector, and if so, do we have a style element?
+		// Add a new style tag to hide the element itself
+		// Add the style tag to hide the element's children (or could do this later)
+		// Probably want to mark these both with a hash
+		if (hidee.cssSelector) {
+			this.checkOrAddStyleElement(hidee.hash, hidee.cssSelector);
 
-		const selfHiddenStyle = document.getElementById(`hidee-self-${hash}`);
-		if (selfHiddenStyle) selfHiddenStyle.remove();
+			// 3. If not our first time, let's look for a node to hide?
+
+			if (this.isDocumentHeadLoaded) {
+				const nodeList = document.querySelectorAll(hidee.cssSelector);
+				const node = nodeList[0];
+
+				if (node) {
+					// 4. If a node exists, let's add a nice hash to its hidee attribute?
+					if (!node.hasAttribute("hidee")) {
+						this.setNodeHash(node, hidee.hash);
+					}
+
+					// Let's directly alter the styles on the node
+					this.applyHiddenStyles(node, hidee, hidee.hash);
+
+					// And add the menu
+					this.handleMenu(node, hidee, hidee.hash);
+				}
+			}
+		}
+	}
+
+	private showHidee(hidee: Hidee): void {
+		// 1. Replace the styles on the element
+
+		if (hidee.cssSelector) {
+			// 1. Find the node
+			const nodeList = document.querySelectorAll(hidee.cssSelector);
+			const node = nodeList[0];
+
+			// If there is a node
+			if (node) {
+				// 2.a. Remove current styles
+				if (node.hasAttribute("style")) {
+					node.removeAttribute("style");
+				}
+
+				// 2.b. Replace styles
+				if (hidee.previousStyles) {
+					Object.entries(hidee.previousStyles).forEach(([property, value]) => {
+						if (property !== "slug") {
+							(node as HTMLElement).style[property as any] = value as string;
+						}
+					});
+				}
+
+				// 3. Delete menu
+				const menu = node.querySelector(`.${this.options.menuClass}`);
+				if (menu) menu.remove();
+			}
+		}
+
+		// 4. Delete style
+		const styleElement = document.getElementById(`hidee-style-${hidee.hash}`);
+
+		if (styleElement) styleElement.remove();
+
+		// 5. Delete hidee.hash
+		delete hidee.hash;
 	}
 
 	private handleMenu(node: Element, hidee: Hidee, hash: string): void {
@@ -247,36 +277,33 @@ export class Hider {
 		) as HTMLElement;
 
 		showOnceLink.onclick = () => {
-			this.showNode(node, hash);
-			hidee.excluded = true;
+			this.showHidee(hidee);
+			hidee.isShownByUser = true;
 			this.onShowOnce(hidee, this.domain);
 		};
 
 		showAlwaysLink.onclick = () => {
-			this.showNode(node, hash);
-			hidee.excluded = true;
+			this.showHidee(hidee);
+			hidee.isShownByUser = true;
 			this.onShowAlways(hidee, this.domain);
 		};
 	}
 
-	private applyHiddenStyles(node: Element, hash: string, hidee: Hidee): void {
-		if (!hidee.setIntervalMethod) {
-			const applyStyles = this.getApplyStyles(hidee.style);
-			let prevStyle: Record<string, string> = {};
+	private applyHiddenStyles(node: Element, hidee: Hidee, hash: string): void {
+		// The setIntervalMethod is used exclusively for YouTube. Not sure what that means!
 
-			Object.entries(applyStyles).forEach(([style, value]) => {
-				if ((node as HTMLElement).style[style as any] !== value) {
-					prevStyle[style] = (node as HTMLElement).style[style as any];
-					(node as HTMLElement).style.setProperty(style, value, "important");
-				}
-			});
+		const applyStyles = this.getApplyStyles(hidee.style);
+		let previousStyles: Record<string, string> = {};
 
-			this.hiddenNodes[hash] = { ...prevStyle, ...this.hiddenNodes[hash] };
-		} else {
-			if (!document.getElementById(`hidee-self-${hash}`)) {
-				this.addSelfStyles(hidee, hash);
+		Object.entries(applyStyles).forEach(([style, value]) => {
+			if ((node as HTMLElement).style[style as any] !== value) {
+				previousStyles[style] = (node as HTMLElement).style[style as any];
+				(node as HTMLElement).style[style as any] = `${value}`;
 			}
-		}
+		});
+
+		// Store previous styles to hiddenNodes
+		hidee.previousStyles = { ...previousStyles };
 	}
 
 	private getApplyStyles(styleObj: HideeStyle): ExtendedStyles {
@@ -308,7 +335,8 @@ export class Hider {
 			styles = {
 				...styles,
 				backgroundColor: styleObj.backgroundColor,
-				boxShadow: "none",
+				// Deleted this, boxShadow now applied universally
+				// boxShadow: "none",
 				borderStyle: "none",
 				borderRadius: "4px",
 			};
@@ -325,70 +353,36 @@ export class Hider {
 		return styles;
 	}
 
-	private addSelfStyles(hidee: Hidee, hash: string): void {
-		const applyStyles = this.getApplyStyles(hidee.style);
-		const styleInnerHtml = `${this.selector(hidee.id, hidee.className)} {${this.formatApplyStylesForStyle(applyStyles)}}`;
-		this.styleAdder(styleInnerHtml, `hidee-self-${hash}`);
-	}
-
-	private checkAndAddChildHiddenStyles(
-		hash: string,
-		id: string | undefined,
-		className: string | undefined,
-	): void {
-		const existingStyle = document.getElementById(`hidee-children-${hash}`);
+	private checkOrAddStyleElement(hash: string, cssSelector: string): void {
+		const existingStyle = document.getElementById(`hidee-style-${hash}`);
 		if (!existingStyle) {
-			this.addChildHiddenStyles(hash, id, className);
+			this.updateStyleElementInnerHtml(hash, cssSelector);
 		} else {
-			this.checkChildHiddenStyles(existingStyle, id, className);
+			// TODO: Not sure why this is necessary:
+			this.checkStyleElementInnerHtml(existingStyle, cssSelector);
 		}
 	}
 
-	private addChildHiddenStyles(
-		hash: string,
-		id: string | undefined,
-		className: string | undefined,
-	): void {
-		const styleId = `hidee-children-${hash}`;
-		const styleInnerHtml = this.createChildHiddenStyleInnerHtml(id, className);
-		this.styleAdder(styleInnerHtml, styleId);
+	private updateStyleElementInnerHtml(hash: string, cssSelector: string): void {
+		const styleId = `hidee-style-${hash}`;
+		const styleInnerHtml = this.createChildHiddenStyleInnerHtml(cssSelector);
+		this.updateInnerHtml(styleInnerHtml, styleId);
 	}
 
-	private checkChildHiddenStyles(
+	// Not sure why this is necessary
+	private checkStyleElementInnerHtml(
 		existingStyle: HTMLElement,
-		id: string | undefined,
-		className: string | undefined,
+		cssSelector: string,
 	): void {
-		const correctInnerHtml = this.createChildHiddenStyleInnerHtml(
-			id,
-			className,
-		);
+		const correctInnerHtml = this.createChildHiddenStyleInnerHtml(cssSelector);
 		if (existingStyle.innerHTML !== correctInnerHtml) {
 			existingStyle.innerHTML = correctInnerHtml;
 		}
 	}
 
-	private createChildHiddenStyleInnerHtml(
-		id: string | undefined,
-		className: string | undefined,
-	): string {
-		const selector = this.selector(id, className);
-		const childSelector = `${selector} > :not(.${this.options.menuClass}) *, ${selector} > :not(.${this.options.menuClass})`;
-		return `${childSelector} { opacity: 0 !important; } ${selector}:after { display: none; } ${selector}:before { display: none; }`;
-	}
-
-	private selector(
-		id: string | undefined,
-		className: string | undefined,
-	): string {
-		let result = "";
-		if (className) {
-			result += `.${className.trim().replace(/\s+/g, ".")}`;
-		}
-		if (id) {
-			result += `#${id}`;
-		}
-		return result;
+	private createChildHiddenStyleInnerHtml(cssSelector: string): string {
+		const childSelector = `${cssSelector} > :not(.${this.options.menuClass}) *, ${cssSelector} > :not(.${this.options.menuClass})`;
+		return `${cssSelector} { pointer-events: none !important; background: none !important; border: 0 !important; box-shadow: none !important; } ${childSelector} { opacity: 0 !important; box-shadow: none !important; border: none !important; } ${cssSelector}:after { display: none; } ${cssSelector}:before { display: none; }`;
 	}
 
 	private isHideeIgnoredByUrl(
@@ -405,173 +399,22 @@ export class Hider {
 		return false;
 	}
 
-	// First you need to 'sweep up' a few options, before discarding them below
-	private findHideeNodesInDoc(hidee: Hidee): Element[] {
-		let nodes: Element[] = [];
-
-		if (hidee.id && hidee.className) {
-			nodes = Array.from(
-				document.getElementsByClassName(hidee.className),
-			).filter((node) => node.id === hidee.id);
-		} else if (hidee.id) {
-			const node = document.getElementById(hidee.id);
-			if (node) nodes = [node];
-		} else if (hidee.className) {
-			nodes = Array.from(document.getElementsByClassName(hidee.className));
+	private getOrCreateAndSetNodeHash(hidee: Hidee, node?: Element) {
+		let hash: string;
+		if (!node) {
+			hash = this.getUid();
+			hidee.hash = hash;
+			// FIXME: previously had something here about hiddenNodes too
+		} else {
+			hash =
+				node.getAttribute("hidee") ||
+				Object.entries(this.hiddenNodes).find(
+					([, value]) => value.slug === hidee.slug,
+				)?.[0] ||
+				// This is a fallback that should never happen
+				this.getUid();
 		}
-
-		// Filter down using tons of rules
-		let filteredNodes = nodes.filter((node) =>
-			this.nodeMatchesHideeConditions(node, hidee),
-		);
-
-		// this.log.info(
-		// 	`${hidee.slug}: found ${filteredNodes.length} matching nodes`,
-		// 	filteredNodes.map(
-		// 		(node) =>
-		// 			`Tag: ${node.tagName}, Class: ${node.className}, ID: ${node.id}`,
-		// 	),
-		// );
-
-		// Move up or down the node tree to select a different node
-		filteredNodes = filteredNodes.map((filteredNode) => {
-			// Option for finding a node by parent and childIndex
-			if (hidee.childIndex) {
-				// Search for an existing found node
-				// And check it has child nodes
-				if (filteredNode && filteredNode.children) {
-					// Then replace the node with its child, specified by index
-					filteredNode = filteredNode.children[hidee.childIndex];
-				}
-			}
-
-			// Go up to the level of a parent if this option is specified
-			// Only do this if we have a filtered node to use
-
-			if (hidee.parentLevels) {
-				let parentNode = filteredNode;
-				for (let i = 0; i < hidee.parentLevels; i++) {
-					parentNode = parentNode.parentElement ?? parentNode;
-				}
-				filteredNode = parentNode;
-			}
-
-			// Closest parent option
-			if (hidee.closestParentClass) {
-				filteredNode =
-					filteredNode.closest(`[class='${hidee.closestParentClass}']`) ??
-					filteredNode;
-			}
-
-			// Return the node after whichever transformation (if any)
-			return filteredNode;
-		});
-
-		if (filteredNodes.length > 1) {
-			// log(`Multiple hider: ${hidee.slug}`)
-		}
-		// Return filtered nodes if there are any
-		if (filteredNodes && filteredNodes[0]) {
-			return filteredNodes;
-		} else return [];
-	}
-
-	// This is where you discard options
-	private nodeMatchesHideeConditions(node: Element, hidee: Hidee): boolean {
-		let include = true;
-
-		// Parent className option
-		if (hidee.parentClassName) {
-			!(hidee.parentClassName === node.parentElement?.className) &&
-				(include = false);
-		}
-
-		// Parent parent className option
-		if (hidee.parentParentClassName) {
-			!(
-				hidee.parentParentClassName ===
-				node.parentElement?.parentElement?.className
-			) && (include = false);
-		}
-
-		// Custom attribute option
-		if (hidee.customAttributeName && hidee.customAttributeValue) {
-			const nodeAttribute =
-				node.hasAttribute(hidee.customAttributeName) &&
-				node.getAttribute(hidee.customAttributeName);
-			if (nodeAttribute && nodeAttribute === hidee.customAttributeValue) {
-				// All good
-			} else {
-				include = false;
-			}
-		}
-
-		// Tag name option
-		if (hidee.tagName) {
-			!(hidee.tagName === node.tagName) && (include = false);
-		}
-
-		// Exact match option
-		if (hidee.classNameExactMatch) {
-			!(hidee.className === node.className) && (include = false);
-		}
-
-		// Inner text option
-		if (hidee.innerText) {
-			// Update here on 12-Jan-2024 to add the trim() function, which should probably be enabled behind a flag
-			// Doing this fixes an issue with LinkedIn feed hider
-			// But I can't see too much harm in including
-			// Seems like all other uses of innerText are compatible with trimming
-			!(hidee.innerText === node.innerHTML) && (include = false);
-		}
-
-		// Child element option
-		if (hidee.firstChildId || hidee.firstChildClassName) {
-			// Define the first child to compare against
-			let firstChild = node.children[0];
-			// If first child is the menu child, use next child
-			if (
-				node.children[0] &&
-				node.children[0].className === this.options.menuClass
-			) {
-				if (node.children[1]) {
-					firstChild = node.children[1];
-				} else {
-					include = false;
-				}
-			}
-
-			// If you have a first child, compare against the hidee first child property
-			if (firstChild) {
-				if (hidee.firstChildId && hidee.firstChildClassName) {
-					!(
-						firstChild.id === hidee.firstChildId &&
-						firstChild.className === hidee.firstChildClassName
-					) && (include = false);
-				} else if (hidee.firstChildId) {
-					!(firstChild.id === hidee.firstChildId) && (include = false);
-				} else if (hidee.firstChildClassName) {
-					!(firstChild.className === hidee.firstChildClassName) &&
-						(include = false);
-				}
-			} else {
-				include = false;
-			}
-		}
-
-		return include;
-	}
-
-	private getOrCreateNodeHash(node: Element, hidee: Hidee): string {
-		if (hidee.hash) return hidee.hash;
-
-		const existingHash = node.getAttribute("hidee");
-		if (existingHash) return existingHash;
-
-		const hash = Object.entries(this.hiddenNodes).find(
-			([, value]) => value.slug === hidee.slug,
-		)?.[0];
-		return hash || this.getUid();
+		return hash;
 	}
 
 	private setNodeHash(node: Element, hash: string): void {
@@ -600,7 +443,7 @@ export class Hider {
 		);
 	}
 
-	private styleAdder(styleInnerHtml: string, styleId: string): void {
+	private updateInnerHtml(styleInnerHtml: string, styleId: string): void {
 		let style = document.createElement("style");
 		style.innerHTML = styleInnerHtml;
 		style.id = styleId;

@@ -35,6 +35,7 @@
 		}
 	},
 	"dependencies": {
+		"@fontsource/inter": "^5.1.0",
 		"@types/firefox-webext-browser": "^120.0.4",
 		"lodash": "^4.17.21",
 		"memoize": "^10.0.0",

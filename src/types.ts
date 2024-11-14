@@ -11,41 +11,25 @@ export interface HiderOptions {
 
 // TODO: C'mon now, this is so unwieldy!
 export interface Hidee {
-	slug: string;
 	domain: string;
-	id?: string;
-	className?: string;
+	section: string;
+	slug: string;
 	shortName: string;
-	section?: string; // This is presumably in the spreadsheet but not used!
 	style: HideeStyle;
 	cssSelector?: string;
 	description?: string; // Not used by hider itself, just metadata
 	type?: string; // Not used by hider itself, just metadata
-	page?: string; // Hm, think this is deprecated...in favour of ignorePages and includePages
 	location?: string; // Not used by hider itself, just metadata
 	tags?: string; // Not used by hider itself, just metadata
-	ignorePages?: string;
-	includePages?: string;
-	parentClassName?: string;
-	parentParentClassName?: string;
-	customAttributeName?: string;
-	customAttributeValue?: string;
-	tagName?: string;
-	classNameExactMatch?: boolean;
-	innerText?: string;
-	firstChildId?: string;
-	firstChildClassName?: string;
-	childIndex?: number;
-	parentLevels?: number;
-	closestParentClass?: string;
+	excludedPages?: string;
+	includedPages?: string;
 	checkMenu?: boolean;
 	checkMenuPosition?: boolean;
 	noMenu?: boolean;
-	applyId?: boolean;
-	setIntervalMethod?: boolean;
 	hash?: string;
-	excluded?: boolean;
-	ignored?: boolean;
+	isShownByUser?: boolean;
+	isOnExcludedPage?: boolean;
+	previousStyles?: Record<string, string>;
 }
 
 export interface HideeStyle {
@@ -62,6 +46,8 @@ export interface UniversalStyles {
 	cursor: string;
 	display: string;
 	flexDirection: string;
+	border: string;
+	boxShadow: string;
 }
 
 export interface ExtendedStyles extends UniversalStyles {
@@ -71,7 +57,6 @@ export interface ExtendedStyles extends UniversalStyles {
 	minHeight?: string;
 	justifyContent?: string;
 	backgroundColor?: string;
-	boxShadow?: string;
 	borderStyle?: string;
 	borderRadius?: string;
 	marginBottom?: string;

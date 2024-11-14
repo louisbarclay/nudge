@@ -9,16 +9,24 @@
 		"128": "icon.png"
 	},
 	"permissions": ["storage"],
-	"host_permissions": ["https://x.com/*"],
+
 	"web_accessible_resources": [
 		{
-			"resources": ["hider-menu.css"],
+			"resources": [
+				"hider-menu.css",
+				"inter-latin-400-normal.woff2",
+				"inter-latin-400-normal.woff"
+			],
 			"matches": ["<all_urls>"]
 		}
 	],
 	"content_scripts": [
 		{
-			"matches": ["https://x.com/*", "https://www.linkedin.com/*"],
+			"matches": [
+				"https://x.com/*",
+				"https://www.linkedin.com/*",
+				"https://mail.google.com/*"
+			],
 			"js": ["content.ts"],
 			"css": ["content.css"],
 			"run_at": "document_start"
