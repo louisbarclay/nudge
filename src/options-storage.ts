@@ -1,10 +1,15 @@
 import OptionsSyncPerDomain from "webext-options-sync-per-domain";
 
-const optionsStoragePerDomain = new OptionsSyncPerDomain({
+interface StorageOptions {
+	excludedHidees: string;
+	noMenuHidees: string;
+	[key: string]: string | number | boolean;
+}
+
+const optionsStoragePerDomain = new OptionsSyncPerDomain<StorageOptions>({
 	defaults: {
-		colorRed: 244,
-		colorGreen: 67,
-		colorBlue: 54,
+		excludedHidees: "[]",
+		noMenuHidees: "[]",
 	},
 	migrations: [OptionsSyncPerDomain.migrations.removeUnused],
 	logging: true,

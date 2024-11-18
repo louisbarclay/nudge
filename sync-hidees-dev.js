@@ -53,11 +53,17 @@ async function checkHidees() {
 				row.forEach((columnValue, index) => {
 					// Clean column values
 					if (columnValue) {
-						if (keys[index].includes("style.")) {
+						if (keys[index].includes("hideeStyle.")) {
 							if (!hidee.style) {
 								hidee.style = {};
 							}
-							hidee.style[keys[index].replace("style.", "")] = columnValue;
+							hidee.style[keys[index].replace("hideeStyle.", "")] = columnValue;
+						} else if (keys[index].includes("buttonStyle.")) {
+							if (!hidee.buttonStyle) {
+								hidee.buttonStyle = {};
+							}
+							hidee.buttonStyle[keys[index].replace("buttonStyle.", "")] =
+								columnValue;
 						} else {
 							columnValue = cleanValue(columnValue);
 							hidee[keys[index]] = columnValue;
@@ -67,6 +73,10 @@ async function checkHidees() {
 				// Make a hidee style object if there is none
 				if (!hidee.style) {
 					hidee.style = {};
+				}
+				// Make a hidee style object if there is none
+				if (!hidee.buttonStyle) {
+					hidee.buttonStyle = {};
 				}
 				if (hidee.import) {
 					delete hidee.import;

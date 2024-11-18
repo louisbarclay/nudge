@@ -5,7 +5,6 @@ export interface HiderOptions {
 	menuClass: string;
 	menuCss: string;
 	menuHtmlString: string;
-	supportLink: string;
 	hider_invisibility: boolean;
 }
 
@@ -16,7 +15,8 @@ export interface Hidee {
 	slug: string;
 	shortName: string;
 	style: HideeStyle;
-	cssSelector?: string;
+	buttonStyle: ButtonStyle;
+	cssSelector: string;
 	description?: string; // Not used by hider itself, just metadata
 	type?: string; // Not used by hider itself, just metadata
 	location?: string; // Not used by hider itself, just metadata
@@ -39,6 +39,11 @@ export interface HideeStyle {
 	backgroundColor?: string;
 	borderRadius?: string;
 	marginBottom?: string;
+}
+
+export interface ButtonStyle {
+	backgroundColor?: string;
+	color?: string;
 }
 
 export interface UniversalStyles {

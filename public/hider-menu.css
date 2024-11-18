@@ -1,0 +1,39 @@
+:root {
+	--hider-menu-bg: white; /* Default value */
+}
+
+.hider-container {
+	border: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	display: flex !important;
+	justify-content: center !important;
+	width: 100% !important;
+	padding-top: 28px !important;
+	pointer-events: all !important;
+}
+
+.hider-menu {
+	box-sizing: content-box !important;
+	pointer-events: all !important;
+	border-radius: 20px !important;
+	color: transparent !important;
+	cursor: pointer !important;
+	font-family: "Inter", sans-serif !important;
+	font-size: 14px !important;
+	font-weight: 500;
+	letter-spacing: 0.02em !important;
+	padding: 0.5em 0.8em !important;
+	text-rendering: optimizeLegibility !important;
+	user-select: none !important;
+	width: fit-content !important;
+	-webkit-font-smoothing: antialiased !important;
+	background-color: var(--hider-menu-bg) !important;
+	transition:
+		background-color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+		color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+.hider-menu:hover {
+	background: color-mix(in srgb, var(--hider-menu-bg) 70%, black) !important;
+}

@@ -13,8 +13,9 @@
 		"declaration": false,
 		"jsx": "react",
 		"allowJs": true,
-		"resolveJsonModule": true
+		"resolveJsonModule": true,
+		"types": ["svelte"]
 	},
-	"include": ["src/**/*"],
+	"include": ["src/**/*", "manifest.json"],
 	"exclude": ["node_modules", "dist"]
 }

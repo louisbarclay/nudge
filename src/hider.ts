@@ -14,7 +14,6 @@ export class Hider {
 	private options: HiderOptions;
 	private domain: string;
 	private onShowOnce: (hidee: Hidee, domain: string) => void;
-	private onShowAlways: (hidee: Hidee, domain: string) => void;
 	private extension: string;
 	// Store hiddenNodes by hash
 	// Info: you can get hash from class, and slug from hash (in hiddenNodes)
@@ -40,7 +39,6 @@ export class Hider {
 		options: HiderOptions,
 		domain: string,
 		onShowOnce: (hidee: Hidee, domain: string) => void,
-		onShowAlways: (hidee: Hidee, domain: string) => void,
 		extension: string,
 	) {
 		// Need the domain hidees to do anything
@@ -63,7 +61,6 @@ export class Hider {
 
 		// Get things started straight away
 		this.onShowOnce = onShowOnce;
-		this.onShowAlways = onShowAlways;
 		this.extension = extension;
 
 		this.init();
@@ -71,6 +68,11 @@ export class Hider {
 
 	// Observe the document if you have a valid domain and domainHidees is longer than zero
 	private init(): void {
+		this.log.info(
+			this.domainHidees.map((hidee) => {
+				return `${hidee.section}: ${hidee.cssSelector}`;
+			}),
+		);
 		// Observe the document if you have a valid domain and domainHidees is longer than zero
 		if (this.domainHidees.length > 0) {
 			// Observe the doc
@@ -124,7 +126,6 @@ export class Hider {
 		// If either of those is true, let's run it!
 		if (runProcessHidee) {
 			this.domainHidees.map((hidee) => {
-				console.log(hidee);
 				this.processHidee(hidee);
 			});
 		}
@@ -154,12 +155,17 @@ export class Hider {
 		// Add the style tag to hide the element's children (or could do this later)
 		// Probably want to mark these both with a hash
 		if (hidee.cssSelector) {
-			this.checkOrAddStyleElement(hidee.hash, hidee.cssSelector);
+			this.checkOrAddStyleElement(hidee);
 
 			// 3. If not our first time, let's look for a node to hide?
 
 			if (this.isDocumentHeadLoaded) {
 				const nodeList = document.querySelectorAll(hidee.cssSelector);
+				if (nodeList.length > 1) {
+					this.log.warn(
+						`Looks like '${hidee.section}: ${hidee.cssSelector}' finds ${nodeList.length} nodes`,
+					);
+				}
 				const node = nodeList[0];
 
 				if (node) {
@@ -221,8 +227,10 @@ export class Hider {
 		const existingMenu = node.querySelector(`.${this.options.menuClass}`);
 
 		if (existingMenu) {
+			// This is a manual override to make sure the text of the button is correct
+			// No idea why it's needed. We can check it out historically
 			if (hidee.checkMenu) {
-				const correctHtml = this.correctMenuHtml(hidee.shortName);
+				const correctHtml = this.updateButtonHtml(hidee);
 				if (existingMenu.outerHTML !== correctHtml) {
 					existingMenu.remove();
 				}
@@ -249,43 +257,26 @@ export class Hider {
 				hidee.style.flexDirection === "column-reverse"
 					? "beforeend"
 					: "afterbegin";
-			const menuHtml = this.correctMenuHtml(hidee.shortName);
+			const menuHtml = this.updateButtonHtml(hidee);
 			node.insertAdjacentHTML(position, menuHtml);
-			this.setupMenuListeners(node, hidee, hash);
+			this.setupButtonListenersAndStyles(node, hidee);
 		} catch (e) {
 			console.error("Error adding menu:", e);
 		}
 	}
 
-	private setupMenuListeners(node: Element, hidee: Hidee, hash: string): void {
+	private setupButtonListenersAndStyles(node: Element, hidee: Hidee): void {
 		const menu = node.querySelector(`.${this.options.menuClass}`);
 		if (!menu) return;
 
-		const dropdown = menu.querySelector("div > div > div") as HTMLElement;
-		const supportButtonContainer = menu.children[1] as HTMLElement;
-
-		if (supportButtonContainer) {
-			(supportButtonContainer.children[0] as HTMLAnchorElement).href =
-				this.options.supportLink;
-		}
-
-		const showOnceLink = dropdown.querySelector(
-			"#hider-show-once",
-		) as HTMLElement;
-		const showAlwaysLink = dropdown.querySelector(
-			"#hider-show-always",
+		const button = menu.querySelector(
+			`#hider-button-${hidee.hash}`,
 		) as HTMLElement;
 
-		showOnceLink.onclick = () => {
+		button.onclick = () => {
 			this.showHidee(hidee);
 			hidee.isShownByUser = true;
 			this.onShowOnce(hidee, this.domain);
-		};
-
-		showAlwaysLink.onclick = () => {
-			this.showHidee(hidee);
-			hidee.isShownByUser = true;
-			this.onShowAlways(hidee, this.domain);
 		};
 	}
 
@@ -353,36 +344,63 @@ export class Hider {
 		return styles;
 	}
 
-	private checkOrAddStyleElement(hash: string, cssSelector: string): void {
+	private checkOrAddStyleElement(hidee: Hidee): void {
+		const { hash, cssSelector } = hidee;
 		const existingStyle = document.getElementById(`hidee-style-${hash}`);
 		if (!existingStyle) {
-			this.updateStyleElementInnerHtml(hash, cssSelector);
+			this.updateStyleElementInnerHtml(hidee);
 		} else {
-			// TODO: Not sure why this is necessary:
-			this.checkStyleElementInnerHtml(existingStyle, cssSelector);
+			this.checkStyleElementInnerHtml(existingStyle, hidee);
 		}
 	}
 
-	private updateStyleElementInnerHtml(hash: string, cssSelector: string): void {
-		const styleId = `hidee-style-${hash}`;
-		const styleInnerHtml = this.createChildHiddenStyleInnerHtml(cssSelector);
+	private updateStyleElementInnerHtml(hidee: Hidee): void {
+		const styleId = `hidee-style-${hidee.hash}`;
+		const styleInnerHtml = this.createChildHiddenStyleInnerHtml(hidee);
 		this.updateInnerHtml(styleInnerHtml, styleId);
 	}
 
 	// Not sure why this is necessary
 	private checkStyleElementInnerHtml(
 		existingStyle: HTMLElement,
-		cssSelector: string,
+		hidee: Hidee,
 	): void {
-		const correctInnerHtml = this.createChildHiddenStyleInnerHtml(cssSelector);
+		const correctInnerHtml = this.createChildHiddenStyleInnerHtml(hidee);
 		if (existingStyle.innerHTML !== correctInnerHtml) {
 			existingStyle.innerHTML = correctInnerHtml;
 		}
 	}
 
-	private createChildHiddenStyleInnerHtml(cssSelector: string): string {
+	private createChildHiddenStyleInnerHtml(hidee: Hidee): string {
+		const { cssSelector } = hidee;
+		let { backgroundColor = "white", color = "black" } = hidee.buttonStyle;
 		const childSelector = `${cssSelector} > :not(.${this.options.menuClass}) *, ${cssSelector} > :not(.${this.options.menuClass})`;
-		return `${cssSelector} { pointer-events: none !important; background: none !important; border: 0 !important; box-shadow: none !important; } ${childSelector} { opacity: 0 !important; box-shadow: none !important; border: none !important; } ${cssSelector}:after { display: none; } ${cssSelector}:before { display: none; }`;
+
+		return `
+        :root {
+            --hider-menu-bg: ${backgroundColor};
+        }
+        ${cssSelector} { 
+            pointer-events: none !important; 
+            background: none !important; 
+            border: 0 !important; 
+            box-shadow: none !important;
+        } 
+        ${childSelector} { 
+            opacity: 0 !important; 
+            box-shadow: none !important; 
+            border: none !important; 
+        } 
+        ${cssSelector}:after { 
+            display: none; 
+        } 
+        ${cssSelector}:before { 
+            display: none; 
+        } 
+        ${cssSelector} > .${this.options.menuClass} > .hider-menu:hover { 
+            color: ${color} !important; 
+        }
+    `;
 	}
 
 	private isHideeIgnoredByUrl(
@@ -421,12 +439,6 @@ export class Hider {
 		node.setAttribute("hidee", hash);
 	}
 
-	private formatApplyStylesForStyle(applyStyles: ExtendedStyles): string {
-		return Object.entries(applyStyles)
-			.map(([style, value]) => `${style}: ${value} !important;`)
-			.join(" ");
-	}
-
 	private getUid(): string {
 		const randomPool = new Uint8Array(32);
 		crypto.getRandomValues(randomPool);
@@ -436,11 +448,10 @@ export class Hider {
 		return `hider-${hex.substring(0, 58)}`;
 	}
 
-	private correctMenuHtml(shortName: string): string {
-		return this.options.menuHtmlString.replace(
-			"Show Section",
-			`Show ${shortName}`,
-		);
+	private updateButtonHtml(hidee: Hidee): string {
+		return this.options.menuHtmlString
+			.replace("Show Section", `Show ${hidee.shortName}`)
+			.replace("hider-button", `hider-button-${hidee.hash}`);
 	}
 
 	private updateInnerHtml(styleInnerHtml: string, styleId: string): void {

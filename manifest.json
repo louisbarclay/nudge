@@ -12,11 +12,7 @@
 
 	"web_accessible_resources": [
 		{
-			"resources": [
-				"hider-menu.css",
-				"inter-latin-400-normal.woff2",
-				"inter-latin-400-normal.woff"
-			],
+			"resources": ["hider-menu.css", "fonts/*"],
 			"matches": ["<all_urls>"]
 		}
 	],
@@ -25,19 +21,20 @@
 			"matches": [
 				"https://x.com/*",
 				"https://www.linkedin.com/*",
-				"https://mail.google.com/*"
+				"https://mail.google.com/*",
+				"https://www.youtube.com/*",
+				"https://bsky.app/*"
 			],
-			"js": ["content.ts"],
-			"css": ["content.css"],
+			"js": ["src/content.ts"],
 			"run_at": "document_start"
 		}
 	],
 	"options_ui": {
-		"browser_style": true,
-		"page": "options.html"
+		"page": "src/options/options.html",
+		"open_in_tab": true
 	},
 	"background": {
-		"service_worker": "background.ts",
+		"service_worker": "src/background.ts",
 		"type": "module"
 	}
 }
