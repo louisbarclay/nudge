@@ -5,13 +5,12 @@
 
 	const optionsStorage = optionsStoragePerDomain.getOptionsForOrigin();
 
-	const hidees = $state<Hidee[]>([]);
-	const searchQuery = $state("");
-	const excludedHidees = $state<string[]>([]);
-	const noMenuHidees = $state<string[]>([]);
-	const domains = $state<string[]>([]);
+	let hidees = $state<Hidee[]>([]);
+	let searchQuery = $state("");
+	let excludedHidees = $state<string[]>([]);
+	let noMenuHidees = $state<string[]>([]);
+	let domains = $state<string[]>([]);
 
-	// Using .then() instead of async/await in $effect
 	$effect(() => {
 		optionsStorage.getAll().then((options) => {
 			excludedHidees = JSON.parse(options.excludedHidees);
@@ -66,7 +65,7 @@
 		<div class="flex flex-wrap gap-2">
 			{#each domains as domain}
 				<button
-					on:click={() => setDomainFilter(domain)}
+					onclick={() => setDomainFilter(domain)}
 					class="px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-sm hover:bg-blue-200 transition-colors"
 				>
 					{domain}
@@ -90,7 +89,7 @@
 							<input
 								type="checkbox"
 								checked={!noMenuHidees.includes(hidee.slug)}
-								on:change={() => toggleNoMenu(hidee.slug)}
+								onchange={() => toggleNoMenu(hidee.slug)}
 								class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
 							/>
 							<span class="text-sm text-gray-700">Show menu</span>
@@ -99,7 +98,7 @@
 							<input
 								type="checkbox"
 								checked={excludedHidees.includes(hidee.slug)}
-								on:change={() => toggleExcludedHidee(hidee.slug)}
+								onchange={() => toggleExcludedHidee(hidee.slug)}
 								class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
 							/>
 							<span class="text-sm text-gray-700">Don't hide</span>
