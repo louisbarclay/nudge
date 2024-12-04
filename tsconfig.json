@@ -14,7 +14,7 @@
 		"jsx": "react",
 		"allowJs": true,
 		"resolveJsonModule": true,
-		"types": ["svelte"]
+		"types": ["svelte", "vite/client"]
 	},
 	"include": ["src/**/*", "manifest.json"],
 	"exclude": ["node_modules", "dist"]

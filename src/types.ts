@@ -2,6 +2,7 @@ export interface HiderOptions {
 	log: boolean;
 	hidees: Hidee[];
 	excludedHidees: string[];
+	noMenuHidees: string[];
 	menuClass: string;
 	menuCss: string;
 	menuHtmlString: string;
@@ -22,6 +23,7 @@ export interface Hidee {
 	location?: string; // Not used by hider itself, just metadata
 	tags?: string; // Not used by hider itself, just metadata
 	excludedPages?: string;
+	exactPages?: string;
 	includedPages?: string;
 	checkMenu?: boolean;
 	checkMenuPosition?: boolean;

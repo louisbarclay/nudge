@@ -44,11 +44,20 @@ export class Hider {
 		// Need the domain hidees to do anything
 		this.options = options;
 		this.domain = domain;
-		this.domainHidees = this.options.hidees.filter(
-			(hidee) =>
-				!this.options.excludedHidees.includes(hidee.slug) &&
-				hidee.domain.includes(this.domain),
-		);
+		this.domainHidees = this.options.hidees
+			// Figure out if we should hide the hidee at all
+			.filter(
+				(hidee) =>
+					!this.options.excludedHidees.includes(hidee.slug) &&
+					hidee.domain.includes(this.domain),
+			)
+			// And if so, if we should show a menu
+			.map((hidee) => {
+				if (this.options.noMenuHidees.includes(hidee.slug)) {
+					hidee.noMenu = true;
+				}
+				return hidee;
+			});
 		// this.log.trace("Domain hidees", this.domainHidees);
 
 		this.observer = new MutationObserver(() => {
@@ -86,7 +95,13 @@ export class Hider {
 
 	private processHidee(hidee: Hidee): void {
 		if (this.isDocumentHeadLoaded) {
-			if (hidee.isOnExcludedPage || hidee.isShownByUser) {
+			if (hidee.isOnExcludedPage) {
+				this.log.info("Show: excluded page");
+				this.showHidee(hidee);
+				return;
+			}
+			if (hidee.isShownByUser) {
+				this.log.info("Show: by user");
 				this.showHidee(hidee);
 				return;
 			}
@@ -106,10 +121,13 @@ export class Hider {
 		this.currentUrl = newUrl;
 		this.domainHidees.forEach((hidee) => {
 			if (isUrlChanged) {
+				this.log.info(
+					this.currentUrl,
+					`Exclude: ${hidee.excludedPages}, exact: ${hidee.exactPages}, include: ${hidee.includedPages}`,
+				);
 				hidee.isOnExcludedPage = this.isHideeIgnoredByUrl(
 					this.currentUrl,
-					hidee.excludedPages,
-					hidee.includedPages,
+					hidee,
 				);
 				runProcessHidee = true;
 			}
@@ -145,6 +163,7 @@ export class Hider {
 
 	// Once we have an element, hide it and add circle
 	private hideHidee(hidee: Hidee, onLoad?: boolean): void {
+		this.log.info(`Hide hidee: ${hidee.slug}`);
 		// 1. Does the hidee already have a hash?
 		if (!hidee.hash) {
 			hidee.hash = this.getOrCreateAndSetNodeHash(hidee) as string;
@@ -160,25 +179,31 @@ export class Hider {
 			// 3. If not our first time, let's look for a node to hide?
 
 			if (this.isDocumentHeadLoaded) {
-				const nodeList = document.querySelectorAll(hidee.cssSelector);
-				if (nodeList.length > 1) {
-					this.log.warn(
-						`Looks like '${hidee.section}: ${hidee.cssSelector}' finds ${nodeList.length} nodes`,
-					);
-				}
-				const node = nodeList[0];
-
-				if (node) {
-					// 4. If a node exists, let's add a nice hash to its hidee attribute?
-					if (!node.hasAttribute("hidee")) {
-						this.setNodeHash(node, hidee.hash);
+				try {
+					const nodeList = document.querySelectorAll(hidee.cssSelector);
+					if (nodeList.length > 1) {
+						this.log.warn(
+							`Looks like '${hidee.section}: ${hidee.cssSelector}' finds ${nodeList.length} nodes`,
+						);
 					}
+					const node = nodeList[0];
 
-					// Let's directly alter the styles on the node
-					this.applyHiddenStyles(node, hidee, hidee.hash);
+					if (node) {
+						// 4. If a node exists, let's add a nice hash to its hidee attribute?
+						if (!node.hasAttribute("hidee")) {
+							this.setNodeHash(node, hidee.hash);
+						}
 
-					// And add the menu
-					this.handleMenu(node, hidee, hidee.hash);
+						// Let's directly alter the styles on the node
+						this.applyHiddenStyles(node, hidee, hidee.hash);
+
+						// And add the menu
+						if (!hidee.noMenu) {
+							this.handleMenu(node, hidee, hidee.hash);
+						}
+					}
+				} catch (e) {
+					this.log.error(e);
 				}
 			}
 		}
@@ -186,6 +211,8 @@ export class Hider {
 
 	private showHidee(hidee: Hidee): void {
 		// 1. Replace the styles on the element
+
+		this.log.info(`Show hidee: ${hidee.slug}`);
 
 		if (hidee.cssSelector) {
 			// 1. Find the node
@@ -227,6 +254,7 @@ export class Hider {
 		const existingMenu = node.querySelector(`.${this.options.menuClass}`);
 
 		if (existingMenu) {
+			this.log.info(`${hidee.slug}: Existing menu`);
 			// This is a manual override to make sure the text of the button is correct
 			// No idea why it's needed. We can check it out historically
 			if (hidee.checkMenu) {
@@ -247,12 +275,17 @@ export class Hider {
 				}
 			}
 		} else if (!hidee.noMenu && !this.options.hider_invisibility) {
+			this.log.info(`${hidee.slug}: No existing menu`);
 			this.addMenu(node, hidee, hash);
 		}
 	}
 
 	private addMenu(node: Element, hidee: Hidee, hash: string): void {
 		try {
+			// On Facebook, adding the button doesn't go down well
+			// It causes mayhem! Some kind of race condition
+			// So we have a hack to get around that, where we add the button at the very end of the element
+			// And we apply flex column-reverse so it shows at the start
 			const position =
 				hidee.style.flexDirection === "column-reverse"
 					? "beforeend"
@@ -274,6 +307,7 @@ export class Hider {
 		) as HTMLElement;
 
 		button.onclick = () => {
+			this.log.info("Show: on click");
 			this.showHidee(hidee);
 			hidee.isShownByUser = true;
 			this.onShowOnce(hidee, this.domain);
@@ -376,6 +410,8 @@ export class Hider {
 		let { backgroundColor = "white", color = "black" } = hidee.buttonStyle;
 		const childSelector = `${cssSelector} > :not(.${this.options.menuClass}) *, ${cssSelector} > :not(.${this.options.menuClass})`;
 
+		// We have a special part of this
+
 		return `
         :root {
             --hider-menu-bg: ${backgroundColor};
@@ -385,7 +421,14 @@ export class Hider {
             background: none !important; 
             border: 0 !important; 
             box-shadow: none !important;
-        } 
+			${
+				hidee.style.flexDirection === "column-reverse" &&
+				`
+				display: flex !important;
+				flex-direction: column-reverse !important; 
+				`
+			}
+        }
         ${childSelector} { 
             opacity: 0 !important; 
             box-shadow: none !important; 
@@ -405,13 +448,21 @@ export class Hider {
 
 	private isHideeIgnoredByUrl(
 		currentUrl: string | null,
-		ignorePages?: string,
-		includePages?: string,
+		hidee: Hidee,
 	): boolean {
-		if (ignorePages && currentUrl?.includes(ignorePages)) {
+		const { excludedPages, exactPages, includedPages } = hidee;
+
+		// This is quite janky, not clear if it allows multiple options
+		if (excludedPages && currentUrl?.includes(excludedPages)) {
+			this.log.info("Ignore: excluded");
 			return true;
 		}
-		if (includePages && !currentUrl?.includes(includePages)) {
+		if (exactPages && currentUrl !== `${exactPages}`) {
+			this.log.info("Ignore: not exact");
+			return true;
+		}
+		if (includedPages && currentUrl && !currentUrl.includes(includedPages)) {
+			this.log.info("Ignore: not included");
 			return true;
 		}
 		return false;
