@@ -1,7 +1,5 @@
-# Privacy Policy for browser-extension-template
+# Privacy Policy for Nudge
 
-No data or personal information is collected by browser-extension-template.
+Nudge asks you for your email address. If you provide it, we'll store it on our database.
 
-##### Contact
-
-If you have any questions or suggestions regarding this privacy policy, do not hesitate to [contact us](https://github.com/fregante/browser-extension-template/issues/new).
+No other information about you is collected.

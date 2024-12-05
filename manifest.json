@@ -47,7 +47,11 @@
 	},
 	"action": {
 		"default_popup": "src/popup/popup.html",
-		"default_icon": { "16": "icon.png" }
+		"default_icon": {
+			"16": "icon16.png",
+			"24": "icon24.png",
+			"32": "icon32.png"
+		}
 	},
 	"background": {
 		"service_worker": "src/background.ts",
