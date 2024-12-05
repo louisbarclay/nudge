@@ -3,6 +3,7 @@
 </script>
 
 <div class="max-w-xl p-6 mx-auto space-y-6">
+	<img src="/icon.svg" alt="Nudge icon" class="mb-4 h-[4em]" />
 	<h1 class="text-3xl font-bold">Welcome to the new Nudge!</h1>
 
 	<p>
