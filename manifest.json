@@ -1,12 +1,15 @@
 {
-	"name": "Hide Everything",
-	"version": "0.0.0",
-	"description": "An awesome new browser extension",
-	"homepage_url": "https://github.com/fregante/browser-extension-template",
+	"name": "Nudge",
+	"version": "2.0.0",
+	"description": "Nudge hides distractions like feeds, related articles and suggested videos to help you focus.",
+	"homepage_url": "https://nudgeware.io",
 	"manifest_version": 3,
 	"minimum_chrome_version": "100",
 	"icons": {
-		"128": "icon.png"
+		"16": "icon16.png",
+		"32": "icon32.png",
+		"48": "icon48.png",
+		"128": "icon128.png"
 	},
 	"permissions": ["storage", "tabs"],
 
@@ -30,7 +33,9 @@
 				"https://mail.google.com/*",
 				"https://www.youtube.com/*",
 				"https://bsky.app/*",
-				"https://www.facebook.com/*"
+				"https://www.facebook.com/*",
+				"https://www.instagram.com/*",
+				"https://www.tiktok.com/*"
 			],
 			"js": ["src/content.ts"],
 			"run_at": "document_start"

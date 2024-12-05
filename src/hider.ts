@@ -95,17 +95,16 @@ export class Hider {
 
 	private processHidee(hidee: Hidee): void {
 		if (this.isDocumentHeadLoaded) {
-			if (hidee.isOnExcludedPage) {
-				this.log.info("Show: excluded page");
-				this.showHidee(hidee);
-				return;
+			//
+			// if (hidee.isShownByUser) {
+			// 	this.log.info("Show: by user");
+			// 	this.showHidee(hidee);
+			// 	return;
+			// }
+			//
+			if (!hidee.isOnExcludedPage && !hidee.isShownByUser) {
+				this.hideHidee(hidee);
 			}
-			if (hidee.isShownByUser) {
-				this.log.info("Show: by user");
-				this.showHidee(hidee);
-				return;
-			}
-			this.hideHidee(hidee);
 		}
 	}
 
@@ -129,6 +128,12 @@ export class Hider {
 					this.currentUrl,
 					hidee,
 				);
+				// Do a 'reset' of hidees we should no longer hide
+				if (hidee.isOnExcludedPage) {
+					this.log.info("Show: excluded page");
+					this.showHidee(hidee);
+					return;
+				}
 				runProcessHidee = true;
 			}
 		});

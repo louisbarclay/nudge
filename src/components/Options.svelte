@@ -59,11 +59,12 @@
 <div class="max-w-4xl p-8 mx-auto">
 	<h1 class="mb-6 text-4xl font-bold text-gray-900">Options</h1>
 	<p class="mb-8 text-lg text-gray-600">
-		Choose which sections to hide, and whether to show a button to unhide them.
+		Choose which distractions to hide, and whether to show a button to unhide
+		them.
 	</p>
 	<div class="space-y-8">
 		<label class="relative block">
-			<span class="sr-only">Search sections</span>
+			<span class="sr-only">Search distractions</span>
 			<span class="absolute inset-y-0 left-0 flex items-center pl-3">
 				<Search class="w-5 h-5 text-gray-400" />
 			</span>

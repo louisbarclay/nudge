@@ -23,6 +23,7 @@
 	let email = "";
 	let emailError = "";
 	let emailSent = false;
+	let isLoading = false; // Add this line to track loading state
 
 	const emailSchema = z.string().email("Please enter a valid email address");
 
@@ -39,15 +40,24 @@
 	export async function signInWithEmail() {
 		if (!validateEmail()) return;
 
-		const { data, error } = await supabase.auth.signInWithOtp({
-			email,
-			options: {
-				emailRedirectTo: "https://louis.work/nudge",
-			},
-		});
-		if (error) throw error;
+		isLoading = true; // Set loading state before API call
 
-		emailSent = true;
+		try {
+			const { data, error } = await supabase.auth.signInWithOtp({
+				email,
+				options: {
+					emailRedirectTo: "https://louis.work/nudge",
+				},
+			});
+			if (error) throw error;
+
+			emailSent = true;
+		} catch (error) {
+			// Handle error appropriately
+			console.error(error);
+		} finally {
+			isLoading = false; // Reset loading state regardless of outcome
+		}
 	}
 </script>
 
@@ -81,12 +91,17 @@
 					<p class="mt-1 text-sm text-red-500">{emailError}</p>
 				{/if}
 			</div>
+
 			<button
 				class="px-4 py-2 rounded-[50px] bg-blue-500 hover:bg-blue-600 text-white disabled:opacity-50 disabled:cursor-not-allowed"
 				on:click={signInWithEmail}
-				disabled={!email || !!emailError}
+				disabled={!email || !!emailError || isLoading}
 			>
-				Sign Up
+				{#if isLoading}
+					Signing up...
+				{:else}
+					Sign Up
+				{/if}
 			</button>
 			<p class="text-sm">The only data we store is your email address.</p>
 		{/if}

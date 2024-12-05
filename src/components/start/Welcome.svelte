@@ -6,15 +6,12 @@
 	<h1 class="text-3xl font-bold">Welcome to the new Nudge!</h1>
 
 	<p>
-		⌛ A while ago, you installed <a
+		A while ago, you installed <a
 			href="https://chromewebstore.google.com/detail/nudge/dmhgdnbkjkejeddddlklojinngaideac"
 			class="text-blue-600 hover:underline"
 			target="_blank">Nudge</a
-		>, a Chrome extension to help you save time online.
-	</p>
-
-	<p>
-		Now, I'm back with a brand new version of Nudge that exists to do one thing:
+		>, an extension to help you save time online. Now, Nudge is back with a new
+		version and a new focus:
 	</p>
 
 	<p class="text-lg font-bold text-gray-900">
@@ -22,14 +19,13 @@
 	</p>
 
 	<p class="">
-		🛑 You can think of it like an ad blocker, except for distractions like news
-		feeds, recommended content and comments.
+		Think of Nudge as an ad blocker, except for distractions like news feeds,
+		recommended content and comments.
 	</p>
 
 	<p class="">
-		👻 Imagine a world where all these things are hidden by default, but a
-		simple click away whenever you need them. That's a radically different
-		status quo.
+		Imagine a world where all these things are hidden by default, but a click
+		away whenever you need them. A radically different status quo.
 	</p>
 	<p>I hope Nudge will change the way you see — or don't see — the internet.</p>
 
@@ -38,7 +34,7 @@
 			on:click={onNext}
 			class="w-full px-4 py-2 font-medium text-white transition-colors bg-blue-600 rounded hover:bg-blue-700"
 		>
-			👀 Check out the new Nudge
+			Try the new Nudge
 		</button>
 
 		<p class="text-sm text-center text-gray-600">

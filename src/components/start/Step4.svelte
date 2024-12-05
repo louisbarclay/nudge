@@ -12,17 +12,18 @@
 	<div class="space-y-4">
 		<h2 class="mb-4 text-xl font-semibold">Help hide more distractions</h2>
 		<p>
-			Nudge currently comes preloaded with {hideesCount} hidden distractions across
+			Nudge ships with {hideesCount} hidden distractions across
 			{uniqueDomainCount}
-			domains, and we're rapidly adding to this number.
+			sites, and we're rapidly adding to this number.
 		</p>
 		<p>
-			Join our <a
+			Join our
+			<a
 				href="https://discord.gg/psxMtcWHdZ"
 				class="font-bold text-blue-500 hover:text-blue-600"
-				target="_blank">Hide Everything Discord</a
+				target="_blank">Discord community, Hide Everything,</a
 			>
-			community to get involved.
+			to get involved.
 		</p>
 		<p>Or to request a specific hidden distraction, email hi@louis.work</p>
 	</div>
@@ -34,7 +35,7 @@
 		<a
 			href="https://discord.gg/psxMtcWHdZ"
 			target="_blank"
-			class="text-white bg-[#7289da] hover:bg-[#627cd6] px-4 py-2 rounded-md"
+			class="text-white text-2xl bg-[#7289da] hover:bg-[#627cd6] px-5 py-3 rounded-[50px]"
 			>Join the Discord</a
 		>
 	</div>

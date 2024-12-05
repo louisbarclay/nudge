@@ -64,7 +64,7 @@
 		<Step5 onBack={goBack} onComplete={() => console.log("Complete!")} />
 	{/if}
 
-	<div class="flex justify-center gap-4">
+	<div class="flex justify-center gap-4 mt-8">
 		{#if $currentStep !== 0}
 			{#each Array(5) as _, i}
 				<div
