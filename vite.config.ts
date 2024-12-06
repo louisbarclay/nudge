@@ -8,4 +8,9 @@ export default defineConfig({
 		svelte(),
 		webExtension({ additionalInputs: ["src/start/start.html"] }),
 	],
+	build: {
+		// Ensure production build
+		minify: true,
+		sourcemap: false,
+	},
 });
